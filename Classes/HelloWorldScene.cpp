@@ -1,50 +1,51 @@
+/*
+	Joe O'Regan
+	HelloWorldScene.cpp
+	02/02/2018
+*/
 #include "HelloWorldScene.h"
-#include "SimpleAudioEngine.h"
-using namespace CocosDenshion;
+//#include "SimpleAudioEngine.h"
+//using namespace CocosDenshion;
+#include "Audio.h"
 
 USING_NS_CC;
-
+/*
+// IOS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #define SPACE_GAME "SpaceGame.caf"
 #define EXPLOSION_LARGE "explosion_large.caf"
 #define LASER_SHIP "laser_ship.caf"
 #else
+// Windows / Android
+#define JOE_RIFF1 "joe_riff1.wav"
 #define SPACE_GAME "SpaceGame.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
 #define LASER_SHIP "laser_ship.wav"
 #endif
+*/
 
-Scene* HelloWorld::createScene()
-{
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+#define KNUMASTEROIDS 15				// Number of asteroids
+#define KNUMLASERS 5					// Number of lasers
 
-    // return the scene
-    return scene;
+Scene* HelloWorld::createScene() {    
+    auto scene = Scene::create();		// 'scene' is an autorelease object        
+    auto layer = HelloWorld::create();	// 'layer' is an autorelease object	    
+    scene->addChild(layer);				// add layer as a child to scene	    
+    return scene;						// return the scene
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
-{
+bool HelloWorld::init() {
     // super init first
-    if ( !Layer::init() )
-    {
-        return false;
-    }
+    if ( !Layer::init() ) { return false; }
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
 	// add a "close" icon to exit the progress. it's an autorelease object
-	auto closeItem = MenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
+	auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
 
 	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
@@ -94,7 +95,6 @@ bool HelloWorld::init()
 	HelloWorld::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	HelloWorld::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
-#define KNUMASTEROIDS 15
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
 		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");
@@ -103,10 +103,9 @@ bool HelloWorld::init()
 		_asteroids->pushBack(asteroid);
 	}
 
-#define KNUMLASERS 5
 	_shipLasers = new Vector<Sprite*>(KNUMLASERS);
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");
+		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");		// Laser sprite
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
@@ -120,21 +119,23 @@ bool HelloWorld::init()
 	touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	_lives = 3;
-	double curTime = getTimeTick();
-	_gameOverTime = curTime + 30000;
+	_lives = 3;																			// Number of lives
+	double curTime = getTimeTick();														// Current game time
+	_gameOverTime = curTime + 30000;													// Time to finish game
 
 	this->scheduleUpdate();
-
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(SPACE_GAME, true);
+/*
+	//SimpleAudioEngine::getInstance()->playBackgroundMusic(SPACE_GAME, true);
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);				// 20180202 Change background music
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
 	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
+*/
+	Audio::Instance()->init();															// Initialise the game audio
 
     return true;
 }
 
-void HelloWorld::update(float dt)
-{
+void HelloWorld::update(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);
 	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
 
@@ -172,13 +173,13 @@ void HelloWorld::update(float dt)
 	newY = MIN(MAX(newY, minY), maxY);
 	_ship->setPosition(_ship->getPosition().x, newY);
 
-	float curTimeMillis = getTimeTick();
-	if (curTimeMillis > _nextAsteroidSpawn) {
+	float curTimeMillis = getTimeTick();													// Current game time
 
+	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
 
-		float randY = randomValueBetween(0.0F, winSize.height);
+		float randY = randomValueBetween(0.0F, winSize.height);								// Random Y position for asteroid
 		float randDuration = randomValueBetween(2.0F, 10.0F);
 
 		Sprite *asteroid = _asteroids->at(_nextAsteroid);
@@ -187,7 +188,7 @@ void HelloWorld::update(float dt)
 		if (_nextAsteroid >= _asteroids->size())
 			_nextAsteroid = 0;
 
-		asteroid->stopAllActions();
+		asteroid->stopAllActions();																			// CCNode.cpp
 		asteroid->setPosition(winSize.width + asteroid->getContentSize().width / 2, randY);
 		asteroid->setVisible(true);
 		asteroid->runAction(
@@ -197,33 +198,40 @@ void HelloWorld::update(float dt)
 			NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
 			);
 	}
-	// Asteroids
+
+	// Asteroids Collisions
 	for (auto asteroid : *_asteroids){
-		if (!(asteroid->isVisible()))
-			continue;
+		if (!(asteroid->isVisible())) continue;
+
 		for (auto shipLaser : *_shipLasers){
-			if (!(shipLaser->isVisible()))
-				continue;
+			if (!(shipLaser->isVisible())) continue;
+
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())){
-				SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_LARGE);
+				//SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_LARGE);
+				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				asteroid->setVisible(false);
 			}
 		}
-		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())){
-			asteroid->setVisible(false);
-			_ship->runAction(Blink::create(1.0F, 9));
-			_lives--;
+		
+		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())){							// If the ship collides with an asteroid
+			asteroid->setVisible(false);																	// Destroy the asteroid
+			_ship->runAction(Blink::create(1.0F, 9));														// Flash the Player ship
+			_lives--;																						// Decrement the number of lives
 		}
 	}
 
-	if (_lives <= 0) {
-		_ship->stopAllActions();
-		_ship->setVisible(false);
-		this->endScene(KENDREASONLOSE);
+	checkGameOver(curTimeMillis);																			// Check is the game over or not
+}
+
+void HelloWorld::checkGameOver(float currenTime) {
+	if (_lives <= 0) {																						// If the player has run out of lives
+		_ship->stopAllActions();																			// CCNode.cpp
+		_ship->setVisible(false);																			// Destroy the ship
+		this->endScene(KENDREASONLOSE);																		// Player has died
 	}
-	else if (curTimeMillis >= _gameOverTime) {
-		this->endScene(KENDREASONWIN);
+	else if (currenTime >= _gameOverTime) {
+		this->endScene(KENDREASONWIN);																		// Player stays playing for the length of time
 	}
 }
 
@@ -263,7 +271,8 @@ void HelloWorld::setInvisible(Node * node) {
 }
 
 void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
-	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);
+	//SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);
+	Audio::Instance()->laserFX();
 	auto winSize = Director::getInstance()->getWinSize();
 	auto shipLaser = _shipLasers->at(_nextShipLaser++);
 	if (_nextShipLaser >= _shipLasers->size())
@@ -318,8 +327,7 @@ void HelloWorld::endScene(EndReason endReason) {
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
+void HelloWorld::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
     return;

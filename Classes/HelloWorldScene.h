@@ -1,3 +1,8 @@
+/*
+	Joe O'Regan
+	HelloWorldScene.h
+	02/02/2018
+*/
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
@@ -11,38 +16,37 @@ typedef enum {
 	KENDREASONLOSE
 } EndReason;
 
-class HelloWorld : public Layer
-{
-public:
-    // there's no 'id' in cpp, so we recommend returning the class instance pointer
-    static cocos2d::Scene* createScene();
-
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    virtual bool init();  
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+class HelloWorld : public Layer {
+public:    
+    static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
+	    
+    virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+        
+    void menuCloseCallback(cocos2d::Ref* pSender);							// a selector callback
+        
+    CREATE_FUNC(HelloWorld);												// implement the "static create()" method manually
 
 	virtual void onAcceleration(Acceleration* acc, Event* event);
 	float randomValueBetween(float low, float high);
 	void setInvisible(Node * node);
 	float getTimeTick();
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
+
+	void checkGameOver(float currenTime);
+
 private:
 	SpriteBatchNode *_batchNode;
-	Sprite *_ship;
+	Sprite *_ship;															// The main character
 	ParallaxNodeExtras *_backgroundNode;
-	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise, *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
+	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
+	Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
 	float _shipPointsPerSecY;
 	Vector<Sprite*> *_asteroids;
 	int _nextAsteroid=0;
-	float _nextAsteroidSpawn=0;
+	float _nextAsteroidSpawn=0;												// time to spawn next asteroid
 	Vector<Sprite*> *_shipLasers;
 	int _nextShipLaser=0;
-	int _lives=0;
+	int _lives=0;															// Player lives
 	double _gameOverTime;
 	bool _gameOver=false;
 

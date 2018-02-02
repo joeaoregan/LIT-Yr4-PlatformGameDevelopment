@@ -1,3 +1,8 @@
+/*
+	Joe O'Regan
+	ParallaxNodeExtras.cpp
+	02/02/2018
+*/
 #include "ParallaxNodeExtras.h"
 
 //// Hack to access CCPointObject (which is not a public class)
@@ -6,19 +11,16 @@
 //	CC_SYNTHESIZE(Point, _offset, Offset)
 //	CC_SYNTHESIZE(Node*, _child, Child)	// weak ref
 //};
-class PointObject : public Ref
-{
+class PointObject : public Ref {
 public:
-	static PointObject * create(Point ratio, Point offset)
-	{
+	static PointObject * create(Point ratio, Point offset) {
 		PointObject *ret = new PointObject();
 		ret->initWithPoint(ratio, offset);
 		ret->autorelease();
 		return ret;
 	}
 
-	bool initWithPoint(Point ratio, Point offset)
-	{
+	bool initWithPoint(Point ratio, Point offset) {
 		_ratio = ratio;
 		_offset = offset;
 		_child = nullptr;
