@@ -1,0 +1,19 @@
+## Joe O'Regan
+## 02/02/2018
+
+# Folders
+!/Classes/
+!/Resources/
+
+# Ignore
+/bin/
+/cocos2d/
+/proj.android/
+/proj.android-studio/
+/proj.ios_mac/
+/proj.linux/
+/proj.win32/
+
+*.json
+*.txt
+
