@@ -2,27 +2,13 @@
 	Joe O'Regan
 	HelloWorldScene.cpp
 	02/02/2018
+
+	20180202	Added Audio class with singleton access
 */
 #include "HelloWorldScene.h"
-//#include "SimpleAudioEngine.h"
-//using namespace CocosDenshion;
 #include "Audio.h"
 
 USING_NS_CC;
-/*
-// IOS
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#define SPACE_GAME "SpaceGame.caf"
-#define EXPLOSION_LARGE "explosion_large.caf"
-#define LASER_SHIP "laser_ship.caf"
-#else
-// Windows / Android
-#define JOE_RIFF1 "joe_riff1.wav"
-#define SPACE_GAME "SpaceGame.wav"
-#define EXPLOSION_LARGE "explosion_large.wav"
-#define LASER_SHIP "laser_ship.wav"
-#endif
-*/
 
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 
@@ -56,7 +42,7 @@ bool HelloWorld::init() {
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu, 1);
 
-	//GALAXY
+	//  GALAXY
 
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
 	this->addChild(_batchNode);
@@ -119,27 +105,33 @@ bool HelloWorld::init() {
 	touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	_lives = 3;																			// Number of lives
-	double curTime = getTimeTick();														// Current game time
-	_gameOverTime = curTime + 30000;													// Time to finish game
+	_lives = 3;																								// Number of lives
+	double curTime = getTimeTick();																			// Current game time
+	_gameOverTime = curTime + 30000;																		// Time to finish game
 
 	this->scheduleUpdate();
-/*
-	//SimpleAudioEngine::getInstance()->playBackgroundMusic(SPACE_GAME, true);
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);				// 20180202 Change background music
-	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
-	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
-*/
-	Audio::Instance()->init();															// Initialise the game audio
+
+	Audio::Instance()->init();																				// Initialise the game audio
 
     return true;
 }
 
 void HelloWorld::update(float dt) {
+	float curTimeMillis = getTimeTick();																	// Current game time
+	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
+
+	scrollBackground(dt);																					// Scroll the background objects
+	moveShip(dt);																							// Move the player ship
+	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
+	checkCollisions();																						// Check have game objects collided with each other
+	checkGameOver(curTimeMillis);																			// Check is the game over or not
+}
+
+void HelloWorld::scrollBackground(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);
 	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
 
-	//Parallax
+	// Parallax
 	auto spaceDusts = new Vector<Sprite*>(2);
 	spaceDusts->pushBack(_spaceDust1);
 	spaceDusts->pushBack(_spaceDust2);
@@ -156,6 +148,7 @@ void HelloWorld::update(float dt) {
 	backGrounds->pushBack(_planetSunrise);
 	backGrounds->pushBack(_spatialAnomaly1);
 	backGrounds->pushBack(_spatialAnomaly2);
+
 	for (auto background : *backGrounds) {
 		float xPosition = _backgroundNode->convertToWorldSpace(background->getPosition()).x;
 		float size = background->getContentSize().width;
@@ -163,65 +156,64 @@ void HelloWorld::update(float dt) {
 			_backgroundNode->incrementOffset(Point(2000, 0), background);
 		}
 	}
+}
 
-	//Acceleration
-	Size winSize = Director::getInstance()->getWinSize();
-	float maxY = winSize.height - _ship->getContentSize().height / 2;
-	float minY = _ship->getContentSize().height / 2;
-	float diff = (_shipPointsPerSecY * dt);
-	float newY = _ship->getPosition().y + diff;
-	newY = MIN(MAX(newY, minY), maxY);
-	_ship->setPosition(_ship->getPosition().x, newY);
-
-	float curTimeMillis = getTimeTick();													// Current game time
-
+void HelloWorld::spawnAsteroids(float curTimeMillis) {
 	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
 
-		float randY = randomValueBetween(0.0F, winSize.height);								// Random Y position for asteroid
+		float randY = randomValueBetween(0.0F, winSize.height);												// Random Y position for asteroid
 		float randDuration = randomValueBetween(2.0F, 10.0F);
 
 		Sprite *asteroid = _asteroids->at(_nextAsteroid);
-		_nextAsteroid++;
+		_nextAsteroid++;																					// Increment the asteroid
 
-		if (_nextAsteroid >= _asteroids->size())
-			_nextAsteroid = 0;
+		if (_nextAsteroid >= _asteroids->size()) _nextAsteroid = 0;											// Loop back around to start of asteroids list
 
 		asteroid->stopAllActions();																			// CCNode.cpp
 		asteroid->setPosition(winSize.width + asteroid->getContentSize().width / 2, randY);
 		asteroid->setVisible(true);
 		asteroid->runAction(
 			Sequence::create(
-			MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)), 
-			CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)),
-			NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
-			);
+				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
+				CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)),
+				NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
+		);
 	}
+}
 
+void HelloWorld::moveShip(float dt) {
+	// Acceleration
+	float maxY = winSize.height - _ship->getContentSize().height / 2;										// The maximum distance the ship can move down
+	float minY = _ship->getContentSize().height / 2;														// The maximum distance the ship can move up
+	float diff = (_shipPointsPerSecY * dt);
+	float newY = _ship->getPosition().y + diff;
+	newY = MIN(MAX(newY, minY), maxY);
+	_ship->setPosition(_ship->getPosition().x, newY);
+}
+
+void HelloWorld::checkCollisions() {
 	// Asteroids Collisions
-	for (auto asteroid : *_asteroids){
+	for (auto asteroid : *_asteroids) {
 		if (!(asteroid->isVisible())) continue;
 
-		for (auto shipLaser : *_shipLasers){
+		for (auto shipLaser : *_shipLasers) {
 			if (!(shipLaser->isVisible())) continue;
 
-			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())){
-				//SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_LARGE);
+			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
 				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				asteroid->setVisible(false);
 			}
 		}
-		
-		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())){							// If the ship collides with an asteroid
+
+		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {							// If the ship collides with an asteroid
 			asteroid->setVisible(false);																	// Destroy the asteroid
 			_ship->runAction(Blink::create(1.0F, 9));														// Flash the Player ship
 			_lives--;																						// Decrement the number of lives
 		}
 	}
-
-	checkGameOver(curTimeMillis);																			// Check is the game over or not
 }
 
 void HelloWorld::checkGameOver(float currenTime) {
@@ -271,7 +263,6 @@ void HelloWorld::setInvisible(Node * node) {
 }
 
 void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
-	//SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);
 	Audio::Instance()->laserFX();
 	auto winSize = Director::getInstance()->getWinSize();
 	auto shipLaser = _shipLasers->at(_nextShipLaser++);

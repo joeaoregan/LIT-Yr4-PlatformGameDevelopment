@@ -32,7 +32,11 @@ public:
 	float getTimeTick();
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
 
-	void checkGameOver(float currenTime);
+	void scrollBackground(float dt);										// 20180202 Scroll the background objects
+	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
+	void checkCollisions();													// 20180202 Check is the game over or not
+	void moveShip(float dt);												// 20180202 Move the player ship
+	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 
 private:
 	SpriteBatchNode *_batchNode;
@@ -40,15 +44,17 @@ private:
 	ParallaxNodeExtras *_backgroundNode;
 	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
 	Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
-	float _shipPointsPerSecY;
-	Vector<Sprite*> *_asteroids;
+	float _shipPointsPerSecY;												// How much distance to move the ship 
+	Vector<Sprite*> *_asteroids;											// List of asteroids
 	int _nextAsteroid=0;
 	float _nextAsteroidSpawn=0;												// time to spawn next asteroid
-	Vector<Sprite*> *_shipLasers;
+	Vector<Sprite*> *_shipLasers;											// List of lasers
 	int _nextShipLaser=0;
 	int _lives=0;															// Player lives
 	double _gameOverTime;
 	bool _gameOver=false;
+		
+	Size winSize;															// Size of the game window
 
 	void update(float dt);
 	void endScene(EndReason endReason);

@@ -17,13 +17,6 @@ Space Shooter: Original raywenderlich.com tutorial
 ## Links: 
 
 
-#### 6. Year-Four Networked Games Project
-I've started creating a networked version of the game in Linux as part of my fourth-year project. The code base is cross platform, and I've included a finite state machine to help eliminate some of the problems with the original game.
-
-[Yr4-Project-Networked-Games-Library Repo](https://github.com/joeaoregan/Yr4-Project-Networked-Games-Library)
-
----
-
 ## Tutorials Used:
 
 [RayWenderlich: Cocos2d-x Tutorial for Beginners](https://www.raywenderlich.com/95835/cocos2d-x-tutorial-beginners)
