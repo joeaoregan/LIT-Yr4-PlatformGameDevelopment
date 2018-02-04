@@ -38,6 +38,18 @@ public:
 	void checkCollisions();													// 20180202 Check is the game over or not
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
+	void updateTimer();														// 20180204 Update the countdown timer
+	void getInput();
+	/*
+	void moveUp(cocos2d::Ref* pSender);
+	void moveDown(cocos2d::Ref* pSender);
+	void moveLeft(cocos2d::Ref* pSender);
+	void moveRight(cocos2d::Ref* pSender);
+	*/
+	void moveUp();
+	void moveDown();
+	void moveLeft();
+	void moveRight();
 	//void showScore();
 
 	// Keyboard
