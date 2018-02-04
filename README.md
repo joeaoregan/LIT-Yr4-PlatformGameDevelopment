@@ -14,6 +14,11 @@ Space Shooter: Original raywenderlich.com tutorial
 
 ---
 
+![Space Game: Added Level Number, Score, and Timer](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/Spacegame2.jpg "Space Shooter: Added Level Number, Score, and Timer")
+Space Shooter: Added Level Number, Score, Timer, and keyboard movement
+
+---
+
 ## Links: 
 
 

@@ -26,7 +26,7 @@ Scene* HelloWorld::createScene() {
 bool HelloWorld::init() {
     // super init first
     if ( !Layer::init() ) { return false; }
-    
+	    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -109,24 +109,145 @@ bool HelloWorld::init() {
 	double curTime = getTimeTick();																			// Current game time
 	_gameOverTime = curTime + 30000;																		// Time to finish game
 
-	this->scheduleUpdate();
-
 	Audio::Instance()->init();																				// Initialise the game audio
 
+
+	currentTime = getTimeTick();
+
+	// Display score, level number, and time
+	score = 0;
+	level = 1;
+	time = 30;
+
+	//scoreText << "Score: " << score;
+	//scoreLabel = Label::createWithBMFont("Arial.fnt", scoreText.str().c_str());
+	//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
+	__String *tempScore = __String::createWithFormat("Score: %i", score);
+	__String *tempLevel = __String::createWithFormat("Level: %i", 1);
+	__String *tempTime = __String::createWithFormat("Time: %i", time);
+
+	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+	scoreLabel->setColor(Color3B::WHITE);
+	//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
+	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
+	this->addChild(scoreLabel, 10000);
+
+	levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+	levelLabel->setColor(Color3B::WHITE);
+	levelLabel->setPosition(Point(75 + origin.x, visibleSize.height * 0.95 + origin.y));
+	this->addChild(levelLabel, 10000);
+
+	// Timer
+	//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
+	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+	//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
+	timeLabel->setPosition(Point(visibleSize.width - 100 - origin.x, visibleSize.height * 0.95 + origin.y));
+	addChild(timeLabel);
+
+	// Ship Movement
+	auto eventListener = EventListenerKeyboard::create();
+	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
+	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		// If a key already exists, do nothing as it will already have a time stamp
+		// Otherwise, set's the timestamp to now
+		if (keys.find(keyCode) == keys.end()) {
+			keys[keyCode] = std::chrono::high_resolution_clock::now();
+		}
+	};
+	eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		// remove the key.  std::map.erase() doesn't care if the key doesnt exist
+		keys.erase(keyCode);
+	};
+
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+
+	this->scheduleUpdate();
+
     return true;
+}
+
+bool HelloWorld::isKeyPressed(EventKeyboard::KeyCode code) {
+	// Check if the key is currently pressed by seeing it it's in the std::map keys
+	// In retrospect, keys is a terrible name for a key/value paried datatype isnt it?
+	if (keys.find(code) != keys.end())
+		return true;
+	return false;
+}
+
+double HelloWorld::keyPressedDuration(EventKeyboard::KeyCode code) {
+	if (!isKeyPressed(EventKeyboard::KeyCode::KEY_CTRL))
+		return 0;  // Not pressed, so no duration obviously
+
+				   // Return the amount of time that has elapsed between now and when the user
+				   // first started holding down the key in milliseconds
+				   // Obviously the start time is the value we hold in our std::map keys
+	return std::chrono::duration_cast<std::chrono::milliseconds>
+		(std::chrono::high_resolution_clock::now() - keys[code]).count();
 }
 
 void HelloWorld::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
+	
+	//showScore(); 
+	scoreLabel->setString("Score: " + std::to_string(score)); 
+	//this->addChild(scoreLabel);
 
 	scrollBackground(dt);																					// Scroll the background objects
-	moveShip(dt);																							// Move the player ship
+	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
+	/*
+	if(isKeyPressed(EventKeyboard::KeyCode::KEY_CTRL)) {
+        std::stringstream ss;
+        ss << "Control key has been pressed for " << 
+            keyPressedDuration(EventKeyboard::KeyCode::KEY_CTRL) << " ms";
+        label->setString(ss.str().c_str());
+    }
+    else
+        label->setString("Press the CTRL Key");
+	*/
+
+	//int currentTime = getTimeTick();
+
+	if (getTimeTick() == currentTime + 1000) {
+		currentTime = getTimeTick();
+		time--;
+		timeLabel->setString("Time: " + std::to_string(time));
+	}
+
+	if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+		_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
+	}
+	else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+		_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
+	}
+
+	if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+		_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
+	}
+	else if (isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
+		_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
+	}
+	//_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
 }
 
+// Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
+std::map<cocos2d::EventKeyboard::KeyCode,
+	std::chrono::high_resolution_clock::time_point> HelloWorld::keys;
+
+/*
+void HelloWorld::showScore() {
+	//scoreText.str("");
+	//scoreText << "Score: " << score;
+	scoreLabel = Label::createWithBMFont("Arial.fnt", scoreText.str().c_str());
+	//scoreLabel->setScale(0.8F);
+	scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
+	this->addChild(scoreLabel);
+	//scoreLabel->runAction(ScaleTo::create(0.5F, 1.0F));
+}
+*/
 void HelloWorld::scrollBackground(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);
 	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
@@ -185,12 +306,46 @@ void HelloWorld::spawnAsteroids(float curTimeMillis) {
 
 void HelloWorld::moveShip(float dt) {
 	// Acceleration
+	/*
 	float maxY = winSize.height - _ship->getContentSize().height / 2;										// The maximum distance the ship can move down
 	float minY = _ship->getContentSize().height / 2;														// The maximum distance the ship can move up
 	float diff = (_shipPointsPerSecY * dt);
+	//float newX;
 	float newY = _ship->getPosition().y + diff;
 	newY = MIN(MAX(newY, minY), maxY);
 	_ship->setPosition(_ship->getPosition().x, newY);
+	*/
+
+	auto eventListener = EventListenerKeyboard::create();
+	
+	eventListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+
+		Vec2 loc = event->getCurrentTarget()->getPosition();
+		switch (keyCode) {
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		case EventKeyboard::KeyCode::KEY_A:
+			//event->getCurrentTarget()->setPosition(--loc.x, loc.y);
+			event->getCurrentTarget()->setPosition(loc.x - 0.1f, loc.y);			
+			break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		case EventKeyboard::KeyCode::KEY_D:
+			//event->getCurrentTarget()->setPosition(++loc.x, loc.y);
+			event->getCurrentTarget()->setPosition(loc.x + 0.1f, loc.y);
+			break;
+		case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		case EventKeyboard::KeyCode::KEY_W:
+			//event->getCurrentTarget()->setPosition(loc.x, ++loc.y);
+			event->getCurrentTarget()->setPosition(loc.x, loc.y + 0.1f);
+			break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		case EventKeyboard::KeyCode::KEY_S:
+			//event->getCurrentTarget()->setPosition(loc.x, --loc.y);
+			event->getCurrentTarget()->setPosition(loc.x, loc.y - 0.1f);
+			break;
+		}
+	};
+
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, _ship);
 }
 
 void HelloWorld::checkCollisions() {
@@ -205,6 +360,7 @@ void HelloWorld::checkCollisions() {
 				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				asteroid->setVisible(false);
+				score += 10;
 			}
 		}
 
@@ -286,18 +442,19 @@ void HelloWorld::restartTapped(Ref* pSender) {
 }
 
 void HelloWorld::endScene(EndReason endReason) {
-	if (_gameOver)
-		return;
-	_gameOver = true;
+	if (_gameOver) return;																						// If already game over, skip this function
+	_gameOver = true;																							// Set game over
 
 	auto winSize = Director::getInstance()->getWinSize();
+
 	char message[10] = "You Win";
-	if (endReason == KENDREASONLOSE)
-		strcpy(message, "You Lose");
-	auto label = Label::createWithBMFont("Arial.fnt", message);
+	if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
+
+	auto label = Label::createWithBMFont("Arial.fnt", message); 
 	label->setScale(0.1F);
 	label->setPosition(winSize.width / 2, winSize.height*0.6F);
 	this->addChild(label);
+
 
 	strcpy(message, "Restart");
 	auto restartLabel = Label::createWithBMFont("Arial.fnt", message);
@@ -316,7 +473,6 @@ void HelloWorld::endScene(EndReason endReason) {
 	// Terminate update callback
 	this->unscheduleUpdate();
 }
-
 
 void HelloWorld::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)

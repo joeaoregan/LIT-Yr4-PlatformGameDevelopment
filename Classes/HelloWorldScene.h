@@ -8,6 +8,7 @@
 
 #include "cocos2d.h"
 #include "ParallaxNodeExtras.h"
+//#include <sstream>															// 20180204 score
 
 USING_NS_CC;
 
@@ -37,6 +38,11 @@ public:
 	void checkCollisions();													// 20180202 Check is the game over or not
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
+	//void showScore();
+
+	// Keyboard
+	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
+	double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
 
 private:
 	SpriteBatchNode *_batchNode;
@@ -59,6 +65,20 @@ private:
 	void update(float dt);
 	void endScene(EndReason endReason);
 	void restartTapped(Ref* pSender);
+
+	cocos2d::Label* scoreLabel;												// Display the current score
+	cocos2d::Label* levelLabel;												// Display the current level
+	cocos2d::Label * timeLabel;												// Display the time remaining
+	//std::stringstream scoreText;
+	unsigned int score;
+	unsigned int level;
+	unsigned int time;
+
+	int currentTime;
+
+	// Keyboard
+	static std::map<cocos2d::EventKeyboard::KeyCode,
+		std::chrono::high_resolution_clock::time_point> keys;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
