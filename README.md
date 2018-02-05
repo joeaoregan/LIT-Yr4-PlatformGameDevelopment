@@ -9,7 +9,7 @@ Cross-platform C++ game for Win32/Android created using Cocos2d-x created for th
 
 ## Screenshots:
 
-![Space Game](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame.jpg "Space Shooter: Original raywenderlich.com tutorial")
+![Space Game](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/Spacegame.jpg "Space Shooter: Original raywenderlich.com tutorial")
 Space Shooter: Original raywenderlich.com tutorial
 
 ---

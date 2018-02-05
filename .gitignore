@@ -17,3 +17,6 @@
 *.json
 *.txt
 
+# Add in windows main files
+!/proj.win32/main.h
+!/proj.win32/main.cpp

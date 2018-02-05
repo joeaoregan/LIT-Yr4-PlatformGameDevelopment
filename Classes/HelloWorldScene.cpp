@@ -21,7 +21,7 @@ std::string to_string(T value)
 
 USING_NS_CC;
 
-DPad *controller;
+DPad *controller;						// Add directional pad for mobile device
 
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 
@@ -39,9 +39,7 @@ Scene* HelloWorld::createScene() {
 bool HelloWorld::init() {
     // super init first
     if ( !Layer::init() ) { return false; }
-
-
-
+	
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -112,7 +110,8 @@ bool HelloWorld::init() {
 		_shipLasers->pushBack(shipLaser);
 	}
 
-	Device::setAccelerometerEnabled(true);
+	Device::setAccelerometerEnabled(true);																	// Enable accelerometer
+
 	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(HelloWorld::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
