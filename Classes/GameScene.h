@@ -9,6 +9,7 @@
 #include "cocos2d.h"
 #include "ParallaxNodeExtras.h"
 //#include <sstream>															// 20180204 score
+#include "Player.h"
 
 USING_NS_CC;
 
@@ -56,10 +57,12 @@ public:
 	//void showScore();
 
 	// Keyboard
-	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
-	double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
+	//bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
+	//double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
 
 private:
+	Player* player;
+
 	SpriteBatchNode *_batchNode;
 	Sprite *_ship;															// The main character
 	ParallaxNodeExtras *_backgroundNode;
@@ -92,8 +95,8 @@ private:
 	int currentTime;
 
 	// Keyboard
-	static std::map<cocos2d::EventKeyboard::KeyCode,
-		std::chrono::high_resolution_clock::time_point> keys;
+	//static std::map<cocos2d::EventKeyboard::KeyCode,
+	//	std::chrono::high_resolution_clock::time_point> keys;
 };
 
 #endif // __GAME_SCENE_H__

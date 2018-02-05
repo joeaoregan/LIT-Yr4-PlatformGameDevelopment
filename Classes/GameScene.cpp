@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include "HUD.h"
+#include "Input.h"
 
 // Needed to use to_string method with android
 template <typename T>
@@ -22,10 +23,15 @@ std::string to_string(T value) {
 
 USING_NS_CC;
 
+// Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
+std::map<cocos2d::EventKeyboard::KeyCode,
+	std::chrono::high_resolution_clock::time_point> Input::keys;
+
 DPad *controller;						// Add directional pad for mobile device
 
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
+Input* Input::s_pInstance;				// Singleton for Input
 
 #define KNUMASTEROIDS 15				// Number of asteroids
 #define KNUMLASERS 5					// Number of lasers
@@ -57,6 +63,7 @@ bool GameScene::init() {
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu, 1);
 
+
 	//  GALAXY
 
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
@@ -67,6 +74,10 @@ bool GameScene::init() {
 	_ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
 	_ship->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);
 	_batchNode->addChild(_ship, 1);
+
+	player = new Player(this);
+	_batchNode->addChild(player->getSprite());
+
 
 	// 1) Create the ParallaxNode
 	_backgroundNode = ParallaxNodeExtras::create();
@@ -130,19 +141,8 @@ bool GameScene::init() {
 	currentTime = getTimeTick();
 
 	// Display score, level number, and time
-	//score = 0;
-	//level = 1;
-	//time = 30;
-
 	HUD::Instance()->init(score, level, time);
-
-	//scoreText << "Score: " << score;
-	//scoreLabel = Label::createWithBMFont("Arial.fnt", scoreText.str().c_str());
-	//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
-	//__String *tempScore = __String::createWithFormat("Score: %i", std::to_string(score));
-	//__String *tempLevel = __String::createWithFormat("Level: %i", std::to_string(level));
-	//__String *tempTime = __String::createWithFormat("Time: %i", std::to_string(time));
-
+	
 	__String *tempScore = __String::createWithFormat("Score: %i", score);
 	__String *tempLevel = __String::createWithFormat("Level: %i", level);
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
@@ -167,6 +167,7 @@ bool GameScene::init() {
 	timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
 	this->addChild(timeLabel);
 
+	/*
 	// Ship Movement
 	auto eventListener = EventListenerKeyboard::create();
 	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
@@ -181,8 +182,11 @@ bool GameScene::init() {
 		// remove the key.  std::map.erase() doesn't care if the key doesnt exist
 		keys.erase(keyCode);
 	};
-
+	
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(Input::Instance()->init(), this);
+	*/
+	Input::Instance()->init(this, this->_eventDispatcher);
 
 	/*
 	//  menu item
@@ -206,7 +210,7 @@ bool GameScene::init() {
 
     return true;
 }
-
+/*
 bool GameScene::isKeyPressed(EventKeyboard::KeyCode code) {
 	// Check if the key is currently pressed by seeing it it's in the std::map keys
 	// In retrospect, keys is a terrible name for a key/value paried datatype isnt it?
@@ -225,7 +229,7 @@ double GameScene::keyPressedDuration(EventKeyboard::KeyCode code) {
 	return std::chrono::duration_cast<std::chrono::milliseconds>
 		(std::chrono::high_resolution_clock::now() - keys[code]).count();
 }
-
+*/
 void GameScene::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
@@ -246,22 +250,18 @@ void GameScene::update(float dt) {
 void GameScene::getInput() {
 	// Windows keyboard
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
-		if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-			_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
-			//moveLeft();
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+			moveLeft();
 		}
-		else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-			_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
-			//moveRight();
+		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+			moveRight();
 		}
 
-		if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
-			_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
-			//moveUp();
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+			moveUp();
 		}
-		else if (isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
-			_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
-			//moveDown();
+		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
+			moveDown();
 		}
 	}
 
@@ -269,38 +269,23 @@ void GameScene::getInput() {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (controller->getButton(8)->isSelected()) {
 			moveUp();
-			CCLOG("Down button is pressed!");
+			//CCLOG("Down button is pressed!");
 		}
 		else if (controller->getButton(2)->isSelected()) {
 			moveDown();
-			CCLOG("Down button is pressed!");
+			//CCLOG("Down button is pressed!");
 		}
 		if (controller->getButton(4)->isSelected()) {
 			moveLeft();
-			CCLOG("Down button is pressed!");
+			//CCLOG("Down button is pressed!");
 		}
 		else if (controller->getButton(6)->isSelected()) {
 			moveRight();
-			CCLOG("Down button is pressed!");
+			//CCLOG("Down button is pressed!");
 		}
 	}
 }
 
-/*
-// Player ship movement
-void GameScene::moveUp(Ref* pSender) {
-	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
-}
-void GameScene::moveDown(Ref* pSender) {
-	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
-}
-void GameScene::moveLeft(Ref* pSender) {
-	_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
-}
-void GameScene::moveRight(Ref* pSender) {
-	_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
-}
-*/
 void GameScene::moveUp() {
 	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
 }
@@ -321,10 +306,6 @@ void GameScene::updateTimer() {
 		timeLabel->setString("Time: " + to_string(time));
 	}
 }
-
-// Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
-std::map<cocos2d::EventKeyboard::KeyCode,
-	std::chrono::high_resolution_clock::time_point> GameScene::keys;
 
 void GameScene::scrollBackground(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);

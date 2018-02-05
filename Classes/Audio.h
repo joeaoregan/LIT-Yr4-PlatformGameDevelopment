@@ -48,7 +48,6 @@ private:
 	~Audio() {};																		// Private destructor shuts down and cleans up the mixer API
 
 	static Audio* s_pInstance;															// Single instance of Audio used as singleton so only one instance exists thoughout the game
-
 };
 
 #endif // __AUDIO__
