@@ -18,7 +18,6 @@ using namespace CocosDenshion;
 #define LASER_SHIP "laser_ship.wav"
 #endif
 
-
 class Audio {
 public:	
 	static Audio* Instance() {

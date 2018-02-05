@@ -1,11 +1,11 @@
 /*
 	Joe O'Regan
-	HelloWorldScene.cpp
+	GameScene.cpp
 	02/02/2018
 
 	20180202	Added Audio class with singleton access
 */
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 #include "Audio.h"
 #include "DPad.h"
 #include <string>
@@ -30,15 +30,15 @@ HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
 #define KNUMASTEROIDS 15				// Number of asteroids
 #define KNUMLASERS 5					// Number of lasers
 
-Scene* HelloWorld::createScene() {    
+Scene* GameScene::createScene() {
     auto scene = Scene::create();		// 'scene' is an autorelease object        
-    auto layer = HelloWorld::create();	// 'layer' is an autorelease object	    
+    auto layer = GameScene::create();	// 'layer' is an autorelease object	    
     scene->addChild(layer);				// add layer as a child to scene	    
     return scene;						// return the scene
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init() {
+bool GameScene::init() {
     // super init first
     if ( !Layer::init() ) { return false; }
 	
@@ -47,7 +47,7 @@ bool HelloWorld::init() {
 
 	// add a "close" icon to exit the progress. it's an autorelease object
 	auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-		CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+		CC_CALLBACK_1(GameScene::menuCloseCallback, this));
 
 	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
 		origin.y + closeItem->getContentSize().height / 2));
@@ -92,9 +92,9 @@ bool HelloWorld::init() {
 	_backgroundNode->addChild(_spatialAnomaly1, -1, bgSpeed, Point(900, visibleSize.height * 0.3));
 	_backgroundNode->addChild(_spatialAnomaly2, -1, bgSpeed, Point(1500, visibleSize.height * 0.9));
 
-	HelloWorld::addChild(ParticleSystemQuad::create("Stars1.plist"));
-	HelloWorld::addChild(ParticleSystemQuad::create("Stars2.plist"));
-	HelloWorld::addChild(ParticleSystemQuad::create("Stars3.plist"));
+	GameScene::addChild(ParticleSystemQuad::create("Stars1.plist"));
+	GameScene::addChild(ParticleSystemQuad::create("Stars2.plist"));
+	GameScene::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
@@ -114,11 +114,11 @@ bool HelloWorld::init() {
 
 	Device::setAccelerometerEnabled(true);																	// Enable accelerometer
 
-	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(HelloWorld::onAcceleration, this));
+	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
 	auto touchListener = EventListenerTouchAllAtOnce::create();
-	touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+	touchListener->onTouchesBegan = CC_CALLBACK_2(GameScene::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
 	_lives = 3;																								// Number of lives
@@ -187,7 +187,7 @@ bool HelloWorld::init() {
 	/*
 	//  menu item
 	auto upLabel = Label::createWithBMFont("Arial.fnt", "Up");
-	auto upItem = MenuItemLabel::create(upLabel, CC_CALLBACK_1(HelloWorld::moveUp, this));
+	auto upItem = MenuItemLabel::create(upLabel, CC_CALLBACK_1(GameScene::moveUp, this));
 	upItem->setScale(1.0f);
 	upItem->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
 
@@ -207,7 +207,7 @@ bool HelloWorld::init() {
     return true;
 }
 
-bool HelloWorld::isKeyPressed(EventKeyboard::KeyCode code) {
+bool GameScene::isKeyPressed(EventKeyboard::KeyCode code) {
 	// Check if the key is currently pressed by seeing it it's in the std::map keys
 	// In retrospect, keys is a terrible name for a key/value paried datatype isnt it?
 	if (keys.find(code) != keys.end())
@@ -215,7 +215,7 @@ bool HelloWorld::isKeyPressed(EventKeyboard::KeyCode code) {
 	return false;
 }
 
-double HelloWorld::keyPressedDuration(EventKeyboard::KeyCode code) {
+double GameScene::keyPressedDuration(EventKeyboard::KeyCode code) {
 	if (!isKeyPressed(EventKeyboard::KeyCode::KEY_CTRL))
 		return 0;  // Not pressed, so no duration obviously
 
@@ -226,7 +226,7 @@ double HelloWorld::keyPressedDuration(EventKeyboard::KeyCode code) {
 		(std::chrono::high_resolution_clock::now() - keys[code]).count();
 }
 
-void HelloWorld::update(float dt) {
+void GameScene::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
 	
@@ -243,7 +243,7 @@ void HelloWorld::update(float dt) {
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 }
 
-void HelloWorld::getInput() {
+void GameScene::getInput() {
 	// Windows keyboard
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
 		if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
@@ -288,33 +288,33 @@ void HelloWorld::getInput() {
 
 /*
 // Player ship movement
-void HelloWorld::moveUp(Ref* pSender) {
+void GameScene::moveUp(Ref* pSender) {
 	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
 }
-void HelloWorld::moveDown(Ref* pSender) {
+void GameScene::moveDown(Ref* pSender) {
 	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
 }
-void HelloWorld::moveLeft(Ref* pSender) {
+void GameScene::moveLeft(Ref* pSender) {
 	_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
 }
-void HelloWorld::moveRight(Ref* pSender) {
+void GameScene::moveRight(Ref* pSender) {
 	_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
 }
 */
-void HelloWorld::moveUp() {
+void GameScene::moveUp() {
 	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
 }
-void HelloWorld::moveDown() {
+void GameScene::moveDown() {
 	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
 }
-void HelloWorld::moveLeft() {
+void GameScene::moveLeft() {
 	_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
 }
-void HelloWorld::moveRight() {
+void GameScene::moveRight() {
 	_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
 }
 
-void HelloWorld::updateTimer() {
+void GameScene::updateTimer() {
 	if (getTimeTick() == currentTime + 1000) {
 		currentTime = getTimeTick();
 		time--;
@@ -324,9 +324,9 @@ void HelloWorld::updateTimer() {
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode,
-	std::chrono::high_resolution_clock::time_point> HelloWorld::keys;
+	std::chrono::high_resolution_clock::time_point> GameScene::keys;
 
-void HelloWorld::scrollBackground(float dt) {
+void GameScene::scrollBackground(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);
 	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
 
@@ -357,7 +357,7 @@ void HelloWorld::scrollBackground(float dt) {
 	}
 }
 
-void HelloWorld::spawnAsteroids(float curTimeMillis) {
+void GameScene::spawnAsteroids(float curTimeMillis) {
 	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
@@ -376,13 +376,13 @@ void HelloWorld::spawnAsteroids(float curTimeMillis) {
 		asteroid->runAction(
 			Sequence::create(
 				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
-				CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)),
+				CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
 				NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
 		);
 	}
 }
 
-void HelloWorld::moveShip(float dt) {
+void GameScene::moveShip(float dt) {
 	// Acceleration
 	/*
 	float maxY = winSize.height - _ship->getContentSize().height / 2;										// The maximum distance the ship can move down
@@ -428,7 +428,7 @@ void HelloWorld::moveShip(float dt) {
 	*/
 }
 
-void HelloWorld::checkCollisions() {
+void GameScene::checkCollisions() {
 	// Asteroids Collisions
 	for (auto asteroid : *_asteroids) {
 		if (!(asteroid->isVisible())) continue;
@@ -452,7 +452,7 @@ void HelloWorld::checkCollisions() {
 	}
 }
 
-void HelloWorld::checkGameOver(float currenTime) {
+void GameScene::checkGameOver(float currenTime) {
 	if (_lives <= 0) {																						// If the player has run out of lives
 		_ship->stopAllActions();																			// CCNode.cpp
 		_ship->setVisible(false);																			// Destroy the ship
@@ -463,7 +463,7 @@ void HelloWorld::checkGameOver(float currenTime) {
 	}
 }
 
-void HelloWorld::onAcceleration(Acceleration* acc, Event* event) {
+void GameScene::onAcceleration(Acceleration* acc, Event* event) {
 #define KFILTERINGFACTOR 0.1
 #define KRESTACCELX -0.6
 #define KSHIPMAXPOINTSPERSEC (winSize.height*0.5)        
@@ -482,46 +482,78 @@ void HelloWorld::onAcceleration(Acceleration* acc, Event* event) {
 	_shipPointsPerSecY = KSHIPMAXPOINTSPERSEC * accelFraction;
 }
 
-float HelloWorld::randomValueBetween(float low, float high) {
+float GameScene::randomValueBetween(float low, float high) {
 	// from http://stackoverflow.com/questions/686353/c-random-float-number-generation
 	return low + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (high - low)));
 }
 
-float HelloWorld::getTimeTick() {
+float GameScene::getTimeTick() {
 	timeval time;
 	gettimeofday(&time, NULL);
 	unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (float)millisecs;
 }
 
-void HelloWorld::setInvisible(Node * node) {
+void GameScene::setInvisible(Node * node) {
 	node->setVisible(false);
 }
 
-void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
+void GameScene::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	Audio::Instance()->laserFX();
 	auto winSize = Director::getInstance()->getWinSize();
-	auto shipLaser = _shipLasers->at(_nextShipLaser++);
+
+	//spawnLaser();
+	spawn2Lasers();
+}
+
+void GameScene::spawnLaser() {
+	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
-		_nextShipLaser = 0;
+		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
+
 	shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
 	shipLaser->runAction(
 		Sequence::create(
-		MoveBy::create(0.5, Point(winSize.width, 0)), 
-		CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)),
-		NULL));
+			MoveBy::create(0.5, Point(winSize.width, 0)),
+			CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
+			NULL));
+}
+void GameScene::spawn2Lasers() {
+	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
+	if (_nextShipLaser >= _shipLasers->size())
+		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
+	auto shipLaser2 = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
+	if (_nextShipLaser >= _shipLasers->size())
+		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
+
+	shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
+	shipLaser->setVisible(true);
+	shipLaser->stopAllActions();
+	shipLaser->runAction(
+		Sequence::create(
+			MoveBy::create(0.5, Point(winSize.width, 0)),
+			CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
+			NULL)); 
+	shipLaser2->setPosition(_ship->getPosition() + Point(shipLaser2->getContentSize().width / 2, -12));
+	shipLaser2->setVisible(true);
+	shipLaser2->stopAllActions();
+	shipLaser2->runAction(
+		Sequence::create(
+			MoveBy::create(0.5, Point(winSize.width, 0)),
+			CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
+			NULL));
 }
 
-void HelloWorld::restartTapped(Ref* pSender) {
+void GameScene::restartTapped(Ref* pSender) {
 	Director::getInstance()->replaceScene
 		(TransitionZoomFlipX::create(0.5, this->createScene()));
 	// reschedule
 	this->scheduleUpdate();
 }
 
-void HelloWorld::endScene(EndReason endReason) {
+void GameScene::endScene(EndReason endReason) {
 	if (_gameOver) return;																						// If already game over, skip this function
 	_gameOver = true;																							// Set game over
 
@@ -537,7 +569,7 @@ void HelloWorld::endScene(EndReason endReason) {
 	
 	strcpy(message, "Restart");
 	auto restartLabel = Label::createWithBMFont("Arial.fnt", message);
-	auto restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_1(HelloWorld::restartTapped, this));
+	auto restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_1(GameScene::restartTapped, this));
 	restartItem->setScale(0.1F);
 	restartItem->setPosition(winSize.width / 2, winSize.height*0.4);
 
@@ -553,7 +585,7 @@ void HelloWorld::endScene(EndReason endReason) {
 	this->unscheduleUpdate();
 }
 
-void HelloWorld::menuCloseCallback(Ref* pSender) {
+void GameScene::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
     return;

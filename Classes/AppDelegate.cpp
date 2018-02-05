@@ -4,7 +4,7 @@
 	02/02/2018
 */
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 #include "SplashScene.h"
 
 USING_NS_CC;
@@ -29,7 +29,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	    
     director->setAnimationInterval(1.0 / 60);								// set FPS. the default value is 1.0/60 if you don't call this
 
-	//auto scene = HelloWorld::createScene();								// create a scene. it's an autorelease object
+	//auto scene = GameScene::createScene();								// create a scene. it's an autorelease object
 	auto scene = SplashScene::createScene();								// Create the game splash screen
 	    
     director->runWithScene(scene);											// run

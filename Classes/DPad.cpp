@@ -11,8 +11,7 @@ DPad::DPad(){}
 DPad::~DPad() {}
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
     DPad *controller = new DPad();
-    if (true)
-    {
+    if (true) {
         // Set to autorelease
         controller->autorelease();
 

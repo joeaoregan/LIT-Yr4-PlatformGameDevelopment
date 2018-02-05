@@ -1,10 +1,10 @@
 /*
 	Joe O'Regan
-	HelloWorldScene.h
+	GameScene.h
 	02/02/2018
 */
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
 
 #include "cocos2d.h"
 #include "ParallaxNodeExtras.h"
@@ -17,7 +17,7 @@ typedef enum {
 	KENDREASONLOSE
 } EndReason;
 
-class HelloWorld : public Layer {
+class GameScene : public Layer {
 public:    
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
@@ -25,13 +25,16 @@ public:
         
     void menuCloseCallback(cocos2d::Ref* pSender);							// a selector callback
         
-    CREATE_FUNC(HelloWorld);												// implement the "static create()" method manually
+    CREATE_FUNC(GameScene);													// implement the "static create()" method manually
 
 	virtual void onAcceleration(Acceleration* acc, Event* event);
 	float randomValueBetween(float low, float high);
 	void setInvisible(Node * node);
 	float getTimeTick();
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
+
+	void spawnLaser();														// 20180205
+	void spawn2Lasers();													// 20180205
 
 	void scrollBackground(float dt);										// 20180202 Scroll the background objects
 	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
@@ -67,7 +70,7 @@ private:
 	int _nextAsteroid=0;
 	float _nextAsteroidSpawn=0;												// time to spawn next asteroid
 	Vector<Sprite*> *_shipLasers;											// List of lasers
-	int _nextShipLaser=0;
+	int _nextShipLaser=0;													// Ship laser list index
 	int _lives=0;															// Player lives
 	double _gameOverTime;
 	bool _gameOver=false;
@@ -93,4 +96,4 @@ private:
 		std::chrono::high_resolution_clock::time_point> keys;
 };
 
-#endif // __HELLOWORLD_SCENE_H__
+#endif // __GAME_SCENE_H__

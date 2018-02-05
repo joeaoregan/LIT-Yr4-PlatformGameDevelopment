@@ -1,6 +1,5 @@
 #include "SplashScene.h"
-#include "HelloWorldScene.h"
-//#include "Definitions.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -27,17 +26,17 @@ bool SplashScene::init() {
     
     this->scheduleOnce( schedule_selector( SplashScene::GoToMainMenuScene ), DISPLAY_TIME_SPLASH_SCENE );
 
-    auto backgroundSprite = Sprite::create( "SplashScreenBG.png" );
+    auto backgroundSprite = Sprite::create( "SplashScreenBG.png" );													// Create the background sprite
     backgroundSprite->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y) );
     
-    this->addChild( backgroundSprite );
+    this->addChild( backgroundSprite );																				// Add background sprite as a child of the layer
     
     return true;
 }
 
 void SplashScene::GoToMainMenuScene( float dt ) {
-    auto scene = HelloWorld::createScene();															// Go to Hello World scene
+    auto scene = GameScene::createScene();																			// Go to Hello World scene
     
-    Director::getInstance( )->replaceScene( TransitionFade::create( TRANSITION_TIME, scene ) );
+    Director::getInstance( )->replaceScene( TransitionFade::create( TRANSITION_TIME, scene ) );						// Change the scene
 }
 
