@@ -10,10 +10,11 @@
 #include "DPad.h"
 #include <string>
 #include <sstream>
+#include "HUD.h"
 
+// Needed to use to_string method with android
 template <typename T>
-std::string to_string(T value)
-{
+std::string to_string(T value) {
     std::ostringstream os ;
     os << value ;
     return os.str() ;
@@ -24,6 +25,7 @@ USING_NS_CC;
 DPad *controller;						// Add directional pad for mobile device
 
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
+HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
 
 #define KNUMASTEROIDS 15				// Number of asteroids
 #define KNUMLASERS 5					// Number of lasers
@@ -96,7 +98,7 @@ bool HelloWorld::init() {
 
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
-		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");
+		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");									// Asteroid sprite
 		asteroid->setVisible(false);
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
@@ -104,7 +106,7 @@ bool HelloWorld::init() {
 
 	_shipLasers = new Vector<Sprite*>(KNUMLASERS);
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");		// Laser sprite
+		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");							// Laser sprite
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
@@ -124,14 +126,15 @@ bool HelloWorld::init() {
 	_gameOverTime = curTime + 30000;																		// Time to finish game
 
 	Audio::Instance()->init();																				// Initialise the game audio
-
-
+	
 	currentTime = getTimeTick();
 
 	// Display score, level number, and time
-	score = 0;
-	level = 1;
-	time = 30;
+	//score = 0;
+	//level = 1;
+	//time = 30;
+
+	HUD::Instance()->init(score, level, time);
 
 	//scoreText << "Score: " << score;
 	//scoreLabel = Label::createWithBMFont("Arial.fnt", scoreText.str().c_str());
@@ -139,16 +142,19 @@ bool HelloWorld::init() {
 	//__String *tempScore = __String::createWithFormat("Score: %i", std::to_string(score));
 	//__String *tempLevel = __String::createWithFormat("Level: %i", std::to_string(level));
 	//__String *tempTime = __String::createWithFormat("Time: %i", std::to_string(time));
+
 	__String *tempScore = __String::createWithFormat("Score: %i", score);
 	__String *tempLevel = __String::createWithFormat("Level: %i", level);
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
 
+	// Score
 	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	scoreLabel->setColor(Color3B::WHITE);
 	//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(scoreLabel, 10000);
 
+	// Level
 	levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	levelLabel->setColor(Color3B::WHITE);
 	levelLabel->setPosition(Point(75 + origin.x, visibleSize.height * 0.95 + origin.y));
@@ -158,9 +164,8 @@ bool HelloWorld::init() {
 	//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-
 	timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
-	addChild(timeLabel);
+	this->addChild(timeLabel);
 
 	// Ship Movement
 	auto eventListener = EventListenerKeyboard::create();
@@ -190,13 +195,15 @@ bool HelloWorld::init() {
 	menu1->setPosition(Point::ZERO);
 	this->addChild(menu1);
 	*/
-	this->scheduleUpdate();
 
 	// d-pad
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
 		this->addChild(controller);
 	}
+
+	this->scheduleUpdate();
+
     return true;
 }
 
@@ -227,14 +234,38 @@ void HelloWorld::update(float dt) {
     scoreLabel->setString("Score: " + to_string(score));
 	//scoreLabel->setString("Score: " + score);
 
-	getInput();																								// Get keyboard input
+	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();
 	scrollBackground(dt);																					// Scroll the background objects
 	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
+}
 
+void HelloWorld::getInput() {
+	// Windows keyboard
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+			_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
+			//moveLeft();
+		}
+		else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+			_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
+			//moveRight();
+		}
+
+		if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+			_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
+			//moveUp();
+		}
+		else if (isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
+			_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
+			//moveDown();
+		}
+	}
+
+	// Android DPad
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (controller->getButton(8)->isSelected()) {
 			moveUp();
@@ -255,25 +286,6 @@ void HelloWorld::update(float dt) {
 	}
 }
 
-void HelloWorld::getInput() {
-	if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-		_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
-		//moveLeft();
-	}
-	else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-		_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
-		//moveRight();
-	}
-
-	if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
-		_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
-		//moveUp();
-	}
-	else if (isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
-		_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
-		//moveDown();
-	}
-}
 /*
 // Player ship movement
 void HelloWorld::moveUp(Ref* pSender) {

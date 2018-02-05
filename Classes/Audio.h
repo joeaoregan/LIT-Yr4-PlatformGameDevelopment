@@ -20,8 +20,7 @@ using namespace CocosDenshion;
 
 
 class Audio {
-public:
-	
+public:	
 	static Audio* Instance() {
 		if (s_pInstance == 0) {
 			s_pInstance = new Audio();
@@ -29,6 +28,7 @@ public:
 		}
 		return s_pInstance;
 	}
+
 	void init(){
 		//SimpleAudioEngine::getInstance()->playBackgroundMusic(SPACE_GAME, true);
 		SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);			// 20180202 Change background music
