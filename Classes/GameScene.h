@@ -43,17 +43,18 @@ public:
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void updateTimer();														// 20180204 Update the countdown timer
-	void getInput();
+	//void getInput();
 	/*
 	void moveUp(cocos2d::Ref* pSender);
 	void moveDown(cocos2d::Ref* pSender);
 	void moveLeft(cocos2d::Ref* pSender);
 	void moveRight(cocos2d::Ref* pSender);
-	*/
+	
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+	*/
 	//void showScore();
 
 	// Keyboard
@@ -64,7 +65,8 @@ private:
 	Player* player;
 
 	SpriteBatchNode *_batchNode;
-	Sprite *_ship;															// The main character
+	//Sprite *_ship;														// The main character
+	Sprite *playerLife;														// Indicate lives left
 	ParallaxNodeExtras *_backgroundNode;
 	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
 	Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;

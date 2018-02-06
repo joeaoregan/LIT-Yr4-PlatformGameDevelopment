@@ -9,6 +9,8 @@
 
 #include "cocos2d.h"
 
+USING_NS_CC;
+
 class Input {
 public:
 	static Input* Instance() {

@@ -32,8 +32,10 @@ public:
 	}
 
 private:
-	static HUD* s_pInstance;															// Single instance of HUD used as singleton, so only one instance exists thoughout the game
+	HUD() {};																	// Constructor is private for use as a Singleton. Initializes the variables
+	~HUD() {};																	// Private destructor
 
+	static HUD* s_pInstance;													// Single instance of HUD used as singleton, so only one instance exists thoughout the game
 };
 
 #endif // __AUDIO__

@@ -62,8 +62,7 @@ bool GameScene::init() {
 	auto menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu, 1);
-
-
+	
 	//  GALAXY
 
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
@@ -71,12 +70,13 @@ bool GameScene::init() {
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
 
-	_ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-	_ship->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);
-	_batchNode->addChild(_ship, 1);
-
+	//_ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
+	//_ship->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);
+	//_batchNode->addChild(_ship, 1);
+	
+	// Player sprite
 	player = new Player(this);
-	_batchNode->addChild(player->getSprite());
+	_batchNode->addChild(player->getSprite(), 1);
 
 
 	// 1) Create the ParallaxNode
@@ -133,6 +133,13 @@ bool GameScene::init() {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
 	_lives = 3;																								// Number of lives
+																											// Player Lives
+	for (int i = 0; i < _lives; i++) {
+		playerLife = Sprite::create("PlayerLife.png");
+		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
+		this->addChild(playerLife);
+	}
+
 	double curTime = getTimeTick();																			// Current game time
 	_gameOverTime = curTime + 30000;																		// Time to finish game
 
@@ -167,25 +174,7 @@ bool GameScene::init() {
 	timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
 	this->addChild(timeLabel);
 
-	/*
 	// Ship Movement
-	auto eventListener = EventListenerKeyboard::create();
-	Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
-	eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-		// If a key already exists, do nothing as it will already have a time stamp
-		// Otherwise, set's the timestamp to now
-		if (keys.find(keyCode) == keys.end()) {
-			keys[keyCode] = std::chrono::high_resolution_clock::now();
-		}
-	};
-	eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-		// remove the key.  std::map.erase() doesn't care if the key doesnt exist
-		keys.erase(keyCode);
-	};
-	
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
-	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(Input::Instance()->init(), this);
-	*/
 	Input::Instance()->init(this, this->_eventDispatcher);
 
 	/*
@@ -210,43 +199,24 @@ bool GameScene::init() {
 
     return true;
 }
-/*
-bool GameScene::isKeyPressed(EventKeyboard::KeyCode code) {
-	// Check if the key is currently pressed by seeing it it's in the std::map keys
-	// In retrospect, keys is a terrible name for a key/value paried datatype isnt it?
-	if (keys.find(code) != keys.end())
-		return true;
-	return false;
-}
 
-double GameScene::keyPressedDuration(EventKeyboard::KeyCode code) {
-	if (!isKeyPressed(EventKeyboard::KeyCode::KEY_CTRL))
-		return 0;  // Not pressed, so no duration obviously
-
-				   // Return the amount of time that has elapsed between now and when the user
-				   // first started holding down the key in milliseconds
-				   // Obviously the start time is the value we hold in our std::map keys
-	return std::chrono::duration_cast<std::chrono::milliseconds>
-		(std::chrono::high_resolution_clock::now() - keys[code]).count();
-}
-*/
 void GameScene::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
 	
-	//showScore(); 
     scoreLabel->setString("Score: " + to_string(score));
-	//scoreLabel->setString("Score: " + score);
 
-	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
+	//getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();
 	scrollBackground(dt);																					// Scroll the background objects
 	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
-}
 
+	player->update();
+}
+/*
 void GameScene::getInput() {
 	// Windows keyboard
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
@@ -298,7 +268,7 @@ void GameScene::moveLeft() {
 void GameScene::moveRight() {
 	_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
 }
-
+*/
 void GameScene::updateTimer() {
 	if (getTimeTick() == currentTime + 1000) {
 		currentTime = getTimeTick();
@@ -424,10 +394,17 @@ void GameScene::checkCollisions() {
 				score += 10;
 			}
 		}
-
+/*
 		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {							// If the ship collides with an asteroid
 			asteroid->setVisible(false);																	// Destroy the asteroid
 			_ship->runAction(Blink::create(1.0F, 9));														// Flash the Player ship
+			_lives--;																						// Decrement the number of lives
+		}
+*/
+
+		if (player->getSprite()->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {				// If the ship collides with an asteroid
+			asteroid->setVisible(false);																	// Destroy the asteroid
+			player->getSprite()->runAction(Blink::create(1.0F, 9));											// Flash the Player ship
 			_lives--;																						// Decrement the number of lives
 		}
 	}
@@ -435,8 +412,10 @@ void GameScene::checkCollisions() {
 
 void GameScene::checkGameOver(float currenTime) {
 	if (_lives <= 0) {																						// If the player has run out of lives
-		_ship->stopAllActions();																			// CCNode.cpp
-		_ship->setVisible(false);																			// Destroy the ship
+		//_ship->stopAllActions();																			// CCNode.cpp
+		//_ship->setVisible(false);																			// Destroy the ship
+		player->getSprite()->stopAllActions();																// CCNode.cpp
+		player->getSprite()->setVisible(false);																// Destroy the ship
 		this->endScene(KENDREASONLOSE);																		// Player has died
 	}
 	else if (currenTime >= _gameOverTime) {
@@ -491,8 +470,9 @@ void GameScene::spawnLaser() {
 	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
-
-	shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
+	
+	//shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
+	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
 	shipLaser->runAction(
@@ -505,11 +485,11 @@ void GameScene::spawn2Lasers() {
 	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
-	auto shipLaser2 = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
+	auto shipLaser2 = _shipLasers->at(_nextShipLaser++);											// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
 
-	shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
+	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
 	shipLaser->runAction(
@@ -517,7 +497,7 @@ void GameScene::spawn2Lasers() {
 			MoveBy::create(0.5, Point(winSize.width, 0)),
 			CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
 			NULL)); 
-	shipLaser2->setPosition(_ship->getPosition() + Point(shipLaser2->getContentSize().width / 2, -12));
+	shipLaser2->setPosition(player->getSprite()->getPosition() + Point(shipLaser2->getContentSize().width / 2, -12));
 	shipLaser2->setVisible(true);
 	shipLaser2->stopAllActions();
 	shipLaser2->runAction(
