@@ -30,20 +30,20 @@ void Player::update() {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
             Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-			player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
+			moveLeft();
 		}
 		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
                  Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-			player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
+			moveRight();
 		}
 
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
             Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-			player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
+			moveUp();
 		}
 		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
                  Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-			player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
+			moveDown();
 		}
 	}
 /*
@@ -65,17 +65,15 @@ void Player::update() {
  */
 }
 
-/*
 void Player::moveUp() {
-	player->setPosition(player->getPosition().x, player->getPosition().y + 3.0f);
+	player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
 }
 void Player::moveDown() {
-	player->setPosition(player->getPosition().x, player->getPosition().y - 3.0f);
+	player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
 }
 void Player::moveLeft() {
-	player->setPosition(player->getPosition().x - 3.0f, player->getPosition().y);
+	player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
 }
 void Player::moveRight() {
-	player->setPosition(player->getPosition().x + 3.0f, player->getPosition().y);
+	player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
 }
-*/

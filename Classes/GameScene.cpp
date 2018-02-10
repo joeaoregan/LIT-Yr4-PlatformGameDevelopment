@@ -24,8 +24,7 @@ std::string to_string(T value) {
 USING_NS_CC;
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
-std::map<cocos2d::EventKeyboard::KeyCode,
-	std::chrono::high_resolution_clock::time_point> Input::keys;
+std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
 DPad *controller;						// Add directional pad for mobile device
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
@@ -68,11 +67,7 @@ bool GameScene::init() {
 	this->addChild(_batchNode);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
-
-	//_ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-	//_ship->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);
-	//_batchNode->addChild(_ship, 1);
-	
+		
 	// Player sprite
 	player = new Player(this);
 	_batchNode->addChild(player->getSprite(), 1);
@@ -80,30 +75,29 @@ bool GameScene::init() {
 	// 1) Create the ParallaxNode
 	_backgroundNode = ParallaxNodeExtras::create();
 	this->addChild(_backgroundNode, -1);
-	//initBG();																							// Initialise the parallax scrolling background
-	_backgroundNode->init();
+	_backgroundNode->init();																								// Initialise the parallax scrolling background
 	
 	GameScene::addChild(ParticleSystemQuad::create("Stars1.plist"));
 	GameScene::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	GameScene::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
-	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);
+	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);																		// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
-		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");									// Asteroid sprite
+		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");													// Asteroid sprite
 		asteroid->setVisible(false);
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
 	}
 
-	_shipLasers = new Vector<Sprite*>(KNUMLASERS);
+	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																			// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");							// Laser sprite
+		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");											// Laser sprite
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
 	}
 
-	Device::setAccelerometerEnabled(true);																	// Enable accelerometer
+	Device::setAccelerometerEnabled(true);																					// Enable accelerometer
 	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
@@ -111,24 +105,23 @@ bool GameScene::init() {
 	touchListener->onTouchesBegan = CC_CALLBACK_2(GameScene::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	_lives = 3;																								// Number of lives
-																											// Player Lives
+	_lives = 3;																												// Number of lives
+	// Player Lives
 	for (int i = 0; i < _lives; i++) {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
 		this->addChild(playerLife);
-		livesList[i] = playerLife;																	// Add life sprite to list of lives
+		livesList[i] = playerLife;																							// Add life sprite to list of lives
 	}
 
-	double curTime = getTimeTick();																			// Current game time
-	_gameOverTime = curTime + 30000;																		// Time to finish game
+	double curTime = getTimeTick();																							// Current game time
+	_gameOverTime = curTime + 30000;																						// Time to finish game
 
-	Audio::Instance()->init();																				// Initialise the game audio
-	
-	currentTime = getTimeTick();
+	currentTime = getTimeTick();																							// Current game time, for timer
 
-	// Display score, level number, and time
-	HUD::Instance()->init(score, level, time);
+	Audio::Instance()->init();																								// Initialise the game audio
+	HUD::Instance()->init(score, level, time);																				// Display score, level number, and time
+	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 	
 	__String *tempScore = __String::createWithFormat("Score: %i", score);
 	__String *tempLevel = __String::createWithFormat("Level: %i", level);
@@ -137,7 +130,6 @@ bool GameScene::init() {
 	// Score
 	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	scoreLabel->setColor(Color3B::WHITE);
-	//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(scoreLabel, 10000);
 
@@ -148,30 +140,11 @@ bool GameScene::init() {
 	this->addChild(levelLabel, 10000);
 
 	// Timer
-	//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-	//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-    //timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
     timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
-    //timeLabel->setPosition(Point(winSize.width - timeLabel->getWidth() - 100, visibleSize.height * 0.95 + origin.y));
 	this->addChild(timeLabel);
-
-	// Ship Movement
-	Input::Instance()->init(this, this->_eventDispatcher);
-
-	/*
-	//  menu item
-	auto upLabel = Label::createWithBMFont("Arial.fnt", "Up");
-	auto upItem = MenuItemLabel::create(upLabel, CC_CALLBACK_1(GameScene::moveUp, this));
-	upItem->setScale(1.0f);
-	upItem->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
-
-	auto *menu1 = Menu::create(upItem, NULL);
-	menu1->setPosition(Point::ZERO);
-	this->addChild(menu1);
-	*/
-
-	// d-pad
+		
+	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
 		this->addChild(controller);
@@ -181,35 +154,7 @@ bool GameScene::init() {
 
     return true;
 }
-/*
-void GameScene::initBG(cocos2d::Layer *layer) {
-	Size visibleSize = Director::getInstance()->getVisibleSize();	
 
-	// 2) Create the sprites will be added to the ParallaxNode
-	_spaceDust1 = Sprite::create("bg_front_spacedust.png");
-	_spaceDust2 = Sprite::create("bg_front_spacedust.png");
-	_planetSunrise = Sprite::create("bg_planetsunrise.png");
-	_galaxy = Sprite::create("bg_galaxy.png");
-	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
-	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
-
-	// 3) Determine relative movement speeds for space dust and background
-	auto dustSpeed = Point(0.1F, 0.1F);
-	auto bgSpeed = Point(0.05F, 0.05F);
-
-	// 4) Add children to ParallaxNode
-	_backgroundNode->addChild(_spaceDust1, 0, dustSpeed, Point(0, visibleSize.height / 2));
-	_backgroundNode->addChild(_spaceDust2, 0, dustSpeed, Point(_spaceDust1->getContentSize().width, visibleSize.height / 2));
-	_backgroundNode->addChild(_galaxy, -1, bgSpeed, Point(0, visibleSize.height * 0.7));
-	_backgroundNode->addChild(_planetSunrise, -1, bgSpeed, Point(600, visibleSize.height * 0));
-	_backgroundNode->addChild(_spatialAnomaly1, -1, bgSpeed, Point(900, visibleSize.height * 0.3));
-	_backgroundNode->addChild(_spatialAnomaly2, -1, bgSpeed, Point(1500, visibleSize.height * 0.9));
-
-	GameScene::addChild(ParticleSystemQuad::create("Stars1.plist"));
-	GameScene::addChild(ParticleSystemQuad::create("Stars2.plist"));
-	GameScene::addChild(ParticleSystemQuad::create("Stars3.plist"));
-}
-*/
 void GameScene::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
@@ -217,9 +162,8 @@ void GameScene::update(float dt) {
     scoreLabel->setString("Score: " + to_string(score));													// Update the displayed score
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
-	updateTimer();
-	//scrollBackground(dt);																					// Scroll the background objects
-	_backgroundNode->update(dt);
+	updateTimer();																							// Update the countdown timer
+	_backgroundNode->update(dt);																			// Scroll the background objects
 	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
@@ -234,27 +178,27 @@ void GameScene::update(float dt) {
 }
 
 void GameScene::getInput() {
-	// Android DPad
+	// Android DPad (maybe change to returning a point (0,0)(1,0)(0,1),(-1,0),(0,-1)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (controller->getButton(8)->isSelected()) {
-			moveUp();
+			player->moveUp();
 			//CCLOG("Down button is pressed!");
 		}
 		else if (controller->getButton(2)->isSelected()) {
-			moveDown();
+			player->moveDown();
 			//CCLOG("Down button is pressed!");
 		}
 		if (controller->getButton(4)->isSelected()) {
-			moveLeft();
+			player->moveLeft();
 			//CCLOG("Down button is pressed!");
 		}
 		else if (controller->getButton(6)->isSelected()) {
-			moveRight();
+			player->moveRight();
 			//CCLOG("Down button is pressed!");
 		}
 	}
 }
-
+/*
 void GameScene::moveUp() {
     //_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
     player->getSprite()->setPosition(player->getSprite()->getPosition().x, player->getSprite()->getPosition().y + 3.0f);
@@ -271,7 +215,7 @@ void GameScene::moveRight() {
     //_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
     player->getSprite()->setPosition(player->getSprite()->getPosition().x + 3.0f, player->getSprite()->getPosition().y);
 }
-
+*/
 void GameScene::updateTimer() {
 	if (getTimeTick() == currentTime + 1000) {
 		currentTime = getTimeTick();
@@ -280,38 +224,6 @@ void GameScene::updateTimer() {
 	}
 }
 
-/*
-void GameScene::scrollBackground(float dt) {
-	auto backgroundScrollVert = Point(-1000, 0);
-	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
-
-	// Parallax
-	auto spaceDusts = new Vector<Sprite*>(2);
-	spaceDusts->pushBack(_spaceDust1);
-	spaceDusts->pushBack(_spaceDust2);
-	for (auto spaceDust : *spaceDusts) {
-		float xPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).x;
-		float size = spaceDust->getContentSize().width;
-		if (xPosition < -size / 2) {
-			_backgroundNode->incrementOffset(Point(spaceDust->getContentSize().width * 2, 0), spaceDust);
-		}
-	}
-
-	auto backGrounds = new Vector<Sprite*>(4);
-	backGrounds->pushBack(_galaxy);
-	backGrounds->pushBack(_planetSunrise);
-	backGrounds->pushBack(_spatialAnomaly1);
-	backGrounds->pushBack(_spatialAnomaly2);
-
-	for (auto background : *backGrounds) {
-		float xPosition = _backgroundNode->convertToWorldSpace(background->getPosition()).x;
-		float size = background->getContentSize().width;
-		if (xPosition < -size) {
-			_backgroundNode->incrementOffset(Point(2000, 0), background);
-		}
-	}
-}
-*/
 void GameScene::spawnAsteroids(float curTimeMillis) {
 	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
@@ -398,14 +310,8 @@ void GameScene::checkCollisions() {
 				score += 10;
 			}
 		}
-/*
-		if (_ship->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {							// If the ship collides with an asteroid
-			asteroid->setVisible(false);																	// Destroy the asteroid
-			_ship->runAction(Blink::create(1.0F, 9));														// Flash the Player ship
-			_lives--;																						// Decrement the number of lives
-		}
-*/
 
+		// Check collisions between the player ship and asteroids
 		if (player->getSprite()->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {				// If the ship collides with an asteroid
 			asteroid->setVisible(false);																	// Destroy the asteroid
 			player->getSprite()->runAction(Blink::create(1.0F, 9));											// Flash the Player ship
@@ -562,3 +468,21 @@ void GameScene::menuCloseCallback(Ref* pSender) {
     exit(0);
 #endif
 }
+
+
+/*
+//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
+//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
+//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
+//timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
+//timeLabel->setPosition(Point(winSize.width - timeLabel->getWidth() - 100, visibleSize.height * 0.95 + origin.y));
+//  menu item
+auto upLabel = Label::createWithBMFont("Arial.fnt", "Up");
+auto upItem = MenuItemLabel::create(upLabel, CC_CALLBACK_1(GameScene::moveUp, this));
+upItem->setScale(1.0f);
+upItem->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+
+auto *menu1 = Menu::create(upItem, NULL);
+menu1->setPosition(Point::ZERO);
+this->addChild(menu1);
+*/

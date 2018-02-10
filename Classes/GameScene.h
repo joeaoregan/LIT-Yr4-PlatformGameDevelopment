@@ -37,42 +37,24 @@ public:
 	void spawnLaser();														// 20180205
 	void spawn2Lasers();													// 20180205
 
-	//void scrollBackground(float dt);										// 20180202 Scroll the background objects
 	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
 	void checkCollisions();													// 20180202 Check is the game over or not
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void updateTimer();														// 20180204 Update the countdown timer
 	void getInput();
-
-	//void initBG(cocos2d::Layer *layer);
-
 	/*
-	void moveUp(cocos2d::Ref* pSender);
-	void moveDown(cocos2d::Ref* pSender);
-	void moveLeft(cocos2d::Ref* pSender);
-	void moveRight(cocos2d::Ref* pSender);
-	*/
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-
-	//void showScore();
-
-	// Keyboard
-	//bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
-	//double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
-
+	*/
 private:
 	Player* player;
 
 	SpriteBatchNode *_batchNode;
-	//Sprite *_ship;														// The main character
 	Sprite *playerLife;														// Indicate lives left
 	ParallaxNodeExtras *_backgroundNode;
-	//Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
-	//Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
 	float _shipPointsPerSecY;												// How much distance to move the ship 
 	Vector<Sprite*> *_asteroids;											// List of asteroids
 	int _nextAsteroid=0;
@@ -94,16 +76,33 @@ private:
 	cocos2d::Label* scoreLabel;												// Display the current score
 	cocos2d::Label* levelLabel;												// Display the current level
 	cocos2d::Label * timeLabel;												// Display the time remaining
-	//std::stringstream scoreText;
 	unsigned int score;
 	unsigned int level;
 	unsigned int time;
 
 	int currentTime;
-
-	// Keyboard
-	//static std::map<cocos2d::EventKeyboard::KeyCode,
-	//	std::chrono::high_resolution_clock::time_point> keys;
 };
 
 #endif // __GAME_SCENE_H__
+
+
+/*
+void initBG(cocos2d::Layer *layer);
+void scrollBackground(float dt);										// 20180202 Scroll the background objects
+void moveUp(cocos2d::Ref* pSender);
+void moveDown(cocos2d::Ref* pSender);
+void moveLeft(cocos2d::Ref* pSender);
+void moveRight(cocos2d::Ref* pSender);
+void showScore();
+// Keyboard
+bool isKeyPressed(cocos2d::EventKeyboard::KeyCode);
+double keyPressedDuration(cocos2d::EventKeyboard::KeyCode);
+
+	std::stringstream scoreText;
+	Sprite *_ship;														// The main character
+	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
+	Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
+	// Keyboard
+	//static std::map<cocos2d::EventKeyboard::KeyCode,
+	//	std::chrono::high_resolution_clock::time_point> keys;
+*/

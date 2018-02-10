@@ -10,13 +10,13 @@ public:
 	void update();							// Update player movement etc.
 
 	cocos2d::Sprite* getSprite() { return player; }
-/*
+
 	// Movement
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-*/
+
 private:
 	cocos2d::Size visibleSize;				// Visible screen size
 	cocos2d::Vec2 origin;					// Origin of the screen
