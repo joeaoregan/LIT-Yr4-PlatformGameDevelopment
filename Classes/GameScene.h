@@ -43,18 +43,18 @@ public:
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void updateTimer();														// 20180204 Update the countdown timer
-	//void getInput();
+	void getInput();
 	/*
 	void moveUp(cocos2d::Ref* pSender);
 	void moveDown(cocos2d::Ref* pSender);
 	void moveLeft(cocos2d::Ref* pSender);
 	void moveRight(cocos2d::Ref* pSender);
-	
+	*/
 	void moveUp();
 	void moveDown();
 	void moveLeft();
 	void moveRight();
-	*/
+
 	//void showScore();
 
 	// Keyboard
@@ -75,8 +75,10 @@ private:
 	int _nextAsteroid=0;
 	float _nextAsteroidSpawn=0;												// time to spawn next asteroid
 	Vector<Sprite*> *_shipLasers;											// List of lasers
-	int _nextShipLaser=0;													// Ship laser list index
+	int _nextShipLaser = 0;													// Ship laser list index
+	Sprite* livesList[3];													// List of lives
 	int _lives=0;															// Player lives
+
 	double _gameOverTime;
 	bool _gameOver=false;
 		

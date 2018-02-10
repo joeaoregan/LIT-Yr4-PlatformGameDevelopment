@@ -28,18 +28,54 @@ Player::Player(cocos2d::Layer *layer) {
 void Player::update() {
 	// Move the player ship
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
-		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
+            Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
 			player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
 		}
-		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
+                 Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
 			player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
 		}
 
-		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
+            Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
 			player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
 		}
-		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
+		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
+                 Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
 			player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
 		}
 	}
+/*
+	// Android DPad
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+		if (controller->getButton(8)->isSelected()) {
+			moveUp();
+		}
+		else if (controller->getButton(2)->isSelected()) {
+			moveDown();
+		}
+		if (controller->getButton(4)->isSelected()) {
+			moveLeft();
+		}
+		else if (controller->getButton(6)->isSelected()) {
+			moveRight();
+		}
+	}
+ */
 }
+
+/*
+void Player::moveUp() {
+	player->setPosition(player->getPosition().x, player->getPosition().y + 3.0f);
+}
+void Player::moveDown() {
+	player->setPosition(player->getPosition().x, player->getPosition().y - 3.0f);
+}
+void Player::moveLeft() {
+	player->setPosition(player->getPosition().x - 3.0f, player->getPosition().y);
+}
+void Player::moveRight() {
+	player->setPosition(player->getPosition().x + 3.0f, player->getPosition().y);
+}
+*/

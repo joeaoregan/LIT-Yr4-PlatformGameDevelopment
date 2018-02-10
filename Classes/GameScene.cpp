@@ -28,7 +28,6 @@ std::map<cocos2d::EventKeyboard::KeyCode,
 	std::chrono::high_resolution_clock::time_point> Input::keys;
 
 DPad *controller;						// Add directional pad for mobile device
-
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
 Input* Input::s_pInstance;				// Singleton for Input
@@ -124,7 +123,6 @@ bool GameScene::init() {
 	}
 
 	Device::setAccelerometerEnabled(true);																	// Enable accelerometer
-
 	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
@@ -138,6 +136,7 @@ bool GameScene::init() {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
 		this->addChild(playerLife);
+		livesList[i] = playerLife;																	// Add life sprite to list of lives
 	}
 
 	double curTime = getTimeTick();																			// Current game time
@@ -171,7 +170,9 @@ bool GameScene::init() {
 	//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-	timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
+    //timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
+    timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
+    //timeLabel->setPosition(Point(winSize.width - timeLabel->getWidth() - 100, visibleSize.height * 0.95 + origin.y));
 	this->addChild(timeLabel);
 
 	// Ship Movement
@@ -206,7 +207,7 @@ void GameScene::update(float dt) {
 	
     scoreLabel->setString("Score: " + to_string(score));
 
-	//getInput();																								// Get keyboard input for Windows, Get DPad input for Android
+	getInput();																							// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();
 	scrollBackground(dt);																					// Scroll the background objects
 	//moveShip(dt);																							// Move the player ship
@@ -215,26 +216,13 @@ void GameScene::update(float dt) {
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 
 	player->update();
-}
-/*
-void GameScene::getInput() {
-	// Windows keyboard
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
-		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-			moveLeft();
-		}
-		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-			moveRight();
-		}
 
-		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW)) {
-			moveUp();
-		}
-		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW)) {
-			moveDown();
-		}
+	if (_lives < 3) {
+		livesList[_lives]->setVisible(false);
 	}
+}
 
+void GameScene::getInput() {
 	// Android DPad
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (controller->getButton(8)->isSelected()) {
@@ -257,18 +245,22 @@ void GameScene::getInput() {
 }
 
 void GameScene::moveUp() {
-	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
+    //_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
+    player->getSprite()->setPosition(player->getSprite()->getPosition().x, player->getSprite()->getPosition().y + 3.0f);
 }
 void GameScene::moveDown() {
-	_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
+    //_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
+    player->getSprite()->setPosition(player->getSprite()->getPosition().x, player->getSprite()->getPosition().y - 3.0f);
 }
 void GameScene::moveLeft() {
-	_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
+    //_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
+    player->getSprite()->setPosition(player->getSprite()->getPosition().x - 3.0f, player->getSprite()->getPosition().y);
 }
 void GameScene::moveRight() {
-	_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
+    //_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
+    player->getSprite()->setPosition(player->getSprite()->getPosition().x + 3.0f, player->getSprite()->getPosition().y);
 }
-*/
+
 void GameScene::updateTimer() {
 	if (getTimeTick() == currentTime + 1000) {
 		currentTime = getTimeTick();
@@ -442,7 +434,7 @@ void GameScene::onAcceleration(Acceleration* acc, Event* event) {
 	_shipPointsPerSecY = KSHIPMAXPOINTSPERSEC * accelFraction;
 }
 
-float GameScene::randomValueBetween(float low, float high) {
+ float GameScene::randomValueBetween(float low, float high) {
 	// from http://stackoverflow.com/questions/686353/c-random-float-number-generation
 	return low + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (high - low)));
 }

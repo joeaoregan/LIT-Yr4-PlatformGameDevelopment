@@ -29,6 +29,16 @@ Space Shooter: Double Lasers
 
 ---
 
+## Additions:
+
+* Changed backing track
+* HUD for Level, Score, and Timer
+* Added direction controls for mobile
+* Double laser weapon
+* Lives indicated with icons
+
+---
+
 ## Links: 
 
 

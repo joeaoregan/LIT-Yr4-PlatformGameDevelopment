@@ -58,6 +58,10 @@ public:
 		eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, layer);
 	}
 
+	void update() {
+
+	}
+
 private:
 	Input() {};																			// Constructor is private for use as a Singleton. Initializes the variables
 	~Input() {};																		// Private destructor shuts down and cleans up the mixer API

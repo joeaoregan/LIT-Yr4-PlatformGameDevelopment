@@ -16,7 +16,8 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/GameScene.cpp \
                    $(LOCAL_PATH)/../../../Classes/ParallaxNodeExtras.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
-                   $(LOCAL_PATH)/../../../Classes/SplashScene.cpp
+                   $(LOCAL_PATH)/../../../Classes/SplashScene.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Player.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 

@@ -25,7 +25,7 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
         controller->up->setPosition(Point(controller->bg->getPosition().x, controller->bg->getPosition().y + controller->bg->getContentSize().height/2 - controller->up->getContentSize().height/2));
         controller->down->setPosition(Point(controller->bg->getPosition().x,controller->bg->getPosition().y - controller->bg->getContentSize().height/2 + controller->down->getContentSize().height/2));
         controller->right->setPosition(Point(controller->bg->getPosition().x + controller->bg->getContentSize().width/2 - controller->down->getContentSize().width/2, controller->bg->getPosition().y));
-         controller->left->setPosition(Point(controller->bg->getPosition().x - controller->bg->getContentSize().width/2 + controller->down->getContentSize().width/2,controller->bg->getPosition().y));
+        controller->left->setPosition(Point(controller->bg->getPosition().x - controller->bg->getContentSize().width/2 + controller->down->getContentSize().width/2,controller->bg->getPosition().y));
         controller->right->setRotation(90);
         controller->down->setRotation(180);
         controller->left->setRotation(-90);
