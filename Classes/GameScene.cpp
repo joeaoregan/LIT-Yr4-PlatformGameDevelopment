@@ -77,31 +77,12 @@ bool GameScene::init() {
 	player = new Player(this);
 	_batchNode->addChild(player->getSprite(), 1);
 
-
 	// 1) Create the ParallaxNode
 	_backgroundNode = ParallaxNodeExtras::create();
 	this->addChild(_backgroundNode, -1);
-
-	// 2) Create the sprites will be added to the ParallaxNode
-	_spaceDust1 = Sprite::create("bg_front_spacedust.png");
-	_spaceDust2 = Sprite::create("bg_front_spacedust.png");
-	_planetSunrise = Sprite::create("bg_planetsunrise.png");
-	_galaxy = Sprite::create("bg_galaxy.png");
-	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
-	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
-
-	// 3) Determine relative movement speeds for space dust and background
-	auto dustSpeed = Point(0.1F, 0.1F);
-	auto bgSpeed = Point(0.05F, 0.05F);
-
-	// 4) Add children to ParallaxNode
-	_backgroundNode->addChild(_spaceDust1, 0, dustSpeed, Point(0, visibleSize.height / 2));
-	_backgroundNode->addChild(_spaceDust2, 0, dustSpeed, Point(_spaceDust1->getContentSize().width, visibleSize.height / 2));
-	_backgroundNode->addChild(_galaxy, -1, bgSpeed, Point(0, visibleSize.height * 0.7));
-	_backgroundNode->addChild(_planetSunrise, -1, bgSpeed, Point(600, visibleSize.height * 0));
-	_backgroundNode->addChild(_spatialAnomaly1, -1, bgSpeed, Point(900, visibleSize.height * 0.3));
-	_backgroundNode->addChild(_spatialAnomaly2, -1, bgSpeed, Point(1500, visibleSize.height * 0.9));
-
+	//initBG();																							// Initialise the parallax scrolling background
+	_backgroundNode->init();
+	
 	GameScene::addChild(ParticleSystemQuad::create("Stars1.plist"));
 	GameScene::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	GameScene::addChild(ParticleSystemQuad::create("Stars3.plist"));
@@ -200,25 +181,55 @@ bool GameScene::init() {
 
     return true;
 }
+/*
+void GameScene::initBG(cocos2d::Layer *layer) {
+	Size visibleSize = Director::getInstance()->getVisibleSize();	
 
+	// 2) Create the sprites will be added to the ParallaxNode
+	_spaceDust1 = Sprite::create("bg_front_spacedust.png");
+	_spaceDust2 = Sprite::create("bg_front_spacedust.png");
+	_planetSunrise = Sprite::create("bg_planetsunrise.png");
+	_galaxy = Sprite::create("bg_galaxy.png");
+	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
+	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
+
+	// 3) Determine relative movement speeds for space dust and background
+	auto dustSpeed = Point(0.1F, 0.1F);
+	auto bgSpeed = Point(0.05F, 0.05F);
+
+	// 4) Add children to ParallaxNode
+	_backgroundNode->addChild(_spaceDust1, 0, dustSpeed, Point(0, visibleSize.height / 2));
+	_backgroundNode->addChild(_spaceDust2, 0, dustSpeed, Point(_spaceDust1->getContentSize().width, visibleSize.height / 2));
+	_backgroundNode->addChild(_galaxy, -1, bgSpeed, Point(0, visibleSize.height * 0.7));
+	_backgroundNode->addChild(_planetSunrise, -1, bgSpeed, Point(600, visibleSize.height * 0));
+	_backgroundNode->addChild(_spatialAnomaly1, -1, bgSpeed, Point(900, visibleSize.height * 0.3));
+	_backgroundNode->addChild(_spatialAnomaly2, -1, bgSpeed, Point(1500, visibleSize.height * 0.9));
+
+	GameScene::addChild(ParticleSystemQuad::create("Stars1.plist"));
+	GameScene::addChild(ParticleSystemQuad::create("Stars2.plist"));
+	GameScene::addChild(ParticleSystemQuad::create("Stars3.plist"));
+}
+*/
 void GameScene::update(float dt) {
 	float curTimeMillis = getTimeTick();																	// Current game time
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
 	
-    scoreLabel->setString("Score: " + to_string(score));
+    scoreLabel->setString("Score: " + to_string(score));													// Update the displayed score
 
-	getInput();																							// Get keyboard input for Windows, Get DPad input for Android
+	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();
-	scrollBackground(dt);																					// Scroll the background objects
+	//scrollBackground(dt);																					// Scroll the background objects
+	_backgroundNode->update(dt);
 	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 
-	player->update();
+	player->update();																						// Update player sprite position
 
-	if (_lives < 3) {
-		livesList[_lives]->setVisible(false);
+	// Update displayed lives
+	if (_lives < 3) {																						// If the players lives are less than 3
+		livesList[_lives]->setVisible(false);																// Set the lives invisible (2,1,0)
 	}
 }
 
@@ -269,6 +280,7 @@ void GameScene::updateTimer() {
 	}
 }
 
+/*
 void GameScene::scrollBackground(float dt) {
 	auto backgroundScrollVert = Point(-1000, 0);
 	_backgroundNode->setPosition(_backgroundNode->getPosition() + (backgroundScrollVert * dt));
@@ -299,7 +311,7 @@ void GameScene::scrollBackground(float dt) {
 		}
 	}
 }
-
+*/
 void GameScene::spawnAsteroids(float curTimeMillis) {
 	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
