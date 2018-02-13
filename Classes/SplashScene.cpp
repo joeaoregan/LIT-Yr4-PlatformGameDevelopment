@@ -1,5 +1,6 @@
 #include "SplashScene.h"
-#include "GameScene.h"
+//#include "GameScene.h"
+#include "MainMenu.h"
 
 USING_NS_CC;
 
@@ -7,13 +8,13 @@ USING_NS_CC;
 #define TRANSITION_TIME 0.5
 
 Scene* SplashScene::createScene() {    
-    auto scene = Scene::create();		// 'scene' is an autorelease object
+    cocos2d::Scene* scene = Scene::create();	// Create the scene. 'scene' is an autorelease object
         
-    auto layer = SplashScene::create();	// 'layer' is an autorelease object
+    SplashScene* layer = SplashScene::create();	// Create the layer. 'layer' is an autorelease object
 	    
-    scene->addChild(layer);				// add layer as a child to scene
+    scene->addChild(layer);						// Add layer as a child to scene
 	    
-    return scene;						// return the scene
+    return scene;								// Return the scene
 }
 
 // on "init" you need to initialize your instance
@@ -26,17 +27,16 @@ bool SplashScene::init() {
     
     this->scheduleOnce( schedule_selector( SplashScene::GoToMainMenuScene ), DISPLAY_TIME_SPLASH_SCENE );
 
-    auto backgroundSprite = Sprite::create( "SplashScreenBG.png" );													// Create the background sprite
-    backgroundSprite->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y) );
-    
+    cocos2d::Sprite* backgroundSprite = Sprite::create( "SplashScreenBG.png" );										// Create the background sprite
+    backgroundSprite->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y) );	// Set the background position    
     this->addChild( backgroundSprite );																				// Add background sprite as a child of the layer
     
     return true;
 }
 
 void SplashScene::GoToMainMenuScene( float dt ) {
-    auto scene = GameScene::createScene();																			// Go to Hello World scene
+    cocos2d::Scene* scene = MainMenu::createScene();																// Create the menu scene
     
-    Director::getInstance( )->replaceScene( TransitionFade::create( TRANSITION_TIME, scene ) );						// Change the scene
+    Director::getInstance( )->replaceScene( TransitionFade::create( TRANSITION_TIME, scene ) );						// Change the scene with transition
 }
 
