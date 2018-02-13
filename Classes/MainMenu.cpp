@@ -21,7 +21,12 @@ bool MainMenu::init() {
 	Size visibleSize = Director::getInstance()->getVisibleSize();																				// Get visible screen size
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();																					// Get screen origin point
 
-	cocos2d::Sprite* backgroundSprite = Sprite::create("BG720p.png");																			// Background image
+	cocos2d::Sprite* backgroundSprite;
+	if (visibleSize.height == 1080)
+		backgroundSprite = Sprite::create("BG1080p.png");
+	else
+		backgroundSprite = Sprite::create("BG720p.png");																						// Background image
+
 	backgroundSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));									// Set backgound position
 	this->addChild(backgroundSprite);																											// Add to layer
 

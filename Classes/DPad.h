@@ -51,14 +51,16 @@ public:
     static DPad *create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position);
     DPad();
     ~DPad();
+
+	bool init(cocos2d::Layer *layer);							// JOR 13/12/2018 initialise the directional pad
     MenuItemImage *getButton(int button);
     void setCorner(int corner);
+
 private:
     MenuItemImage *up;
     MenuItemImage *down;
     MenuItemImage *left;
     MenuItemImage *right;
-    Sprite *bg;
-    
+    Sprite *bg;    
 };
 #endif /* defined(__RPGCollab__DPad__) */

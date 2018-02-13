@@ -41,21 +41,23 @@ public:
 	}
 
 	void init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher) {
-		auto eventListener = EventListenerKeyboard::create();
-		Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
-		eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-			// If a key already exists, do nothing as it will already have a time stamp
-			// Otherwise, set's the timestamp to now
-			if (keys.find(keyCode) == keys.end()) {
-				keys[keyCode] = std::chrono::high_resolution_clock::now();
-			}
-		};
-		eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-			// remove the key.  std::map.erase() doesn't care if the key doesnt exist
-			keys.erase(keyCode);
-		};
+		if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
+			auto eventListener = EventListenerKeyboard::create();
+			Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
+			eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+				// If a key already exists, do nothing as it will already have a time stamp
+				// Otherwise, set's the timestamp to now
+				if (keys.find(keyCode) == keys.end()) {
+					keys[keyCode] = std::chrono::high_resolution_clock::now();
+				}
+			};
+			eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+				// remove the key.  std::map.erase() doesn't care if the key doesnt exist
+				keys.erase(keyCode);
+			};
 
-		eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, layer);
+			eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, layer);
+		}
 	}
 
 	void update() {

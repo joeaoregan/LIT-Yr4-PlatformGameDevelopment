@@ -141,14 +141,17 @@ bool GameScene::init() {
 
 	// Timer
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-    timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
+	//timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
+	timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 80, visibleSize.height * 0.95 + origin.y));
 	this->addChild(timeLabel);
-		
+	
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
 		this->addChild(controller);
 	}
+	
+	//controller->init(this);		// D-pad (Display on mobile device)
 
 	this->scheduleUpdate();
 
@@ -198,24 +201,7 @@ void GameScene::getInput() {
 		}
 	}
 }
-/*
-void GameScene::moveUp() {
-    //_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y + 3.0f);
-    player->getSprite()->setPosition(player->getSprite()->getPosition().x, player->getSprite()->getPosition().y + 3.0f);
-}
-void GameScene::moveDown() {
-    //_ship->setPosition(_ship->getPosition().x, _ship->getPosition().y - 3.0f);
-    player->getSprite()->setPosition(player->getSprite()->getPosition().x, player->getSprite()->getPosition().y - 3.0f);
-}
-void GameScene::moveLeft() {
-    //_ship->setPosition(_ship->getPosition().x - 3.0f, _ship->getPosition().y);
-    player->getSprite()->setPosition(player->getSprite()->getPosition().x - 3.0f, player->getSprite()->getPosition().y);
-}
-void GameScene::moveRight() {
-    //_ship->setPosition(_ship->getPosition().x + 3.0f, _ship->getPosition().y);
-    player->getSprite()->setPosition(player->getSprite()->getPosition().x + 3.0f, player->getSprite()->getPosition().y);
-}
-*/
+
 void GameScene::updateTimer() {
 	if (getTimeTick() == currentTime + 1000) {
 		currentTime = getTimeTick();
@@ -381,7 +367,6 @@ void GameScene::spawnLaser() {
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
 	
-	//shipLaser->setPosition(_ship->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
 	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
@@ -468,21 +453,3 @@ void GameScene::menuCloseCallback(Ref* pSender) {
     exit(0);
 #endif
 }
-
-
-/*
-//scoreLabel->setPosition(winSize.width / 2, winSize.height - 20);
-//timeLabel = cocos2d::Label::createWithSystemFont("Time: " + time, "Arial", 32);
-//timeLabel->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-//timeLabel->setPosition(Point(visibleSize.width - 100, visibleSize.height * 0.95 + origin.y));
-//timeLabel->setPosition(Point(winSize.width - timeLabel->getWidth() - 100, visibleSize.height * 0.95 + origin.y));
-//  menu item
-auto upLabel = Label::createWithBMFont("Arial.fnt", "Up");
-auto upItem = MenuItemLabel::create(upLabel, CC_CALLBACK_1(GameScene::moveUp, this));
-upItem->setScale(1.0f);
-upItem->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
-
-auto *menu1 = Menu::create(upItem, NULL);
-menu1->setPosition(Point::ZERO);
-this->addChild(menu1);
-*/

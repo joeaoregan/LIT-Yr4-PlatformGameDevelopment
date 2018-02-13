@@ -7,8 +7,31 @@
 //
 
 #include "DPad.h"
-DPad::DPad(){}
-DPad::~DPad() {}
+DPad::DPad(){}		// Constructor	
+DPad::~DPad() {}	// Destructor
+
+bool DPad::init(cocos2d::Layer *layer) {
+	// If the target platform is a mobile device (android in this case)
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+		//controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
+		layer->addChild(DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150)));
+		//layer->addChild(DPad::create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
+	}
+
+	return true;
+}
+
+/*
+// If the target platform is a mobile device (android in this case)
+if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+	//if (visibleSize.height == 1080)
+	//	layer->addChild(DPad::create("Base225.png", "Arrow72.png", "Arrow72Pressed.png", Point(200, 200)));
+	//else
+	//controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
+	layer->addChild(DPad::create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
+}
+*/
+
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
     DPad *controller = new DPad();
     if (true) {
@@ -40,26 +63,20 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
     CC_SAFE_DELETE(controller);
     return NULL;
 }
+
 MenuItemImage *DPad::getButton(int button){
     MenuItemImage *result;
     switch (button) {
-        case 8:
-            result = DPad::up;
-            break;
-        case 2:
-            result = DPad::down;
-            break;
-        case 6:
-            result = DPad::right;
-            break;
-        case 4:
-            result = DPad::left;
-            break;
-        default:
-            break;
+        case 8: result = DPad::up; break;		// Move up
+        case 2: result = DPad::down; break;		// Move down
+        case 6: result = DPad::right; break;	// Move left
+        case 4: result = DPad::left; break;		// Move right
+        default: break;
     }
+
     return result;
 }
+
 void DPad::setCorner(int corner){
     Point position;
 	switch (corner) {
