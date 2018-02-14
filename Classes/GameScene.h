@@ -50,6 +50,7 @@ public:
 	void checkCollisions();													// 20180202 Check is the game over or not
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
+	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
 	void updateTimer();														// 20180204 Update the countdown timer
 	void getInput();
 	unsigned int getScore() { return score; }								// 20180214 Return the current score
@@ -65,11 +66,15 @@ private:
 
 	SpriteBatchNode *_batchNode;
 	Sprite *playerLife;														// Indicate lives left
+	Sprite *EnemyShip;
 	ParallaxNodeExtras *_backgroundNode;
 	float _shipPointsPerSecY;												// How much distance to move the ship 
 	Vector<Sprite*> *_asteroids;											// List of asteroids
-	int _nextAsteroid=0;
-	float _nextAsteroidSpawn=0;												// time to spawn next asteroid
+	Vector<Sprite*> *EnemyShipList;											// List of enemy ships
+	int _nextAsteroid = 0;
+	int nextEnemyShip = 0;
+	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
+	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
 	Vector<Sprite*> *_shipLasers;											// List of lasers
 	int _nextShipLaser = 0;													// Ship laser list index
 	Sprite* livesList[3];													// List of lives
@@ -84,9 +89,9 @@ private:
 	void endScene(EndReason endReason);
 	void restartTapped(Ref* pSender);
 
-	//cocos2d::Label* levelLabel;												// Display the current level
 	cocos2d::Label* scoreLabel;												// Display the current score
 	cocos2d::Label * timeLabel;												// Display the time remaining
+
 	unsigned int score;
 	unsigned int level;
 	unsigned int time;

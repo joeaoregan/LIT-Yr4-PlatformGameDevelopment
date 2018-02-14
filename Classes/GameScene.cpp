@@ -13,15 +13,6 @@
 #include "HUD.h"
 #include "Input.h"
 
-/*
-// Needed to use to_string method with android
-template <typename T>
-std::string to_string(T value) {
-    std::ostringstream os ;
-    os << value ;
-    return os.str() ;
-}
-*/
 USING_NS_CC;
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -46,7 +37,9 @@ Scene* GameScene::createScene() {
 // on "init" you need to initialize your instance
 bool GameScene::init() {    
     if ( !Layer::init() ) { return false; }																					// super init first
-	
+
+	_lives = 3;
+
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -63,7 +56,6 @@ bool GameScene::init() {
 	this->addChild(menu, 1);
 	
 	//  GALAXY
-
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
 	this->addChild(_batchNode);
 
@@ -90,6 +82,18 @@ bool GameScene::init() {
 		_asteroids->pushBack(asteroid);
 	}
 
+	// EnemyShip
+	EnemyShipList = new Vector<Sprite*>(3);																					// List of enemy ships
+	for (int i = 0; i < 3; ++i) {
+		//EnemyShip = Sprite::create("EnemyShip.png");
+		//EnemyShip->setPosition(visibleSize.width, visibleSize.height / 2);
+		//this->addChild(EnemyShip);
+		auto *enemyShip1 = Sprite::create("EnemyShip.png");													// Asteroid sprite
+		enemyShip1->setVisible(false);
+		this->addChild(enemyShip1);
+		EnemyShipList->pushBack(enemyShip1);
+	}
+
 	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																			// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
 		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");											// Laser sprite
@@ -106,14 +110,14 @@ bool GameScene::init() {
 	touchListener->onTouchesBegan = CC_CALLBACK_2(GameScene::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	// Player Lives
-	_lives = 3;																												// Number of lives
+	// Player Lives																									// Number of lives
 	for (int i = 0; i < _lives; i++) {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
 		this->addChild(playerLife);
 		livesList[i] = playerLife;																							// Add life sprite to list of lives
 	}
+
 
 	double curTime = getTimeTick();																							// Current game time
 	_gameOverTime = curTime + 30000;																						// Time to finish game
@@ -124,7 +128,6 @@ bool GameScene::init() {
 	HUD::Instance()->init(score, level, time, this);																				// Display score, level number, and time
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 
-	//__String *tempLevel = __String::createWithFormat("Level: %i", level);
 	__String *tempScore = __String::createWithFormat("Score: %i", score);
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
 	
@@ -133,13 +136,6 @@ bool GameScene::init() {
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(scoreLabel, 10000);
-	/*
-	// Level
-	levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-	levelLabel->setColor(Color3B::WHITE);
-	levelLabel->setPosition(Point(75 + origin.x, visibleSize.height * 0.95 + origin.y));
-	this->addChild(levelLabel, 10000);
-	*/
 
 	// Timer
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
@@ -177,6 +173,7 @@ void GameScene::update(float dt) {
 	updateTimer();																							// Update the countdown timer
 	_backgroundNode->update(dt);																			// Scroll the background objects
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
+	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 
@@ -186,6 +183,9 @@ void GameScene::update(float dt) {
 	if (_lives < 3) {																						// If the players lives are less than 3
 		livesList[_lives]->setVisible(false);																// Set the lives invisible (2,1,0)
 	}
+
+	// Update the enemy ship position
+	//EnemyShip->setPosition(EnemyShip->getPosition().x - 2, EnemyShip->getPosition().y);
 }
 
 void GameScene::getInput() {
@@ -211,7 +211,7 @@ void GameScene::getInput() {
 }
 
 void GameScene::updateTimer() {
-	if (getTimeTick() == currentTime + 1000) {
+	if (getTimeTick() >= currentTime + 1000) {
 		currentTime = getTimeTick();
 		time--;
 		timeLabel->setString("Time: " + to_string(time));
@@ -239,6 +239,33 @@ void GameScene::spawnAsteroids(float curTimeMillis) {
 				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
 				CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
 				NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
+		);
+	}
+}
+
+
+void GameScene::spawnEnemyShips(float curTimeMillis) {
+	if (curTimeMillis > nextEnemyShipSpawnTime) {
+		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
+		nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;												// Set the time to spawn the next ship
+
+		float randY = randomValueBetween(0.0F, winSize.height);												// Random Y position for enemy ship
+		float randDuration = randomValueBetween(2.0F, 10.0F);
+
+		Sprite *enemyShip = EnemyShipList->at(nextEnemyShip);
+		nextEnemyShip++;																					// Increment the enemy ship on the list
+
+		if (nextEnemyShip >= EnemyShipList->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
+
+		enemyShip->stopAllActions();																		// CCNode.cpp
+		enemyShip->setPosition(winSize.width + enemyShip->getContentSize().width / 2, randY);
+		enemyShip->setVisible(true);
+
+		enemyShip->runAction(
+			Sequence::create(
+				MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),
+				CallFuncN::create(CC_CALLBACK_1(GameScene::setInvisible, this)),
+				NULL /* TERMINATE WITH NULL */)
 		);
 	}
 }
@@ -301,7 +328,7 @@ void GameScene::checkCollisions() {
 				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				asteroid->setVisible(false);
-				score += 10;
+				score += 10;																				// Award 10 points for destroying an asteroid
 			}
 		}
 
@@ -310,6 +337,22 @@ void GameScene::checkCollisions() {
 			asteroid->setVisible(false);																	// Destroy the asteroid
 			player->getSprite()->runAction(Blink::create(1.0F, 9));											// Flash the Player ship
 			_lives--;																						// Decrement the number of lives
+		}
+	}
+
+	// Enemy ship collisions
+	for (auto enemyShip : *EnemyShipList) {
+		if (!(enemyShip->isVisible())) continue;
+
+		for (auto shipLaser : *_shipLasers) {
+			if (!(shipLaser->isVisible())) continue;
+
+			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
+				Audio::Instance()->explodeFX();
+				shipLaser->setVisible(false);
+				enemyShip->setVisible(false);
+				score += 20;																				// Award 20 points for destroying an enemy ship
+			}
 		}
 	}
 }
