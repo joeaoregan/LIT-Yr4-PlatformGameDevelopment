@@ -13,6 +13,7 @@
 #include "HUD.h"
 #include "Input.h"
 
+/*
 // Needed to use to_string method with android
 template <typename T>
 std::string to_string(T value) {
@@ -20,7 +21,7 @@ std::string to_string(T value) {
     os << value ;
     return os.str() ;
 }
-
+*/
 USING_NS_CC;
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -30,6 +31,7 @@ DPad *controller;						// Add directional pad for mobile device
 Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
 HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
 Input* Input::s_pInstance;				// Singleton for Input
+GameScene* GameScene::s_pInstance;		// Game Singleton 
 
 #define KNUMASTEROIDS 15				// Number of asteroids
 #define KNUMLASERS 5					// Number of lasers
@@ -37,14 +39,13 @@ Input* Input::s_pInstance;				// Singleton for Input
 Scene* GameScene::createScene() {
     auto scene = Scene::create();		// 'scene' is an autorelease object        
     auto layer = GameScene::create();	// 'layer' is an autorelease object	    
-    scene->addChild(layer);				// add layer as a child to scene	    
-    return scene;						// return the scene
+    scene->addChild(layer);				// Add layer as a child to scene	    
+    return scene;						// Return the scene
 }
 
 // on "init" you need to initialize your instance
-bool GameScene::init() {
-    // super init first
-    if ( !Layer::init() ) { return false; }
+bool GameScene::init() {    
+    if ( !Layer::init() ) { return false; }																					// super init first
 	
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
@@ -105,8 +106,8 @@ bool GameScene::init() {
 	touchListener->onTouchesBegan = CC_CALLBACK_2(GameScene::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	_lives = 3;																												// Number of lives
 	// Player Lives
+	_lives = 3;																												// Number of lives
 	for (int i = 0; i < _lives; i++) {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
@@ -120,24 +121,25 @@ bool GameScene::init() {
 	currentTime = getTimeTick();																							// Current game time, for timer
 
 	Audio::Instance()->init();																								// Initialise the game audio
-	HUD::Instance()->init(score, level, time);																				// Display score, level number, and time
+	HUD::Instance()->init(score, level, time, this);																				// Display score, level number, and time
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
-	
-	__String *tempScore = __String::createWithFormat("Score: %i", score);
-	__String *tempLevel = __String::createWithFormat("Level: %i", level);
-	__String *tempTime = __String::createWithFormat("Time: %i", time);
 
+	//__String *tempLevel = __String::createWithFormat("Level: %i", level);
+	__String *tempScore = __String::createWithFormat("Score: %i", score);
+	__String *tempTime = __String::createWithFormat("Time: %i", time);
+	
 	// Score
 	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(scoreLabel, 10000);
-
+	/*
 	// Level
 	levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
 	levelLabel->setColor(Color3B::WHITE);
 	levelLabel->setPosition(Point(75 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(levelLabel, 10000);
+	*/
 
 	// Timer
 	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
@@ -146,7 +148,6 @@ bool GameScene::init() {
 		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 120, visibleSize.height * 0.95 + origin.y));
 	else
 		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 80, visibleSize.height * 0.95 + origin.y));
-
 	this->addChild(timeLabel);
 	
 	// D-pad (Display on mobile device)
@@ -159,8 +160,7 @@ bool GameScene::init() {
 		this->addChild(controller);
 	}
 	
-	//controller->init(this);		// D-pad (Display on mobile device)
-
+	//controller->init(this);																				// D-pad (Display on mobile device)
 	this->scheduleUpdate();
 
     return true;
@@ -171,11 +171,11 @@ void GameScene::update(float dt) {
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
 	
     scoreLabel->setString("Score: " + to_string(score));													// Update the displayed score
+	//HUD::Instance()->update();																				// Update the score (Not working)
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();																							// Update the countdown timer
 	_backgroundNode->update(dt);																			// Scroll the background objects
-	//moveShip(dt);																							// Move the player ship
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not

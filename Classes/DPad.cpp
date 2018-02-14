@@ -1,10 +1,12 @@
-//
-//  DPad.cpp
-//  RPGCollab
-//
-//  Created by Jordan Brown on 9/1/14.
-//
-//
+/*
+	Joe O'Regan
+	K00203642
+
+	Original Version:
+	DPad.cpp 
+	RPGCollab
+	Created by Jordan Brown on 9/1/14.
+*/
 
 #include "DPad.h"
 DPad::DPad(){}		// Constructor	

@@ -19,7 +19,16 @@ typedef enum {
 } EndReason;
 
 class GameScene : public Layer {
-public:    
+public:
+	// Game singleton
+	static GameScene* Instance() {
+		if (s_pInstance == 0) {
+			s_pInstance = new GameScene();
+			return s_pInstance;
+		}
+		return s_pInstance;
+	}
+
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -43,6 +52,8 @@ public:
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void updateTimer();														// 20180204 Update the countdown timer
 	void getInput();
+	unsigned int getScore() { return score; }								// 20180214 Return the current score
+
 	/*
 	void moveUp();
 	void moveDown();
@@ -73,14 +84,16 @@ private:
 	void endScene(EndReason endReason);
 	void restartTapped(Ref* pSender);
 
+	//cocos2d::Label* levelLabel;												// Display the current level
 	cocos2d::Label* scoreLabel;												// Display the current score
-	cocos2d::Label* levelLabel;												// Display the current level
 	cocos2d::Label * timeLabel;												// Display the time remaining
 	unsigned int score;
 	unsigned int level;
 	unsigned int time;
 
 	int currentTime;
+
+	static GameScene* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 };
 
 #endif // __GAME_SCENE_H__
