@@ -11,26 +11,21 @@ DPad::DPad(){}		// Constructor
 DPad::~DPad() {}	// Destructor
 
 bool DPad::init(cocos2d::Layer *layer) {
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+
 	// If the target platform is a mobile device (android in this case)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		//controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
-		layer->addChild(DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150)));
-		//layer->addChild(DPad::create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
+		if (visibleSize.height == 1080)
+			//layer->addChild(DPad::create("Base225.png", "Arrow72.png", "Arrow72Pressed.png", Point(200, 200)));
+			layer->addChild(create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", Point(250, 250)));
+		else
+			//layer->addChild(DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150)));
+			layer->addChild(create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
 	}
 
 	return true;
 }
-
-/*
-// If the target platform is a mobile device (android in this case)
-if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
-	//if (visibleSize.height == 1080)
-	//	layer->addChild(DPad::create("Base225.png", "Arrow72.png", "Arrow72Pressed.png", Point(200, 200)));
-	//else
-	//controller = DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150));
-	layer->addChild(DPad::create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
-}
-*/
 
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
     DPad *controller = new DPad();

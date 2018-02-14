@@ -67,8 +67,13 @@ bool ParallaxNodeExtras::init() {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
 	// 2) Create the sprites will be added to the ParallaxNode
-	_spaceDust1 = Sprite::create("bg_front_spacedust.png");
-	_spaceDust2 = Sprite::create("bg_front_spacedust.png");
+	if (visibleSize.height == 1080) {
+		_spaceDust1 = Sprite::create("bg_front_spacedust1080.png");
+		_spaceDust2 = Sprite::create("bg_front_spacedust1080.png");
+	} else {
+		_spaceDust1 = Sprite::create("bg_front_spacedust.png");
+		_spaceDust2 = Sprite::create("bg_front_spacedust.png");
+	}
 	_planetSunrise = Sprite::create("bg_planetsunrise.png");
 	_galaxy = Sprite::create("bg_galaxy.png");
 	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
