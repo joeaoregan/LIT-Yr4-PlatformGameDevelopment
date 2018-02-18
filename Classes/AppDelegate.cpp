@@ -18,8 +18,10 @@ AppDelegate::~AppDelegate()
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
+	//auto director = Director::getInstance();
+	//auto glview = director->getOpenGLView();
+	cocos2d::Director* director = Director::getInstance();
+	cocos2d::GLView* glview = director->getOpenGLView();
     if(!glview) {
         glview = GLViewImpl::create("Space Game: Joe O'Regan K00203642");
         director->setOpenGLView(glview);
@@ -30,7 +32,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);								// set FPS. the default value is 1.0/60 if you don't call this
 
 	//auto scene = GameScene::createScene();								// create a scene. it's an autorelease object
-	auto scene = SplashScene::createScene();								// Create the game splash screen
+	cocos2d::Scene* scene = SplashScene::createScene();						// Create the game splash screen
 	    
     director->runWithScene(scene);											// run
 

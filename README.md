@@ -29,6 +29,11 @@ Space Shooter: Double Lasers
 
 ---
 
+![Space Game: Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame5Enemies.png "Space Shooter: Enemies")
+Space Shooter: Enemies
+
+---
+
 ## Additions:
 
 * Changed backing track

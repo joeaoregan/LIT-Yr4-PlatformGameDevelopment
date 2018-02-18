@@ -6,12 +6,14 @@ USING_NS_CC;
 #define TRANSITION_TIME 0.5
 
 Scene* MainMenu::createScene() {
-	auto scene = Scene::create();			// 'scene' is an autorelease object
-	auto layer = MainMenu::create();		// 'layer' is an autorelease object
+	//auto scene = Scene::create();				// 'scene' is an autorelease object
+	//auto layer = MainMenu::create();			// 'layer' is an autorelease object
+	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object
+	MainMenu* layer = MainMenu::create();		// 'layer' is an autorelease object
 		
-	scene->addChild(layer);					// Add layer as a child to scene
+	scene->addChild(layer);						// Add layer as a child to scene
 		
-	return scene;							// Return the scene
+	return scene;								// Return the scene
 }
 
 // on "init" you need to initialize your instance
@@ -45,7 +47,8 @@ bool MainMenu::init() {
 }
 
 void MainMenu::StartGame(cocos2d::Ref *sender) {
-	auto scene = GameScene::createScene();																										// Create the game scene
+	//auto scene = GameScene::createScene();																									// Create the game scene
+	cocos2d::Scene* scene = GameScene::createScene();																							// Create the game scene
 
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
 }

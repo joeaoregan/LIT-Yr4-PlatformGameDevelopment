@@ -80,8 +80,10 @@ bool ParallaxNodeExtras::init() {
 	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
 
 	// 3) Determine relative movement speeds for space dust and background
-	auto dustSpeed = Point(0.1F, 0.1F);
-	auto bgSpeed = Point(0.05F, 0.05F);
+	//auto dustSpeed = Point(0.1F, 0.1F);
+	//auto bgSpeed = Point(0.05F, 0.05F);
+	cocos2d::Point dustSpeed = Point(0.1F, 0.1F);
+	cocos2d::Point bgSpeed = Point(0.05F, 0.05F);
 
 	// 4) Add children to ParallaxNode
 	addChild(_spaceDust1, 0, dustSpeed, Point(0, visibleSize.height / 2));
@@ -95,28 +97,33 @@ bool ParallaxNodeExtras::init() {
 }
 
 void ParallaxNodeExtras::update(float dt) {
-	auto backgroundScrollVert = Point(-1000, 0);
+	//auto backgroundScrollVert = Point(-1000, 0);
+	cocos2d::Point backgroundScrollVert = Point(-1000, 0);
 	setPosition(getPosition() + (backgroundScrollVert * dt));
 
 	// Parallax
-	auto spaceDusts = new Vector<Sprite*>(2);
+	//auto spaceDusts = new Vector<Sprite*>(2);
+	cocos2d::Vector<cocos2d::Sprite*>* spaceDusts = new Vector<Sprite*>(2);
 	spaceDusts->pushBack(_spaceDust1);
 	spaceDusts->pushBack(_spaceDust2);
-	for (auto spaceDust : *spaceDusts) {
+	//for (auto spaceDust : *spaceDusts) {
+	for (cocos2d::Sprite* spaceDust : *spaceDusts) {
 		float xPosition = convertToWorldSpace(spaceDust->getPosition()).x;
 		float size = spaceDust->getContentSize().width;
 		if (xPosition < -size / 2) {
 			incrementOffset(Point(spaceDust->getContentSize().width * 2, 0), spaceDust);
 		}
 	}
-	
-	auto backGrounds = new Vector<Sprite*>(4);
+
+	//auto backGrounds = new Vector<Sprite*>(4);
+	cocos2d::Vector<cocos2d::Sprite*>* backGrounds = new Vector<Sprite*>(4);
 	backGrounds->pushBack(_galaxy);
 	backGrounds->pushBack(_planetSunrise);
 	backGrounds->pushBack(_spatialAnomaly1);
 	backGrounds->pushBack(_spatialAnomaly2);
 
-	for (auto background : *backGrounds) {
+	//for (auto background : *backGrounds) {
+	for (cocos2d::Sprite* background : *backGrounds) {
 		float xPosition = convertToWorldSpace(background->getPosition()).x;
 		float size = background->getContentSize().width;
 		if (xPosition < -size) {

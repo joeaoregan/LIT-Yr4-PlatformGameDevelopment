@@ -18,25 +18,27 @@ USING_NS_CC;
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
-DPad *controller;						// Add directional pad for mobile device
-Audio* Audio::s_pInstance;				// Singleton so only one instance of Audio exists in the game, for easy access
-HUD* HUD::s_pInstance;					// Singleton for Heads Up Display
-Input* Input::s_pInstance;				// Singleton for Input
-GameScene* GameScene::s_pInstance;		// Game Singleton 
+DPad *controller;							// Add directional pad for mobile device
+Audio* Audio::s_pInstance;					// Singleton so only one instance of Audio exists in the game, for easy access
+HUD* HUD::s_pInstance;						// Singleton for Heads Up Display
+Input* Input::s_pInstance;					// Singleton for Input
+GameScene* GameScene::s_pInstance;			// Game Singleton 
 
-#define KNUMASTEROIDS 15				// Number of asteroids
-#define KNUMLASERS 5					// Number of lasers
+#define KNUMASTEROIDS 15					// Number of asteroids
+#define KNUMLASERS 5						// Number of lasers
 
 Scene* GameScene::createScene() {
-    auto scene = Scene::create();		// 'scene' is an autorelease object        
-    auto layer = GameScene::create();	// 'layer' is an autorelease object	    
-    scene->addChild(layer);				// Add layer as a child to scene	    
-    return scene;						// Return the scene
+	//auto scene = Scene::create();			// 'scene' is an autorelease object        
+	//auto layer = GameScene::create();		// 'layer' is an autorelease object	   
+	cocos2d::Scene* scene = Scene::create();// 'scene' is an autorelease object        
+	GameScene* layer = GameScene::create();	// 'layer' is an autorelease object	    
+    scene->addChild(layer);					// Add layer as a child to scene	    
+    return scene;							// Return the scene
 }
 
 // on "init" you need to initialize your instance
 bool GameScene::init() {    
-    if ( !Layer::init() ) { return false; }																					// super init first
+    if ( !Layer::init() ) { return false; }																// super init first
 
 	_lives = 3;
 
@@ -44,14 +46,17 @@ bool GameScene::init() {
     Point origin = Director::getInstance()->getVisibleOrigin();
 
 	// add a "close" icon to exit the progress. it's an autorelease object
-	auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+	//auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+	//	CC_CALLBACK_1(GameScene::menuCloseCallback, this));
+	cocos2d::MenuItemImage* closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(GameScene::menuCloseCallback, this));
 
 	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
 		origin.y + closeItem->getContentSize().height / 2));
 
 	// create menu, it's an autorelease object
-	auto menu = Menu::create(closeItem, NULL);
+	//auto menu = Menu::create(closeItem, NULL);
+	cocos2d::Menu* menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu, 1);
 	
@@ -76,7 +81,8 @@ bool GameScene::init() {
 
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);																		// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
-		auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");													// Asteroid sprite
+		//auto *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");												// Asteroid sprite
+		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName("asteroid.png");										// Asteroid sprite
 		asteroid->setVisible(false);
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
@@ -88,7 +94,8 @@ bool GameScene::init() {
 		//EnemyShip = Sprite::create("EnemyShip.png");
 		//EnemyShip->setPosition(visibleSize.width, visibleSize.height / 2);
 		//this->addChild(EnemyShip);
-		auto *enemyShip1 = Sprite::create("EnemyShip.png");													// Asteroid sprite
+		//auto *enemyShip1 = Sprite::create("EnemyShip.png");																// Asteroid sprite
+		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");														// Asteroid sprite
 		enemyShip1->setVisible(false);
 		this->addChild(enemyShip1);
 		EnemyShipList->pushBack(enemyShip1);
@@ -96,21 +103,24 @@ bool GameScene::init() {
 
 	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																			// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");											// Laser sprite
+		//auto shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");											// Laser sprite
+		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");								// Laser sprite
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
 	}
 
 	Device::setAccelerometerEnabled(true);																					// Enable accelerometer
-	auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
+	//auto accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
+	cocos2d::EventListenerAcceleration* accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
-	auto touchListener = EventListenerTouchAllAtOnce::create();
+	//auto touchListener = EventListenerTouchAllAtOnce::create();
+	cocos2d::EventListenerTouchAllAtOnce* touchListener = EventListenerTouchAllAtOnce::create();
 	touchListener->onTouchesBegan = CC_CALLBACK_2(GameScene::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
-	// Player Lives																									// Number of lives
+	// Player Lives																											// Number of lives
 	for (int i = 0; i < _lives; i++) {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
@@ -118,14 +128,13 @@ bool GameScene::init() {
 		livesList[i] = playerLife;																							// Add life sprite to list of lives
 	}
 
-
 	double curTime = getTimeTick();																							// Current game time
 	_gameOverTime = curTime + 30000;																						// Time to finish game
 
 	currentTime = getTimeTick();																							// Current game time, for timer
 
 	Audio::Instance()->init();																								// Initialise the game audio
-	HUD::Instance()->init(score, level, time, this);																				// Display score, level number, and time
+	HUD::Instance()->init(score, level, time, this);																		// Display score, level number, and time
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 
 	__String *tempScore = __String::createWithFormat("Score: %i", score);
@@ -167,7 +176,7 @@ void GameScene::update(float dt) {
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen
 	
     scoreLabel->setString("Score: " + to_string(score));													// Update the displayed score
-	//HUD::Instance()->update();																				// Update the score (Not working)
+	//HUD::Instance()->update();																			// Update the score (Not working)
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 	updateTimer();																							// Update the countdown timer
@@ -318,10 +327,12 @@ void GameScene::moveShip(float dt) {
 
 void GameScene::checkCollisions() {
 	// Asteroids Collisions
-	for (auto asteroid : *_asteroids) {
+	//for (auto asteroid : *_asteroids) {
+	for (cocos2d::Sprite* asteroid : *_asteroids) {
 		if (!(asteroid->isVisible())) continue;
 
-		for (auto shipLaser : *_shipLasers) {
+		//for (auto shipLaser : *_shipLasers) {
+		for (cocos2d::Sprite* shipLaser : *_shipLasers) {
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
@@ -341,10 +352,12 @@ void GameScene::checkCollisions() {
 	}
 
 	// Enemy ship collisions
-	for (auto enemyShip : *EnemyShipList) {
+	//for (auto enemyShip : *EnemyShipList) {
+	for (cocos2d::Sprite* enemyShip : *EnemyShipList) {
 		if (!(enemyShip->isVisible())) continue;
 
-		for (auto shipLaser : *_shipLasers) {
+		//for (auto shipLaser : *_shipLasers) {
+		for (cocos2d::Sprite* shipLaser : *_shipLasers) {
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
@@ -407,14 +420,16 @@ void GameScene::setInvisible(Node * node) {
 
 void GameScene::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	Audio::Instance()->laserFX();
-	auto winSize = Director::getInstance()->getWinSize();
+	//auto winSize = Director::getInstance()->getWinSize();
+	cocos2d::Size winSize = Director::getInstance()->getWinSize();
 
 	//spawnLaser();
 	spawn2Lasers();
 }
 
 void GameScene::spawnLaser() {
-	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
+	//auto shipLaser = _shipLasers->at(_nextShipLaser++);											// Next laser in the list
+	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);									// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
 	
@@ -428,10 +443,12 @@ void GameScene::spawnLaser() {
 			NULL));
 }
 void GameScene::spawn2Lasers() {
-	auto shipLaser = _shipLasers->at(_nextShipLaser++);												// Next laser in the list
+	//auto shipLaser = _shipLasers->at(_nextShipLaser++);											// Next laser in the list
+	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);									// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
-	auto shipLaser2 = _shipLasers->at(_nextShipLaser++);											// Next laser in the list
+	//auto shipLaser2 = _shipLasers->at(_nextShipLaser++);											// Next laser in the list
+	cocos2d::Sprite* shipLaser2 = _shipLasers->at(_nextShipLaser++);								// Next laser in the list
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
 
@@ -464,23 +481,28 @@ void GameScene::endScene(EndReason endReason) {
 	if (_gameOver) return;																						// If already game over, skip this function
 	_gameOver = true;																							// Set game over
 
-	auto winSize = Director::getInstance()->getWinSize();
+	//auto winSize = Director::getInstance()->getWinSize();
+	cocos2d::Size winSize = Director::getInstance()->getWinSize();
 
 	char message[10] = "You Win";
 	if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
 
-	auto label = Label::createWithBMFont("Arial.fnt", message); 
+	//auto label = Label::createWithBMFont("Arial.fnt", message);
+	cocos2d::Label* label = Label::createWithBMFont("Arial.fnt", message);
 	label->setScale(0.1F);
 	label->setPosition(winSize.width / 2, winSize.height*0.6F);
 	this->addChild(label);
 	
 	strcpy(message, "Restart");
-	auto restartLabel = Label::createWithBMFont("Arial.fnt", message);
-	auto restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_1(GameScene::restartTapped, this));
+	//auto restartLabel = Label::createWithBMFont("Arial.fnt", message);
+	//auto restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_1(GameScene::restartTapped, this));
+	cocos2d::Label* restartLabel = Label::createWithBMFont("Arial.fnt", message);
+	cocos2d::MenuItemLabel* restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_1(GameScene::restartTapped, this));
 	restartItem->setScale(0.1F);
 	restartItem->setPosition(winSize.width / 2, winSize.height*0.4);
 
-	auto *menu = Menu::create(restartItem, NULL);
+	//auto *menu = Menu::create(restartItem, NULL);
+	cocos2d::Menu* menu = Menu::create(restartItem, NULL);
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
 
