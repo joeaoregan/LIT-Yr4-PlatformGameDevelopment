@@ -2,8 +2,6 @@
 //#include "DPad.h"
 #include "Input.h"
 
-USING_NS_CC;
-
 //DPad *controller;																	// Add directional pad for mobile device
 
 #define PLAYER_SPEED 3.0f
@@ -61,8 +59,16 @@ void Player::update() {
 		else if (controller->getButton(6)->isSelected()) {
 			moveRight();
 		}
+	} 
+ // Android DPad
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+		if (DPad::Instance()->getButton(8)->isSelected()) moveUp();
+		else if (DPad::Instance()->getButton(2)->isSelected()) moveDown();
+
+		if (DPad::Instance()->getButton(4)->isSelected()) moveLeft();
+		else if (DPad::Instance()->getButton(6)->isSelected()) moveRight();
 	}
- */
+	*/
 }
 
 void Player::moveUp() {

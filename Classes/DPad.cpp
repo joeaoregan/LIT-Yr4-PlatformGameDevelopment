@@ -9,10 +9,13 @@
 */
 
 #include "DPad.h"
-DPad::DPad(){}		// Constructor	
-DPad::~DPad() {}	// Destructor
 
-bool DPad::init(cocos2d::Layer *layer) {
+//DPad* DPad::s_pInstance;	// DPad Singleton
+
+DPad::DPad(){}				// Constructor	
+DPad::~DPad() {}			// Destructor
+
+bool DPad::init(cocos2d::Layer *layer) {	
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
 	// If the target platform is a mobile device (android in this case)
@@ -25,12 +28,16 @@ bool DPad::init(cocos2d::Layer *layer) {
 			//layer->addChild(DPad::create("Base01.png", "Button01.png", "ButtonPressed01.png", Point(150, 150)));
 			layer->addChild(create("Base150.png", "Arrow.png", "ArrowPressed.png", Point(150, 150)));
 	}
+	
+
+	//layer->addChild(create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", Point(250, 250)));
 
 	return true;
 }
 
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
     DPad *controller = new DPad();
+
     if (true) {
         // Set to autorelease
         controller->autorelease();
@@ -57,6 +64,7 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
         
         return controller;
     }
+
     CC_SAFE_DELETE(controller);
     return NULL;
 }
@@ -92,6 +100,7 @@ void DPad::setCorner(int corner){
 		default:
 			break;
 	}
+
 	bg->setPosition(position);
 	up->setPosition(Point(bg->getPosition().x,bg->getPosition().y + bg->getContentSize().height/2 - up->getContentSize().height/2));
 	down->setPosition(Point(bg->getPosition().x,bg->getPosition().y - bg->getContentSize().height/2 + down->getContentSize().height/2));

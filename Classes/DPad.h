@@ -48,11 +48,22 @@ using namespace cocos2d;
 class DPad: public Node{
 
 public:
+	/*
+	// DPad singleton
+	static DPad* Instance() {
+		if (s_pInstance == 0) {
+			s_pInstance = new DPad();
+			return s_pInstance;
+		}
+		return s_pInstance;
+	}
+	*/
     static DPad *create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position);
+
     DPad();
     ~DPad();
 
-	bool init(cocos2d::Layer *layer);							// JOR 13/12/2018 initialise the directional pad
+	bool init(cocos2d::Layer *layer);										// JOR 13/12/2018 initialise the directional pad
     MenuItemImage *getButton(int button);
     void setCorner(int corner);
 
@@ -62,5 +73,7 @@ private:
     MenuItemImage *left;
     MenuItemImage *right;
     Sprite *bg;    
+
+	//static DPad* s_pInstance;												// Single instance of Game used as singleton, so only one instance exists thoughout the game
 };
 #endif /* defined(__RPGCollab__DPad__) */

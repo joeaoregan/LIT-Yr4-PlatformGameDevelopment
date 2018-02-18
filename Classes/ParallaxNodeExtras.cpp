@@ -3,7 +3,9 @@
 	ParallaxNodeExtras.cpp
 	02/02/2018
 */
-#include "ParallaxNodeExtras.h"
+#include "Game.h"
+//#include "ParallaxNodeExtras.h"
+
 
 //// Hack to access CCPointObject (which is not a public class)
 //class PointObject : public Ref {
@@ -66,24 +68,37 @@ void ParallaxNodeExtras::incrementOffset(Point offset, Node* node){
 bool ParallaxNodeExtras::init() {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
+	std::string bgFileName;
+
 	// 2) Create the sprites will be added to the ParallaxNode
+	// Choose the background image based on the screen resolution and current level
 	if (visibleSize.height == 1080) {
-		_spaceDust1 = Sprite::create("bg_front_spacedust1080.png");
-		_spaceDust2 = Sprite::create("bg_front_spacedust1080.png");
+		if (Game::Instance()->getLevel() == 1  || Game::Instance()->getLevel() == 4)
+			bgFileName = "bg_front_spacedust1080.png";
+		else if (Game::Instance()->getLevel() == 2)
+			bgFileName = "bg_front_spacedust1080L2.png";
+		else if (Game::Instance()->getLevel() == 3)
+			bgFileName = "bg_front_spacedust1080L3.png";
 	} else {
-		_spaceDust1 = Sprite::create("bg_front_spacedust.png");
-		_spaceDust2 = Sprite::create("bg_front_spacedust.png");
+		if (Game::Instance()->getLevel() == 1 || Game::Instance()->getLevel() == 4)
+			bgFileName = "bg_front_spacedust.png";
+		else if (Game::Instance()->getLevel() == 2)
+			bgFileName = "bg_front_spacedustL2.png";
+		else if (Game::Instance()->getLevel() == 3)
+			bgFileName = "bg_front_spacedustL3.png";
 	}
+
+	_spaceDust1 = Sprite::create(bgFileName);
+	_spaceDust2 = Sprite::create(bgFileName);
+
 	_planetSunrise = Sprite::create("bg_planetsunrise.png");
 	_galaxy = Sprite::create("bg_galaxy.png");
 	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
 	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
 
 	// 3) Determine relative movement speeds for space dust and background
-	//auto dustSpeed = Point(0.1F, 0.1F);
-	//auto bgSpeed = Point(0.05F, 0.05F);
-	cocos2d::Point dustSpeed = Point(0.1F, 0.1F);
-	cocos2d::Point bgSpeed = Point(0.05F, 0.05F);
+	cocos2d::Point dustSpeed = Point(0.1F, 0.1F);															// JOR replaced auto specifier
+	cocos2d::Point bgSpeed = Point(0.05F, 0.05F);															// JOR replaced auto specifier
 
 	// 4) Add children to ParallaxNode
 	addChild(_spaceDust1, 0, dustSpeed, Point(0, visibleSize.height / 2));
@@ -97,13 +112,11 @@ bool ParallaxNodeExtras::init() {
 }
 
 void ParallaxNodeExtras::update(float dt) {
-	//auto backgroundScrollVert = Point(-1000, 0);
-	cocos2d::Point backgroundScrollVert = Point(-1000, 0);
+	cocos2d::Point backgroundScrollVert = Point(-1000, 0);									// JOR replaced auto specifier
 	setPosition(getPosition() + (backgroundScrollVert * dt));
 
 	// Parallax
-	//auto spaceDusts = new Vector<Sprite*>(2);
-	cocos2d::Vector<cocos2d::Sprite*>* spaceDusts = new Vector<Sprite*>(2);
+	cocos2d::Vector<cocos2d::Sprite*>* spaceDusts = new Vector<Sprite*>(2);					// JOR replaced auto specifier
 	spaceDusts->pushBack(_spaceDust1);
 	spaceDusts->pushBack(_spaceDust2);
 	//for (auto spaceDust : *spaceDusts) {
@@ -115,15 +128,13 @@ void ParallaxNodeExtras::update(float dt) {
 		}
 	}
 
-	//auto backGrounds = new Vector<Sprite*>(4);
-	cocos2d::Vector<cocos2d::Sprite*>* backGrounds = new Vector<Sprite*>(4);
+	cocos2d::Vector<cocos2d::Sprite*>* backGrounds = new Vector<Sprite*>(4);				// JOR replaced auto specifier
 	backGrounds->pushBack(_galaxy);
 	backGrounds->pushBack(_planetSunrise);
 	backGrounds->pushBack(_spatialAnomaly1);
 	backGrounds->pushBack(_spatialAnomaly2);
 
-	//for (auto background : *backGrounds) {
-	for (cocos2d::Sprite* background : *backGrounds) {
+	for (cocos2d::Sprite* background : *backGrounds) {										// JOR replaced auto specifier
 		float xPosition = convertToWorldSpace(background->getPosition()).x;
 		float size = background->getContentSize().width;
 		if (xPosition < -size) {

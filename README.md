@@ -29,8 +29,13 @@ Space Shooter: Double Lasers
 
 ---
 
-![Space Game: Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame5Enemies.png "Space Shooter: Enemies")
+![Space Game: Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame5Enemies.jpg "Space Shooter: Enemies")
 Space Shooter: Enemies
+
+---
+
+![Space Game: Level 2](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame6Level2.jpg "Space Shooter: Level 2")
+Space Shooter: Level 2, score and lives carry over from previous level, and background changes
 
 ---
 

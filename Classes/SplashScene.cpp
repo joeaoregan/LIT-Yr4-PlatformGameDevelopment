@@ -8,13 +8,13 @@ USING_NS_CC;
 #define TRANSITION_TIME 0.5
 
 Scene* SplashScene::createScene() {    
-    cocos2d::Scene* scene = Scene::create();	// Create the scene. 'scene' is an autorelease object
+    cocos2d::Scene* scene = Scene::create();		// Create the scene. 'scene' is an autorelease object
         
-    SplashScene* layer = SplashScene::create();	// Create the layer. 'layer' is an autorelease object
+    SplashScene* layer = SplashScene::create();		// Create the layer. 'layer' is an autorelease object
 	    
-    scene->addChild(layer);						// Add layer as a child to scene
+    scene->addChild(layer);							// Add layer as a child to scene
 	    
-    return scene;								// Return the scene
+    return scene;									// Return the scene
 }
 
 // on "init" you need to initialize your instance
