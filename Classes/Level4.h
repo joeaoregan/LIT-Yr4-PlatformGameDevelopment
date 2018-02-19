@@ -1,10 +1,12 @@
 /*
+	Level4.h
+
 	Joe O'Regan
-	GameScene.h
-	02/02/2018
+	K00203642
+	18/02/2018
 */
-#ifndef __LEVEL_2_H__
-#define __LEVEL_2_H__
+#ifndef __LEVEL_4_H__
+#define __LEVEL_4_H__
 
 #include "cocos2d.h"
 #include "Player.h"
@@ -12,21 +14,13 @@
 
 USING_NS_CC;
 
-enum EndReason2 {
-	KENDREASON2WIN,
-	KENDREASON2LOSE
+enum EndReason4 {
+	KENDREASON4WIN,
+	KENDREASON4LOSE
 };
 
-class Level2 : public Layer {
+class Level4 : public Layer {
 public:
-	// Game singleton
-	static Level2* Instance() {
-		if (s_pInstance == 0) {
-			s_pInstance = new Level2();
-			return s_pInstance;
-		}
-		return s_pInstance;
-	}
 
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
@@ -34,7 +28,7 @@ public:
         
     void menuCloseCallback(cocos2d::Ref* pSender);							// a selector callback
         
-    CREATE_FUNC(Level2);													// implement the "static create()" method manually
+    CREATE_FUNC(Level4);													// implement the "static create()" method manually
 
 	float randomValueBetween(float low, float high);
 	void setInvisible(Node * node);
@@ -52,7 +46,7 @@ public:
 	void getInput();
 
 private:
-	Player* player;
+	Player* player;															// The Player ship sprite
 
 	SpriteBatchNode *_batchNode;
 	Sprite *playerLife;														// Indicate lives left
@@ -73,20 +67,17 @@ private:
 		
 	Size winSize;															// Size of the game window
 
-	void update(float dt);
-	void endScene(EndReason2 endReason);
+	void update(float dt);													// Update the scene
+	void endScene(EndReason4 endReason);
 	void restartTapped(Ref* pSender);										// Restart the current level
-	void startLevel3(Ref* pSender);											// Start level 3
-	void returnToMenu(Ref* pSender);										// Return to the main menu
-
+	void returnToMenu(Ref* pSender);											// Transition to level 4
+	
 	cocos2d::Label* scoreLabel;												// Display the current score
 	cocos2d::Label * timeLabel;												// Display the time remaining
 
 	unsigned int time;														// Current time
 
 	int currentTime;
-
-	static Level2* s_pInstance;												// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 };
 
-#endif // __LEVEL_2_H__
+#endif // __LEVEL_4_H__

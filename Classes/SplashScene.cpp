@@ -1,6 +1,7 @@
 #include "SplashScene.h"
 //#include "GameScene.h"
 #include "MainMenu.h"
+#include "Audio.h"
 
 USING_NS_CC;
 
@@ -21,6 +22,8 @@ Scene* SplashScene::createScene() {
 bool SplashScene::init() {
     // 1. super init first
     if ( !Layer::init() ) { return false; }
+	
+	Audio::Instance()->init();																						// Initialise the game audio
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();

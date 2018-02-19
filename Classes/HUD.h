@@ -10,7 +10,7 @@
 #ifndef __HUD__
 #define __HUD__
 
-#include "GameScene.h"
+//#include "Level1.h"
 
 // Needed to use to_string method with android
 template <typename T>

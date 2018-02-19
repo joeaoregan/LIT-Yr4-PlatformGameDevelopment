@@ -3,8 +3,8 @@
 	GameScene.h
 	02/02/2018
 */
-#ifndef __GAME_SCENE_H__
-#define __GAME_SCENE_H__
+#ifndef __LEVEL_1_H__
+#define __LEVEL_1_H__
 
 #include "cocos2d.h"
 //#include "ParallaxNodeExtras.h"
@@ -19,24 +19,25 @@ enum EndReason1 {
 	KENDREASONLOSE
 };
 
-class GameScene : public Layer {
+class Level1 : public Layer {
 public:
+	/*
 	// Game singleton
-	static GameScene* Instance() {
+	static Level1* Instance() {
 		if (s_pInstance == 0) {
-			s_pInstance = new GameScene();
+			s_pInstance = new Level1();
 			return s_pInstance;
 		}
 		return s_pInstance;
 	}
-
+	*/
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
         
     void menuCloseCallback(cocos2d::Ref* pSender);							// a selector callback
         
-    CREATE_FUNC(GameScene);													// implement the "static create()" method manually
+    CREATE_FUNC(Level1);													// implement the "static create()" method manually
 
 	//virtual void onAcceleration(Acceleration* acc, Event* event);
 	float randomValueBetween(float low, float high);
@@ -72,7 +73,7 @@ private:
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
 	Vector<Sprite*> *_shipLasers;											// List of lasers
 	int _nextShipLaser = 0;													// Ship laser list index
-	Sprite* livesList[5];											// List of lives
+	Sprite* livesList[5];													// List of lives
 	//int _lives=0;															// Player lives, Moved to Game.h
 
 	double _gameOverTime;
@@ -84,6 +85,7 @@ private:
 	void endScene(EndReason1 endReason);
 	void restartTapped(Ref* pSender);
 	void startLevel2(Ref* pSender);											// 20180218 Progress to the next level
+	void returnToMenu(Ref* pSender);										// 20180218 Return to the main menu
 
 	cocos2d::Label* scoreLabel;												// Display the current score
 	cocos2d::Label * timeLabel;												// Display the time remaining
@@ -94,10 +96,10 @@ private:
 
 	int currentTime;
 
-	static GameScene* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+	//static Level1* s_pInstance;												// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 };
 
-#endif // __GAME_SCENE_H__
+#endif // __LEVEL_1_H__
 
 /*
 void initBG(cocos2d::Layer *layer);

@@ -26,7 +26,10 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 
 void Audio::init() {
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);					// 20180202 Change background music
+	if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())						// If the background music isn't already playing
+		SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);				// 20180202 Change background music
+
+	// Preload the sound effects
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
 	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
 //#endif

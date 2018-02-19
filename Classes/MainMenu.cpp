@@ -1,5 +1,5 @@
 #include "MainMenu.h"
-#include "GameScene.h"
+#include "Level1.h"
 
 #define TRANSITION_TIME 0.5
 
@@ -43,7 +43,7 @@ bool MainMenu::init() {
 }
 
 void MainMenu::StartGame(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = GameScene::createScene();																						// Create the game scene, JOR replaced auto specifier
+	cocos2d::Scene* scene = Level1::createScene();																						// Create the game scene, JOR replaced auto specifier
 
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
 }

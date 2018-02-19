@@ -20,7 +20,7 @@
 #include "HUD.h"
 //#include "Input.h"
 
-#define LEVEL_TIME 10000													// 30 Seconds until level is complete
+#define LEVEL_TIME 30000													// 30 Seconds until level is complete
 #define MAX_LIVES 5															// The maximum number of lives a player can have
 
 USING_NS_CC;
@@ -95,7 +95,6 @@ private:
 	Sprite *playerLife;														// Indicate lives left
 	Sprite *EnemyShip;
 	ParallaxNodeExtras *_backgroundNode;
-	float _shipPointsPerSecY;												// How much distance to move the ship 
 	Vector<Sprite*> *_asteroids;											// List of asteroids
 	Vector<Sprite*> *EnemyShipList;											// List of enemy ships
 	int _nextAsteroid = 0;
