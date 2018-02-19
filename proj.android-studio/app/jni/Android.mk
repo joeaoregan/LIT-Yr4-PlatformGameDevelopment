@@ -16,10 +16,12 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp \
-                   $(LOCAL_PATH)/../../../Classes/GameScene.cpp \
                    $(LOCAL_PATH)/../../../Classes/HUD.cpp \
                    $(LOCAL_PATH)/../../../Classes/Input.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Level1.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level2.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Level3.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Level4.cpp \
                    $(LOCAL_PATH)/../../../Classes/MainMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/ParallaxNodeExtras.cpp \
                    $(LOCAL_PATH)/../../../Classes/Player.cpp \

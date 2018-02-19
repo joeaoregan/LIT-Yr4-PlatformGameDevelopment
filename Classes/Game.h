@@ -49,6 +49,9 @@ public:
     //static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+	
+	void checkHighScore();													// When the game has ended, check if the current score is a high score and save it if it is
+
 /*  
     void menuCloseCallback(cocos2d::Ref* pSender);							// a selector callback
         

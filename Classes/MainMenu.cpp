@@ -1,3 +1,4 @@
+#include "Game.h"
 #include "MainMenu.h"
 #include "Level1.h"
 
@@ -39,11 +40,24 @@ bool MainMenu::init() {
 	menu->setPosition(Point::ZERO);																											// Set position on screen
 	this->addChild(menu);																													// Add to layer
 
+
+	// Show current high score
+	UserDefault* def = UserDefault::getInstance();
+	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
+
+	__String *tempScore = __String::createWithFormat("High Score: %i", highScore);
+
+	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.1);
+	cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/arial.ttf", visibleSize.height * 0.1);
+	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.2f + origin.y));
+	highScoreLbl->setColor(Color3B::RED);
+	this->addChild(highScoreLbl);
+
 	return true;
 }
 
 void MainMenu::StartGame(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = Level1::createScene();																						// Create the game scene, JOR replaced auto specifier
+	cocos2d::Scene* scene = Level1::createScene();																							// Create the game scene, JOR replaced auto specifier
 
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
 }

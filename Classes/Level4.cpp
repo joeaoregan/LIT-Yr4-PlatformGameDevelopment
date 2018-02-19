@@ -365,6 +365,8 @@ void Level4::endScene(EndReason4 endReason) {
 	_gameOver = true;																										// Set game over
 
 	cocos2d::Size winSize = Director::getInstance()->getWinSize();															// JOR replaced auto specifier
+	
+	Game::Instance()->checkHighScore();																						// The game has ended, check if the current score is the high score and save it if it is
 
 	// Win / Lose Message
 	char message[17] = "You Win";

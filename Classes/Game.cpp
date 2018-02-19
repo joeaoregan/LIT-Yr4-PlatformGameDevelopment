@@ -19,3 +19,18 @@ bool Game::init() {
 	
 	return true;
 }
+
+// When the game has ended, check if the current score is a high score and save it if it is
+void Game::checkHighScore() {
+	// Save Score
+	UserDefault* def = UserDefault::getInstance();
+	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
+
+	if (getScore() > highScore) {
+		highScore = getScore();
+
+		def->setIntegerForKey("HIGHSCORE", highScore);
+	}
+
+	def->flush();
+}

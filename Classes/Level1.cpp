@@ -499,6 +499,28 @@ void Level1::endScene(EndReason1 endReason) {
 
 	cocos2d::Size winSize = Director::getInstance()->getWinSize();															// JOR replaced auto specifier
 
+
+
+	/*
+	// Save Score
+	UserDefault* def = UserDefault::getInstance();
+	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
+
+	if (Game::Instance()->getScore() > highScore) {
+		highScore = Game::Instance()->getScore();
+
+		def->setIntegerForKey("HIGHSCORE", highScore);
+	}
+
+	def->flush();
+	*/
+
+	Game::Instance()->checkHighScore();																						// The game has ended, check if the current score is the high score and save it if it is
+
+
+
+
+
 	// Win / Lose Message
 	char message[17] = "Level 1 Complete";
 	if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
