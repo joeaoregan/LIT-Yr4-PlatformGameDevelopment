@@ -20,6 +20,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/HighScores.cpp \
                    $(LOCAL_PATH)/../../../Classes/HUD.cpp \
                    $(LOCAL_PATH)/../../../Classes/Input.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Level.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level1.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level2.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level3.cpp \

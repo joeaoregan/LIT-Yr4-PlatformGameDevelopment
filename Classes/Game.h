@@ -20,7 +20,7 @@
 #include "HUD.h"
 //#include "Input.h"
 
-#define LEVEL_TIME 10000													// 30 Seconds until level is complete
+#define LEVEL_TIME 5000													// 30 Seconds until level is complete
 #define MAX_LIVES 5															// The maximum number of lives a player can have
 
 USING_NS_CC;
