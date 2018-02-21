@@ -115,18 +115,23 @@ bool Level4::init() {
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
 	
-	// Score
-	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+	/// Score & Timer set size
+	//timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
+	if (visibleSize.height == 1080) {
+		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
+		timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
+		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 150, visibleSize.height * 0.95 + origin.y));
+	}
+	else {
+		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+		timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
+		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 80, visibleSize.height * 0.95 + origin.y));
+	}
+
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
-	this->addChild(scoreLabel, 10000);
 
-	// Timer
-	timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-	if (visibleSize.height == 1080)
-		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 120, visibleSize.height * 0.95 + origin.y));
-	else
-		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 80, visibleSize.height * 0.95 + origin.y));
+	this->addChild(scoreLabel, 10000);
 	this->addChild(timeLabel);
 	
 	// D-pad (Display on mobile device)
@@ -152,7 +157,7 @@ void Level4::update(float dt) {
     scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));								// Update the displayed score
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
-	updateTimer();																							// Update the countdown timer
+	updateTimer(curTimeMillis);																				// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
 	_backgroundNode->update(dt);																			// Scroll the background objects
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
@@ -173,12 +178,12 @@ void Level4::getInput() {
 	}
 }
 
-void Level4::updateTimer() {
-	if (getTimeTick() >= currentTime + 1000) {
-		currentTime = getTimeTick();
+void Level4::updateTimer(float curTimeMillis) {
+	if (curTimeMillis > currentTime) {
+		currentTime = curTimeMillis + 1000.0f;
 		time--;
-		timeLabel->setString("Time: " + to_string(time));
 	}
+	timeLabel->setString("Time: " + to_string(time));
 }
 
 void Level4::spawnAsteroids(float curTimeMillis) {

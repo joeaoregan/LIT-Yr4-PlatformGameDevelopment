@@ -42,7 +42,7 @@ public:
 	void checkCollisions();													// 20180202 Check is the game over or not
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
-	void updateTimer();														// 20180204 Update the countdown timer
+	void updateTimer(float curTimeMillis);									// 20180204 Update the countdown timer, 21/02/2018 Passing curTimeMillis solves Android timer issue
 	void getInput();
 
 private:
@@ -77,7 +77,7 @@ private:
 
 	unsigned int time;														// Current time
 
-	int currentTime;
+	float currentTime;														// 20180221 Change to float to fix Android timer issue
 };
 
 #endif // __LEVEL_4_H__

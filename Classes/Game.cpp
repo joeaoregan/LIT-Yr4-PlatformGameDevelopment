@@ -34,3 +34,11 @@ void Game::checkHighScore() {
 
 	def->flush();
 }
+
+void Game::updateTimer(float curTimeMillis) {
+	if (curTimeMillis > currentTime) {
+		currentTime = curTimeMillis + 1000.0f;
+		time--;
+	}
+	//timeLabel->setString("Time: " + to_string(time));
+}

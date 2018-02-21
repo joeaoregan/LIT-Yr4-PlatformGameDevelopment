@@ -132,25 +132,27 @@ bool Level1::init() {
 	//_gameOverTime = curTime + 30000;																						// Time to finish game
 	_gameOverTime = curTime + LEVEL_TIME;																					// Time to finish game
 
-	currentTime = getTimeTick();																							// Current game time, for timer
+	//currentTime = getTimeTick();																							// Current game time, for timer
+	currentTime = 0.0f;																										// Current game time, for timer, changed to float to solve Android timer issue
 
 	//Audio::Instance()->init();																							// Initialise the game audio
 	Game::Instance()->init();																								// Inite score and level
 	HUD::Instance()->init(time, this);																						// Display score, level number, and time
-	//time = 30;
+
+	//time = LEVEL_TIME / 1000;
+	Game::Instance()->setTimer(LEVEL_TIME/1000);
+
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
 	
-	// Score
-
-	// Timer
+	// Score & Timer set size
 	//timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
 	if (visibleSize.height == 1080) {
 		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
 		timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
-		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 120, visibleSize.height * 0.95 + origin.y));
+		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 150, visibleSize.height * 0.95 + origin.y));
 	}
 	else {
 		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
@@ -195,7 +197,24 @@ void Level1::update(float dt) {
 	//HUD::Instance()->update();																			// Update the score (Not working)
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
-	updateTimer();																							// Update the countdown timer
+
+	// Update timer this class
+	//updateTimer(curTimeMillis);																			// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
+
+	// Update timer from Game class
+	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
+	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
+
+	//time -= ((int) dt % 10);
+	//time += dt;
+	//this->schedule(schedule_selector(Level1::updateTimer), 1.0f);											// Call the function every 1 second
+	//if (curTimeMillis > timerTime) {
+	//	timerTime = curTimeMillis + 1000;
+	//	time--;
+	//}
+
+	//timeLabel->setString("Time: " + to_string(time));
+
 	_backgroundNode->update(dt);																			// Scroll the background objects
 	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
 	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
@@ -204,7 +223,7 @@ void Level1::update(float dt) {
 
 	player->update();																						// Update player sprite position
 
-	// Update displayed lives
+		// Update displayed lives
 	//if (_lives < 3 && !_gameOver) {																		// If the players lives are less than 3
 	if (Game::Instance()->getLives() < MAX_LIVES && !_gameOver) {											// If the players lives are less than the max num lives
 		livesList[Game::Instance()->getLives()]->setVisible(false);											// Set the lives invisible (2,1,0)
@@ -236,12 +255,18 @@ void Level1::getInput() {
 	}	
 }
 
-void Level1::updateTimer() {
-	if (getTimeTick() >= currentTime + 1000) {
-		currentTime = getTimeTick();
+void Level1::updateTimer(float dt) {
+	if (dt > currentTime) {
+		currentTime = dt + 1000.0f;
 		time--;
-		timeLabel->setString("Time: " + to_string(time));
 	}
+
+	//if (getTimeTick() >= currentTime + 1000) {
+	//	currentTime = getTimeTick();
+	//	time--;
+	//	if (time == 0) this->unschedule(schedule_selector(Level1::updateTimer));
+	timeLabel->setString("Time: " + to_string(time));
+	//}
 }
 
 void Level1::spawnAsteroids(float curTimeMillis) {

@@ -20,7 +20,7 @@
 #include "HUD.h"
 //#include "Input.h"
 
-#define LEVEL_TIME 30000													// 30 Seconds until level is complete
+#define LEVEL_TIME 10000													// 30 Seconds until level is complete
 #define MAX_LIVES 5															// The maximum number of lives a player can have
 
 USING_NS_CC;
@@ -71,13 +71,15 @@ public:
 	void moveShip(float dt);												// 20180202 Move the player ship
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
-	void updateTimer();														// 20180204 Update the countdown timer
 	void getInput();
 	*/
+	void updateTimer(float curTimeMillis);									// 20180204 Update the countdown timer, 21/02/2018 Passing curTimeMillis solves Android timer issue
+	
 	unsigned int getLevel() { return level; }								// 20180218 Return the current level
 	unsigned int getScore() { return score; }								// 20180214 Return the current score
 	unsigned int getLives() { return _lives; }								// 20180218 Return the players number of lives
 	std::string getPlayerName() { return playerName; }						// 20180221 Return the name of the player
+	unsigned int getTimer() { return time; }
 
 	void setLevel(unsigned int set) { level = set; }
 	void updateScore(unsigned int set) { score += set; }
@@ -85,6 +87,7 @@ public:
 	void takeLife() { _lives--; };											// Decrement the number of lives
 	void addLife() { if (_lives <= MAX_LIVES) _lives++; };					// Increment the number of lives (Max 5)
 	void setPlayerName(std::string set) { playerName = set; }				// Set the player name
+	void setTimer(unsigned int set) { time = set; }							// Set the countdown timer
 	
 private:
 	unsigned int _lives = 0;												// Player lives
@@ -94,6 +97,9 @@ private:
 	unsigned int level;														// Current level
 
 	static Game* s_pInstance;												// Single instance of Game used as singleton, so only one instance exists thoughout the game
+
+	unsigned int time;														// Countdown timer value
+	float currentTime;														// 20180221 Change to float to fix Android timer issue
 	/*
 	Player* player;
 
@@ -123,9 +129,6 @@ private:
 	cocos2d::Label* scoreLabel;												// Display the current score
 	cocos2d::Label * timeLabel;												// Display the time remaining
 
-	unsigned int time;
-
-	int currentTime;
 	*/
 	
 };
