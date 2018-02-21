@@ -34,14 +34,8 @@ public:
 	}
 	*/
 
-    //static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
-	    
-
-	enum EndReason {
-		KENDREASONWIN,
-		KENDREASONLOSE
-	};
-
+    static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
+	
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	
 	virtual void update(float dt);
@@ -60,15 +54,14 @@ public:
 
 	void startLevel2(Ref* pSender);											// 20180218 Progress to the next level
 	void startLevel3(Ref* pSender); 
-	void returnToMenu(Ref* pSender);										// Return to main menu
+	void returnToMenu(Ref* pSender);										// 20180218 Return to the main menu
 
 	float randomValueBetween(float low, float high);						// Select a random value from a given range
 	void setInvisible(Node * node);											// Hide the node/sprite
 
-     /*
+     
     CREATE_FUNC(Level);														// implement the "static create()" method manually
-
-		//virtual void onAcceleration(Acceleration* acc, Event* event);
+	/*
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
 
 	void spawnLaser();														// 20180205
@@ -77,6 +70,11 @@ public:
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
 	*/
+
+	enum EndReason {
+		KENDREASONWIN,
+		KENDREASONLOSE
+	};
 
 	cocos2d::Size visibleSize;
 	Size winSize;															// Current size of the game window (constantly updated)
@@ -112,13 +110,15 @@ public:
 
 	DPad *controller;														// Add directional pad for mobile device
 
-private:
+	bool _gameOver = false;
 
+	cocos2d::Scene* scene;// 'scene' is an autorelease object
+	Level* layer;			// 'layer' is an autorelease object
+
+private:
 	/*
 	void endScene(EndReason1 endReason);
 	void restartTapped(Ref* pSender);
-	void returnToMenu(Ref* pSender);										// 20180218 Return to the main menu
-
 
 	Sprite *playerLife;														// Indicate lives left
 	Sprite *EnemyShip;
@@ -126,14 +126,6 @@ private:
 	int nextEnemyShip = 0;
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
-
-	bool _gameOver=false;
-		
-
-
-
-	unsigned int level;
-
 	*/
 
 	//static Level* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game

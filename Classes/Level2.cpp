@@ -14,7 +14,7 @@
 
 Scene* Level2::createScene() {  
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	Level2* layer = Level2::create();			// 'layer' is an autorelease object, JOR replaced auto specifier   
+	Level2* layer = Level2::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
     scene->addChild(layer);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }

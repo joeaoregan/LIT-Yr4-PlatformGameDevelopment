@@ -84,7 +84,7 @@ private:
 	//int _lives=0;															// Player lives, Moved to Game.h
 
 	//double _gameOverTime;
-	bool _gameOver=false;
+	//bool _gameOver=false;
 		
 	//Size winSize;															// Size of the game window
 
@@ -98,7 +98,7 @@ private:
 	//cocos2d::Label * timeLabel;												// Display the time remaining
 
 	//unsigned int score;													// Moved to Game.h
-	unsigned int level;
+	//unsigned int level;
 	//unsigned int time;
 
 	//float currentTime;														// 20180221 Change to float to fix Android timer issue

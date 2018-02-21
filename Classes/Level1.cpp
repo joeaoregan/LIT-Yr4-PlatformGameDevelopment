@@ -36,7 +36,7 @@ Input* Input::s_pInstance;						// Singleton for Input
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	Level1* layer = Level1::create();		// 'layer' is an autorelease object, JOR replaced auto specifier   
+	Level* layer = Level1::create();			// 'layer' is an autorelease object, JOR replaced auto specifier   
     scene->addChild(layer);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }

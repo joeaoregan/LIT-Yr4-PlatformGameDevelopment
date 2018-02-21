@@ -13,6 +13,7 @@
 #include "Level1.h"								// Menu Item: Start game
 #include "HighScores.h"							// Menu Item: High Scores
 #include "EnterName.h"
+#include "Settings.h"
 
 #define TRANSITION_TIME 0.5
 
@@ -44,10 +45,15 @@ bool MainMenu::init() {
 	this->addChild(backgroundSprite);																									// Add to layer
 
 	// Scene Title
-	titleSprite = Sprite::create("MainMenu.png");																						// Title image
+	titleSprite = Sprite::create("MainMenu.png");																						// Scene Title image
 	//titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height - titleSprite->getContentSize().height));		// Set position on screen
-	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.925f + origin.y));		// Set position on screen
+	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.925f + origin.y));							// Set position on screen
 	this->addChild(titleSprite);																										// Add to layer							
+	
+	gameTitleSprite = Sprite::create("GameTitle.png");																					// Game Title image
+	gameTitleSprite->setPosition(Point(visibleSize.width * 0.1f, visibleSize.height / 2 + origin.y));						// Set position on screen
+	gameTitleSprite->setRotation(-90);
+	this->addChild(gameTitleSprite);																									// Add to layer		
 
 	// 1. Start Game Button
 	playItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));					// Set image for menu option
@@ -66,7 +72,7 @@ bool MainMenu::init() {
 	this->addChild(menu2);																												// Add to layer
 
 	// 3. Game Options
-	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
+	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));		// Set image for options option
 	optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));							// Set image position
 
 	menu3 = Menu::create(optionsItem, NULL);																							// Menu
@@ -96,6 +102,17 @@ bool MainMenu::init() {
 	highScoreLbl->setColor(Color3B::RED);
 	this->addChild(highScoreLbl);
 
+	// Show current player name
+	cocos2d::Label* changeNameLbl = Label::createWithBMFont("Arial.fnt", "Current Player:\n" + Game::Instance()->getPlayerName());		// Display current players name
+	cocos2d::MenuItemLabel* mainMenuItem = MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MainMenu::GoToEnterName, this));			// Go to enter name scene
+	
+	cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);																			// JOR replaced auto specifier
+	menu2->setPosition(Point::ZERO);
+	this->addChild(menu2);
+
+	mainMenuItem->setPosition(Point(visibleSize.width * 0.9f, visibleSize.height *.9 + origin.y));
+	mainMenuItem->runAction(ScaleTo::create(0.5F, 1.0F));
+
 	return true;
 }
 
@@ -103,21 +120,28 @@ bool MainMenu::init() {
 void MainMenu::StartGame(cocos2d::Ref *sender) {
 	cocos2d::Scene* scene = Level1::createScene();																						// Create the game scene, JOR replaced auto specifier
 
-	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
+	Director::getInstance()->replaceScene(TransitionSlideInB::create(TRANSITION_TIME, scene));
 }
 
 // Start the High Scores Scene
 void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	cocos2d::Scene* scene = HighScores::createScene();																					// Create the high scores scene
 
-	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));												// Load the high scores screen with transition
+	Director::getInstance()->replaceScene(TransitionFadeUp::create(TRANSITION_TIME, scene));											// Load the high scores screen with transition
 }
 
 // Start the Settings Scene
 void MainMenu::GoToSettings(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = EnterName::createScene();																					// Create the enter name scene
+	cocos2d::Scene* scene = Settings::createScene();																					// Create the enter name scene
 
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));												// Load the enter name screen with transition
+}
+
+// Start the Settings Scene
+void MainMenu::GoToEnterName(cocos2d::Ref *sender) {
+	cocos2d::Scene* scene = EnterName::createScene();																					// Create the enter name scene
+
+	Director::getInstance()->replaceScene(TransitionFadeDown::create(TRANSITION_TIME, scene));												// Load the enter name screen with transition
 }
 
 // Exit the game

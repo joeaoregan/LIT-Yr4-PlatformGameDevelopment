@@ -16,15 +16,6 @@ USING_NS_CC;
 
 class Level2 : public Level {
 public:
-	// Game singleton
-	static Level2* Instance() {
-		if (s_pInstance == 0) {
-			s_pInstance = new Level2();
-			return s_pInstance;
-		}
-		return s_pInstance;
-	}
-
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -49,14 +40,10 @@ private:
 	int nextEnemyShip = 0;
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
-
-	bool _gameOver=false;
-		
+			
 	void update(float dt);
 	void endScene(EndReason endReason);
-	void restartTapped(Ref* pSender);										// Restart the current level
-	
-	static Level2* s_pInstance;												// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+	void restartTapped(Ref* pSender);										// Restart the current level	
 };
 
 #endif // __LEVEL_2_H__

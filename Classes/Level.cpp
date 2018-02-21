@@ -21,14 +21,13 @@ std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::ti
 
 //Input* Input::s_pInstance;																			// Singleton for Input
 
-/*
+
 Scene* Level::createScene() {
 	cocos2d::Scene* scene = Scene::create();															// 'scene' is an autorelease object, JOR replaced auto specifier   
 	Level* layer = Level::create();																		// 'layer' is an autorelease object, JOR replaced auto specifier   
     scene->addChild(layer);																				// Add layer as a child to scene	    
     return scene;																						// Return the scene
 }
-*/
 
 // on "init" you need to initialize your instance
 bool Level::init() {

@@ -28,11 +28,20 @@ public:
 	void explodeFX();					// Play explosion sound effect
 	void laserFX();						// Play laser sound effect
 
+	void skipTrackForwards();
+	void skipTrackBackwards();
+	void musicVolIncrease();
+	void musicVolDecrease();
+	void sfxVolIncrease();
+	void sfxVolDecrease();
+
 private:
 	Audio() {};							// Constructor is private for use as a Singleton. Initializes the variables
 	~Audio() {};						// Private destructor shuts down and cleans up the mixer API
 
 	static Audio* s_pInstance;			// Single instance of Audio used as singleton so only one instance exists thoughout the game
+
+	float currentVol;					// Current music volume
 };
 
 #endif // __AUDIO__

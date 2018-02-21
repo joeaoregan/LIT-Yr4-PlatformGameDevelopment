@@ -24,7 +24,8 @@ public:
 private:
 	void StartGame(cocos2d::Ref *sender);		// Start the game
 	void GoToScores(cocos2d::Ref *sender);		// Go to the high scores table
-	void GoToSettings(cocos2d::Ref *sender);		// Go to the options scene
+	void GoToSettings(cocos2d::Ref *sender);	// Go to the options scene
+	void GoToEnterName(cocos2d::Ref *sender);	// Go to the enter name scene
 	void menuCloseCallback(Ref* pSender);		// Exit the game
 
 	// Screen size
@@ -34,6 +35,7 @@ private:
 	// Sprites
 	cocos2d::Sprite* backgroundSprite;			// Background image
 	cocos2d::Sprite* titleSprite;				// Scene title image
+	cocos2d::Sprite* gameTitleSprite;			// Game title image
 
 	// Menu Images
 	cocos2d::MenuItemImage* playItem;			// Start the game
@@ -52,6 +54,7 @@ private:
 	int highScore;								// Load the first sorted score, which is the high score
 	cocos2d::__String *tempScore;				// Score text to display
 	cocos2d::LabelTTF* highScoreLbl;			// Label to display the score text
+	cocos2d::LabelTTF* currentPlayer;			// Label to display the current Player name
 };
 
 #endif // __MAIN_MENU_H__
