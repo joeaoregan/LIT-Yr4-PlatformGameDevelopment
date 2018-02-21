@@ -20,12 +20,16 @@ public:
 
 	void initBackground();						// Initialise the background image
 
+	void sortScores();							// Sort the high scores
+
 private:
 	void returnToMenu(cocos2d::Ref *sender);	// Return to the MainMenu
 	Size visibleSize;							// Get the size of the screen, to set the image size for the current platform
 
 	cocos2d::Sprite* backgroundSprite;			// Sprite for background image
 	Vec2 origin;								// Screen origin point
+
+	__String *tempScore;						// Text to display
 };
 
 #endif // __HIGH_SCORES_H__

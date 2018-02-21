@@ -15,7 +15,8 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AppDelegate.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
-                   $(LOCAL_PATH)/../../../Classes/Game.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Game.cpp\
+                   $(LOCAL_PATH)/../../../Classes/HighScores.cpp \
                    $(LOCAL_PATH)/../../../Classes/HUD.cpp \
                    $(LOCAL_PATH)/../../../Classes/Input.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level1.cpp \

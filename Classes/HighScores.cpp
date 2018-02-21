@@ -3,7 +3,11 @@
 #include "MainMenu.h"
 #include "Level1.h"
 
+#include "HUD.h"
+//#include <UIText.h>
+
 #define TRANSITION_TIME 0.5
+#define MAX_SCORES_DISPLAYED 10
 
 Scene* HighScores::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
@@ -25,12 +29,14 @@ bool HighScores::init() {
 
 	this->addChild(backgroundSprite);																											// Add to layer
 
-	cocos2d::Sprite* titleSprite = Sprite::create("GameTitle.png");																				// Title image
+	// High Scores Title
+	cocos2d::Sprite* titleSprite = Sprite::create("HighScores.png");																				// Title image
 	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height - titleSprite->getContentSize().height));				// Set position on screen
 	this->addChild(titleSprite);																												// Add to layer							
 
-	cocos2d::MenuItemImage* playItem = MenuItemImage::create("BtnStart.png","BtnStartClicked.png",CC_CALLBACK_1(HighScores::returnToMenu,this));// Set image for menu option
-	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));											// Set image position
+	// Back Button
+	cocos2d::MenuItemImage* playItem = MenuItemImage::create("btnBack.png","btnBackSelect.png",CC_CALLBACK_1(HighScores::returnToMenu,this));	// Set image for menu option
+	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.1f + origin.y));											// Set image position
 
 	cocos2d::Menu* menu = Menu::create(playItem, NULL);																							// Menu
 	menu->setPosition(Point::ZERO);																												// Set position on screen
@@ -38,15 +44,21 @@ bool HighScores::init() {
 
 
 	// Show current high score
-	UserDefault* def = UserDefault::getInstance();
-	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
+	//UserDefault* def = UserDefault::getInstance();
+	//int highScore = def->getIntegerForKey("HIGHSCORE", 0);
 
-	__String *tempScore = __String::createWithFormat("High Score: %i", highScore);
+	//tempScore = __String::createWithFormat("High Score: %i", highScore);
+	sortScores();	// set value for tempScore
 
-	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.1);
-	cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/arial.ttf", visibleSize.height * 0.1);
-	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.2f + origin.y));
-	highScoreLbl->setColor(Color3B::RED);
+	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/MarkerFelt.ttf", visibleSize.height * 0.1);
+	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
+	auto highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
+	//cocos2d::ui::Text* highScoreLbl = cocos2d::ui::Text::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
+
+
+	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.7f + origin.y));
+	//highScoreLbl->setColor(Color3B::RED);
+	highScoreLbl->setColor(Color3B::WHITE);
 	this->addChild(highScoreLbl);
 
 	return true;
@@ -66,4 +78,86 @@ void HighScores::initBackground() {
 		backgroundSprite = Sprite::create("BG720p.png");																						// Background image
 
 	backgroundSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));									// Set backgound position
+}
+
+void HighScores::sortScores() {
+	int swapScore = 0;
+	std::string tempName = "";
+	UserDefault* def = UserDefault::getInstance();
+
+	std::string scoreLabelText;
+
+	int arrScores[MAX_SCORES_DISPLAYED+1];								// Array of scores +1 for sorting
+	std::string arrNames[MAX_SCORES_DISPLAYED + 1];						// Array of names +1 for sorting
+
+	char scoreTxt[12] = "Score";
+	
+	for (int i = 1; i <= MAX_SCORES_DISPLAYED; i++) {
+		///strcat(scoreTxt, to_string(i));
+		sprintf(scoreTxt, "Score%d", i);
+		arrScores[i - 1] = def->getIntegerForKey(scoreTxt);				// search for Score1, Score2, Score3, etc.
+		sprintf(scoreTxt, "Name%d", i);
+		arrNames[i - 1] = def->getStringForKey(scoreTxt);				// search for Name1, Name2, Name3, etc.
+	}
+
+	arrScores[MAX_SCORES_DISPLAYED] = Game::Instance()->getScore();
+	//arrNames[MAX_SCORES_DISPLAYED] = Game::Instance()->getPlayerName();	////////////////////////////////////////888888888888888888////////////// enter name
+
+	// Set scores table heading
+	if (Game::Instance()->getScore() > arrScores[0])					// If the current score is greater than the high score
+		scoreLabelText = "New High Score:";
+	else if (arrScores[0] == 0)
+		scoreLabelText = "No High Score Yet";
+	else
+		scoreLabelText = "Leaderboard:";
+
+	// Swap the scores
+	for (int x = 1; x < (MAX_SCORES_DISPLAYED + 1); x++)                // Check all the scores
+	{
+		for (int y = 0; y < (MAX_SCORES_DISPLAYED + 1) - x; y++)        // Against every other score
+		{
+			if (arrScores[y] < arrScores[y + 1])                        // Sorting the largest score first
+			{
+				swapScore = arrScores[y];                               // Do swapping
+				tempName = arrNames[y];
+
+				arrScores[y] = arrScores[y + 1];
+				arrNames[y] = arrNames[y + 1];
+
+				arrScores[y + 1] = swapScore;
+				arrNames[y + 1] = tempName;
+			}
+		}
+	}
+
+
+	// Display updated scores
+	for (int i = 0; i < MAX_SCORES_DISPLAYED; i++)
+	{
+		if (arrScores[i] == 0) continue;                                                     // No need to display if score is 0
+		//highScoresText.text += (i + 1) + ". " + arrNames[i] + " " + arrScores[i] + "\n";     // Showing name and score
+		//sprintf(scoreLabelText, "%s%d. %s %d\n", scoreLabelText,i+1, arrNames[i], arrScores[i]);
+
+		//scoreLabelText += "\n" + i + "\t " + arrNames[i] + "\t" + arrScores[i];
+
+		//std::string strToAdd = "\n"  + arrNames[i] + "\t" + arrScores[i];
+
+		//scoreLabelText += "\n" + std::to_string(i + 1) + ".\t" + arrNames[i] + "\t " + std::to_string(arrScores[i]);
+		scoreLabelText += "\n" + to_string(i + 1) + ".\t" + arrNames[i] + "\t " + to_string(arrScores[i]);
+	} 
+
+	//tempScore = __String::createWithFormat(scoreLabelText.c_str());		// Otherwise Reset the scores table with normal heading	NOT WORKING ANDROID
+	char *convertStr = new char[scoreLabelText.length() + 1];
+	strcpy(convertStr, scoreLabelText.c_str());
+	tempScore = __String::createWithFormat(convertStr);						// Otherwise Reset the scores table with normal heading
+	delete[] convertStr;													// Clear up
+
+	// Set the new values in PlayerPrefs
+	for (int i = 1; i <= MAX_SCORES_DISPLAYED; i++)
+	{
+		sprintf(scoreTxt, "Score%d", i);
+		def->setIntegerForKey(scoreTxt, arrScores[i - 1]);					// Write the ordered score back to PlayerPrefs
+		sprintf(scoreTxt, "Name%d", i);
+		def->setStringForKey(scoreTxt, arrNames[i - 1]);					// and the player name
+	}
 }

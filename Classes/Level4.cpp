@@ -326,12 +326,12 @@ void Level4::spawnLaser() {
 }
 
 void Level4::spawn2Lasers() {
-	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
+	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);															// Next laser in the list, JOR replaced auto specifier
 	if (_nextShipLaser >= _shipLasers->size())
-		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
-	cocos2d::Sprite* shipLaser2 = _shipLasers->at(_nextShipLaser++);													// Next laser in the list, JOR replaced auto specifier
+		_nextShipLaser = 0;																									// Reset laser list index to 0 (go back to start of list)
+	cocos2d::Sprite* shipLaser2 = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
 	if (_nextShipLaser >= _shipLasers->size())
-		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
+		_nextShipLaser = 0;																									// Reset laser list index to 0 (go back to start of list)
 
 	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
 	shipLaser->setVisible(true);
@@ -395,9 +395,9 @@ void Level4::endScene(EndReason4 endReason) {
 
 	// Return To Main Menu
 	strcpy(message, "Main Menu");
-	cocos2d::Label* menuLbl = Label::createWithBMFont("Arial.fnt", message);											// JOR replaced auto specifier
-	cocos2d::MenuItemLabel* mainMenuItem = MenuItemLabel::create(menuLbl, CC_CALLBACK_1(Level4::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-																															//restartItem->setScale(0.1F);
+	cocos2d::Label* menuLbl = Label::createWithBMFont("Arial.fnt", message);												// JOR replaced auto specifier
+	cocos2d::MenuItemLabel* mainMenuItem = MenuItemLabel::create(menuLbl, CC_CALLBACK_1(Level4::returnToMenu, this));		// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+																															// restartItem->setScale(0.1F);
 	if (winSize.height == 720)
 		mainMenuItem->setScale(0.1F);
 	else

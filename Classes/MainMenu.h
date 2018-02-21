@@ -15,6 +15,7 @@ public:
 private:
 	void StartGame(cocos2d::Ref *sender);		// Start the game
 	void GoToHighScores(cocos2d::Ref *sender);	// Go to the high scores table
+	void menuCloseCallback(Ref* pSender);		// Exit the game
 };
 
 #endif // __MAIN_MENU_H__
