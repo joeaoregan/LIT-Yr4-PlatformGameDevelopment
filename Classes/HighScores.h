@@ -1,4 +1,6 @@
 /*
+	HighScores.h
+
 	Joe O'Regan
 	20/02/2018
 
@@ -30,6 +32,10 @@ private:
 	Vec2 origin;								// Screen origin point
 
 	__String *tempScore;						// Text to display
+
+	cocos2d::Sprite* titleSprite;
+	cocos2d::MenuItemImage* btnBackImg;			// Set image for Back Button menu option
+	cocos2d::Menu* btnBack;
 };
 
 #endif // __HIGH_SCORES_H__

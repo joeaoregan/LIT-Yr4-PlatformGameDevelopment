@@ -1,7 +1,7 @@
 # Year-four Platform Games Development CA 
 # Cocos2d-x Space Game
 ## Side-scrolling 2D Space Shooter
-### 05/02/2018
+### 21/02/2018
 
 Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point
 
@@ -36,6 +36,16 @@ Space Shooter: Enemies
 
 ![Space Game: Level 2](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame6Level2.jpg "Space Shooter: Level 2")
 Space Shooter: Level 2, score and lives carry over from previous level, and background changes
+
+---
+
+![Space Game: High Scores Table](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame7HighScoreScene.jpg "Space Shooter: High Scores Table")
+Space Shooter: High Scores Table, displays up to ten scores, and indicates when a new high score is a achieved
+
+---
+
+![Space Game: Menu High Scores](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame8MenuHighScore.jpg "Space Shooter: Menu High Scores")
+Space Shooter: The high score is displayed in the menu
 
 ---
 

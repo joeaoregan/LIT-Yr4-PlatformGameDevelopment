@@ -458,10 +458,7 @@ void Level1::spawn2Lasers() {
 	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
 	if (_nextShipLaser >= _shipLasers->size())
 		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
-	cocos2d::Sprite* shipLaser2 = _shipLasers->at(_nextShipLaser++);													// Next laser in the list, JOR replaced auto specifier
-	if (_nextShipLaser >= _shipLasers->size())
-		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
-
+	
 	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
@@ -470,6 +467,11 @@ void Level1::spawn2Lasers() {
 			MoveBy::create(0.5, Point(winSize.width, 0)),
 			CallFuncN::create(CC_CALLBACK_1(Level1::setInvisible, this)),
 			NULL)); 
+
+	cocos2d::Sprite* shipLaser2 = _shipLasers->at(_nextShipLaser++);													// Next laser in the list, JOR replaced auto specifier
+	if (_nextShipLaser >= _shipLasers->size())
+		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
+
 	shipLaser2->setPosition(player->getSprite()->getPosition() + Point(shipLaser2->getContentSize().width / 2, -12));
 	shipLaser2->setVisible(true);
 	shipLaser2->stopAllActions();
@@ -498,28 +500,8 @@ void Level1::endScene(EndReason1 endReason) {
 	_gameOver = true;																										// Set game over
 
 	cocos2d::Size winSize = Director::getInstance()->getWinSize();															// JOR replaced auto specifier
-
-
-
-	/*
-	// Save Score
-	UserDefault* def = UserDefault::getInstance();
-	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
-
-	if (Game::Instance()->getScore() > highScore) {
-		highScore = Game::Instance()->getScore();
-
-		def->setIntegerForKey("HIGHSCORE", highScore);
-	}
-
-	def->flush();
-	*/
-
+	
 	Game::Instance()->checkHighScore();																						// The game has ended, check if the current score is the high score and save it if it is
-
-
-
-
 
 	// Win / Lose Message
 	char message[17] = "Level 1 Complete";

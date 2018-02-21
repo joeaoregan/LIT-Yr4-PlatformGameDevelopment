@@ -1,3 +1,12 @@
+/*
+	HighScores.cpp
+
+	Joe O'Regan
+	K00203642
+
+	Display a leaderboard of up to 10 scores
+*/
+
 #include "Game.h"
 #include "HighScores.h"
 #include "MainMenu.h"
@@ -30,17 +39,17 @@ bool HighScores::init() {
 	this->addChild(backgroundSprite);																											// Add to layer
 
 	// High Scores Title
-	cocos2d::Sprite* titleSprite = Sprite::create("HighScores.png");																				// Title image
+	titleSprite = Sprite::create("HighScores.png");																								// Title image
 	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height - titleSprite->getContentSize().height));				// Set position on screen
 	this->addChild(titleSprite);																												// Add to layer							
 
 	// Back Button
-	cocos2d::MenuItemImage* playItem = MenuItemImage::create("btnBack.png","btnBackSelect.png",CC_CALLBACK_1(HighScores::returnToMenu,this));	// Set image for menu option
-	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.1f + origin.y));											// Set image position
+	btnBackImg = MenuItemImage::create("btnBack.png","btnBackSelect.png",CC_CALLBACK_1(HighScores::returnToMenu,this));							// Set image for menu option
+	btnBackImg->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.1f + origin.y));										// Set image position
 
-	cocos2d::Menu* menu = Menu::create(playItem, NULL);																							// Menu
-	menu->setPosition(Point::ZERO);																												// Set position on screen
-	this->addChild(menu);																														// Add to layer
+	btnBack = Menu::create(btnBackImg, NULL);																									// Menu
+	btnBack->setPosition(Point::ZERO);																											// Set position on screen
+	this->addChild(btnBack);																													// Add to layer
 
 
 	// Show current high score
@@ -52,10 +61,9 @@ bool HighScores::init() {
 
 	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/MarkerFelt.ttf", visibleSize.height * 0.1);
 	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
-	auto highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
-	//cocos2d::ui::Text* highScoreLbl = cocos2d::ui::Text::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05);
-
-
+	cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05f);
+	//cocos2d::ui::Text* highScoreLbl = cocos2d::ui::Text::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height*0.05);
+	
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.7f + origin.y));
 	//highScoreLbl->setColor(Color3B::RED);
 	highScoreLbl->setColor(Color3B::WHITE);
@@ -87,7 +95,7 @@ void HighScores::sortScores() {
 
 	std::string scoreLabelText;
 
-	int arrScores[MAX_SCORES_DISPLAYED+1];								// Array of scores +1 for sorting
+	unsigned int arrScores[MAX_SCORES_DISPLAYED+1];								// Array of scores +1 for sorting
 	std::string arrNames[MAX_SCORES_DISPLAYED + 1];						// Array of names +1 for sorting
 
 	char scoreTxt[12] = "Score";
@@ -147,10 +155,16 @@ void HighScores::sortScores() {
 	} 
 
 	//tempScore = __String::createWithFormat(scoreLabelText.c_str());		// Otherwise Reset the scores table with normal heading	NOT WORKING ANDROID
-	char *convertStr = new char[scoreLabelText.length() + 1];
-	strcpy(convertStr, scoreLabelText.c_str());
-	tempScore = __String::createWithFormat(convertStr);						// Otherwise Reset the scores table with normal heading
-	delete[] convertStr;													// Clear up
+	
+	//char *convertStr = new char[scoreLabelText.length() + 1];
+	//strcpy(convertStr, scoreLabelText.c_str());
+	//char convertStr[scoreLabelText.length + 1];
+	//strcpy(convertStr, scoreLabelText.c_str());
+	//tempScore = __String::createWithFormat(convertStr);					// Otherwise Reset the scores table with normal heading
+	//tempScore = __String::create(convertStr);
+	//delete[] convertStr;													// Clear up
+
+	tempScore = __String::create(scoreLabelText.c_str());					// Otherwise Reset the scores table with normal heading	NOT WORKING ANDROID
 
 	// Set the new values in PlayerPrefs
 	for (int i = 1; i <= MAX_SCORES_DISPLAYED; i++)
