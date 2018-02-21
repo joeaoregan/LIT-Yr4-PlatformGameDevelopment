@@ -135,9 +135,36 @@ void Level2::spawnEnemyShips(float curTimeMillis) {
 	}
 }
 
+void Level2::spawnLasers(int amount) {																		// 20180221
+	for (int i = 0; i < amount; i++) {
+		cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
+		if (_nextShipLaser >= _shipLasers->size())
+			_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
+
+		if (i == 0) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
+		if (i == 1) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));	// bottom
+		if (i == 2) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -0));	// middle
+
+		shipLaser->setVisible(true);
+		shipLaser->stopAllActions();
+
+		shipLaser->runAction(
+			Sequence::create(
+				MoveBy::create(0.5, Point(winSize.width, 0)), // change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
+	}
+}
+
+void Level2::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event) {
+	Audio::Instance()->laserFX();
+	cocos2d::Size winSize = Director::getInstance()->getWinSize();											// JOR replaced auto specifier
+
+	spawnLasers(2);
+}
+
 void Level2::checkCollisions() {
 	Level::checkCollisions();																				// Call base class function
-	// Check collisions with different objects in different levels
+																											// Check collisions with different objects in different levels
 }
 
 void Level2::checkGameOver(float currenTime) {
@@ -148,31 +175,6 @@ void Level2::checkGameOver(float currenTime) {
 	}
 	else if (currenTime >= _gameOverTime) {
 		this->endScene(KENDREASONWIN);																		// Player stays playing for the length of time
-	}
-}
-
-void Level2::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
-	Audio::Instance()->laserFX();
-	cocos2d::Size winSize = Director::getInstance()->getWinSize();											// JOR replaced auto specifier
-
-	spawnLasers(2);
-}
-
-void Level2::spawnLasers(int amount) {																		// 20180221
-	for (int i = 0; i < amount; i++) {
-		cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
-		if (_nextShipLaser >= _shipLasers->size())
-			_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
-
-		if (i == 0) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));
-		if (i == 1) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));
-
-		shipLaser->setVisible(true);
-		shipLaser->stopAllActions();
-		shipLaser->runAction(
-			Sequence::create(
-				MoveBy::create(0.5, Point(winSize.width, 0)),
-				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 	}
 }
 

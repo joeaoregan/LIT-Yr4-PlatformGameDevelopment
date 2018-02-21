@@ -95,7 +95,7 @@ bool Level1::init() {
 	//}
 
 	// EnemyShip
-	//EnemyShipList = new Vector<Sprite*>(3);																					// List of enemy ships
+	//EnemyShipList = new Vector<Sprite*>(3);																				// List of enemy ships
 	for (int i = 0; i < 3; ++i) {
 		//EnemyShip = Sprite::create("EnemyShip.png");
 		//EnemyShip->setPosition(visibleSize.width, visibleSize.height / 2);
@@ -107,7 +107,7 @@ bool Level1::init() {
 	}
 
 	/*
-	//_shipLasers = new Vector<Sprite*>(KNUMLASERS);																			// List of lasers
+	//_shipLasers = new Vector<Sprite*>(KNUMLASERS);																		// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
 		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");								// Laser sprite, JOR replaced auto specifier
 		shipLaser->setVisible(false);
@@ -500,7 +500,7 @@ void Level1::spawnLasers(int amount) {																					// 20180221
 	shipLaser->stopAllActions();
 	shipLaser->runAction(
 		Sequence::create(
-			MoveBy::create(0.5, Point(winSize.width, 0)),
+			MoveBy::create(0.5, Point(winSize.width, 100)),
 			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)); 
 
 	if (amount == 2) {

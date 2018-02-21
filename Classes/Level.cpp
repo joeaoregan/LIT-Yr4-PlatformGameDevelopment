@@ -21,7 +21,6 @@ std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::ti
 
 //Input* Input::s_pInstance;																			// Singleton for Input
 
-
 Scene* Level::createScene() {
 	cocos2d::Scene* scene = Scene::create();															// 'scene' is an autorelease object, JOR replaced auto specifier   
 	Level* layer = Level::create();																		// 'layer' is an autorelease object, JOR replaced auto specifier   
@@ -549,15 +548,15 @@ void Level::endScene(EndReason1 endReason) {
 */
 
 void Level::startLevel2(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));							// Change scene, progressing to Level 2
+	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));			// Change scene, progressing to Level 2
 }
 
 void Level::startLevel3(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));							// Load level 3	
+	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));			// Load level 3	
 }
 
 void Level::returnToMenu(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));						// Return to the main menu
+	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));		// Return to the main menu
 }
 
 void Level::menuCloseCallback(Ref* pSender) {
