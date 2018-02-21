@@ -24,6 +24,7 @@ public:
 private:
 	void StartGame(cocos2d::Ref *sender);		// Start the game
 	void GoToScores(cocos2d::Ref *sender);		// Go to the high scores table
+	void GoToSettings(cocos2d::Ref *sender);		// Go to the options scene
 	void menuCloseCallback(Ref* pSender);		// Exit the game
 
 	// Screen size
@@ -37,12 +38,14 @@ private:
 	// Menu Images
 	cocos2d::MenuItemImage* playItem;			// Start the game
 	cocos2d::MenuItemImage*	scoreItem;			// Go to the high scores scene
+	cocos2d::MenuItemImage* optionsItem;		// Go to the options scene
 	cocos2d::MenuItemImage* closeItem;			// Exit the game
 
 	// Menu Buttons
 	cocos2d::Menu* menu1;						// Button 1 start the game
-	cocos2d::Menu* menu2;						// Button 2 go to high scores
-	cocos2d::Menu* menu3;						// Button 3 exit the game
+	cocos2d::Menu* menu2;						// Button 2 go to high scores scene
+	cocos2d::Menu* menu3;						// Button 3 go to game options scene
+	cocos2d::Menu* menu4;						// Button 4 exit the game
 
 	// High Score
 	cocos2d::UserDefault* def;					// UserDefault used to save and load variables

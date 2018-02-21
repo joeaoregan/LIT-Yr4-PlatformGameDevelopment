@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AppDelegate.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
+                   $(LOCAL_PATH)/../../../Classes/EnterName.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp\
                    $(LOCAL_PATH)/../../../Classes/HighScores.cpp \
                    $(LOCAL_PATH)/../../../Classes/HUD.cpp \
@@ -36,12 +37,19 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 
 LOCAL_STATIC_LIBRARIES := cocos2dx_static
 
+# Additional code for UI
+LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocos_ui_static
+
 # _COCOS_LIB_ANDROID_BEGIN
 # _COCOS_LIB_ANDROID_END
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,.)
+# 21/02/2018 Additional for UI
+$(call import-module,extensions)
+$(call import-module,ui)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

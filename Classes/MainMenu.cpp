@@ -5,12 +5,14 @@
 	K00203642
 
 	Game main menu, from here the player can start the game, view the highscores, or exit the game
+	The current high score is displayed at the bottom of the menu
 */
 
 #include "Game.h"
 #include "MainMenu.h"
 #include "Level1.h"								// Menu Item: Start game
 #include "HighScores.h"							// Menu Item: High Scores
+#include "EnterName.h"
 
 #define TRANSITION_TIME 0.5
 
@@ -27,6 +29,8 @@ Scene* MainMenu::createScene() {
 bool MainMenu::init() {
 	if (!Layer::init()) return false;																									// Super init first
 
+	if (Game::Instance()->getPlayerName() == "") Game::Instance()->setPlayerName("Player");												// Set the players name to a default value
+
 	visibleSize = Director::getInstance()->getVisibleSize();																			// Get visible screen size
 	origin = Director::getInstance()->getVisibleOrigin();																				// Get screen origin point
 		
@@ -39,46 +43,54 @@ bool MainMenu::init() {
 	backgroundSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));							// Set backgound position
 	this->addChild(backgroundSprite);																									// Add to layer
 
-	// Title
+	// Scene Title
 	titleSprite = Sprite::create("MainMenu.png");																						// Title image
-	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height - titleSprite->getContentSize().height));		// Set position on screen
+	//titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height - titleSprite->getContentSize().height));		// Set position on screen
+	titleSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.925f + origin.y));		// Set position on screen
 	this->addChild(titleSprite);																										// Add to layer							
 
-	// Start Game Button
+	// 1. Start Game Button
 	playItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));					// Set image for menu option
-	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.7f + origin.y));								// Set image position
+	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.8f + origin.y));								// Set image position
 
 	menu1 = Menu::create(playItem, NULL);																								// Menu
 	menu1->setPosition(Point::ZERO);																									// Set position on screen
 	this->addChild(menu1);																												// Add to layer																											// Add to layer							
 
-	// High Scores Button
+	// 2. High Scores Button
 	scoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));		// Set image for menu option
-	scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.5f + origin.y));								// Set image position
+	scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.6f + origin.y));								// Set image position
 
 	menu2 = Menu::create(scoreItem, NULL);																								// Menu
 	menu2->setPosition(Point::ZERO);																									// Set position on screen
 	this->addChild(menu2);																												// Add to layer
 
-	// Exit Button
-	closeItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MainMenu::menuCloseCallback, this));			// Set image for menu option
-	closeItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.3f + origin.y));								// Set image position
+	// 3. Game Options
+	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
+	optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));							// Set image position
 
-	menu3 = Menu::create(closeItem, NULL);																								// Menu
+	menu3 = Menu::create(optionsItem, NULL);																							// Menu
 	menu3->setPosition(Point::ZERO);																									// Set position on screen
 	this->addChild(menu3);																												// Add to layer
-	
+
+	// 4. Exit Button
+	closeItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MainMenu::menuCloseCallback, this));			// Set image for menu option
+	closeItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.2f + origin.y));								// Set image position
+
+	menu4 = Menu::create(closeItem, NULL);																								// Menu
+	menu4->setPosition(Point::ZERO);																									// Set position on screen
+	this->addChild(menu4);																												// Add to layer
+
 	// Show current high score
 	def = UserDefault::getInstance();
 	//int highScore = def->getIntegerForKey("HIGHSCORE", 0);
 	highScore = def->getIntegerForKey("Score1", 0);																						// Load the high score
+	std::string playerName = def->getStringForKey("Name1");
 
-	tempScore = __String::createWithFormat("Highest Score: %i", highScore);
+	//tempScore = __String::createWithFormat("Top Score: %s %i", playerName, highScore);
+	tempScore = __String::createWithFormat("Top Score: %d", highScore);
 
-	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/MarkerFelt.ttf", visibleSize.height * 0.1);
-	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/arial.ttf", visibleSize.height * 0.1);
-	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Zombiebites.ttf", visibleSize.height * 0.1);
-	//cocos2d::LabelTTF* highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Mario.ttf", visibleSize.height * 0.1);
+	// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf
 	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.1); 
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.1f + origin.y));
 	highScoreLbl->setColor(Color3B::RED);
@@ -98,7 +110,14 @@ void MainMenu::StartGame(cocos2d::Ref *sender) {
 void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	cocos2d::Scene* scene = HighScores::createScene();																					// Create the high scores scene
 
-	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
+	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));												// Load the high scores screen with transition
+}
+
+// Start the Settings Scene
+void MainMenu::GoToSettings(cocos2d::Ref *sender) {
+	cocos2d::Scene* scene = EnterName::createScene();																					// Create the enter name scene
+
+	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));												// Load the enter name screen with transition
 }
 
 // Exit the game

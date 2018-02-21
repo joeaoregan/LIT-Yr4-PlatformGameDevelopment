@@ -77,16 +77,19 @@ public:
 	unsigned int getLevel() { return level; }								// 20180218 Return the current level
 	unsigned int getScore() { return score; }								// 20180214 Return the current score
 	unsigned int getLives() { return _lives; }								// 20180218 Return the players number of lives
-	
+	std::string getPlayerName() { return playerName; }						// 20180221 Return the name of the player
+
 	void setLevel(unsigned int set) { level = set; }
 	void updateScore(unsigned int set) { score += set; }
 	void setLives(unsigned int set) { _lives = set; }						// Set the number of livess
 	void takeLife() { _lives--; };											// Decrement the number of lives
 	void addLife() { if (_lives <= MAX_LIVES) _lives++; };					// Increment the number of lives (Max 5)
+	void setPlayerName(std::string set) { playerName = set; }				// Set the player name
 	
 private:
 	unsigned int _lives = 0;												// Player lives
 
+	std::string playerName;													// Current player name
 	unsigned int score;														// Current score
 	unsigned int level;														// Current level
 

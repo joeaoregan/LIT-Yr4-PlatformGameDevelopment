@@ -108,8 +108,9 @@ bool Level1::init() {
 		_shipLasers->pushBack(shipLaser);
 	}
 
-	//Device::setAccelerometerEnabled(true);																					// Enable accelerometer
-	//cocos2d::EventListenerAcceleration* accelerationListener = EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));	// JOR replaced auto specifier
+	//Device::setAccelerometerEnabled(true);																				// Enable accelerometer
+	//cocos2d::EventListenerAcceleration* accelerationListener = 
+	//EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));									// JOR replaced auto specifier
 	//_eventDispatcher->addEventListenerWithSceneGraphPriority(accelerationListener, this);
 
 	cocos2d::EventListenerTouchAllAtOnce* touchListener = EventListenerTouchAllAtOnce::create();							// JOR replaced auto specifier
@@ -133,7 +134,7 @@ bool Level1::init() {
 
 	currentTime = getTimeTick();																							// Current game time, for timer
 
-	//Audio::Instance()->init();																								// Initialise the game audio
+	//Audio::Instance()->init();																							// Initialise the game audio
 	Game::Instance()->init();																								// Inite score and level
 	HUD::Instance()->init(time, this);																						// Display score, level number, and time
 	//time = 30;
@@ -175,8 +176,8 @@ bool Level1::init() {
 	}
 
 	/*
-	//controller->init(this);																				// NOT WORKING ANDROID: D-pad (Display on mobile device)
-	//DPad::Instance()->init(this);																				// NOT WORKING ANDROID: D-pad (Display on mobile device)
+	//controller->init(this);																									// NOT WORKING ANDROID: D-pad (Display on mobile device)
+	//DPad::Instance()->init(this);																								// NOT WORKING ANDROID: D-pad (Display on mobile device)
 	controller = DPad::Instance()->create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
 	this->addChild(controller);
 	*/

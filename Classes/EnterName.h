@@ -1,28 +1,33 @@
 /*
-	HighScores.h
+	EnterName.h
 
 	Joe O'Regan
-	20/02/2018
+	21/02/2018
 
-	Display the stored high scores
+	Enter the players name
 */
 
-#ifndef __HIGH_SCORES_H__
-#define __HIGH_SCORES_H__
+#ifndef __ENTER_NAME_H__
+#define __ENTER_NAME_H__
 
 #include "cocos2d.h"
 
-class HighScores : public cocos2d::Layer {
+#include "extensions/cocos-ext.h"				// UI
+#include "ui/CocosGUI.h"
+
+USING_NS_CC_EXT;
+using namespace ui;
+
+
+class EnterName : public cocos2d::Layer {
 public:	
 	static cocos2d::Scene* createScene();		// Returns class instance pointer
 		
 	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
 		
-	CREATE_FUNC(HighScores);					// Static create() method implemented manually
+	CREATE_FUNC(EnterName);						// Static create() method implemented manually
 
 	void initBackground();						// Initialise the background image
-
-	void sortScores();							// Sort the high scores
 
 private:
 	void returnToMenu(cocos2d::Ref *sender);	// Return to the MainMenu
@@ -39,6 +44,10 @@ private:
 
 	// High Score
 	cocos2d::LabelTTF* highScoreLbl;			// Label to display current high score
+
+	// Text Input
+	cocos2d::ui::TextField* txtField;			// Text entered
+	void textFieldEvent(Ref* sender, ui::TextField::EventType type);
 };
 
-#endif // __HIGH_SCORES_H__
+#endif // __ENTER_NAME_H__
