@@ -40,10 +40,14 @@ private:
 
 	__String *tempScore;							// Text to display
 
-	cocos2d::Sprite* titleSprite;
-	cocos2d::Sprite* musicLbl;
-	cocos2d::Sprite* sfxLbl;
-	cocos2d::Sprite* trackLbl;
+	// Labels
+	cocos2d::Sprite* gameTitleSprite;				// Game name label
+	cocos2d::Sprite* titleSprite;					// Scene name label
+	cocos2d::Sprite* musicLbl;						// Music volume setting label
+	cocos2d::Sprite* sfxLbl;						// SFX volume setting label
+	cocos2d::Sprite* trackLbl;						// Track select setting label
+
+	// Menu button images
 	cocos2d::MenuItemImage* btnBackImg;				// Set image for Back Button menu option
 	cocos2d::MenuItemImage* btnVolUpImg;			// Set image for volume up Button menu option
 	cocos2d::MenuItemImage* btnVolDownImg;			// Set image for volume down Button menu option
@@ -51,6 +55,8 @@ private:
 	cocos2d::MenuItemImage* btnFXDownImg;			// Set image for FX volume down Button menu option
 	cocos2d::MenuItemImage* btnTrackUpImg;			// Select the next track Button menu option
 	cocos2d::MenuItemImage* btnTrackDownImg;		// Select the previous track Button menu option
+
+	// Menu buttons
 	cocos2d::Menu* btnBack;
 	cocos2d::Menu* btnVolUp;
 	cocos2d::Menu* btnVolDown;
@@ -61,7 +67,9 @@ private:
 
 	// High Score
 	cocos2d::LabelTTF* instructionLbl;			// Label to display current high score
-
+	cocos2d::LabelTTF* currentTrackLbl;			// Label to display current background music track
+	int trackSelect = 0;
+	//std::string currentTrack[3];				// The name of the current track
 };
 
 #endif // __SETTINGS_H__

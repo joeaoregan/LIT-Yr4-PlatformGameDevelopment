@@ -18,7 +18,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 // Windows / Android
 #define JOE_RIFF1 "joe_riff1.wav"
 #define JOE_RIFF2 "joe_riff2.wav"
-#define JOE_RIFF3 "JoeBloodLevel.wav"
+#define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
 #define LASER_SHIP "laser_ship.wav"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)												// CAF: Core audio format
@@ -32,7 +32,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 #define NUM_TRACKS 3
 
 int currentTrack = 0;
-const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "JoeBloodLevel.wav" };
+const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.wav" };
 
 void Audio::init() {
 	currentVol = 1.0f;

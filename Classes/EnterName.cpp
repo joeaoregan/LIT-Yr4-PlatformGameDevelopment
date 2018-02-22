@@ -79,6 +79,8 @@ bool EnterName::init() {
 void EnterName::textFieldEvent(cocos2d::Ref* sender, ui::TextField::EventType type) {
 	cocos2d::ui::TextField* textField = dynamic_cast<ui::TextField *>(sender);
 
+	def = UserDefault::getInstance();																								// Used to store the current player name
+
 	switch (type) {
 	case cocos2d::ui::TextField::EventType::ATTACH_WITH_IME:
 		log("Start typing rev rev");
@@ -89,6 +91,7 @@ void EnterName::textFieldEvent(cocos2d::Ref* sender, ui::TextField::EventType ty
 	case cocos2d::ui::TextField::EventType::INSERT_TEXT:
 		log("%s", textField->getString().c_str());
 		Game::Instance()->setPlayerName(txtField->getString().c_str());
+		def->setStringForKey("CurrentPlayer", txtField->getString().c_str());														// Store the current players name
 		break;
 	case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
 		log("s", textField->getString().c_str());
