@@ -46,8 +46,8 @@ bool Settings::init() {
 	this->addChild(titleSprite);																									// Add to layer							
 		
 	// Instructions
-	//MarkerFelt.ttf SuperMarioBros.ttf 
-	instructionLbl = LabelTTF::create("Adjust Audio Volumes", "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05f);				// Label to display current high score	
+	//MarkerFelt.ttf Super Mario Bros..ttf 
+	instructionLbl = LabelTTF::create("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);				// Label to display current high score	
 	instructionLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.8f + origin.y));					// Set its position on screen
 	instructionLbl->setColor(Color3B::WHITE);																						// Set the text colour
 	instructionLbl->setScale(scale);																								// Set the scale
@@ -59,16 +59,16 @@ bool Settings::init() {
 	musicLbl->setScale(scale);																										// Set the scale
 	this->addChild(musicLbl);																										// Add to layer	
 
-	// Music Up
-	btnVolDownImg = MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(Settings::musicVolUp, this));			// Set image for menu option
+	// Music volume down
+	btnVolDownImg = MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(Settings::musicVolDown, this));			// Set image for menu option
 	btnVolDownImg->setPosition(Point(visibleSize.width * 0.25f + origin.x, visibleSize.height * 0.7f + origin.y));					// Set image position
 	btnVolDownImg->setScale(scale);																									// Set the scale
 	btnVolDown = Menu::create(btnVolDownImg, NULL);																					// Menu
 	btnVolDown->setPosition(Point::ZERO);																							// Set position on screen
 	this->addChild(btnVolDown);																										// Add to layer
 
-	// Music down
-	btnVolUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::musicVolDown, this));			// Set image for menu option
+	// Music volume up
+	btnVolUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::musicVolUp, this));			// Set image for menu option
 	btnVolUpImg->setPosition(Point(visibleSize.width * 0.75f + origin.x, visibleSize.height * 0.7f + origin.y));					// Set image position
 	btnVolUpImg->setScale(scale);																										// Set the scale
 	btnVolUp = Menu::create(btnVolUpImg, NULL);																						// Menu
@@ -82,7 +82,7 @@ bool Settings::init() {
 	this->addChild(sfxLbl);																											// Add to layer	
 
 	// FX Down
-	btnVolDownImg = MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(Settings::sfxVolUp, this));			// Set image for menu option
+	btnVolDownImg = MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(Settings::sfxVolDown, this));			// Set image for menu option
 	btnVolDownImg->setPosition(Point(visibleSize.width * 0.25f + origin.x, visibleSize.height * 0.5f + origin.y));					// Set image position
 	btnVolDownImg->setScale(scale);																										// Set the scale
 	btnFXDown = Menu::create(btnVolDownImg, NULL);																					// Menu
@@ -90,7 +90,7 @@ bool Settings::init() {
 	this->addChild(btnFXDown);																										// Add to layer
 
 	// FX Up
-	btnFXUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::sfxVolDown, this));				// Set image for menu option
+	btnFXUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::sfxVolUp, this));				// Set image for menu option
 	btnFXUpImg->setPosition(Point(visibleSize.width * 0.75f + origin.x, visibleSize.height * 0.5f + origin.y));						// Set image positionscreen
 	btnFXUpImg->setScale(scale);																										// Set the scale
 	btnFXUp = Menu::create(btnFXUpImg, NULL);																						// Menu

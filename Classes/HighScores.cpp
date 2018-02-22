@@ -52,8 +52,8 @@ bool HighScores::init() {
 	
 	// Scores
 	sortScores();																													// set value for tempScore
-	//MarkerFelt.ttf SuperMarioBros.ttf 
-	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05f);				// Label to display current high score	
+	//MarkerFelt.ttf Super Mario Bros..ttf 
+	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);				// Label to display current high score	
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.5f + origin.y));						// Set its position on screen
 	highScoreLbl->setColor(Color3B::WHITE);																							// Set the text colour
 	this->addChild(highScoreLbl);																									// Add it to the layer

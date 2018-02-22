@@ -23,6 +23,7 @@ DPad *controller3;								// Add directional pad for mobile device
 Scene* Level3::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
 	Level3* layer = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier   
+	layer->setName("Level3");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
     scene->addChild(layer);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }

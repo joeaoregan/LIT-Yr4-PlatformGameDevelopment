@@ -1,6 +1,7 @@
 #include "Player.h"
 //#include "DPad.h"
 #include "Input.h"
+#include "Level.h"
 
 //DPad *controller;																	// Add directional pad for mobile device
 
@@ -83,3 +84,25 @@ void Player::moveLeft() {
 void Player::moveRight() {
 	player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
 }
+/*
+void Player::spawnLasers(int amount, cocos2d::Layer *layer) {
+	int i;
+	for ((amount == 2) ? i = 1 : i = 0; i < amount; i++) {
+		cocos2d::Sprite* shipLaser = Level::Instance()->getLaserList()->at(Level::Instance()->getNextShipLaser()+1);	// Next laser in the list, JOR replaced auto specifier
+		Level::Instance()->setNextShipLaser(Level::Instance()->getNextShipLaser() + 1);
+		if (Level::Instance()->getNextShipLaser() >= Level::Instance()->getLaserList()->size())
+			Level::Instance()->setNextShipLaser(0);																		// Reset laser list index to 0 (go back to start of list)
+
+		if (i == 0) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));	// middle
+		if (i == 1) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));	// bottom
+		if (i == 2) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
+
+		shipLaser->setVisible(true);
+		shipLaser->stopAllActions();
+
+		shipLaser->runAction(
+			Sequence::create(MoveBy::create(0.5, Point(Level::Instance()->getWinSize().width, 0)),						// change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, layer)), NULL));
+	}
+}
+*/

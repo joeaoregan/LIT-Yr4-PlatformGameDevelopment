@@ -42,13 +42,14 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
         // Set to autorelease
         controller->autorelease();
 
-        controller->bg = Sprite::create(base);
-        controller->bg->setPosition(position);
-        controller->addChild(controller->bg,100);
-        controller->up = MenuItemImage::create(buttonImage,pressedButtonImage);
-        controller->down = MenuItemImage::create(buttonImage,pressedButtonImage);
-        controller->left = MenuItemImage::create(buttonImage,pressedButtonImage);
-        controller->right = MenuItemImage::create(buttonImage,pressedButtonImage);
+        controller->bg = Sprite::create(base);		// Set the background image
+        controller->bg->setPosition(position);		// Set the background position
+        controller->addChild(controller->bg,100);	// Add as child of bg
+        controller->up = MenuItemImage::create(buttonImage,pressedButtonImage);		// Create up arrow menu item
+        controller->down = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create down arrow menu item
+        controller->left = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create left arrow menu item
+        controller->right = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create right arrow menu item
+		// Set positions and rotations
         controller->up->setPosition(Point(controller->bg->getPosition().x, controller->bg->getPosition().y + controller->bg->getContentSize().height/2 - controller->up->getContentSize().height/2));
         controller->down->setPosition(Point(controller->bg->getPosition().x,controller->bg->getPosition().y - controller->bg->getContentSize().height/2 + controller->down->getContentSize().height/2));
         controller->right->setPosition(Point(controller->bg->getPosition().x + controller->bg->getContentSize().width/2 - controller->down->getContentSize().width/2, controller->bg->getPosition().y));

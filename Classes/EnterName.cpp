@@ -52,14 +52,14 @@ bool EnterName::init() {
 	this->addChild(btnBack);																										// Add to layer
 	
 	// Instructions
-	//MarkerFelt.ttf SuperMarioBros.ttf 
-	highScoreLbl = LabelTTF::create("Enter up to 12 characters", "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05f);			// Label to display current high score	
+	//MarkerFelt.ttf Super Mario Bros..ttf 
+	highScoreLbl = LabelTTF::create("Enter up to 12 characters", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);		// Label to display current high score	
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.75f + origin.y));					// Set its position on screen
 	highScoreLbl->setColor(Color3B::WHITE);																							// Set the text colour
 	this->addChild(highScoreLbl);																									// Add it to the layer
 	
 	// Enter name
-	txtField = ui::TextField::create("Input text here", "fonts/SuperMarioBros.ttf", visibleSize.height * 0.05f);
+	txtField = ui::TextField::create("Enter Name Here", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);
 	txtField->setMaxLength(12);	// Max username size
 	txtField->setMaxLengthEnabled(true);
 

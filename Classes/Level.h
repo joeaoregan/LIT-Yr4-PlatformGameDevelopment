@@ -19,11 +19,10 @@ USING_NS_CC;
 
 #define KNUMASTEROIDS 15						// Number of asteroids
 #define KNUMASTEROIDSL2 20						// Number of asteroids
-#define KNUMLASERS 5							// Number of lasers
+#define KNUMLASERS 8							// Number of lasers
 
 class Level : public Layer {
 public:
-	/*
 	// Level singleton
 	static Level* Instance() {
 		if (s_pInstance == 0) {
@@ -32,7 +31,6 @@ public:
 		}
 		return s_pInstance;
 	}
-	*/
 
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	
@@ -59,6 +57,9 @@ public:
 	float randomValueBetween(float low, float high);						// Select a random value from a given range
 	void setInvisible(Node * node);											// Hide the node/sprite
 
+	Size getWinSize() { return winSize; }
+
+	//void spawnLasers(int amount, cocos2d::Layer *layer);
      
     CREATE_FUNC(Level);														// implement the "static create()" method manually
 	/*
@@ -88,6 +89,10 @@ public:
 	Player* player;															// Player sprite
 
 	ParallaxNodeExtras *_backgroundNode;									// Scrolling background
+
+	Vector<Sprite*>* getLaserList() { return _shipLasers; }
+	int getNextShipLaser() { return _nextShipLaser; }
+	void setNextShipLaser(int set) { _nextShipLaser = set; }
 
 	Vector<Sprite*>* _asteroids;											// List of asteroids
 	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
@@ -128,7 +133,7 @@ private:
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
 	*/
 
-	//static Level* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+	static Level* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 };
 
 #endif // __LEVEL_H__

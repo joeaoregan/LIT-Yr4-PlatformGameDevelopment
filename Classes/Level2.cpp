@@ -15,6 +15,7 @@
 Scene* Level2::createScene() {  
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
 	Level2* layer = Level2::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	layer->setName("Level2");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
     scene->addChild(layer);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }
@@ -136,21 +137,22 @@ void Level2::spawnEnemyShips(float curTimeMillis) {
 }
 
 void Level2::spawnLasers(int amount) {																		// 20180221
+	//int i;
+	//for ((amount == 2) ? i = 1 : i = 1; i < amount; i++) {
 	for (int i = 0; i < amount; i++) {
 		cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
 		if (_nextShipLaser >= _shipLasers->size())
 			_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
 
-		if (i == 0) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
+		if (i == 0) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));	// middle
 		if (i == 1) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));	// bottom
-		if (i == 2) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -0));	// middle
+		if (i == 2) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
 
 		shipLaser->setVisible(true);
 		shipLaser->stopAllActions();
 
 		shipLaser->runAction(
-			Sequence::create(
-				MoveBy::create(0.5, Point(winSize.width, 0)), // change to plus 100 for up - 100 for down
+			Sequence::create(MoveBy::create(0.5, Point(winSize.width, 0)), // change to plus 100 for up - 100 for down
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 	}
 }

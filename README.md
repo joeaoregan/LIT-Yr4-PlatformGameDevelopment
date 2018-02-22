@@ -49,6 +49,11 @@ Space Shooter: The high score is displayed in the menu
 
 ---
 
+![Space Game: Multiple Laser Weapon](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame9Lasers.jpg "Space Shooter: Multiple Laser Weapon")
+Space Shooter: Multiple Laser Weapon allows from 1 to 4 beams to be fired
+
+---
+
 ## Additions:
 
 * Changed backing track

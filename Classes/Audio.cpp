@@ -70,18 +70,18 @@ void Audio::skipTrackBackwards() {
 }
 
 void Audio::musicVolIncrease() {
-	if (currentVol <= MAX_VOL)
+	if (currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol + 0.1f);
 }
 void Audio::musicVolDecrease() {
-	if (currentVol >= MIN_VOL)
+	if (currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol - 0.1f);
 }
 void Audio::sfxVolIncrease() {
-	if (currentVol <= MAX_VOL)
+	if (currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol + 0.1f);
 }
 void Audio::sfxVolDecrease() {
-	if (currentVol >= MIN_VOL)
+	if (currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol - 0.1f);
 }

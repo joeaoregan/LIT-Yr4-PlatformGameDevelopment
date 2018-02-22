@@ -5,9 +5,9 @@
 
 class Player {
 public:
-	Player(cocos2d::Layer *layer);			// Player constructor
+	Player(cocos2d::Layer *layer);					// Player constructor
 
-	void update();							// Update player movement etc.
+	void update();									// Update player movement etc.
 
 	cocos2d::Sprite* getSprite() { return player; }
 
@@ -17,11 +17,13 @@ public:
 	void moveLeft();
 	void moveRight();
 
-private:
-	cocos2d::Size visibleSize;				// Visible screen size
-	cocos2d::Vec2 origin;					// Origin of the screen
+	//void spawnLasers(int amount, cocos2d::Layer *layer);
 
-	cocos2d::Sprite *player;				// Player sprite
+private:
+	cocos2d::Size visibleSize;						// Visible screen size
+	cocos2d::Vec2 origin;							// Origin of the screen
+
+	cocos2d::Sprite *player;						// Player sprite
 };
 
-#endif // __BIRD_H__
+#endif // __PLAYER_H__

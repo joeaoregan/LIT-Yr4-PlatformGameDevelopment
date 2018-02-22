@@ -36,7 +36,8 @@ Input* Input::s_pInstance;						// Singleton for Input
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	Level* layer = Level1::create();			// 'layer' is an autorelease object, JOR replaced auto specifier   
+	Level1* layer = Level1::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	layer->setName("Level1");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
     scene->addChild(layer);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }
@@ -471,8 +472,55 @@ void Level1::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	//cocos2d::Size winSize = Director::getInstance()->getWinSize();									// JOR replaced auto specifier
 
 	//spawnLaser();
-	spawnLasers(2);
+	spawnLasers(3);
+	//Level::spawnLasers(2, this);
 }
+
+// Up to 4 different types of laser, with different spawn points and rotations
+void Level1::spawnLasers(int amount) {																		// 20180221
+	//int i;
+	//(amount == 2) ? i = 1 : i = 0;
+	int yVal = 0, yPos = 0, rot = 0;	// y value for point to aim for, y position of laser spawn point, rotation of laser	
+	//if (amount == 2) yVal = 100;
+	// 100 * 0
+	// 100 * -1
+	// 100 * 1
+
+
+	for (int i = 0; i < amount; i++) {
+		cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
+		if (_nextShipLaser >= _shipLasers->size())
+			_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
+
+		//if (i == 0) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));		// middle
+		//if (i == 1) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));	// bottom
+		//if (i == 2) shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
+
+		// Set laser spawn points
+		if (amount < 4)
+			(i == 0) ? yPos = 0 : (i == 1) ? yPos = -12 : yPos = 12;										// 0 = midd
+		else
+			(i == 0) ? yPos = 8 : (i == 1) ? yPos = -12 : (i == 2) ? yPos = 12 : yPos = -8;					// 0. = 5, 1. = 12, 2. = 12, 3. = -5
+
+		shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, yPos));
+		if (amount == 2) (i == 0) ? rot = -5 : rot = 5;														// Top, bottom lasers
+		if (amount == 3) (i == 0) ? rot = 0 : (i == 1) ? rot = 5 : rot = -5;								// Middle, bottom, top lasers
+		if (amount == 4) (i == 0) ? rot = -3 : (i == 1) ? rot = 5 : (i == 2 ) ? rot = -5: rot = 3;			// laser 1: i = 2 (5), laser 2: i = 0 (3), laser 3: i = ,laser 4: i = 1 (-5)
+		shipLaser->setRotation(rot);
+
+		shipLaser->setVisible(true);
+		shipLaser->stopAllActions();
+
+		if (amount == 2) (i == 0) ? yVal = 60 : yVal = -60;													// if 2 lasers, first one goes up, second goes down
+		if (amount == 3) (i == 1) ? yVal = -100 : (i == 2) ? yVal = 100 : yVal = 0;							// if 3 lasers, first goes straight, second goes down, third goes up
+		if (amount == 4) (i == 1) ? yVal = -120 : (i == 2) ? yVal = 120 : (i==3) ? yVal = -40 : yVal = 40;	// if 3 lasers, first goes straight, second goes down, third goes up
+
+		shipLaser->runAction(
+			Sequence::create(MoveBy::create(0.5, Point(winSize.width, yVal)), // change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
+	}
+}
+
 /*
 void Level1::spawnLaser() {
 	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
@@ -489,7 +537,7 @@ void Level1::spawnLaser() {
 			NULL));
 }
 void Level1::spawn2Lasers() {
-	*/
+	
 void Level1::spawnLasers(int amount) {																					// 20180221
 	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
 	if (_nextShipLaser >= _shipLasers->size())
@@ -499,8 +547,7 @@ void Level1::spawnLasers(int amount) {																					// 20180221
 	shipLaser->setVisible(true);
 	shipLaser->stopAllActions();
 	shipLaser->runAction(
-		Sequence::create(
-			MoveBy::create(0.5, Point(winSize.width, 100)),
+		Sequence::create(MoveBy::create(0.5, Point(winSize.width, 100)),
 			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)); 
 
 	if (amount == 2) {
@@ -512,12 +559,11 @@ void Level1::spawnLasers(int amount) {																					// 20180221
 		shipLaser2->setVisible(true);
 		shipLaser2->stopAllActions();
 		shipLaser2->runAction(
-			Sequence::create(
-				MoveBy::create(0.5, Point(winSize.width, 0)),
+			Sequence::create(MoveBy::create(0.5, Point(winSize.width, -100)),
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 	}
 }
-
+*/
 void Level1::restartTapped(Ref* pSender) {
 	Director::getInstance()->replaceScene(TransitionZoomFlipX::create(0.5, this->createScene()));							// Restart the current scene	
 	this->scheduleUpdate();																									// reschedule

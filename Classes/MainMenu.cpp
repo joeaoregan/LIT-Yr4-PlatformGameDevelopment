@@ -96,8 +96,8 @@ bool MainMenu::init() {
 	//tempScore = __String::createWithFormat("Top Score: %s %i", playerName, highScore);
 	tempScore = __String::createWithFormat("Top Score: %d", highScore);
 
-	// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf
-	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/SuperMarioBros.ttf", visibleSize.height * 0.1); 
+	// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf Super Mario Bros..ttf
+	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.1); 
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.1f + origin.y));
 	highScoreLbl->setColor(Color3B::RED);
 	this->addChild(highScoreLbl);

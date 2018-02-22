@@ -19,7 +19,7 @@
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
-//Input* Input::s_pInstance;																			// Singleton for Input
+Level* Level::s_pInstance;																				// Singleton for Level
 
 Scene* Level::createScene() {
 	cocos2d::Scene* scene = Scene::create();															// 'scene' is an autorelease object, JOR replaced auto specifier   
@@ -47,6 +47,8 @@ bool Level::init() {
 	menuClose = Menu::create(closeItem, NULL);															// JOR replaced auto specifier
 	menuClose->setPosition(Point::ZERO);
 	
+	//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();
+
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
@@ -414,20 +416,6 @@ void Level::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	spawn2Lasers();
 }
 
-void Level::spawnLaser() {
-	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
-	if (_nextShipLaser >= _shipLasers->size())
-		_nextShipLaser = 0;																								// Reset laser list index to 0 (go back to start of list)
-	
-	shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width/2, 0));
-	shipLaser->setVisible(true);
-	shipLaser->stopAllActions();
-	shipLaser->runAction(
-		Sequence::create(
-			MoveBy::create(0.5, Point(winSize.width, 0)),
-			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
-			NULL));
-}
 void Level::spawn2Lasers() {
 	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
 	if (_nextShipLaser >= _shipLasers->size())
