@@ -14,7 +14,7 @@
 
 #define TRANSITION_TIME 0.5
 
-std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, and a guitar solo by Jimmy" };
+//std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, and a guitar solo by Jimmy" };
 
 Scene* Settings::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
@@ -128,37 +128,38 @@ bool Settings::init() {
 	this->addChild(btnTrackDown);																									// Add to layer
 
 	// Track Forwards
-	btnTrackUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::skipTrackForwards, this));	// Set image for menu option
-	btnTrackUpImg->setPosition(Point(visibleSize.width * 0.7f + origin.x, visibleSize.height * 0.25f + origin.y));					// Set image position
-	btnTrackUpImg->setScale(scale);																									// Set the scale
-	btnTrackUp = Menu::create(btnTrackUpImg, NULL);																					// Menu
-	btnTrackUp->setPosition(Point::ZERO);																							// Set position on screen
+	btnTrackUpImg = MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(Settings::skipTrackForwards, this));		// Set image for menu option
+	btnTrackUpImg->setPosition(Point(visibleSize.width * 0.7f + origin.x, visibleSize.height * 0.25f + origin.y));						// Set image position
+	btnTrackUpImg->setScale(scale);																										// Set the scale
+	btnTrackUp = Menu::create(btnTrackUpImg, NULL);																						// Menu
+	btnTrackUp->setPosition(Point::ZERO);																								// Set position on screen
 	this->addChild(btnTrackUp);
 	
 
 	// Current Track
-	currentTrackLbl = LabelTTF::create(trackNames[trackSelect], "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);			// Label to display current high score	
-	currentTrackLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.15f + origin.y));					// Set its position on screen
-	currentTrackLbl->setColor(Color3B::WHITE);																						// Set the text colour
-	//currentTrackLbl->setScale(scale);																								// Set the scale
-	this->addChild(currentTrackLbl);																								// Add it to the layer
+	//currentTrackLbl = LabelTTF::create(trackNames[trackSelect], "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);			// Label to display current high score
+	currentTrackLbl = LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);	// Label to display current high score	
+	currentTrackLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.15f + origin.y));						// Set its position on screen
+	currentTrackLbl->setColor(Color3B::WHITE);																							// Set the text colour
+	//currentTrackLbl->setScale(scale);																									// Set the scale
+	this->addChild(currentTrackLbl);																									// Add it to the layer
 
 	// Back Button
-	btnBackImg = MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(Settings::returnToMenu, this));			// Set image for menu option
-	btnBackImg->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));						// Set image position
-	btnBackImg->setScale(scale);																									// Set the scale
-	btnBack = Menu::create(btnBackImg, NULL);																						// Menu
-	btnBack->setPosition(Point::ZERO);																								// Set position on screen
-	this->addChild(btnBack);																										// Add to layer																							// Add to layer
+	btnBackImg = MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(Settings::returnToMenu, this));				// Set image for menu option
+	btnBackImg->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));							// Set image position
+	btnBackImg->setScale(scale);																										// Set the scale
+	btnBack = Menu::create(btnBackImg, NULL);																							// Menu
+	btnBack->setPosition(Point::ZERO);																									// Set position on screen
+	this->addChild(btnBack);																											// Add to layer																							// Add to layer
 	
 	return true;
 }
 
 // Callbacks
 void Settings::returnToMenu(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = MainMenu::createScene();																				// Return to the main menu
+	cocos2d::Scene* scene = MainMenu::createScene();																					// Return to the main menu
 
-	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));											// Switch scenes with animated transition
+	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));												// Switch scenes with animated transition
 }
 void Settings::musicVolUp(cocos2d::Ref *sender) {
 	Audio::Instance()->musicVolIncrease();
@@ -175,17 +176,19 @@ void Settings::sfxVolDown(cocos2d::Ref *sender) {
 void Settings::skipTrackForwards(cocos2d::Ref *sender) {
 	//trackSelect++;
 	//if (trackSelect == 3) trackSelect = 0;
-	(trackSelect == 2) ? trackSelect = 0 : trackSelect++;
-	currentTrackLbl->setString(trackNames[trackSelect]);
+	//(trackSelect == 2) ? trackSelect = 0 : trackSelect++;
+	//currentTrackLbl->setString(trackNames[trackSelect]);
+
 	Audio::Instance()->skipTrackForwards();
+	currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }
 void Settings::skipTrackBackwards(cocos2d::Ref *sender) {
 	//if (trackSelect > 0) trackSelect--;
 	//else if (trackSelect == 0) trackSelect = 3;
-	(trackSelect == 0) ? trackSelect = 2 : trackSelect--;
-	currentTrackLbl->setString(trackNames[trackSelect]);
+	//(trackSelect == 0) ? trackSelect = 2 : trackSelect--;	
 
 	Audio::Instance()->skipTrackBackwards();
+	currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }
 
 // Choose a background based on the screen resolution

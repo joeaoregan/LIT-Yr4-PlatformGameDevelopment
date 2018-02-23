@@ -9,7 +9,7 @@
 */
 
 #include "Audio.h"
-#include "string.h"
+//#include "string.h"
 
 Audio* Audio::s_pInstance;																	// Singleton so only one instance of Audio exists in the game, for easy access
 
@@ -33,6 +33,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 
 int currentTrack = 0;
 const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.wav" };
+std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, guitar solo by Jimmy" };
 
 void Audio::init() {
 	currentVol = 1.0f;
@@ -55,16 +56,26 @@ void Audio::laserFX() {
 	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);								// Play laser sound effect
 }
 
+void Audio::play() {
+	//SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);
+	SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+}
+void Audio::pause() {
+	SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+}
+
 void Audio::skipTrackForwards() {
-	if (currentTrack < NUM_TRACKS - 1)
-		currentTrack++;
-	else currentTrack = 0;
+	//if (currentTrack < NUM_TRACKS - 1)
+	//	currentTrack++;
+	//else currentTrack = 0;
+	(currentTrack < NUM_TRACKS - 1) ? currentTrack++ : currentTrack = 0;
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
 }
 void Audio::skipTrackBackwards() {
-	if (currentTrack > 0) currentTrack--;
-	else currentTrack = NUM_TRACKS - 1;
+	//if (currentTrack > 0) currentTrack--;
+	//else currentTrack = NUM_TRACKS - 1;
+	(currentTrack == 0) ? currentTrack = NUM_TRACKS - 1 : currentTrack--;
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
 }
@@ -84,4 +95,8 @@ void Audio::sfxVolIncrease() {
 void Audio::sfxVolDecrease() {
 	if (currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol - 0.1f);
+}
+
+std::string Audio::getTrackName() {
+	return trackNames[currentTrack];
 }

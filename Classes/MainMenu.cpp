@@ -15,6 +15,7 @@
 #include "EnterName.h"
 #include "Settings.h"
 
+
 #define TRANSITION_TIME 0.5
 
 Scene* MainMenu::createScene() {
@@ -69,37 +70,37 @@ bool MainMenu::init() {
 	playItem->setScale(scale * 0.8f);
 	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.6f + origin.y));								// Set image position
 
-	menu1 = Menu::create(playItem, NULL);																								// Menu
-	menu1->setPosition(Point::ZERO);																									// Set position on screen
+	//menu1 = Menu::create(playItem, NULL);																								// Menu
+	//menu1->setPosition(Point::ZERO);																									// Set position on screen
 	//menu1->setScale(scale * 0.8f);
-	this->addChild(menu1);																												// Add to layer																											// Add to layer							
+	//this->addChild(menu1);																												// Add to layer																											// Add to layer							
 
 	// 2. High Scores Button
 	scoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));		// Set image for menu option
 	scoreItem->setScale(scale * 0.8f);
 	scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.5f + origin.y));								// Set image position
 
-	menu2 = Menu::create(scoreItem, NULL);																								// Menu
-	menu2->setPosition(Point::ZERO);																									// Set position on screen
-	this->addChild(menu2);																												// Add to layer
+	//menu2 = Menu::create(scoreItem, NULL);																								// Menu
+	//menu2->setPosition(Point::ZERO);																									// Set position on screen
+	//this->addChild(menu2);																												// Add to layer
 
 	// 3. Game Options
 	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));		// Set image for options option
 	optionsItem->setScale(scale * 0.8f);
 	optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));							// Set image position
 
-	menu3 = Menu::create(optionsItem, NULL);																							// Menu
-	menu3->setPosition(Point::ZERO);																									// Set position on screen
-	this->addChild(menu3);																												// Add to layer
+	//menu3 = Menu::create(optionsItem, NULL);																							// Menu
+	//menu3->setPosition(Point::ZERO);																									// Set position on screen
+	//this->addChild(menu3);																												// Add to layer
 
 	// 4. Exit Button
 	closeItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MainMenu::menuCloseCallback, this));			// Set image for menu option
 	closeItem->setScale(scale * 0.8f);
 	closeItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.3f + origin.y));								// Set image position
 
-	menu4 = Menu::create(closeItem, NULL);																								// Menu
-	menu4->setPosition(Point::ZERO);																									// Set position on screen
-	this->addChild(menu4);																												// Add to layer
+	//menu4 = Menu::create(closeItem, NULL);																								// Menu
+	//menu4->setPosition(Point::ZERO);																									// Set position on screen
+	//this->addChild(menu4);																												// Add to layer
 
 	// Show current high score
 	def = UserDefault::getInstance();
@@ -123,17 +124,44 @@ bool MainMenu::init() {
 	changeNameLbl->setScale(scale);
 	cocos2d::MenuItemLabel* mainMenuItem = MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MainMenu::GoToEnterName, this));			// Go to enter name scene
 	
-	cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);																			// JOR replaced auto specifier
-	menu2->setPosition(Point::ZERO);
-	this->addChild(menu2);
+	//cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);																			// JOR replaced auto specifier
+	//menu2->setPosition(Point::ZERO);
+	//this->addChild(menu2);
 
 	mainMenuItem->setPosition(Point((visibleSize.width + origin.x) * 0.1f, visibleSize.height * 0.95f + origin.y));
 	mainMenuItem->runAction(ScaleTo::create(0.5F, 1.0F));
 
+	// Menu Items
+	menu = Menu::create(playItem, scoreItem, optionsItem, closeItem, mainMenuItem, NULL);								// Handles menu item touches
+	menu->setPosition(Point::ZERO);
+	this->addChild(menu);
+
+	// Music Player
+	mplayer = MusicPlayer::create(Point(250, 75));
+	this->addChild(mplayer);
+
+	this->scheduleUpdate();																												// Start updating the scene
+
 	return true;
 }
 
-
+void MainMenu::update(float dt) {
+	mplayer->update();
+	/*
+	if (mplayer->getButton(1)->isSelected()) {
+		mplayer->playTrack();							// Swap play & pause button sprites
+	}
+	else if (mplayer->getButton(2)->isSelected()) {
+		mplayer->pauseTrack();							// Swap play & pause button sprites
+	}
+	else if (mplayer->getButton(3)->isSelected()) {
+		mplayer->nextTrack();							// Skip track forwards
+	}
+	else if (mplayer->getButton(4)->isSelected()) {
+		mplayer->previousTrack();						// Skip track backwards
+	}
+	*/
+}
 
 // Start the Game Scene
 void MainMenu::StartGame(cocos2d::Ref *sender) {

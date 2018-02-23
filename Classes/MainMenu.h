@@ -11,6 +11,7 @@
 #define __MAIN_MENU_H__
 
 #include "cocos2d.h"
+#include "MusicPlayer.h"
 
 class MainMenu : public cocos2d::Layer
 {
@@ -18,6 +19,7 @@ public:
 	static cocos2d::Scene* createScene();		// Returns class instance pointer
 		
 	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
+	void update(float dt);						// Update the menu
 		
 	CREATE_FUNC(MainMenu);						// Static create() method implemented manually
 
@@ -44,10 +46,10 @@ private:
 	cocos2d::MenuItemImage* closeItem;			// Exit the game
 
 	// Menu Buttons
-	cocos2d::Menu* menu1;						// Button 1 start the game
-	cocos2d::Menu* menu2;						// Button 2 go to high scores scene
-	cocos2d::Menu* menu3;						// Button 3 go to game options scene
-	cocos2d::Menu* menu4;						// Button 4 exit the game
+	cocos2d::Menu* menu;						// Button 1 start the game
+	//cocos2d::Menu* menu2;						// Button 2 go to high scores scene
+	//cocos2d::Menu* menu3;						// Button 3 go to game options scene
+	//cocos2d::Menu* menu4;						// Button 4 exit the game
 
 	// High Score
 	cocos2d::UserDefault* def;					// UserDefault used to save and load variables
@@ -55,6 +57,9 @@ private:
 	cocos2d::__String *tempScore;				// Score text to display
 	cocos2d::LabelTTF* highScoreLbl;			// Label to display the score text
 	cocos2d::LabelTTF* currentPlayer;			// Label to display the current Player name
+
+	// Music Player
+	MusicPlayer *mplayer;						// Music Player
 };
 
 #endif // __MAIN_MENU_H__

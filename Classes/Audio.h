@@ -13,6 +13,8 @@
 #include "SimpleAudioEngine.h"
 using namespace CocosDenshion;			// Audio engine
 
+#include <string>
+
 class Audio {
 public:	
 	static Audio* Instance() {
@@ -29,11 +31,14 @@ public:
 	void laserFX();						// Play laser sound effect
 
 	void skipTrackForwards();
+	void play();
+	void pause();
 	void skipTrackBackwards();
 	void musicVolIncrease();
 	void musicVolDecrease();
 	void sfxVolIncrease();
 	void sfxVolDecrease();
+	std::string getTrackName();
 
 private:
 	Audio() {};							// Constructor is private for use as a Singleton. Initializes the variables
