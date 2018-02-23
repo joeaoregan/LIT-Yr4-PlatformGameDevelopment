@@ -46,7 +46,7 @@ MusicPlayer *MusicPlayer::create(Point position){
 		s_pInstance->back->setPosition(Point(position.x - s_pInstance->pause->getContentSize().width - s_pInstance->back->getContentSize().width/2, position.y));
 		s_pInstance->forward->setScale(-1);
 
-		s_pInstance->currentTrackLbl = LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.25f);
+		s_pInstance->currentTrackLbl = LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
 		s_pInstance->currentTrackLbl->setPosition(Point(position.x, position.y - (s_pInstance->pause->getContentSize().height) * 0.75f));
 		s_pInstance->currentTrackLbl->setColor(Color3B::WHITE);
 		s_pInstance->addChild(s_pInstance->currentTrackLbl);
@@ -56,6 +56,8 @@ MusicPlayer *MusicPlayer::create(Point position){
         menu->setPosition(Point(0,0));
 		s_pInstance->addChild(menu, 120);
 		s_pInstance->setScale(0.75);
+
+		//s_pInstance->getContentSize().width;
         
         return s_pInstance;
     }

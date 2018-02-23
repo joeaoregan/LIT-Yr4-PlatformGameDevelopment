@@ -193,6 +193,8 @@ bool Level1::init() {
 	this->addChild(controller);
 	*/
 
+	this->addChild(mplayer);
+
 	this->scheduleUpdate();
 	
     return true;

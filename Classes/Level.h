@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "Game.h"
+#include "MusicPlayer.h"
 
 USING_NS_CC;
 
@@ -117,8 +118,10 @@ public:
 
 	bool _gameOver = false;
 
-	cocos2d::Scene* scene;// 'scene' is an autorelease object
-	Level* layer;			// 'layer' is an autorelease object
+	//cocos2d::Scene* scene;												// 'scene' is an autorelease object
+	//Level* layer;															// 'layer' is an autorelease object
+
+	MusicPlayer* mplayer;
 
 private:
 	/*

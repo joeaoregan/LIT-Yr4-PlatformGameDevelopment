@@ -145,6 +145,8 @@ bool Level3::init() {
 
 		this->addChild(controller3);
 	}
+
+	//this->addChild(mplayer);
 	
 	this->scheduleUpdate();
 

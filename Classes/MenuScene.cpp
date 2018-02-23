@@ -1,0 +1,112 @@
+/*
+	Menu.cpp
+
+	Joe O'Regan
+	K00203642
+	23/02/2018
+
+	Menu base class
+
+	Each menu scene derived from this class, will inherit the game title, scene title, and player name text
+*/
+
+#include "MainMenu.h"
+#include "MenuScene.h"
+#include "EnterName.h"
+#include "Game.h"
+
+MenuScene* MenuScene::layer;
+
+cocos2d::Scene* MenuScene::createScene() {
+	cocos2d::Scene* scene = cocos2d::Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
+	layer = MenuScene::create();						// 'layer' is an autorelease object, JOR replaced auto specifier
+		
+	scene->addChild(layer);								// Add layer as a child to scene
+		
+	return scene;										// Return the scene
+}
+
+// on "init" you need to initialize your instance
+bool MenuScene::init() {
+	if (!Layer::init()) return false;																								// Super init first
+
+	def = cocos2d::UserDefault::getInstance();
+	
+	// Screen size
+	visibleSize = cocos2d::Director::getInstance()->getVisibleSize();																// Get visible screen size
+	origin = cocos2d::Director::getInstance()->getVisibleOrigin();																	// Get screen origin point		
+	(visibleSize.height == 1080) ? scale = 1.0f : scale = 0.67f;
+	
+	// Background image
+	backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Background image
+	backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));				// Set backgound position
+	this->addChild(backgroundSprite);																								// Add to layer
+	
+	// Game Title
+	gameTitleSprite = cocos2d::Sprite::create("GameTitle.png");																		// Game Title image
+	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width * 0.1f, visibleSize.height / 2 + origin.y));						// Set position on screen
+	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.9f + origin.y));			// Set position on screen
+	gameTitleSprite->setScale(1.75 * scale);
+	this->addChild(gameTitleSprite);																								// Add to layer		
+		
+	// Scene Title
+	titleSprite = cocos2d::Sprite::create("MainMenu.png");																			// Scene Title image
+	titleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.75f + origin.y));				// Set position on screen
+	titleSprite->setScale(scale);
+	this->addChild(titleSprite);																									// Add to layer							
+	
+	// Show current player name
+	currentPlayerName = def->getStringForKey("CurrentPlayer", "Player");
+	//if (Game::Instance()->getPlayerName() == "") 
+	Game::Instance()->setPlayerName(currentPlayerName);																				// Set the players name to a default value
+
+	changeNameLbl = cocos2d::Label::createWithBMFont("Arial.fnt", "Current Player:\n" + currentPlayerName);							// Display current players name
+	changeNameLbl->setScale(scale);
+	currentPlayerLbl = cocos2d::MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MenuScene::GoToEnterName, this));				// Go to enter name scene
+	currentPlayerLbl->setPosition(cocos2d::Point((visibleSize.width + origin.x) * 0.1f, visibleSize.height * 0.95f + origin.y));
+	currentPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
+
+	// Back Button
+	btnBackImg = cocos2d::MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(MenuScene::returnToMenu, this));	// Set image for menu option
+	btnBackImg->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));				// Set image position
+	btnBackImg->setScale(scale);																									// Set the scale
+
+	// Exit button (autorelease object)
+	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+		CC_CALLBACK_1(MenuScene::menuCloseCallback, this));																			// Close game button, JOR replaced auto specifier
+	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
+		origin.y + closeItem->getContentSize().height / 2));
+
+	// Menu Items
+	menu = cocos2d::Menu::create(currentPlayerLbl, btnBackImg, closeItem, NULL);													// Handles menu item touches
+	menu->setPosition(cocos2d::Point::ZERO);
+	this->addChild(menu);
+
+	return true;
+}
+
+// The player can enter and store their name from this scene
+void MenuScene::GoToEnterName(cocos2d::Ref *sender) {
+	cocos2d::Scene* scene = EnterName::createScene();																				// Create the enter name scene
+	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFadeDown::create(TRANSITION_TIME, scene));					// Load the enter name screen with transition
+}
+
+// Change to the main menu scene
+void MenuScene::returnToMenu(cocos2d::Ref *sender) {
+	cocos2d::Scene* scene = MainMenu::createScene();																				// Return to the main menu
+	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFade::create(TRANSITION_TIME, scene));						// Switch scenes with animated transition
+}
+
+// Exit the game
+void MenuScene::menuCloseCallback(Ref* pSender) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
+	return;
+#endif
+
+	cocos2d::Director::getInstance()->end();	// Close the director
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+#endif
+}

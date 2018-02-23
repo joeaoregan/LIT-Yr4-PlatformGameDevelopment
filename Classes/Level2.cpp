@@ -73,6 +73,8 @@ bool Level2::init() {
 		this->addChild(controller);
 	}	
 
+	this->addChild(mplayer);
+
 	this->scheduleUpdate();																					// Start updating the scene
 
     return true;

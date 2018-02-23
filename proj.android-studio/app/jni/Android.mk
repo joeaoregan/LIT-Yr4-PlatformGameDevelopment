@@ -14,6 +14,7 @@ LOCAL_MODULE_FILENAME := libMyGame
 LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AppDelegate.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
+                   $(LOCAL_PATH)/../../../Classes/AudioMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnterName.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp\
@@ -26,6 +27,8 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level3.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level4.cpp \
                    $(LOCAL_PATH)/../../../Classes/MainMenu.cpp \
+                   $(LOCAL_PATH)/../../../Classes/MenuScene.cpp \
+                   $(LOCAL_PATH)/../../../Classes/MusicPlayer.cpp \
                    $(LOCAL_PATH)/../../../Classes/ParallaxNodeExtras.cpp \
                    $(LOCAL_PATH)/../../../Classes/Player.cpp \
                    $(LOCAL_PATH)/../../../Classes/Settings.cpp \

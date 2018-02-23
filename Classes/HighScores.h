@@ -10,34 +10,23 @@
 #ifndef __HIGH_SCORES_H__
 #define __HIGH_SCORES_H__
 
-#include "cocos2d.h"
+#include "MenuScene.h"
 
-class HighScores : public cocos2d::Layer {
+class HighScores : public MenuScene {
 public:	
 	static cocos2d::Scene* createScene();		// Returns class instance pointer
 		
 	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
 		
 	CREATE_FUNC(HighScores);					// Static create() method implemented manually
-
-	void initBackground();						// Initialise the background image
-
+	
 	void sortScores();							// Sort the high scores
-
+	void resetScores();							// Reset the scores
+	void saveScores();							// Save the names and scores to UserDefaults
 private:
-	void returnToMenu(cocos2d::Ref *sender);	// Return to the MainMenu
-	Size visibleSize;							// Get the size of the screen, to set the image size for the current platform
-	Vec2 origin;								// Screen origin point
-
-	cocos2d::Sprite* backgroundSprite;			// Sprite for background image
-
-	__String *tempScore;						// Text to display
-
-	cocos2d::Sprite* titleSprite;
-	cocos2d::MenuItemImage* btnBackImg;			// Set image for Back Button menu option
-	cocos2d::Menu* btnBack;
 
 	// High Score
+	__String *tempScore;						// Text to display	
 	cocos2d::LabelTTF* highScoreLbl;			// Label to display current high score
 };
 

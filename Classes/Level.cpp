@@ -118,6 +118,9 @@ bool Level::init() {
 			controller = DPad::create("DPad/Base150.png", "DPad/Arrow.png", "DPad/ArrowPressed.png", Point(150, 150));
 	}
 
+	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));						// Position: scale in MusicPlayer class throws off measurement (undo first)
+	//mplayer = MusicPlayer::create(Point(250, 75));
+
 	/*
 	this->addChild(menu, 1);
 	
@@ -215,6 +218,7 @@ void Level::update(float dt) {
 	_backgroundNode->update(dt);																			// Scroll the background objects
 	
 	player->update();																						// Update player sprite position
+	mplayer->update();																						// Update the music player
 }
 
 void Level::getInput() {

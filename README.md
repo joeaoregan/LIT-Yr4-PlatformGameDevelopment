@@ -1,7 +1,7 @@
 # Year-four Platform Games Development CA 
 # Cocos2d-x Space Game
 ## Side-scrolling 2D Space Shooter
-### 21/02/2018
+### 23/02/2018
 
 Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point
 
@@ -51,6 +51,11 @@ Space Shooter: The high score is displayed in the menu
 
 ![Space Game: Multiple Laser Weapon](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame9Lasers.jpg "Space Shooter: Multiple Laser Weapon")
 Space Shooter: Multiple Laser Weapon allows from 1 to 4 beams to be fired
+
+---
+
+![Space Game: Music Controls](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame10MusicControls.jpg "Space Shooter: Music Controls")
+Space Shooter: Added music controls to add to menu and game scenes
 
 ---
 
