@@ -39,6 +39,7 @@ public:
 	void sfxVolIncrease();
 	void sfxVolDecrease();
 	std::string getTrackName();
+	bool isPaused();					// If music paused, show play button on music player
 
 private:
 	Audio() {};							// Constructor is private for use as a Singleton. Initializes the variables

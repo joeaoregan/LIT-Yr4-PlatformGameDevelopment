@@ -26,11 +26,11 @@ class Level : public Layer {
 public:
 	// Level singleton
 	static Level* Instance() {
-		if (s_pInstance == 0) {
-			s_pInstance = new Level();
-			return s_pInstance;
+		if (layerInstance == 0) {
+			layerInstance = new Level();
+			return layerInstance;
 		}
-		return s_pInstance;
+		return layerInstance;
 	}
 
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -49,7 +49,7 @@ public:
 
 	void checkCollisions();													// 20180202 Check is the game over or not
 
-	//void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
+	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
 
 	void startLevel2(Ref* pSender);											// 20180218 Progress to the next level
 	void startLevel3(Ref* pSender); 
@@ -59,20 +59,19 @@ public:
 	void setInvisible(Node * node);											// Hide the node/sprite
 
 	Size getWinSize() { return winSize; }
-
-	//void spawnLasers(int amount, cocos2d::Layer *layer);
-     
-    CREATE_FUNC(Level);														// implement the "static create()" method manually
-	/*
-	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
-
-	void spawnLaser();														// 20180205
-	void spawn2Lasers();													// 20180205
+	     
+    CREATE_FUNC(Level);
 
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
-	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
+	
+	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
+	/*
+	void spawnLaser();														// 20180205
+	void spawn2Lasers();													// 20180205
 	*/
-
+	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
+	
+	
 	enum EndReason {
 		KENDREASONWIN,
 		KENDREASONLOSE
@@ -123,20 +122,26 @@ public:
 
 	MusicPlayer* mplayer;
 
-private:
-	/*
-	void endScene(EndReason1 endReason);
-	void restartTapped(Ref* pSender);
+	void spawnLasers(int amount);											// 20180221
 
+private:
 	Sprite *playerLife;														// Indicate lives left
-	Sprite *EnemyShip;
+
+	
+	void endScene(EndReason endReason);
+	void restartTapped(Ref* pSender);
+	
+	//Sprite *EnemyShip;
+
 	int _nextAsteroid = 0;
 	int nextEnemyShip = 0;
+	
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
-	*/
+	
 
-	static Level* s_pInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+protected:
+	static Level* layerInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 };
 
 #endif // __LEVEL_H__

@@ -57,11 +57,12 @@ public:
 	cocos2d::UserDefault* def;					// UserDefault used to save and load variables
 	cocos2d::Label* changeNameLbl; 
 	std::string currentPlayerName;
-
 	// Menu Buttons
 	cocos2d::MenuItemImage* btnBackImg;			// Set image for Back Button menu option
 	cocos2d::MenuItemLabel* currentPlayerLbl;	// Player name text changes scene to enter name scene when pressed
 	cocos2d::MenuItemImage* closeItem;			// Close button, bottom right corner
+
+	cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FG, cocos2d::Color4F BG);
 
 private:
 	/*

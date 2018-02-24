@@ -14,6 +14,10 @@
 #include "MenuScene.h"
 #include "EnterName.h"
 #include "Game.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include <SDL.h>										// For gamepad support on desktop
+#endif
+#include "HealthBar.h"
 
 MenuScene* MenuScene::layer;
 
@@ -30,6 +34,14 @@ cocos2d::Scene* MenuScene::createScene() {
 bool MenuScene::init() {
 	if (!Layer::init()) return false;																								// Super init first
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	// SDL Gamepad Support for Windows
+	if (SDL_Init(SDL_INIT_JOYSTICK) < 0) {
+		//std::cout << "SDL could not initialize! SDL Error: %s\n" << SDL_GetError() << std::endl;
+		cocos2d::log("SDL init failed");
+	}									// For gamepad support on desktop
+#endif
+	
 	def = cocos2d::UserDefault::getInstance();
 	
 	// Screen size
@@ -42,6 +54,39 @@ bool MenuScene::init() {
 	backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));				// Set backgound position
 	this->addChild(backgroundSprite);																								// Add to layer
 	
+	/*
+	// Draw Rect test
+	cocos2d::DrawNode* rectNode = DrawNode::create();
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2(-50, -20); 
+	rectangle[1] = Vec2(50, -20);
+	rectangle[2] = Vec2(50, 20);
+	rectangle[3] = Vec2(-50, 20);
+
+	Vec2 rectangle2[4];
+	rectangle2[0] = Vec2(-48, -20);
+	rectangle2[1] = Vec2(48, -20);
+	rectangle2[2] = Vec2(48, 20);
+	rectangle2[3] = Vec2(-48, 20);
+	
+
+	Color4F white(1, 1, 1, 1);
+	Color4F red(1, 0, 0, 1);
+	Color4F trans(1, 0, 0, 0);
+	rectNode->drawPolygon(rectangle, 4, trans, 1, red);
+	rectNode->drawPolygon(rectangle2, 4, trans, 1, white);
+
+	rectNode->setPosition(Point(visibleSize.width / 2, visibleSize.height * 0.05f + origin.y));
+
+	this->addChild(rectNode);
+	 
+
+	Color4F red(1, 0, 0, 1);
+	Color4F green(0, 1, 0, 1);
+	cocos2d::DrawNode* healthBar = createStatusBar(100, 50, 100, 10, 0.8f, red, green);
+	this->addChild(healthBar);
+	*/
+
 	// Game Title
 	gameTitleSprite = cocos2d::Sprite::create("GameTitle.png");																		// Game Title image
 	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width * 0.1f, visibleSize.height / 2 + origin.y));						// Set position on screen

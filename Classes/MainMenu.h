@@ -47,6 +47,11 @@ private:
 
 	// Music Player
 	MusicPlayer *mplayer;						// Music Player
+
+	// 20180223
+	// Keyboard and gamepad
+	int currentBtn;								// Current selected menu button for keyboard / gamepad
+	int numButtons;								// The number of buttons in the menu/state
 };
 
 #endif // __MAIN_MENU_H__

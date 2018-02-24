@@ -10,7 +10,7 @@
 #include "Game.h"
 #include "HighScores.h"
 #include "MainMenu.h"
-#include "Level1.h"
+#include "LevelTest.h"	// was level1
 
 #include "HUD.h"
 //#include <UIText.h>

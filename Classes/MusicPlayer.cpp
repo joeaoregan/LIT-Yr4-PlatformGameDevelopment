@@ -39,13 +39,19 @@ MusicPlayer *MusicPlayer::create(Point position){
 		// Set positions and rotations
 		s_pInstance->play->setPosition(Point(position.x, position.y));
 		s_pInstance->pause->setPosition(Point(position.x, position.y));
-		s_pInstance->play->setVisible(false);												// Initially hide play, and reveal when pause button is pressed
+
+		// Check to display pause or play
+		if (SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
+			s_pInstance->play->setVisible(false);											// Initially hide play, and reveal when pause button is pressed
+		else
+			s_pInstance->pause->setVisible(false);
 
 		// Set button positions
 		s_pInstance->forward->setPosition(Point(position.x + s_pInstance->pause->getContentSize().width + s_pInstance->forward->getContentSize().width/2, position.y));
 		s_pInstance->back->setPosition(Point(position.x - s_pInstance->pause->getContentSize().width - s_pInstance->back->getContentSize().width/2, position.y));
 		s_pInstance->forward->setScale(-1);
 
+		// Display the current track information
 		s_pInstance->currentTrackLbl = LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
 		s_pInstance->currentTrackLbl->setPosition(Point(position.x, position.y - (s_pInstance->pause->getContentSize().height) * 0.75f));
 		s_pInstance->currentTrackLbl->setColor(Color3B::WHITE);
@@ -55,9 +61,7 @@ MusicPlayer *MusicPlayer::create(Point position){
         Menu *menu = Menu::create(s_pInstance->play, s_pInstance->pause, s_pInstance->forward, s_pInstance->back, NULL);
         menu->setPosition(Point(0,0));
 		s_pInstance->addChild(menu, 120);
-		s_pInstance->setScale(0.75);
-
-		//s_pInstance->getContentSize().width;
+		s_pInstance->setScale(0.75);					// Make whole music player smaller, affects the screen positioning
         
         return s_pInstance;
     }
@@ -98,11 +102,13 @@ void MusicPlayer::playTrack() {
 	Audio::Instance()->play();
 	s_pInstance->pause->setVisible(true);
 	s_pInstance->play->setVisible(false);
+	s_pInstance->currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }
 void MusicPlayer::pauseTrack() {
 	Audio::Instance()->pause();
 	s_pInstance->pause->setVisible(false);
 	s_pInstance->play->setVisible(true);
+	s_pInstance->currentTrackLbl->setString("Music Paused");
 }
 void MusicPlayer::nextTrack() {
 	Audio::Instance()->skipTrackForwards();

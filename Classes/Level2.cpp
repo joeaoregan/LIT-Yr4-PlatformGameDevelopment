@@ -168,7 +168,7 @@ void Level2::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event) {
 
 void Level2::checkCollisions() {
 	Level::checkCollisions();																				// Call base class function
-																											// Check collisions with different objects in different levels
+	// Check collisions with different objects in different levels
 }
 
 void Level2::checkGameOver(float currenTime) {

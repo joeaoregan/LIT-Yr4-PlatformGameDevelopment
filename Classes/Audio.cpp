@@ -48,6 +48,10 @@ void Audio::init() {
 //#endif
 }
 
+bool Audio::isPaused() {
+	return SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
+}
+
 void Audio::explodeFX() {
 	SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_LARGE);							// Play explosion sound effect
 }

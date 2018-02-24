@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level2.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level3.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level4.cpp \
+                   $(LOCAL_PATH)/../../../Classes/LevelTest.cpp \
                    $(LOCAL_PATH)/../../../Classes/MainMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/MenuScene.cpp \
                    $(LOCAL_PATH)/../../../Classes/MusicPlayer.cpp \
