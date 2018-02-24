@@ -73,7 +73,7 @@ void EnterName::textFieldEvent(cocos2d::Ref* sender, ui::TextField::EventType ty
 		def->setStringForKey("CurrentPlayer", txtField->getString().c_str());			// Store the current players name
 		break;
 	case cocos2d::ui::TextField::EventType::DELETE_BACKWARD:
-		log("s", textField->getString().c_str());
+		log("%s", textField->getString().c_str());
 		break;
 	}
 }

@@ -6,7 +6,7 @@
 	24/02/2018
 
 	So I don't completely bone the proper levels
-*/
+
 #ifndef __LEVEL_TEST_H__
 #define __LEVEL_TEST_H__
 
@@ -18,25 +18,25 @@
 #include "Level.h"
 
 USING_NS_CC;
-/*
-enum EndReason1 {
-	KENDREASONWIN,
-	KENDREASONLOSE
-};
-*/
+
+//enum EndReason1 {
+//	KENDREASONWIN,
+//	KENDREASONLOSE
+//};
+
 
 class LevelTest : public Level {
 public:
-	/*
-	// Game singleton
-	static Level1* Instance() {
-		if (s_pInstance == 0) {
-			s_pInstance = new Level1();
-			return s_pInstance;
-		}
-		return s_pInstance;
-	}
-	*/
+	
+	/// Game singleton
+	//static Level1* Instance() {
+	//	if (s_pInstance == 0) {
+	//		s_pInstance = new Level1();
+	//		return s_pInstance;
+	//	}
+	//	return s_pInstance;
+	//}
+	
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -109,7 +109,7 @@ private:
 };
 
 #endif // __LEVEL_TEST_H__
-
+*/
 /*
 void initBG(cocos2d::Layer *layer);
 void scrollBackground(float dt);											// 20180202 Scroll the background objects

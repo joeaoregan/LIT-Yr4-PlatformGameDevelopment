@@ -11,9 +11,8 @@
 #define __AUDIO__
 
 #include "SimpleAudioEngine.h"
-using namespace CocosDenshion;			// Audio engine
-
 #include <string>
+using namespace CocosDenshion;			// Audio engine
 
 class Audio {
 public:	
@@ -30,15 +29,18 @@ public:
 	void explodeFX();					// Play explosion sound effect
 	void laserFX();						// Play laser sound effect
 
-	void skipTrackForwards();
-	void play();
-	void pause();
-	void skipTrackBackwards();
-	void musicVolIncrease();
-	void musicVolDecrease();
-	void sfxVolIncrease();
-	void sfxVolDecrease();
-	std::string getTrackName();
+	void skipTrackForwards();			// Skip to the next track in the array, or first track if already at the last
+	void skipTrackBackwards();			// Skip to the previous track in the array, or last track if already at the 1st
+	void play();						// Play the background music
+	void pause();						// Pause the background music
+
+	// Volumes (Not working windows)
+	void musicVolIncrease();			// Increase the music volume
+	void musicVolDecrease();			// Decrease the music volume
+	void sfxVolIncrease();				// Increase the FX volume
+	void sfxVolDecrease();				// Decrease the FX volume
+
+	std::string getTrackName();			// Get the name of the track
 	bool isPaused();					// If music paused, show play button on music player
 
 private:

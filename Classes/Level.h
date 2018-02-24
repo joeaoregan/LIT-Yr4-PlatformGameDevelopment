@@ -15,15 +15,17 @@
 #include "Game.h"
 #include "MusicPlayer.h"
 
-USING_NS_CC;
-
-
 #define KNUMASTEROIDS 15						// Number of asteroids
 #define KNUMASTEROIDSL2 20						// Number of asteroids
 #define KNUMLASERS 8							// Number of lasers
 
 class Level : public Layer {
 public:
+	enum EndReason {
+		KENDREASONWIN,														// Player has won the game
+		KENDREASONLOSE														// Player has lost the game
+	};
+
 	// Level singleton
 	static Level* Instance() {
 		if (layerInstance == 0) {
@@ -37,48 +39,46 @@ public:
 	
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	
-	virtual void update(float dt);
+	virtual void update(float dt);											// Update function
+	virtual void endScene(EndReason endReason);
     	
     void menuCloseCallback(cocos2d::Ref* pSender);							// Selector callback, exit the game when button pressed
 
 	float getTimeTick();													// Get current time in milliseconds
 
 	void getInput();														// Get input from DPad
-
-	void updateTimer(float curTimeMillis);									// 20180204 Update the countdown timer, 21/02/2018 Passing curTimeMillis solves Android timer issue
-
+	
 	void checkCollisions();													// 20180202 Check is the game over or not
 
 	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
 
+	// Callbacks
+	void restartTapped(Ref* pSender);
 	void startLevel2(Ref* pSender);											// 20180218 Progress to the next level
 	void startLevel3(Ref* pSender); 
 	void returnToMenu(Ref* pSender);										// 20180218 Return to the main menu
 
 	float randomValueBetween(float low, float high);						// Select a random value from a given range
 	void setInvisible(Node * node);											// Hide the node/sprite
-
-	Size getWinSize() { return winSize; }
-	     
-    CREATE_FUNC(Level);
-
-	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
-	
+		     
+    CREATE_FUNC(Level);														// Create the level layer
+		
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
-	/*
-	void spawnLaser();														// 20180205
-	void spawn2Lasers();													// 20180205
-	*/
-	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
-	
-	
-	enum EndReason {
-		KENDREASONWIN,
-		KENDREASONLOSE
-	};
 
-	cocos2d::Size visibleSize;
+	// Spawn game objects
+	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
+	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
+	void spawnLasers(int amount);											// 20180221
+	
+	// Get / Set methods
+	Size getWinSize() { return winSize; }									// Get the window size
+	int getNextShipLaser() { return _nextShipLaser; }						// Next laser in laser list
+	void setNextShipLaser(int set) { _nextShipLaser = set; }				// Set the next laser in the list
+
+
+	cocos2d::Size visibleSize;												// Screen resolution changes depending on the platform
 	Size winSize;															// Current size of the game window (constantly updated)
+	float scale;															// Scale objects up in size for 1080p, or down for 720p
 	cocos2d::Point origin;
 	
 	// Menu
@@ -86,50 +86,15 @@ public:
 	cocos2d::Menu* menuClose;
 
 	SpriteBatchNode *_batchNode;											// Group nodes together for efficiency
-	Player* player;															// Player sprite
-
 	ParallaxNodeExtras *_backgroundNode;									// Scrolling background
+	Player* player;															// Player sprite
+	
+	Vector<Sprite*>* getLaserList() { return _shipLasers; }					// return ship lasers
 
-	Vector<Sprite*>* getLaserList() { return _shipLasers; }
-	int getNextShipLaser() { return _nextShipLaser; }
-	void setNextShipLaser(int set) { _nextShipLaser = set; }
-
-	Vector<Sprite*>* _asteroids;											// List of asteroids
-	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
-	Vector<Sprite*> *_shipLasers;											// List of lasers
-	Sprite* livesList[MAX_LIVES];											// List of lives
-	int _nextShipLaser = 0;													// Ship laser list index
-
-	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listener
-
-	// Time
-	float currentTime;														// 20180221 Change to float to fix Android timer issue
-	double curTime;															// Current game time
-	double _gameOverTime;													// Game over time
-	float curTimeMillis;													// Current time in milliseconds
-	unsigned int time;
-
-	// HUD
-	cocos2d::Label* scoreLabel;												// Display the current score
-	cocos2d::Label * timeLabel;												// Display the time remaining
-
-	DPad *controller;														// Add directional pad for mobile device
-
-	bool _gameOver = false;
-
-	//cocos2d::Scene* scene;												// 'scene' is an autorelease object
-	//Level* layer;															// 'layer' is an autorelease object
-
-	MusicPlayer* mplayer;
-
-	void spawnLasers(int amount);											// 20180221
-
+			
 private:
 	Sprite *playerLife;														// Indicate lives left
-
-	
-	void endScene(EndReason endReason);
-	void restartTapped(Ref* pSender);
+		
 	
 	//Sprite *EnemyShip;
 
@@ -137,11 +102,29 @@ private:
 	int nextEnemyShip = 0;
 	
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
-	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship
+	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship	
 	
+	// Time
+	double curTime;															// Current game time
+	double _gameOverTime;													// Game over time
+	float curTimeMillis;													// Current time in milliseconds
+
+	// Weapons
+	int _nextShipLaser = 0;													// Ship laser list index
+
+	// Object lists
+	Vector<Sprite*>* _asteroids;											// List of asteroids
+	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
+	Vector<Sprite*> *_shipLasers;											// List of lasers
+	Sprite* livesList[MAX_LIVES];											// List of lives
 
 protected:
+	MusicPlayer* mplayer;													// Controls for playing/pausing music and skipping tracks
+	HUD* newHUD;															// Test hud
+	DPad *controller;														// Add directional pad for mobile device
+
 	static Level* layerInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listenerF
 };
 
 #endif // __LEVEL_H__

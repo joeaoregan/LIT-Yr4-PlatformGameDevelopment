@@ -13,10 +13,8 @@
 
 #include <iostream>
 #include "cocos2d.h"
-using namespace cocos2d;
 
-class MusicPlayer: public Node{
-
+class MusicPlayer: public cocos2d::Node {
 public:
 	// MusicPlayer singleton
 	static MusicPlayer* Instance() {
@@ -27,28 +25,28 @@ public:
 		return s_pInstance;
 	}
 
-	static MusicPlayer *create(Point position);
+	static MusicPlayer *create(cocos2d::Point position);	// Create the music player at the position specified
 
-	MusicPlayer() {};							// Constructor	
-	~MusicPlayer() {};							// Destructor
+	MusicPlayer() {};										// Constructor	
+	~MusicPlayer() {};										// Destructor
 
-	bool init(cocos2d::Layer *layer);			// Initialise the music player
-	void update();								// update the music player
+	bool init(cocos2d::Layer *layer);						// Initialise the music player
+	void update();											// update the music player
 
-	void playTrack();							// Play the music
-	void pauseTrack();							// Pause the music
-	void nextTrack();							// Skip to the next track
-	void previousTrack();						// Skip to previous track
+	void playTrack();										// Play the music
+	void pauseTrack();										// Pause the music
+	void nextTrack();										// Skip to the next track
+	void previousTrack();									// Skip to previous track
 
-    MenuItemImage *getButton(int button);		// Get the active button
+	cocos2d::MenuItemImage *getButton(int button);			// Get the active button
 	
 private:
-    MenuItemImage *play;						// Play music button
-    MenuItemImage *pause;						// Pause music button
-    MenuItemImage *forward;						// Skip track forwards button
-    MenuItemImage *back;						// Skip track backwards button
-	cocos2d::LabelTTF* currentTrackLbl;			// Label to display current background music track
+	cocos2d::MenuItemImage *play;							// Play music button
+	cocos2d::MenuItemImage *pause;							// Pause music button
+	cocos2d::MenuItemImage *forward;						// Skip track forwards button
+	cocos2d::MenuItemImage *back;							// Skip track backwards button
+	cocos2d::LabelTTF* currentTrackLbl;						// Label to display current background music track
 	
-	static MusicPlayer* s_pInstance;			// Single instance of Game used as singleton, so only one instance exists thoughout the game
+	static MusicPlayer* s_pInstance;						// Single instance of Game used as singleton, so only one instance exists thoughout the game
 };
 #endif /* __M_PLAYER_H */

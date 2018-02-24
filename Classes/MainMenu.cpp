@@ -13,7 +13,7 @@
 
 #include "Game.h"
 #include "MainMenu.h"
-#include "LevelTest.h"							// Menu Item: Start game WAS LEVEL1
+#include "Level1.h"								// Menu Item: Start game WAS LEVEL1
 #include "HighScores.h"							// Menu Item: High Scores
 #include "EnterName.h"							// Accessed by selecting current player menu text item
 #include "Settings.h"							// Menu Item
@@ -101,7 +101,7 @@ void MainMenu::update(float dt) {
 	Callback: Start the Game Scene
 */
 void MainMenu::StartGame(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = LevelTest::createScene();																					// Create the game scene, JOR replaced auto specifier
+	cocos2d::Scene* scene = Level1::createScene();																					// Create the game scene, JOR replaced auto specifier
 	Director::getInstance()->replaceScene(TransitionSlideInB::create(TRANSITION_TIME, scene));										// Create scene and transition
 }
 

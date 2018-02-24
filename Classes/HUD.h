@@ -10,7 +10,7 @@
 #ifndef __HUD__
 #define __HUD__
 
-//#include "Level1.h"
+#define MAX_LIVES 5											// The maximum number of lives a player can have
 
 // Needed to use to_string method with android
 template <typename T>
@@ -20,7 +20,7 @@ std::string to_string(T value) {
 	return os.str();
 }
 
-class HUD{
+class HUD : public cocos2d::Node {
 public:
 	// HUD singleton
 	static HUD* Instance() {
@@ -31,21 +31,36 @@ public:
 		return s_pInstance;
 	}
 
-	//void init(unsigned int &score, unsigned int &level, unsigned int &time, cocos2d::Layer *layer);
-	void init(unsigned int &time, cocos2d::Layer *layer);
+	HUD() {};														// Constructor is private for use as a Singleton. Initializes the variables
+	~HUD() {};														// Private destructor
 
-	void update() {
-		//scoreLabel->setString("Score: " + to_string(GameScene::Instance()->getScore()));								// Update the displayed score
-	}
+	static HUD *create(cocos2d::Point position, cocos2d::Size res);	// Create the HUD at the position specified
+	void init(cocos2d::Layer *layer);								// Initialise the HUD
+	void update(float curTimeMillis);								// Update the HUD, passing the time in milliseconds for the timer
+
+	// Update variables
+	void updateLives();												// Update the displayed number of lives sprites
+	void updateTimer(float curTimeMillis);							// 20180204 Update the countdown timer, 21/02/2018 Passing curTimeMillis solves Android timer issue
+	void setLevel(unsigned int set);								// Update the level number for levels after 1
 
 private:
-	HUD() {};																											// Constructor is private for use as a Singleton. Initializes the variables
-	~HUD() {};																											// Private destructor
 
-	static HUD* s_pInstance;																							// Single instance of HUD used as singleton, so only one instance exists thoughout the game
+	static HUD* s_pInstance;										// Single instance of HUD used as singleton, so only one instance exists thoughout the game
 	
-	cocos2d::Label* levelLabel;																							// Display the current level
-	//cocos2d::Label* scoreLabel;																						// Display the current score
+	cocos2d::Label* levelLabel;										// Display the current level
+	cocos2d::Label* scoreLabel;										// Display the current score
+	cocos2d::Label * timeLabel;										// Display the time remaining
+
+	// Lives
+	cocos2d::Sprite *playerLife;									// Indicate lives left
+	cocos2d::Sprite* livesList[MAX_LIVES];							// List of lives
+
+	// Time
+	float currentTime;												// 20180221 Change to float to fix Android timer issue
+	unsigned int time;												// Countdown timer displayed time
+
+	// Level
+	unsigned int levelNum;
 };
 
 #endif // __AUDIO__

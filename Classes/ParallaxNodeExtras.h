@@ -5,21 +5,19 @@
 */
 #include "cocos2d.h"
 
-USING_NS_CC;
-
-class ParallaxNodeExtras : public ParallaxNode {
+class ParallaxNodeExtras : public cocos2d::ParallaxNode {
 
 public:		
-	ParallaxNodeExtras();									// Need to provide a constructor
+	ParallaxNodeExtras();												// Need to provide a constructor
 		
-	static ParallaxNodeExtras * create();					// just to avoid ugly later cast and also for safety
+	static ParallaxNodeExtras * create();								// just to avoid ugly later cast and also for safety
 		
-	void incrementOffset(Point offset, Node* node);			// Facility method (it’s expected to have it soon in COCOS2DX)
+	void incrementOffset(cocos2d::Point offset, cocos2d::Node* node);	// Facility method (it’s expected to have it soon in COCOS2DX)
 
 	bool init();
 	void update(float dt);
 
 private:
-	Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
-	Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
+	cocos2d::Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
+	cocos2d::Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
 };

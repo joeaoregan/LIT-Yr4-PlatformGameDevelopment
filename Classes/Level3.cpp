@@ -111,7 +111,7 @@ bool Level3::init() {
 	currentTime = 0.0f;																										// Current game time, for timer, changed to float to solve Android timer issue
 
 	//Audio::Instance()->init();																							// Initialise the game audio
-	HUD::Instance()->init(time, this);																						// Display score, level number, and time
+	//HUD::Instance()->init(time, this);																						// Display score, level number, and time
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());

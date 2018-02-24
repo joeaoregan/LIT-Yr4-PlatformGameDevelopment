@@ -22,30 +22,32 @@
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
-Level* Level::layerInstance;																			// Singleton for Level
+Level* Level::layerInstance;																					// Singleton for Level
 
 Scene* Level::createScene() {
-	cocos2d::Scene* scene = Scene::create();															// 'scene' is an autorelease object, JOR replaced auto specifier   
-	layerInstance = Level::create();																	// 'layer' is an autorelease object, JOR replaced auto specifier   
-    scene->addChild(layerInstance);																		// Add layer as a child to scene	    
-    return scene;																						// Return the scene
+	cocos2d::Scene* scene = Scene::create();																	// 'scene' is an autorelease object, JOR replaced auto specifier   
+	layerInstance = Level::create();																			// 'layer' is an autorelease object, JOR replaced auto specifier   
+    scene->addChild(layerInstance);																				// Add layer as a child to scene	    
+    return scene;																								// Return the scene
 }
 
 // on "init" you need to initialize your instance
 bool Level::init() {
-    if ( !Layer::init() ) { return false; }																// super init first
+    if ( !Layer::init() ) { return false; }																		// super init first
 
+	// Screen size and position
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
+
+	(visibleSize.height == 1080) ? scale = 1.5f : scale = 0.67f;
 			
 	// Add exit button in bottom right corner. it's an autorelease object
 	closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-		CC_CALLBACK_1(Level::menuCloseCallback, this));															// JOR replaced auto specifier
+		CC_CALLBACK_1(Level::menuCloseCallback, this));															// JOR replaced auto specifier	
+	closeItem->setScale(scale);
+	closeItem->setPosition(cocos2d::Point((origin.x + visibleSize.width - closeItem->getContentSize().width / 2) * 0.99f ,
+		origin.y + closeItem->getContentSize().height / 1.97f));
 
-	
-	closeItem->setPosition(cocos2d::Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
-		origin.y + closeItem->getContentSize().height / 2));
-	
 	// create menu, it's an autorelease object
 	menuClose = cocos2d::Menu::create(closeItem, NULL);															// JOR replaced auto specifier
 	menuClose->setPosition(cocos2d::Point::ZERO);
@@ -70,6 +72,7 @@ bool Level::init() {
 	Level::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	Level::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
+	// Asteroids
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);															// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
 		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName("asteroid.png");							// Asteroid sprite, JOR replaced auto specifier
@@ -78,49 +81,51 @@ bool Level::init() {
 		_asteroids->pushBack(asteroid);
 	}
 
-	// EnemyShip
-	EnemyShipList = new Vector<Sprite*>(3);																				// List of enemy ships
+	// Enemy Ship
+	EnemyShipList = new Vector<Sprite*>(3);																		// List of enemy ships
 	for (int i = 0; i < 3; ++i) {
-		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");														// Asteroid sprite, JOR replaced auto specifier
+		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
 		enemyShip1->setVisible(false);
 		this->addChild(enemyShip1);
 		EnemyShipList->pushBack(enemyShip1);
 	}
 
-	//_nextShipLaser = 0;
-	_shipLasers = new Vector<Sprite*>(KNUMLASERS);														// List of lasers
+	// Ship Lasers:
+	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");			// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");					// Laser sprite, JOR replaced auto specifier
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
 	}
 
-	touchListener = EventListenerTouchAllAtOnce::create();												// JOR replaced auto specifier
+	// Touch screen / Mouse press
+	touchListener = EventListenerTouchAllAtOnce::create();														// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-	
+	/*
 	// Player number of lives
 	for (unsigned int i = 0; i < MAX_LIVES; i++) {
 		playerLife = Sprite::create("PlayerLife.png");
 		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
 		this->addChild(playerLife);
-		livesList[i] = playerLife;																							// Add life sprite to list of lives
+		livesList[i] = playerLife;																				// Add life sprite to list of lives
 	}
 	livesList[3]->setVisible(false);
 	livesList[4]->setVisible(false);
-		
+	*/
 	// Time
-	currentTime = 0.0f;																										// Current game time, for timer, changed to float to solve Android timer issue
-	curTime = getTimeTick();																								// Current game time																						// Time to finish game
-	_gameOverTime = curTime + LEVEL_TIME;																					// Time to finish game
+//	currentTime = 0.0f;																							// Current game time, for timer, changed to float to solve Android timer issue
+	curTime = getTimeTick();																					// Current game time																						// Time to finish game
+	_gameOverTime = curTime + LEVEL_TIME;																		// Time to finish game
 
-	Game::Instance()->init();																								// Inite score and level
-	HUD::Instance()->init(time, this);																						// Display score, level number, and time
+	Game::Instance()->init();																					// Inite score and level
+	//HUD::Instance()->init(time, this);																		// Display score, level number, and time
 	
-	Game::Instance()->setTimer(LEVEL_TIME / 1000);
-	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
+	Game::Instance()->setTimer(LEVEL_TIME / 1000);																// Set the countdown timer time
+	Input::Instance()->init(this, this->_eventDispatcher);														// Ship Movement
 	
+	/*
 	// HUD
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
@@ -142,8 +147,7 @@ bool Level::init() {
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	this->addChild(scoreLabel, 10000);
 	this->addChild(timeLabel);
-	
-
+	*/
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (visibleSize.height == 1080)
@@ -153,7 +157,9 @@ bool Level::init() {
 
 		this->addChild(controller);
 	}
-	
+
+	newHUD = HUD::create(origin, visibleSize);																				// Create the HUD at the origin point (0,0), and passing in the screen resolution
+	this->addChild(newHUD);
 	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));						// Position: scale in MusicPlayer class throws off measurement (undo first)
 	this->addChild(mplayer);
 		
@@ -176,12 +182,12 @@ void Level::update(float dt) {
 
 	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 
-	scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));								// Update the displayed score
+	//scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));							// Update the displayed score
 
 	// Update timer from Game class
-	updateTimer(curTimeMillis);																				// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
+//	updateTimer(curTimeMillis);																				// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
 	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
-	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
+	//timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
 
 	_backgroundNode->update(dt);																			// Scroll the background objects
 
@@ -190,13 +196,15 @@ void Level::update(float dt) {
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 	
+	/*
 	// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_LIVES && !_gameOver) {											// If the players lives are less than the max num lives
+	if (Game::Instance()->getLives() < MAX_LIVES && !Game::Instance()->isGameOver()) {						// If the players lives are less than the max num lives
 		livesList[Game::Instance()->getLives()]->setVisible(false);											// Set the lives invisible (2,1,0)
 	}
-
+	*/
 	player->update();																						// Update player sprite position
 	mplayer->update();																						// Update the music player
+	newHUD->update(curTimeMillis);																			// Update the HUD
 }
 
 void Level::spawnAsteroids(float curTimeMillis) {
@@ -306,15 +314,18 @@ void Level::getInput() {
 	}
 }
 
-void Level::updateTimer(float dt) {
-	if (dt > currentTime) {
-		currentTime = dt + 1000.0f;
-		time--;
+/*
+	update the HUD countdown timer
+
+void Level::updateTimer(float curTimeMillis) {
+	if (curTimeMillis > currentTime) {						// If the game timer has reached the indicated point (every 1 second)
+		currentTime = curTimeMillis + 1000.0f;				// Set next time to reach
+		time--;												// Decrement the countdown timer
 	}
 
-	timeLabel->setString("Time: " + to_string(time));
+	timeLabel->setString("Time: " + to_string(time));		// Update the countdown timers display
 }
-
+*/
 float Level::randomValueBetween(float low, float high) {
 	// from http://stackoverflow.com/questions/686353/c-random-float-number-generation
 	return low + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (high - low)));
@@ -347,7 +358,8 @@ void Level::checkCollisions() {
 			player->getSprite()->runAction(Blink::create(1.0F, 9));											// Flash the Player ship
 																											//_lives--;																						// Decrement the number of lives
 			Game::Instance()->takeLife();																	// Decrement the number of lives
-			livesList[Game::Instance()->getLives()]->setVisible(false);										// Set the player lives invisible (in the order 2,1,0)
+			//livesList[Game::Instance()->getLives()]->setVisible(false);									// Set the player lives invisible (in the order 2,1,0)
+			newHUD->updateLives();																			// Updates the displayed lives when the player collides with an object
 		}
 	}
 
@@ -434,8 +446,8 @@ void Level::restartTapped(Ref* pSender) {
 }
 
 void Level::endScene(EndReason endReason) {
-	if (_gameOver) return;																									// If already game over, skip this function
-	_gameOver = true;																										// Set game over
+	if (Game::Instance()->isGameOver()) return;																				// If already game over, skip this function
+	Game::Instance()->setGameOver(true);																					// Set game over
 
 	cocos2d::Size winSize = Director::getInstance()->getWinSize();															// JOR replaced auto specifier
 	
@@ -458,7 +470,7 @@ void Level::endScene(EndReason endReason) {
 	// Restart Level
 	strcpy(message, "Restart Game");
 	cocos2d::Label* restartLbl = Label::createWithBMFont("Arial.fnt", message);												// JOR replaced auto specifier
-	cocos2d::MenuItemLabel* restartItem=MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));		// JOR replaced auto specifier
+	cocos2d::MenuItemLabel* restartItem=MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));			// JOR replaced auto specifier
 	//restartItem->setScale(0.1F);
 	if (winSize.height == 720)
 		restartItem->setScale(0.1F);

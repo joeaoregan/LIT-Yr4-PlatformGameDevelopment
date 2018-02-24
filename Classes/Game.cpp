@@ -24,7 +24,7 @@ bool Game::init() {
 void Game::checkHighScore() {
 	// Save Score
 	UserDefault* def = UserDefault::getInstance();
-	int highScore = def->getIntegerForKey("HIGHSCORE", 0);
+	unsigned int highScore = def->getIntegerForKey("HIGHSCORE", 0);
 
 	if (getScore() > highScore) {
 		highScore = getScore();

@@ -8,7 +8,7 @@
 	The first level of the game
 
 	20180202	Added Audio class with singleton access
-*/
+
 #include "LevelTest.h"	// was level1
 #include "Level2.h"
 #include "MainMenu.h"
@@ -26,13 +26,14 @@
 //std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
 //DPad *controller;								// Add directional pad for mobile device
+*/
 /*
 Audio* Audio::s_pInstance;						// Singleton so only one instance of Audio exists in the game, for easy access
 HUD* HUD::s_pInstance;							// Singleton for Heads Up Display
 Input* Input::s_pInstance;						// Singleton for Input
 GameScene* GameScene::s_pInstance;				// Game Singleton 
 */
-
+/*
 Scene* LevelTest::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
 	LevelTest* layer = LevelTest::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
@@ -107,7 +108,7 @@ bool LevelTest::init() {
 		this->addChild(enemyShip1);
 		EnemyShipList->pushBack(enemyShip1);
 	}
-
+	*/
 	/*
 	//_shipLasers = new Vector<Sprite*>(KNUMLASERS);																		// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
@@ -117,6 +118,7 @@ bool LevelTest::init() {
 		_shipLasers->pushBack(shipLaser);
 	}
 	*/
+/*
 	//Device::setAccelerometerEnabled(true);																				// Enable accelerometer
 	//cocos2d::EventListenerAcceleration* accelerationListener = 
 	//EventListenerAcceleration::create(CC_CALLBACK_2(GameScene::onAcceleration, this));									// JOR replaced auto specifier
@@ -155,6 +157,7 @@ bool LevelTest::init() {
 
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
 	__String *tempTime = __String::createWithFormat("Time: %i", time);
+	*/
 	/*
 	// Score & Timer set size
 	//timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
@@ -172,6 +175,7 @@ bool LevelTest::init() {
 	scoreLabel->setColor(Color3B::WHITE);
 	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
 	*/
+/*
 	this->addChild(scoreLabel, 10000);
 	this->addChild(timeLabel);
 	
@@ -184,15 +188,15 @@ bool LevelTest::init() {
 		else
 			controller = DPad::create("DPad/Base150.png", "DPad/Arrow.png", "DPad/ArrowPressed.png", Point(150, 150));
 		*/
-		this->addChild(controller);
+	/*	this->addChild(controller);
 	}
 
-	/*
+	
 	//controller->init(this);																									// NOT WORKING ANDROID: D-pad (Display on mobile device)
 	//DPad::Instance()->init(this);																								// NOT WORKING ANDROID: D-pad (Display on mobile device)
-	controller = DPad::Instance()->create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
-	this->addChild(controller);
-	*/
+	//controller = DPad::Instance()->create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
+	//this->addChild(controller);
+	
 
 	this->addChild(mplayer);
 
@@ -245,6 +249,7 @@ void LevelTest::update(float dt) {
 	// Update the enemy ship position
 	//EnemyShip->setPosition(EnemyShip->getPosition().x - 2, EnemyShip->getPosition().y);
 }
+*/
 /*
 // Moved to Level base class
 void Level1::getInput() {
@@ -268,7 +273,7 @@ void Level1::getInput() {
 		}
 	}	
 }
-*/
+
 void LevelTest::updateTimer(float dt) {
 	if (dt > currentTime) {
 		currentTime = dt + 1000.0f;
@@ -303,11 +308,12 @@ void LevelTest::spawnAsteroids(float curTimeMillis) {
 			Sequence::create(
 				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
-				NULL /* DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)*/)
+				NULL )	// DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 		);
 	}
 }
-
+*/
+/*
 void LevelTest::spawnEnemyShips(float curTimeMillis) {
 	if (curTimeMillis > nextEnemyShipSpawnTime) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
@@ -329,7 +335,7 @@ void LevelTest::spawnEnemyShips(float curTimeMillis) {
 			Sequence::create(
 				MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
-				NULL /* TERMINATE WITH NULL */)
+				NULL )// TERMINATE WITH NULL
 		);
 	}
 }
@@ -378,7 +384,7 @@ void LevelTest::moveShip(float dt) {
 
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, _ship);
 	*/
-}
+//}
 /*
 void Level1::checkCollisions() {
 	// Asteroids Collisions
@@ -425,6 +431,7 @@ void Level1::checkCollisions() {
 	}
 }
 */
+/*
 void LevelTest::checkGameOver(float currenTime) {
 	//if (_lives <= 0) {																					// If the player has run out of lives
 	if (Game::Instance()->getLives() <= 0) {																// If the player has run out of lives
@@ -436,6 +443,7 @@ void LevelTest::checkGameOver(float currenTime) {
 		this->endScene(KENDREASONWIN);																		// Player stays playing for the length of time
 	}
 }
+*/
 /*
 void Level1::onAcceleration(Acceleration* acc, Event* event) {
 #define KFILTERINGFACTOR 0.1
@@ -469,7 +477,7 @@ void Level1::setInvisible(Node * node) {
 	node->setVisible(false);
 }
 */
-
+/*
 void LevelTest::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	Audio::Instance()->laserFX();
 	//cocos2d::Size winSize = Director::getInstance()->getWinSize();									// JOR replaced auto specifier
@@ -523,7 +531,7 @@ void LevelTest::spawnLasers(int amount) {																		// 20180221
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 	}
 }
-
+*/
 /*
 void Level1::spawnLaser() {
 	cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);														// Next laser in the list, JOR replaced auto specifier
@@ -567,10 +575,12 @@ void Level1::spawnLasers(int amount) {																					// 20180221
 	}
 }
 */
+/*
 void LevelTest::restartTapped(Ref* pSender) {
 	Director::getInstance()->replaceScene(TransitionZoomFlipX::create(0.5, this->createScene()));							// Restart the current scene	
 	this->scheduleUpdate();																									// reschedule
 }
+*/
 /*
 void Level1::startLevel2(Ref* pSender) {
 	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));							// Change scene, progressing to Level 2
@@ -579,6 +589,7 @@ void Level1::returnToMenu(Ref* pSender) {
 	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));						// Return to the main menu
 }
 */
+/*
 void LevelTest::endScene(EndReason endReason) {
 	if (_gameOver) return;																									// If already game over, skip this function
 	_gameOver = true;																										// Set game over
@@ -658,6 +669,7 @@ void LevelTest::endScene(EndReason endReason) {
 		
 	this->unscheduleUpdate();																								// Terminate update callback
 }
+*/
 /*
 void Level1::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -673,7 +685,7 @@ void Level1::menuCloseCallback(Ref* pSender) {
 }
 */
 
-
+/*
 void LevelTest::createStatusBar(int x, int y, int w, int h, float percent, Color4F FGColor, Color4F BGColor, int orientation, int startFrom) {	// Horizontal healthbar 2017/01/20 added if statement to decide orientation of health bar
 
 	percent = (percent > 1.0f) ? 1.0f : (percent < 0.f) ? 0.f : percent;		// If greater than 1 set to 1, if minus set to 0
@@ -706,21 +718,22 @@ void LevelTest::createStatusBar(int x, int y, int w, int h, float percent, Color
 //	SDL_SetRenderDrawColor(Game::Instance()->getRenderer(), BGColor.r, BGColor.g, BGColor.b, BGColor.a);	// Draw a Solid Rectangle with the RGB colour values assigned
 //	SDL_RenderFillRect(Game::Instance()->getRenderer(), &backgroundRect);
 //	SDL_SetRenderDrawColor(Game::Instance()->getRenderer(), FGColor.r, FGColor.g, FGColor.b, FGColor.a);
-	/*
+	
 	// Decide if Healthbar is horizontal or vertical
-	if (orientation == HORIZONTAL) {
-		int newW = (int)((float)w * Percent);									// new width
-		int newX = x + (w - newW);												// new x coord
-		if (startFrom == START_LEFT) foregroundRect = { newX, y, newW, h };		// Decrease from left
-		else if (startFrom == START_RIGHT) foregroundRect = { x, y, newW, h };	// 2017/02/17 Decrease from right
-	}
-	else if (orientation == VERTICAL) {
-		int ph = (int)((float)h * Percent);
-		int py = y + (h - ph);
-		foregroundRect = { x, py, w, ph };
-	}
-	*/
+	//if (orientation == HORIZONTAL) {
+	//	int newW = (int)((float)w * Percent);									// new width
+	//	int newX = x + (w - newW);												// new x coord
+	//	if (startFrom == START_LEFT) foregroundRect = { newX, y, newW, h };		// Decrease from left
+	//	else if (startFrom == START_RIGHT) foregroundRect = { x, y, newW, h };	// 2017/02/17 Decrease from right
+	//}
+	//else if (orientation == VERTICAL) {
+	//	int ph = (int)((float)h * Percent);
+	//	int py = y + (h - ph);
+	//	foregroundRect = { x, py, w, ph };
+	//}
+	
 	//SDL_RenderFillRect(Game::Instance()->getRenderer(), &foregroundRect);
 	//SDL_SetRenderDrawColor(Game::Instance()->getRenderer(), old.r, old.g, old.b, old.a);
 	
 }
+*/

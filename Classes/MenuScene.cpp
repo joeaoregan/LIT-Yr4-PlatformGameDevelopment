@@ -34,15 +34,15 @@ cocos2d::Scene* MenuScene::createScene() {
 bool MenuScene::init() {
 	if (!Layer::init()) return false;																								// Super init first
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	// SDL Gamepad Support for Windows
-	if (SDL_Init(SDL_INIT_JOYSTICK) < 0) {
-		//std::cout << "SDL could not initialize! SDL Error: %s\n" << SDL_GetError() << std::endl;
-		cocos2d::log("SDL init failed");
-	}									// For gamepad support on desktop
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+//	// SDL Gamepad Support for Windows
+//	if (SDL_Init(SDL_INIT_JOYSTICK) < 0) {
+//		//std::cout << "SDL could not initialize! SDL Error: %s\n" << SDL_GetError() << std::endl;
+//		cocos2d::log("SDL init failed");
+//	}									// For gamepad support on desktop
+//#endif
 	
-	def = cocos2d::UserDefault::getInstance();
+	def = cocos2d::UserDefault::getInstance();																						// User defaults used to store/load values
 	
 	// Screen size
 	visibleSize = cocos2d::Director::getInstance()->getVisibleSize();																// Get visible screen size
@@ -100,11 +100,10 @@ bool MenuScene::init() {
 	titleSprite->setScale(scale);
 	this->addChild(titleSprite);																									// Add to layer							
 	
-	// Show current player name
+	// Show current player name. Can select to switch to Enter Name state
 	currentPlayerName = def->getStringForKey("CurrentPlayer", "Player");
 	//if (Game::Instance()->getPlayerName() == "") 
 	Game::Instance()->setPlayerName(currentPlayerName);																				// Set the players name to a default value
-
 	changeNameLbl = cocos2d::Label::createWithBMFont("Arial.fnt", "Current Player:\n" + currentPlayerName);							// Display current players name
 	changeNameLbl->setScale(scale);
 	currentPlayerLbl = cocos2d::MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MenuScene::GoToEnterName, this));				// Go to enter name scene

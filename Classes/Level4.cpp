@@ -110,7 +110,7 @@ bool Level4::init() {
 	currentTime = getTimeTick();																							// Current game time, for timer
 
 	//Audio::Instance()->init();																							// Initialise the game audio
-	HUD::Instance()->init(time, this);																						// Display score, level number, and time
+	//HUD::Instance()->init(time, this);																						// Display score, level number, and time
 	Input::Instance()->init(this, this->_eventDispatcher);																	// Ship Movement
 
 	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
