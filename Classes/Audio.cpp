@@ -15,6 +15,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 
 // IOS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)	// WAV audio format
+//#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)	// WAV audio format
 // Windows / Android
 #define JOE_RIFF1 "joe_riff1.wav"
 #define JOE_RIFF2 "joe_riff2.wav"
@@ -40,7 +41,7 @@ void Audio::init() {
 
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 	if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())						// If the background music isn't already playing
-		SimpleAudioEngine::getInstance()->playBackgroundMusic(JOE_RIFF1, true);				// 20180202 Change background music
+		SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[0], true);				// 20180202 Change background music
 
 	// Preload the sound effects
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);

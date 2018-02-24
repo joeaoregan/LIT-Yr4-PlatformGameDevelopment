@@ -13,7 +13,8 @@ Player::Player(cocos2d::Layer *layer) {
 	origin = Director::getInstance()->getVisibleOrigin();							// origin coorinate
 
 	player = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-	player->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);
+	player->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);			// Place in middle left of screen
+	player->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);					// Increase scale of player for Android (My phone anyway)
 /*
 	auto playerBody = PhysicsBody::createCircle(player->getContentSize().width / 2);
 	playerBody->setCollisionBitmask(PLAYER_COLLISION_BITMASK);
@@ -26,7 +27,7 @@ Player::Player(cocos2d::Layer *layer) {
 
 void Player::update() {
 	// Move the player ship
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
             Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
 			moveLeft();

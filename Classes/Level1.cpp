@@ -29,25 +29,18 @@ Scene* Level1::createScene() {
 
 // on "init" you need to initialize your instance
 bool Level1::init() {
-	Level::init();																						// 20180221 Added Level base class
+	Level::init();								// 20180221 Added Level base class
 
-	if ( !Layer::init() ) { return false; }																// super init first
+	if ( !Layer::init() ) { return false; }		// super init first
 
-	Game::Instance()->setLevel(1);																		// for parallax node init
+	Game::Instance()->setLevel(1);				// for parallax node init
+	newHUD->setLevel(1);						// Update HUD Level text display
 
-	Game::Instance()->setLives(3);																		// JOR set the number of lives for the player
+	Game::Instance()->setLives(3);				// Set the number of lives for the player
 	
-	// 1) Create the ParallaxNode
-	//_backgroundNode = ParallaxNodeExtras::create();
-	this->addChild(_backgroundNode, -1);
-	_backgroundNode->init();																			// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
-	
-	/*
-	//controller->init(this);																									// NOT WORKING ANDROID: D-pad (Display on mobile device)
-	//DPad::Instance()->init(this);																								// NOT WORKING ANDROID: D-pad (Display on mobile device)
-	controller = DPad::Instance()->create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
-	this->addChild(controller);
-	*/
+	// ParallaxNode
+	this->addChild(_backgroundNode, -1);		// Add the parallax background
+	_backgroundNode->init();					// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
 	
 	this->scheduleUpdate();
 	
@@ -55,15 +48,14 @@ bool Level1::init() {
 }
 
 void Level1::update(float dt) {
-	Level::update(dt);																						// Call base class update function	
+	Level::update(dt);							// Call base class update function	
 }
 
 void Level1::checkCollisions() {
-	Level::checkCollisions();																				// Call base class function
+	Level::checkCollisions();					// Call base class function
 	// Check collisions with different objects in different levels
 }
 
-
 void Level1::endScene(EndReason endReason) {
-	Level::endScene(endReason);
+	Level::endScene(endReason);					// End the scene
 }

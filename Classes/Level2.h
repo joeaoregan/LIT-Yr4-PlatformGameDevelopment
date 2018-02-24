@@ -12,7 +12,7 @@
 
 #include "Level.h"
 
-USING_NS_CC;
+//USING_NS_CC;
 
 class Level2 : public Level {
 public:
@@ -26,15 +26,11 @@ public:
 
 private:
 
-	Sprite *playerLife;							// Indicate lives left
-	Sprite *EnemyShip;
-	int _nextAsteroid = 0;
-	int nextEnemyShip = 0;
-	float _nextAsteroidSpawn = 0;				// time to spawn next asteroid
-	float nextEnemyShipSpawnTime = 0;			// Time to spawn next enemy ship
+	//cocos2d::Sprite *playerLife;				// Indicate lives left
+	//cocos2d::Sprite *EnemyShip;
 			
 	virtual void update(float dt);
-	virtual void endScene(EndReason endReason);		// CHANGE TO PROGRESS
+	virtual void endScene(EndReason endReason);	// Do level complete stuff
 };
 
 #endif // __LEVEL_2_H__

@@ -21,7 +21,7 @@ double Input::keyPressedDuration(cocos2d::EventKeyboard::KeyCode code) {
 }
 
 void Input::init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher) {
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		cocos2d::EventListenerKeyboard* eventListener = EventListenerKeyboard::create();	// JOR replaced auto specifier
 		Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
 		eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {

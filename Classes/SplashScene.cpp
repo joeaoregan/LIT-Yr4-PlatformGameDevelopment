@@ -32,8 +32,10 @@ bool SplashScene::init() {
 
     cocos2d::Sprite* backgroundSprite = Sprite::create( "SplashScreenBG.png" );										// Create the background sprite
     backgroundSprite->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y) );	// Set the background position    
+	backgroundSprite->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);
     this->addChild( backgroundSprite );																				// Add background sprite as a child of the layer
-    
+
+	backgroundSprite->runAction(ScaleTo::create(0.5F, 1.0f));
     return true;
 }
 

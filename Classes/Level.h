@@ -55,7 +55,8 @@ public:
 	// Callbacks
 	void restartTapped(Ref* pSender);
 	void startLevel2(Ref* pSender);											// 20180218 Progress to the next level
-	void startLevel3(Ref* pSender); 
+	void startLevel3(Ref* pSender);
+	void startLevel4(Ref* pSender);
 	void returnToMenu(Ref* pSender);										// 20180218 Return to the main menu
 
 	float randomValueBetween(float low, float high);						// Select a random value from a given range
@@ -74,11 +75,10 @@ public:
 	Size getWinSize() { return winSize; }									// Get the window size
 	int getNextShipLaser() { return _nextShipLaser; }						// Next laser in laser list
 	void setNextShipLaser(int set) { _nextShipLaser = set; }				// Set the next laser in the list
-
-
+	
 	cocos2d::Size visibleSize;												// Screen resolution changes depending on the platform
 	Size winSize;															// Current size of the game window (constantly updated)
-	float scale;															// Scale objects up in size for 1080p, or down for 720p
+	float scaleUp, scaleDown;												// Scale objects up in size for 1080p, or down for 720p
 	cocos2d::Point origin;
 	
 	// Menu
@@ -90,23 +90,20 @@ public:
 	Player* player;															// Player sprite
 	
 	Vector<Sprite*>* getLaserList() { return _shipLasers; }					// return ship lasers
-
-			
+				
 private:
 	Sprite *playerLife;														// Indicate lives left
-		
 	
-	//Sprite *EnemyShip;
-
+	// Asteroids
 	int _nextAsteroid = 0;
-	int nextEnemyShip = 0;
-	
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
+
+	// Enemies
+	int nextEnemyShip = 0;	
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship	
 	
 	// Time
 	double curTime;															// Current game time
-	double _gameOverTime;													// Game over time
 	float curTimeMillis;													// Current time in milliseconds
 
 	// Weapons
@@ -124,7 +121,14 @@ protected:
 	DPad *controller;														// Add directional pad for mobile device
 
 	static Level* layerInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
-	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listenerF
+	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listener
+
+	double _gameOverTime;													// Game over time
+
+	// End of Level Labels
+	cocos2d::Label* levelCompleteLbl;
+	cocos2d::MenuItemLabel* restartItem;
+	cocos2d::MenuItemLabel* continueItem;
 };
 
 #endif // __LEVEL_H__

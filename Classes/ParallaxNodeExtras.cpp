@@ -65,6 +65,10 @@ void ParallaxNodeExtras::incrementOffset(Point offset, Node* node){
 	}
 }
 
+/*
+	Originally I was using separate background images
+	But for efficiency it is better to use one image and scale down from a high resolution
+*/
 bool ParallaxNodeExtras::init() {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -72,13 +76,15 @@ bool ParallaxNodeExtras::init() {
 
 	// 2) Create the sprites will be added to the ParallaxNode
 	// Choose the background image based on the screen resolution and current level
+	if (Game::Instance()->getLevel() == 1 || Game::Instance()->getLevel() == 4)
+		bgFileName = "bg_front_spacedust1080.png";
+	else if (Game::Instance()->getLevel() == 2)
+		bgFileName = "bg_front_spacedust1080L2.png";
+	else if (Game::Instance()->getLevel() == 3)
+		bgFileName = "bg_front_spacedust1080L3.png";
+
+/*
 	if (visibleSize.height == 1080) {
-		if (Game::Instance()->getLevel() == 1  || Game::Instance()->getLevel() == 4)
-			bgFileName = "bg_front_spacedust1080.png";
-		else if (Game::Instance()->getLevel() == 2)
-			bgFileName = "bg_front_spacedust1080L2.png";
-		else if (Game::Instance()->getLevel() == 3)
-			bgFileName = "bg_front_spacedust1080L3.png";
 	} else {
 		if (Game::Instance()->getLevel() == 1 || Game::Instance()->getLevel() == 4)
 			bgFileName = "bg_front_spacedust.png";
@@ -87,14 +93,23 @@ bool ParallaxNodeExtras::init() {
 		else if (Game::Instance()->getLevel() == 3)
 			bgFileName = "bg_front_spacedustL3.png";
 	}
-
+*/
+	int scaleDown = (visibleSize.height == 1080) ? 1.0f : 0.67f;											// Scale down high res image
 	_spaceDust1 = Sprite::create(bgFileName);
 	_spaceDust2 = Sprite::create(bgFileName);
+	_spaceDust1->setScale(scaleDown);
+	_spaceDust2->setScale(scaleDown);
 
 	_planetSunrise = Sprite::create("bg_planetsunrise.png");
 	_galaxy = Sprite::create("bg_galaxy.png");
 	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
 	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
+
+	int scaleUp = (visibleSize.height == 1080) ? 1.5f : 1.0f;												// Scale up lower res image
+	_planetSunrise->setScale(scaleUp);
+	_galaxy->setScale(scaleUp);
+	_spatialAnomaly1->setScale(scaleUp);
+	_spatialAnomaly2->setScale(scaleUp);
 
 	// 3) Determine relative movement speeds for space dust and background
 	cocos2d::Point dustSpeed = Point(0.1F, 0.1F);															// JOR replaced auto specifier

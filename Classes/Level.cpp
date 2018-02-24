@@ -11,6 +11,7 @@
 #include "Level1.h"
 #include "Level2.h"
 #include "Level3.h"
+#include "Level4.h"
 #include "MainMenu.h"
 #include "DPad.h"
 #include <string>
@@ -35,16 +36,19 @@ Scene* Level::createScene() {
 bool Level::init() {
     if ( !Layer::init() ) { return false; }																		// super init first
 
+	Game::Instance()->setGameOver(false);																		// Needed for starting new level, or restarting game
+
 	// Screen size and position
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
 
-	(visibleSize.height == 1080) ? scale = 1.5f : scale = 0.67f;
+	(visibleSize.height == 720) ? scaleUp = 1.0f : scaleUp = 1.5f;
+	(visibleSize.height == 1080) ? scaleDown = 1.0f : scaleDown = 0.67f;
 			
 	// Add exit button in bottom right corner. it's an autorelease object
 	closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(Level::menuCloseCallback, this));															// JOR replaced auto specifier	
-	closeItem->setScale(scale);
+	closeItem->setScale(scaleUp);
 	closeItem->setPosition(cocos2d::Point((origin.x + visibleSize.width - closeItem->getContentSize().width / 2) * 0.99f ,
 		origin.y + closeItem->getContentSize().height / 1.97f));
 
@@ -77,6 +81,7 @@ bool Level::init() {
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
 		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName("asteroid.png");							// Asteroid sprite, JOR replaced auto specifier
 		asteroid->setVisible(false);
+		asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);											// Increase scale of Asteroid for Android (My phone anyway)
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
 	}
@@ -84,10 +89,11 @@ bool Level::init() {
 	// Enemy Ship
 	EnemyShipList = new Vector<Sprite*>(3);																		// List of enemy ships
 	for (int i = 0; i < 3; ++i) {
-		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
-		enemyShip1->setVisible(false);
-		this->addChild(enemyShip1);
-		EnemyShipList->pushBack(enemyShip1);
+		cocos2d::Sprite* enemyShip = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		enemyShip->setVisible(false);
+		enemyShip->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
+		this->addChild(enemyShip);
+		EnemyShipList->pushBack(enemyShip);
 	}
 
 	// Ship Lasers:
@@ -103,51 +109,15 @@ bool Level::init() {
 	touchListener = EventListenerTouchAllAtOnce::create();														// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-	/*
-	// Player number of lives
-	for (unsigned int i = 0; i < MAX_LIVES; i++) {
-		playerLife = Sprite::create("PlayerLife.png");
-		playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
-		this->addChild(playerLife);
-		livesList[i] = playerLife;																				// Add life sprite to list of lives
-	}
-	livesList[3]->setVisible(false);
-	livesList[4]->setVisible(false);
-	*/
+	
 	// Time
-//	currentTime = 0.0f;																							// Current game time, for timer, changed to float to solve Android timer issue
 	curTime = getTimeTick();																					// Current game time																						// Time to finish game
 	_gameOverTime = curTime + LEVEL_TIME;																		// Time to finish game
 
-	Game::Instance()->init();																					// Inite score and level
-	//HUD::Instance()->init(time, this);																		// Display score, level number, and time
-	
+	Game::Instance()->init();																					// Inite score and level	
 	Game::Instance()->setTimer(LEVEL_TIME / 1000);																// Set the countdown timer time
 	Input::Instance()->init(this, this->_eventDispatcher);														// Ship Movement
-	
-	/*
-	// HUD
-	__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
-	__String *tempTime = __String::createWithFormat("Time: %i", time);
-	
-	// Score & Timer set size
-	//timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 250, visibleSize.height * 0.95 + origin.y));
-	if (visibleSize.height == 1080) {
-		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
-		timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
-		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 150, visibleSize.height * 0.95 + origin.y));
-	}
-	else {
-		scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-		timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-		timeLabel->setPosition(Point(visibleSize.width - timeLabel->getWidth() - 80, visibleSize.height * 0.95 + origin.y));
-	}
 
-	scoreLabel->setColor(Color3B::WHITE);
-	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
-	this->addChild(scoreLabel, 10000);
-	this->addChild(timeLabel);
-	*/
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (visibleSize.height == 1080)
@@ -158,9 +128,9 @@ bool Level::init() {
 		this->addChild(controller);
 	}
 
-	newHUD = HUD::create(origin, visibleSize);																				// Create the HUD at the origin point (0,0), and passing in the screen resolution
+	newHUD = HUD::create(origin, visibleSize);																	// Create the HUD at the origin point (0,0), and passing in the screen resolution
 	this->addChild(newHUD);
-	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));						// Position: scale in MusicPlayer class throws off measurement (undo first)
+	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));			// Position: scale in MusicPlayer class throws off measurement (undo first)
 	this->addChild(mplayer);
 		
 	//this->scheduleUpdate();
@@ -176,35 +146,24 @@ float Level::getTimeTick() {
 }
 
 void Level::update(float dt) {
-	curTimeMillis = getTimeTick();																			// Current game time
+	curTimeMillis = getTimeTick();																		// Current game time
 
-	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen (Needs to update here so lasers fire etc.)
+	winSize = Director::getInstance()->getWinSize();													// Dimensions of game screen (Needs to update here so lasers fire etc.)
 
-	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
+	getInput();																							// Get keyboard input for Windows, Get DPad input for Android
 
-	//scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));							// Update the displayed score
+	Game::Instance()->updateTimer(curTimeMillis);														// Update the countdown timer in Game class, pass in curTimeMillies solves Android Timer issue
 
-	// Update timer from Game class
-//	updateTimer(curTimeMillis);																				// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
-	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
-	//timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
+	_backgroundNode->update(dt);																		// Scroll the background objects
 
-	_backgroundNode->update(dt);																			// Scroll the background objects
-
-	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
-	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
-	checkCollisions();																						// Check have game objects collided with each other
-	checkGameOver(curTimeMillis);																			// Check is the game over or not
+	spawnAsteroids(curTimeMillis);																		// Spawn asteroids
+	spawnEnemyShips(curTimeMillis);																		// Spawn asteroids
+	checkCollisions();																					// Check have game objects collided with each other
+	checkGameOver(curTimeMillis);																		// Check is the game over or not
 	
-	/*
-	// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_LIVES && !Game::Instance()->isGameOver()) {						// If the players lives are less than the max num lives
-		livesList[Game::Instance()->getLives()]->setVisible(false);											// Set the lives invisible (2,1,0)
-	}
-	*/
-	player->update();																						// Update player sprite position
-	mplayer->update();																						// Update the music player
-	newHUD->update(curTimeMillis);																			// Update the HUD
+	player->update();																					// Update player sprite position
+	mplayer->update();																					// Update the music player
+	newHUD->update(curTimeMillis);																		// Update the HUD
 }
 
 void Level::spawnAsteroids(float curTimeMillis) {
@@ -294,20 +253,20 @@ void Level::spawnLasers(int amount) {
 
 void Level::getInput() {
 	// Android DPad (maybe change to returning a point (0,0)(1,0)(0,1),(-1,0),(0,-1)
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
-		if (controller->getButton(8)->isSelected()) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {			// If the platform is mobile
+		if (controller->getButton(8)->isSelected()) {													// Up arrow pressed
 			player->moveUp();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (controller->getButton(2)->isSelected()) {
+		else if (controller->getButton(2)->isSelected()) {												// Down arrow pressed
 			player->moveDown();
 			//CCLOG("Down button is pressed!");
 		}
-		if (controller->getButton(4)->isSelected()) {
+		if (controller->getButton(4)->isSelected()) {													// Left arrow pressed
 			player->moveLeft();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (controller->getButton(6)->isSelected()) {
+		else if (controller->getButton(6)->isSelected()) {												// Right arrow pressed
 			player->moveRight();
 			//CCLOG("Down button is pressed!");
 		}
@@ -315,16 +274,7 @@ void Level::getInput() {
 }
 
 /*
-	update the HUD countdown timer
-
-void Level::updateTimer(float curTimeMillis) {
-	if (curTimeMillis > currentTime) {						// If the game timer has reached the indicated point (every 1 second)
-		currentTime = curTimeMillis + 1000.0f;				// Set next time to reach
-		time--;												// Decrement the countdown timer
-	}
-
-	timeLabel->setString("Time: " + to_string(time));		// Update the countdown timers display
-}
+	Generate a random number from a range
 */
 float Level::randomValueBetween(float low, float high) {
 	// from http://stackoverflow.com/questions/686353/c-random-float-number-generation
@@ -332,49 +282,49 @@ float Level::randomValueBetween(float low, float high) {
 }
 
 void Level::setInvisible(Node * node) {
-	node->setVisible(false);
+	node->setVisible(false);																			// Set the node invisible
 }
 
 void Level::checkCollisions() {
 	// Asteroids Collisions
-	for (cocos2d::Sprite* asteroid : *_asteroids) {															// JOR replaced auto specifier
+	for (cocos2d::Sprite* asteroid : *_asteroids) {														// JOR replaced auto specifier
 		if (!(asteroid->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *_shipLasers) {													// JOR replaced auto specifier
+		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
 				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				asteroid->setVisible(false);
-				//score += 10;																				// Award 10 points for destroying an asteroid
+				//score += 10;																			// Award 10 points for destroying an asteroid
 				Game::Instance()->updateScore(10);
 			}
 		}
 
 		// Check collisions between the player ship and asteroids
-		if (player->getSprite()->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {				// If the ship collides with an asteroid
-			asteroid->setVisible(false);																	// Destroy the asteroid
-			player->getSprite()->runAction(Blink::create(1.0F, 9));											// Flash the Player ship
-																											//_lives--;																						// Decrement the number of lives
-			Game::Instance()->takeLife();																	// Decrement the number of lives
-			//livesList[Game::Instance()->getLives()]->setVisible(false);									// Set the player lives invisible (in the order 2,1,0)
-			newHUD->updateLives();																			// Updates the displayed lives when the player collides with an object
+		if (player->getSprite()->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {			// If the ship collides with an asteroid
+			asteroid->setVisible(false);																// Destroy the asteroid
+			player->getSprite()->runAction(Blink::create(1.0F, 9));										// Flash the Player ship
+																										//_lives--;																						// Decrement the number of lives
+			Game::Instance()->takeLife();																// Decrement the number of lives
+			//livesList[Game::Instance()->getLives()]->setVisible(false);								// Set the player lives invisible (in the order 2,1,0)
+			newHUD->updateLives();																		// Updates the displayed lives when the player collides with an object
 		}
 	}
 
 	// Enemy ship collisions
-	for (cocos2d::Sprite* enemyShip : *EnemyShipList) {														// JOR replaced auto specifier
+	for (cocos2d::Sprite* enemyShip : *EnemyShipList) {													// JOR replaced auto specifier
 		if (!(enemyShip->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *_shipLasers) {													// JOR replaced auto specifier
+		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
 				Audio::Instance()->explodeFX();
 				shipLaser->setVisible(false);
 				enemyShip->setVisible(false);
-				//score += 20;																				// Award 20 points for destroying an enemy ship
+				//score += 20;																			// Award 20 points for destroying an enemy ship
 				Game::Instance()->updateScore(20);
 			}
 		}
@@ -421,18 +371,16 @@ void Level::update(float dt) {
 }
 */
 
-void Level::checkGameOver(float currenTime) {
-	//if (_lives <= 0) {																					// If the player has run out of lives
-	if (Game::Instance()->getLives() <= 0) {																// If the player has run out of lives
-		player->getSprite()->stopAllActions();																// CCNode.cpp
-		player->getSprite()->setVisible(false);																// Destroy the ship
-		this->endScene(KENDREASONLOSE);																		// Player has died
+void Level::checkGameOver(float currenTime) {															// If the player has run out of lives
+	if (Game::Instance()->getLives() <= 0) {															// If the player has run out of lives
+		player->getSprite()->stopAllActions();															// CCNode.cpp
+		player->getSprite()->setVisible(false);															// Destroy the ship
+		endScene(KENDREASONLOSE);																		// Player has died
 	}
 	else if (currenTime >= _gameOverTime) {
-		this->endScene(KENDREASONWIN);																		// Player stays playing for the length of time
+		endScene(KENDREASONWIN);																		// Player stays playing for the length of time
 	}
 }
-
 
 void Level::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	Audio::Instance()->laserFX();
@@ -440,104 +388,106 @@ void Level::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
 	spawnLasers(NUM_LASERS_TO_FIRE);
 }
 
-void Level::restartTapped(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionZoomFlipX::create(0.5, Level1::createScene()));			// Restart the current scene	
-	this->scheduleUpdate();																					// reschedule
-}
-
 void Level::endScene(EndReason endReason) {
-	if (Game::Instance()->isGameOver()) return;																				// If already game over, skip this function
-	Game::Instance()->setGameOver(true);																					// Set game over
-
-	cocos2d::Size winSize = Director::getInstance()->getWinSize();															// JOR replaced auto specifier
+	if (Game::Instance()->isGameOver()) return;															// If already game over, skip this function
+	Game::Instance()->setGameOver(true);																// Set game over
 	
-	Game::Instance()->checkHighScore();																						// The game has ended, check if the current score is the high score and save it if it is
+	(visibleSize.height == 720) ? scaleUp = 1.0f : scaleUp = 0.67f;
+
+	Game::Instance()->checkHighScore();																	// The game has ended, check if the current score is the high score and save it if it is
 
 	// Win / Lose Message
-	char message[17] = "Level 1 Complete";
-	if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
+	//char message[17] = "Level 1 Complete";
+	std::string message = "Level " + to_string(Game::Instance()->getLevel()) + " Complete";
+	//if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
+	if (endReason == KENDREASONLOSE) message = "You Lose";
 
-	cocos2d::Label* label = Label::createWithBMFont("Arial.fnt", message);													// JOR replaced auto specifier
-
-	if (winSize.height == 720)
-		label->setScale(0.2f);
-	else
-		label->setScale(0.3F);																								// JOR Use larger label for 1080p
-
-	label->setPosition(winSize.width / 2, winSize.height*0.75f);
-	this->addChild(label);
+	// Level Over Message
+	levelCompleteLbl = Label::createWithBMFont("Arial.fnt", message);									// JOR replaced auto specifier
+	levelCompleteLbl->setPosition(winSize.width / 2, winSize.height*0.75f);
+	this->addChild(levelCompleteLbl);
 	
 	// Restart Level
-	strcpy(message, "Restart Game");
-	cocos2d::Label* restartLbl = Label::createWithBMFont("Arial.fnt", message);												// JOR replaced auto specifier
-	cocos2d::MenuItemLabel* restartItem=MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));			// JOR replaced auto specifier
-	//restartItem->setScale(0.1F);
-	if (winSize.height == 720)
-		restartItem->setScale(0.1F);
-	else
-		restartItem->setScale(0.15F);																						// JOR Use larger size for 1080p
+	//strcpy(message, "Restart Game");
+	message = "Restart Game";
+	cocos2d::Label* restartLbl = Label::createWithBMFont("Arial.fnt", message);							// JOR replaced auto specifier
+	restartItem = MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));			// JOR replaced auto specifier
 	restartItem->setPosition(winSize.width / 2, winSize.height*0.5f);
+	
+	unsigned int level = Game::Instance()->getLevel();
 
-	cocos2d::Menu* menu = Menu::create(restartItem, NULL);																	// JOR replaced auto specifier
+	// Continue To Next Level
+	if (endReason != KENDREASONLOSE && level < 4)
+		message = "Start Level " + to_string(Game::Instance()->getLevel()+1);
+	if (level == 4 || endReason == KENDREASONLOSE)
+		message = "Main Menu";
+
+	cocos2d::Label* continueLbl = Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
+	//continueLbl->setBMFontSize(10);																	// Test set font size
+	if (endReason != KENDREASONLOSE) {
+		if (level == 1) 
+			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel2, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		else if (level == 2) 
+			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel3, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		else if (level == 3) 
+			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel4, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		else if (level == 4) 
+			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	}
+	else 
+		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+	continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);
+
+		//cocos2d::Menu* menu2 = Menu::create(continueItem, NULL);										// JOR replaced auto specifier
+		//menu2->setPosition(Point::ZERO);
+		//this->addChild(menu2);
+		
+	continueItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the continue to next level label
+	
+
+		// Return To Main Menu
+		//strcpy(message, "Main Menu");
+		//message = "Main Menu";
+		//cocos2d::Label* menuLbl = Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
+		//continueItem = MenuItemLabel::create(menuLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		//continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);
+
+		//cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);										// JOR replaced auto specifier
+		//menu2->setPosition(Point::ZERO);
+		//this->addChild(menu2);
+
+		//continueItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));// Scale the go to main menu button label
+	
+
+	cocos2d::Menu* menu = Menu::create(restartItem, continueItem, NULL);								// JOR replaced auto specifier
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
 
-	// Continue To Next Level
-	if (endReason != KENDREASONLOSE) {
-		strcpy(message, "Continue");
-		cocos2d::Label* continueLbl = Label::createWithBMFont("Arial.fnt", message);										// JOR replaced auto specifier
-		cocos2d::MenuItemLabel* continueItem = MenuItemLabel::create(continueLbl,CC_CALLBACK_1(Level::startLevel2,this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-																															//restartItem->setScale(0.1F);
-		if (winSize.height == 720)
-			continueItem->setScale(0.1F);
-		else
-			continueItem->setScale(0.15F);																					// JOR Use larger size for 1080p
-		continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);
-
-		cocos2d::Menu* menu2 = Menu::create(continueItem, NULL);															// JOR replaced auto specifier
-		menu2->setPosition(Point::ZERO);
-		this->addChild(menu2);
-		
-		continueItem->runAction(ScaleTo::create(0.5F, 1.0F));
-	} else {
-		// Return To Main Menu
-		strcpy(message, "Main Menu");
-		cocos2d::Label* menuLbl = Label::createWithBMFont("Arial.fnt", message);											// JOR replaced auto specifier
-		cocos2d::MenuItemLabel* mainMenuItem = MenuItemLabel::create(menuLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-		if (winSize.height == 720)
-			mainMenuItem->setScale(0.1F);
-		else
-			mainMenuItem->setScale(0.15F);																					// JOR Use larger size for 1080p
-		mainMenuItem->setPosition(winSize.width / 2, winSize.height*0.25f);
-
-		cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);															// JOR replaced auto specifier
-		menu2->setPosition(Point::ZERO);
-		this->addChild(menu2);
-
-		mainMenuItem->runAction(ScaleTo::create(0.5F, 1.0F));
-	}
-
 	// clear label and menu
-	restartItem->runAction(ScaleTo::create(0.5F, 1.0F));
-	label->runAction(ScaleTo::create(0.5F, 1.0F));
+	restartItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the restart button label
+	levelCompleteLbl->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));	// Scale the level complete message label
 		
-	this->unscheduleUpdate();																								// Terminate update callback
+	this->unscheduleUpdate();																			// Terminate update callback
 }
 
-
+// Callbacks
+void Level::restartTapped(Ref* pSender) {
+	Director::getInstance()->replaceScene(TransitionZoomFlipX::create(0.5, Level1::createScene()));		// Restart the current scene	
+	this->scheduleUpdate();																				// reschedule
+}
 void Level::startLevel2(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));			// Change scene, progressing to Level 2
+	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));		// Change scene, progressing to Level 2
 }
-
 void Level::startLevel3(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));			// Load level 3	
+	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));		// Load level 3
 }
-
+void Level::startLevel4(Ref* pSender) {
+	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level4::createScene()));		// Load level 4
+}
 void Level::returnToMenu(Ref* pSender) {
-	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));		// Return to the main menu
+	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
 }
-
 void Level::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
