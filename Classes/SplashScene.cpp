@@ -35,7 +35,7 @@ bool SplashScene::init() {
 	backgroundSprite->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);
     this->addChild( backgroundSprite );																				// Add background sprite as a child of the layer
 
-	backgroundSprite->runAction(ScaleTo::create(0.5F, 1.0f));
+	backgroundSprite->runAction(ScaleTo::create(0.5F, 1.0f));														// Not working Android
     return true;
 }
 

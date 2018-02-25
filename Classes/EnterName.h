@@ -32,7 +32,8 @@ private:
 	cocos2d::__String *tempScore;												// Text to display
 
 	// High Score
-	cocos2d::LabelTTF* instructionLbl;									// Label to display current high score
+	//cocos2d::LabelTTF* instructionLbl;									// Label to display current high score
+	cocos2d::Label* instructionLbl;									// Label to display current high score
 
 	// Text Input
 	cocos2d::ui::TextField* txtField;									// Text entered

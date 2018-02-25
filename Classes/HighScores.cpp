@@ -41,8 +41,10 @@ bool HighScores::init() {
 	sortScores();																// set value for tempScore
 
 	//MarkerFelt.ttf Super Mario Bros..ttf 
-	highScoreLbl = LabelTTF::create(tempScore->getCString(), 
-		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score	
+	//highScoreLbl = LabelTTF::create(tempScore->getCString(), 
+	//	"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score	
+	highScoreLbl = cocos2d::Label::createWithTTF(tempScore->getCString(),
+		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score (Label replaces LabelTTF causing warnings)
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, 
 		visibleSize.height * 0.4f + origin.y));									// Set its position on screen
 	highScoreLbl->setColor(Color3B::WHITE);										// Set the text colour

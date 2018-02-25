@@ -47,9 +47,13 @@ private:
 
 	static HUD* s_pInstance;										// Single instance of HUD used as singleton, so only one instance exists thoughout the game
 	
-	cocos2d::Label* levelLabel;										// Display the current level
-	cocos2d::Label* scoreLabel;										// Display the current score
-	cocos2d::Label * timeLabel;										// Display the time remaining
+	cocos2d::Label *levelLabel;										// Display the current level
+	cocos2d::Label *scoreLabel;										// Display the current score
+	cocos2d::Label *timeLabel;										// Display the time remaining
+
+	cocos2d::MenuItemImage* closeItem;								// Exit button in bottom right corner
+	cocos2d::MenuItemImage* menuItem;								// Menu sprite
+	cocos2d::Menu* menuClose;										// Menu items
 
 	// Lives
 	cocos2d::Sprite *playerLife;									// Indicate lives left

@@ -70,8 +70,6 @@
 	<real>0</real>
 	<key>sourcePositionVariancey</key>
 	<integer>720</integer>
-	<key>sourcePositionx</key>
-	<integer>1088</integer>
 	<key>sourcePositiony</key>
 	<integer>720</integer>
 	<key>speed</key>
@@ -106,5 +104,7 @@
 	<string>star1.png</string>
 	<key>textureImageData</key>
 	<string>H4sIAAAAAAAAAwFLAbT+iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAABEklEQVRIDe2TYRGDMAyFuRmYhEpAQiUgAQmTwBxMAhKQUAmTwBwggX3hKNdjkBbY9ovcPRqa9/KOtGTZGUcn0Pe9FRztE9Vj0oA8SjxCwMCA7h9G9VYj+AZUIG3cEA3wcdMmA8mCesRV437UEMnZ+HAkhSeRW/AALZAofW3TirAY5Prj+Nnp/b90OTBxitG+EYXzpPlVMWhD7lp+WSsE+/cgn6ev+cbmd77AKl8xlDY3DQV0yIHcmlhMVzrUR3O6yjm0Y3fHWgIjQlYLGuCjjjacE1CKwRM4YOd1/06tAN2I9D8cgRg4UPpm2govB2JUabypBlEMKlmnzYQEvhi1STpIJqHnIgWtGO3WLzY9N386gTdy7LvukmMkygAAAABJRU5ErkJgghE6j/xLAQAA</string>
+	<key>sourcePositionx</key>
+	<integer>1280</integer>
 </dict>
 </plist>

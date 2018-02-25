@@ -70,7 +70,9 @@ bool MainMenu::init() {
 	std::string playerName = def->getStringForKey("Name1");
 	
 	tempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);										// String to display the top score & player	
-	highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);			// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf Super Mario Bros..ttf
+
+	highScoreLbl = cocos2d::Label::createWithTTF(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);// Label to display current high score (Label replaces LabelTTF causing warnings)
+	//highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);			// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf Super Mario Bros..ttf
 	highScoreLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height * 0.2f + origin.y));
 	highScoreLbl->setColor(Color3B::RED);
 	highScoreLbl->setScale(scale * 0.6f);

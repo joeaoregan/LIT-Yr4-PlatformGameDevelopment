@@ -34,8 +34,10 @@ private:
 	cocos2d::Sprite* musicLbl;						// Music volume setting label
 	cocos2d::Sprite* sfxLbl;						// SFX volume setting label
 	cocos2d::Sprite* trackLbl;						// Track select setting label
-	cocos2d::LabelTTF* instructionLbl;				// Label to display current high score
-	cocos2d::LabelTTF* currentTrackLbl;				// Label to display current background music track
+	//cocos2d::LabelTTF* instructionLbl;				// Label to display current high score
+	//cocos2d::LabelTTF* currentTrackLbl;				// Label to display current background music track
+	cocos2d::Label* instructionLbl;					// Label to display current high score
+	cocos2d::Label* currentTrackLbl;				// Label to display current background music track
 
 	// Menu button images
 	cocos2d::MenuItemImage* btnBackImg;				// Set image for Back Button menu option

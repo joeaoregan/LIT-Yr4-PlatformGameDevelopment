@@ -44,7 +44,7 @@ bool Level::init() {
 
 	(visibleSize.height == 720) ? scaleUp = 1.0f : scaleUp = 1.5f;
 	(visibleSize.height == 1080) ? scaleDown = 1.0f : scaleDown = 0.67f;
-			
+/*
 	// Add exit button in bottom right corner. it's an autorelease object
 	closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(Level::menuCloseCallback, this));															// JOR replaced auto specifier	
@@ -56,7 +56,7 @@ bool Level::init() {
 	menuClose = cocos2d::Menu::create(closeItem, NULL);															// JOR replaced auto specifier
 	menuClose->setPosition(cocos2d::Point::ZERO);
 	this->addChild(menuClose, 1);
-	
+*/
 	//  GALAXY
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");													// Player sprite is added here
 	this->addChild(_batchNode);
@@ -132,8 +132,6 @@ bool Level::init() {
 	this->addChild(newHUD);
 	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));			// Position: scale in MusicPlayer class throws off measurement (undo first)
 	this->addChild(mplayer);
-		
-	//this->scheduleUpdate();
 	
     return true;
 }
@@ -146,24 +144,24 @@ float Level::getTimeTick() {
 }
 
 void Level::update(float dt) {
-	curTimeMillis = getTimeTick();																		// Current game time
+	curTimeMillis = getTimeTick();																			// Current game time
 
-	winSize = Director::getInstance()->getWinSize();													// Dimensions of game screen (Needs to update here so lasers fire etc.)
+	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen (Needs to update here so lasers fire etc.)
 
-	getInput();																							// Get keyboard input for Windows, Get DPad input for Android
+	getInput();																								// Get keyboard input for Windows, Get DPad input for Android
 
-	Game::Instance()->updateTimer(curTimeMillis);														// Update the countdown timer in Game class, pass in curTimeMillies solves Android Timer issue
+	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer in Game class, pass in curTimeMillies solves Android Timer issue
 
-	_backgroundNode->update(dt);																		// Scroll the background objects
+	_backgroundNode->update(dt);																			// Scroll the background objects
 
-	spawnAsteroids(curTimeMillis);																		// Spawn asteroids
-	spawnEnemyShips(curTimeMillis);																		// Spawn asteroids
-	checkCollisions();																					// Check have game objects collided with each other
-	checkGameOver(curTimeMillis);																		// Check is the game over or not
+	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
+	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
+	checkCollisions();																						// Check have game objects collided with each other
+	checkGameOver(curTimeMillis);																			// Check is the game over or not
 	
-	player->update();																					// Update player sprite position
-	mplayer->update();																					// Update the music player
-	newHUD->update(curTimeMillis);																		// Update the HUD
+	player->update();																						// Update player sprite position
+	mplayer->update();																						// Update the music player
+	newHUD->update(curTimeMillis);																			// Update the HUD
 }
 
 void Level::spawnAsteroids(float curTimeMillis) {
@@ -437,29 +435,9 @@ void Level::endScene(EndReason endReason) {
 	else 
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-	continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);
-
-		//cocos2d::Menu* menu2 = Menu::create(continueItem, NULL);										// JOR replaced auto specifier
-		//menu2->setPosition(Point::ZERO);
-		//this->addChild(menu2);
-		
+	continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);		
 	continueItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the continue to next level label
 	
-
-		// Return To Main Menu
-		//strcpy(message, "Main Menu");
-		//message = "Main Menu";
-		//cocos2d::Label* menuLbl = Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
-		//continueItem = MenuItemLabel::create(menuLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		//continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);
-
-		//cocos2d::Menu* menu2 = Menu::create(mainMenuItem, NULL);										// JOR replaced auto specifier
-		//menu2->setPosition(Point::ZERO);
-		//this->addChild(menu2);
-
-		//continueItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));// Scale the go to main menu button label
-	
-
 	cocos2d::Menu* menu = Menu::create(restartItem, continueItem, NULL);								// JOR replaced auto specifier
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);

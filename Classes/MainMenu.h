@@ -42,8 +42,10 @@ private:
 	// High Score
 	int highScore;								// Load the first sorted score, which is the high score
 	cocos2d::__String *tempScore;				// Score text to display
-	cocos2d::LabelTTF* highScoreLbl;			// Label to display the score text
-	cocos2d::LabelTTF* currentPlayer;			// Label to display the current Player name
+	//cocos2d::LabelTTF* highScoreLbl;			// Label to display the score text
+	//cocos2d::LabelTTF* currentPlayer;			// Label to display the current Player name
+	cocos2d::Label* highScoreLbl;				// Label to display the score text
+	//cocos2d::Label* currentPlayer;				// Label to display the current Player name
 
 	// Music Player
 	MusicPlayer *mplayer;						// Music Player

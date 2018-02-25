@@ -1,41 +1,12 @@
 #include "Game.h"
 #include "HUD.h"
+#include "MainMenu.h"
 
 #define SCREEN_RESOLUTION_HEIGHT 720
 
 HUD* HUD::s_pInstance;							// Singleton for Heads Up Display
 
 void HUD::init(cocos2d::Layer *layer) {
-	//score = 0;
-	//Game::Instance()->setScore(0);
-	//level = 1;
-	//Game::Instance()->setLevel(1);
-	//time = LEVEL_TIME / 1000;					// Should be 30 seconds
-	/*
-	visibleSize = Director::getInstance()->getVisibleSize();
-	origin = Director::getInstance()->getVisibleOrigin();
-
-	__String *tempLevel = __String::createWithFormat("Level: %i", Game::Instance()->getLevel());
-	//__String *tempScore = __String::createWithFormat("Score: %i", score);
-
-	// Level
-	if (visibleSize.height == 1080) {
-        levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.075f);
-        levelLabel->setPosition(Point(125 + origin.x, visibleSize.height * 0.95 + origin.y));
-    }
-	else {
-        levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-        levelLabel->setPosition(Point(75 + origin.x, visibleSize.height * 0.95 + origin.y));
-    }
-	levelLabel->setColor(Color3B::WHITE);
-	layer->addChild(levelLabel, 10000);
-	
-	// Score
-	scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", visibleSize.height * 0.05f);
-	scoreLabel->setColor(Color3B::WHITE);
-	scoreLabel->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.95 + origin.y));
-	layer->addChild(scoreLabel, 10000);
-	*/
 	currentTime = 0.0f;																							// Current game time, for timer, changed to float to solve Android timer issue
 }
 
@@ -51,34 +22,63 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		__String *tempScore = __String::createWithFormat("Score: %i", Game::Instance()->getScore());
 		__String *tempTime = __String::createWithFormat("Time: %i", s_pInstance->time);
 
+		// Scale up text for my Android phone
+		float scaleUp, scaleDown;
+		(res.height == 1080) ? scaleUp = 1.5f : scaleUp = 1.0f;
+		(res.height == 1080) ? scaleDown = 1.0f : scaleDown = 0.67f;
+
+		// Menu Icon
+		s_pInstance->menuItem = cocos2d::MenuItemImage::create("MenuWR.png", "MenuWG.png");
+		s_pInstance->menuItem->setScale(scaleDown);
+		s_pInstance->menuItem->setPosition(cocos2d::Point((position.x + res.width * 0.05f) * 0.99f, res.height * 0.95 + position.y));
+
 		// Current Level
 		s_pInstance->levelLabel = Label::createWithTTF(tempLevel->getCString(), "fonts/Marker Felt.ttf", res.height * 0.05f);
-		s_pInstance->levelLabel->setPosition(Point(position.x + res.width * 0.05f, position.y + res.height * 0.95));
-		s_pInstance->levelLabel->setColor(Color3B::WHITE);
+		s_pInstance->levelLabel->setTextColor(Color4B::RED);
+		s_pInstance->levelLabel->enableOutline(Color4B::WHITE, 3);
+		s_pInstance->levelLabel->setScale(scaleUp);																				// Scale up the image
+		//s_pInstance->levelLabel->enableOutline(Color4B::WHITE, 2);
+		s_pInstance->levelLabel->setPosition(Point((position.x + res.width * 0.1f) + s_pInstance->menuItem->getContentSize().width, position.y + res.height * 0.95));			// Then set the position
 		s_pInstance->addChild(s_pInstance->levelLabel);
 
 		// Current score
 		s_pInstance->scoreLabel = Label::createWithTTF(tempScore->getCString(), "fonts/Marker Felt.ttf", res.height * 0.05f);
-		s_pInstance->scoreLabel->setColor(Color3B::WHITE);
+		s_pInstance->scoreLabel->setTextColor(Color4B::RED);
+		s_pInstance->scoreLabel->enableOutline(Color4B::WHITE, 3);
+		s_pInstance->scoreLabel->setScale(scaleUp);
 		s_pInstance->scoreLabel->setPosition(Point(res.width / 2 + position.x, res.height * 0.95 + position.y));
 		s_pInstance->addChild(s_pInstance->scoreLabel, 10000);
 
 		// Countdown Timer
 		s_pInstance->timeLabel = Label::createWithTTF(tempTime->getCString(), "fonts/Marker Felt.ttf", res.height * 0.05f);
-		s_pInstance->timeLabel->setPosition(Point((res.width - s_pInstance->timeLabel->getWidth()) * 0.95f, res.height * 0.95 + position.y));
-		s_pInstance->timeLabel->setColor(Color3B::WHITE);
+		s_pInstance->timeLabel->setTextColor(Color4B::RED);
+		s_pInstance->timeLabel->enableOutline(Color4B::WHITE, 3);
+		s_pInstance->timeLabel->setScale(scaleUp);
+		s_pInstance->timeLabel->setPosition(Point(((res.width * 0.925f) - s_pInstance->timeLabel->getWidth()), res.height * 0.95 + position.y));
 		s_pInstance->addChild(s_pInstance->timeLabel);
 
 		// Player number of lives
 		for (unsigned int i = 0; i < MAX_LIVES; i++) {
 			s_pInstance->playerLife = Sprite::create("PlayerLife.png");
 			//s_pInstance->playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
-			s_pInstance->playerLife->setPosition(position.x + SCREEN_RESOLUTION_HEIGHT * 0.05f + (i * 52), SCREEN_RESOLUTION_HEIGHT * 0.05f);
+			s_pInstance->playerLife->setScale(scaleUp);
+			s_pInstance->playerLife->setPosition(position.x + res.width * 0.05f + (i * (s_pInstance->playerLife->getContentSize().width * scaleUp)), res.height * 0.05f);
 			s_pInstance->addChild(s_pInstance->playerLife);
 			s_pInstance->livesList[i] = s_pInstance->playerLife;																				// Add life sprite to list of lives
 		}
 		s_pInstance->livesList[3]->setVisible(false);
 		s_pInstance->livesList[4]->setVisible(false);
+
+		// Add exit button in bottom right corner. it's an autorelease object
+		//s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Level::menuCloseCallback, Director::getInstance()->getRunningScene()));	
+		s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png");	
+		s_pInstance->closeItem->setScale(scaleUp);
+		s_pInstance->closeItem->setPosition(cocos2d::Point((position.x + res.width - s_pInstance->closeItem->getContentSize().width / 2) * 0.99f, res.height * 0.05f));
+
+		// Create A Menu, it's an autorelease object
+		s_pInstance->menuClose = cocos2d::Menu::create(s_pInstance->closeItem, s_pInstance->menuItem, NULL);															// JOR replaced auto specifier
+		s_pInstance->menuClose->setPosition(cocos2d::Point::ZERO);
+		s_pInstance->addChild(s_pInstance->menuClose, 1);
 
 		return s_pInstance;
 	}
@@ -97,6 +97,18 @@ void HUD::update(float curTimeMillis) {
 	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
 
 	updateTimer(curTimeMillis);
+
+	if (s_pInstance->closeItem->isSelected()) {
+		cocos2d::Director::getInstance()->end();	// Close the director
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		exit(0);
+#endif
+	}
+
+	if (s_pInstance->menuItem->isSelected()) {
+		Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
+	}
 }
 
 /*

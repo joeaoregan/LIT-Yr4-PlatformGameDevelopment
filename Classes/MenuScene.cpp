@@ -50,7 +50,9 @@ bool MenuScene::init() {
 	(visibleSize.height == 1080) ? scale = 1.0f : scale = 0.67f;
 	
 	// Background image
-	backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Background image
+	//backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Choose Background image depending on resolution
+	backgroundSprite = cocos2d::Sprite::create("BG1080p.png");																		// Use one high res background image for efficiency
+	backgroundSprite->setScale(scale);
 	backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));				// Set backgound position
 	this->addChild(backgroundSprite);																								// Add to layer
 	

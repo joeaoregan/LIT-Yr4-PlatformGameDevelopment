@@ -16,6 +16,8 @@ Game* Game::s_pInstance;	// Game Singleton
 bool Game::init() {
 	score = 0;				// Initialise the score value
 	level = 1;				// Initialise the level value
+	_gameOver = false;
+	currentTime = 0;
 	
 	return true;
 }

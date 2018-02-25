@@ -45,7 +45,8 @@ private:
 	cocos2d::MenuItemImage *pause;							// Pause music button
 	cocos2d::MenuItemImage *forward;						// Skip track forwards button
 	cocos2d::MenuItemImage *back;							// Skip track backwards button
-	cocos2d::LabelTTF* currentTrackLbl;						// Label to display current background music track
+	//cocos2d::LabelTTF* currentTrackLbl;						// Label to display current background music track
+	cocos2d::Label* currentTrackLbl;						// Label to display current background music track
 	
 	static MusicPlayer* s_pInstance;						// Single instance of Game used as singleton, so only one instance exists thoughout the game
 };

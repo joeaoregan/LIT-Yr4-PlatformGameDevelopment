@@ -29,8 +29,10 @@ bool EnterName::init() {
 	titleSprite->setTexture("EnterName.png");											// Change the title image text
 		
 	// Instructions (MarkerFelt.ttf Super Mario Bros..ttf) 
-	instructionLbl = LabelTTF::create("Enter up to 12 characters", 
-		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);						// Label to display current high score	
+	//instructionLbl = LabelTTF::create("Enter up to 12 characters", 
+	//	"fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);						// Label to display current high score	
+	instructionLbl = cocos2d::Label::createWithTTF("Enter up to 12 characters",
+		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.05f);
 	instructionLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, 
 		visibleSize.height * 0.6f + origin.y));											// Set its position on screen
 	instructionLbl->setColor(Color3B::WHITE);											// Set the text colour

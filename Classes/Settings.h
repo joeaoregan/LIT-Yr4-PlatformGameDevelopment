@@ -66,10 +66,12 @@ private:
 	cocos2d::Menu* btnTrackDown;
 
 	// High Score
-	cocos2d::LabelTTF* instructionLbl;			// Label to display current high score
-	cocos2d::LabelTTF* currentTrackLbl;			// Label to display current background music track
+	//cocos2d::LabelTTF* instructionLbl;			// Label to display current high score
+	//cocos2d::LabelTTF* currentTrackLbl;			// Label to display current background music track
+	cocos2d::Label* instructionLbl;					// Label to display current high score
+	cocos2d::Label* currentTrackLbl;				// Label to display current background music track
 	int trackSelect = 0;
-	//std::string currentTrack[3];				// The name of the current track
+	//std::string currentTrack[3];					// The name of the current track
 };
 
 #endif // __SETTINGS_H__

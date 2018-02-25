@@ -102,9 +102,6 @@ private:
 	int nextEnemyShip = 0;	
 	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship	
 	
-	// Time
-	double curTime;															// Current game time
-	float curTimeMillis;													// Current time in milliseconds
 
 	// Weapons
 	int _nextShipLaser = 0;													// Ship laser list index
@@ -124,6 +121,10 @@ protected:
 	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listener
 
 	double _gameOverTime;													// Game over time
+
+	// Time
+	double curTime;															// Current game time
+	float curTimeMillis;													// Current time in milliseconds
 
 	// End of Level Labels
 	cocos2d::Label* levelCompleteLbl;

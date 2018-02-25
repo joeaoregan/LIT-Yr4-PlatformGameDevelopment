@@ -53,9 +53,12 @@ MusicPlayer *MusicPlayer::create(cocos2d::Point position) {
 		s_pInstance->forward->setScale(-1);
 
 		// Display the current track information
-		s_pInstance->currentTrackLbl = cocos2d::LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
+		//s_pInstance->currentTrackLbl = cocos2d::LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
+		s_pInstance->currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
 		s_pInstance->currentTrackLbl->setPosition(cocos2d::Point(position.x, position.y - (s_pInstance->pause->getContentSize().height) * 0.75f));
-		s_pInstance->currentTrackLbl->setColor(cocos2d::Color3B::WHITE);
+		//s_pInstance->currentTrackLbl->setColor(cocos2d::Color3B::WHITE);
+		s_pInstance->currentTrackLbl->setTextColor(cocos2d::Color4B::RED);
+		s_pInstance->currentTrackLbl->enableOutline(cocos2d::Color4B::WHITE, 3);
 		s_pInstance->addChild(s_pInstance->currentTrackLbl);
 		//s_pInstance->addChild(currentTrackLbl, 100);
 

@@ -27,7 +27,8 @@ private:
 
 	// High Score
 	__String *tempScore;						// Text to display	
-	cocos2d::LabelTTF* highScoreLbl;			// Label to display current high score
+	//cocos2d::LabelTTF* highScoreLbl;			// Label to display current high score
+	cocos2d::Label* highScoreLbl;				// Label to display current high score
 };
 
 #endif // __HIGH_SCORES_H__
