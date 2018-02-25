@@ -72,8 +72,11 @@ private:
     MenuItemImage *down;
     MenuItemImage *left;
     MenuItemImage *right;
+	MenuItemImage *aBtn;
+	MenuItemImage *bBtn;
     Sprite *bg;    
 
+	Size visibleSize;
 	//static DPad* s_pInstance;												// Single instance of Game used as singleton, so only one instance exists thoughout the game
 };
 #endif /* defined(__RPGCollab__DPad__) */

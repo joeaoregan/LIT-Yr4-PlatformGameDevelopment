@@ -16,7 +16,7 @@
 #include "DPad.h"
 #include "HUD.h"
 
-#define LEVEL_TIME 3000										// 30 Seconds until level is complete
+#define LEVEL_TIME 30000										// 30 Seconds until level is complete
 #define MAX_LIVES 5												// The maximum number of lives a player can have
 
 #define RES_720P 720

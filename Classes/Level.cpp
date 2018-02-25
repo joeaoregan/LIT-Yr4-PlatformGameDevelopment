@@ -87,7 +87,7 @@ bool Level::init() {
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
 	}
-
+	/*
 	// Enemy Ship
 	EnemyShipList = new Vector<Sprite*>(3);																		// List of enemy ships
 	for (int i = 0; i < 3; ++i) {
@@ -96,6 +96,16 @@ bool Level::init() {
 		enemyShip->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
 		this->addChild(enemyShip);
 		EnemyShipList->pushBack(enemyShip);
+	}
+	*/
+	EnemyShips = new Vector<Sprite*>(3);
+	for (int i = 0; i < 3; ++i) {
+		//EnemyShip *enemyShip = new EnemyShip(this);
+		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		enemyShip1->setVisible(false);
+		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
+		this->addChild(enemyShip1);
+		EnemyShips->pushBack(enemyShip1);
 	}
 
 	// Ship Lasers:
@@ -122,10 +132,14 @@ bool Level::init() {
 
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+	/*
 		if (visibleSize.height == 1080)
 			controller = DPad::create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
 		else
 			controller = DPad::create("DPad/Base150.png", "DPad/Arrow.png", "DPad/ArrowPressed.png", Point(150, 150));
+		*/
+		controller = DPad::create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", (visibleSize.height == 1080) ? Point(375, 375) : Point(250, 250));
+		controller->setScale((visibleSize.height == 1080) ? 1.0f : 0.67f);
 
 		this->addChild(controller);
 	}
@@ -195,6 +209,7 @@ void Level::spawnAsteroids(float curTimeMillis) {
 }
 
 void Level::spawnEnemyShips(float curTimeMillis) {
+
 	if (curTimeMillis > nextEnemyShipSpawnTime) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
 		nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;												// Set the time to spawn the next ship
@@ -202,13 +217,15 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		float randY = randomValueBetween(0.0F, winSize.height);												// Random Y position for enemy ship
 		float randDuration = randomValueBetween(2.0F, 10.0F);
 
-		Sprite *enemyShip = EnemyShipList->at(nextEnemyShip);
+		//Sprite *enemyShip = EnemyShipList->at(nextEnemyShip);
+		Sprite *enemyShip = EnemyShips->at(nextEnemyShip);
 		nextEnemyShip++;																					// Increment the enemy ship on the list
 
 
 		Game::Instance()->incrementEnemyShipCount();
 
-		if (nextEnemyShip >= EnemyShipList->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
+		//if (nextEnemyShip >= EnemyShipList->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
+		if (nextEnemyShip >= EnemyShips->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
 
 		enemyShip->stopAllActions();																		// CCNode.cpp
 		enemyShip->setPosition(winSize.width + enemyShip->getContentSize().width / 2, randY);
@@ -323,7 +340,8 @@ void Level::checkCollisions() {
 	}
 
 	// Enemy ship collisions
-	for (cocos2d::Sprite* enemyShip : *EnemyShipList) {													// JOR replaced auto specifier
+	//for (cocos2d::Sprite* enemyShip : *EnemyShipList) {													// JOR replaced auto specifier
+	for (cocos2d::Sprite* enemyShip : *EnemyShips) {													// JOR replaced auto specifier
 		if (!(enemyShip->isVisible())) continue;
 
 		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier

@@ -12,6 +12,7 @@
 
 #include "cocos2d.h"
 #include "Player.h"
+#include "EnemyShip.h"
 #include "Game.h"
 #include "MusicPlayer.h"
 
@@ -109,6 +110,7 @@ private:
 	// Object lists
 	Vector<Sprite*>* _asteroids;											// List of asteroids
 	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
+	Vector <Sprite*> * EnemyShips;											// List of enemy ships
 	Vector<Sprite*> *_shipLasers;											// List of lasers
 	Sprite* livesList[MAX_LIVES];											// List of lives
 
