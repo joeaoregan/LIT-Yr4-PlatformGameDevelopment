@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
                    $(LOCAL_PATH)/../../../Classes/AudioMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
+                   $(LOCAL_PATH)/../../../Classes/EnemyShip.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnterName.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp\
                    $(LOCAL_PATH)/../../../Classes/HighScores.cpp \
@@ -26,7 +27,6 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level2.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level3.cpp \
                    $(LOCAL_PATH)/../../../Classes/Level4.cpp \
-                   $(LOCAL_PATH)/../../../Classes/LevelTest.cpp \
                    $(LOCAL_PATH)/../../../Classes/MainMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/MenuScene.cpp \
                    $(LOCAL_PATH)/../../../Classes/MusicPlayer.cpp \

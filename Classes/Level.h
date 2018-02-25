@@ -78,7 +78,7 @@ public:
 	void setNextShipLaser(int set) { _nextShipLaser = set; }				// Set the next laser in the list
 	
 	cocos2d::Size visibleSize;												// Screen resolution changes depending on the platform
-	Size winSize;															// Current size of the game window (constantly updated)
+	cocos2d::Size winSize;													// Current size of the game window (constantly updated)
 	float scaleUp, scaleDown;												// Scale objects up in size for 1080p, or down for 720p
 	cocos2d::Point origin;
 	
@@ -110,7 +110,8 @@ private:
 	// Object lists
 	Vector<Sprite*>* _asteroids;											// List of asteroids
 	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
-	Vector <Sprite*> * EnemyShips;											// List of enemy ships
+	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
+	//Vector <Sprite*> * EnemyShips;										// List of enemy ships
 	Vector<Sprite*> *_shipLasers;											// List of lasers
 	Sprite* livesList[MAX_LIVES];											// List of lives
 

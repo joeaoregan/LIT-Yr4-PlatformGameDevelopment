@@ -18,9 +18,10 @@
 #include <sstream>
 #include "Input.h"
 
-#include "HealthBar.h"
+//#include "HealthBar.h"
 
 #define NUM_LASERS_TO_FIRE 4
+
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -98,16 +99,56 @@ bool Level::init() {
 		EnemyShipList->pushBack(enemyShip);
 	}
 	*/
-	EnemyShips = new Vector<Sprite*>(3);
+	EnemyShips = new Vector<EnemyShip*>(3);
 	for (int i = 0; i < 3; ++i) {
 		//EnemyShip *enemyShip = new EnemyShip(this);
-		cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
-		enemyShip1->setVisible(false);
+		//cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		//EnemyShip* enemyShip1 = new EnemyShip();
+		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
+		//enemyShip1->autorelease();
+
+		//Sprite* blah = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+
+		//enemyShip1->setSprite(&(*blah));
+		//enemyShip1->setVisible(false);
+		//cocos2d::Sprite* enemySprite = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		//enemyShip1->addChild(enemySprite);
 		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
+		/*
+		cocos2d::DrawNode* healthBar = createStatusBar(
+			enemyShip1->getPosition().x + enemyShip1->getContentSize().width, enemyShip1->getPosition().y + enemyShip1->getContentSize().height,		// Position
+			(visibleSize.height == 720) ? 80 : 120, (visibleSize.height == 720) ? 10 : 15,						// Dimensions
+			float (enemyShip1->getLives() / MAX_SHIP_LIVES),			// percentage
+			red, trans);		
+		// Colours
+		enemyShip1->addChild(healthBar);
+		*/
 		this->addChild(enemyShip1);
 		EnemyShips->pushBack(enemyShip1);
 	}
+	/*
+	EnemyShips = new Vector<EnemyShip*>(3);
+	for (int i = 0; i < 3; ++i) {
+		//EnemyShip *enemyShip = new EnemyShip(this);
+		//cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		EnemyShip* enemyShip1 = new EnemyShip();
+		Sprite* blah = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		enemyShip1->setSprite(&(*blah));
+		enemyShip1->getSprite()->setVisible(false);
+		enemyShip1->getSprite()->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
 
+		cocos2d::DrawNode* healthBar = createStatusBar(
+			enemyShip1->getSprite()->getPosition().x + enemyShip1->getSprite()->getContentSize().height, enemyShip1->getSprite()->getPosition().y,		// Position
+			(visibleSize.height == 720) ? 100 : 150, (visibleSize.height == 720) ? 10 : 15,						// Dimensions
+			float(enemyShip1->getLives() / MAX_SHIP_LIVES),			// percentage
+			red, trans);
+		// Colours
+		enemyShip1->getSprite()->addChild(healthBar);
+
+		this->addChild(enemyShip1->getSprite());
+		EnemyShips->pushBack(enemyShip1);
+	}
+	*/
 	// Ship Lasers:
 	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
@@ -131,7 +172,7 @@ bool Level::init() {
 	Input::Instance()->init(this, this->_eventDispatcher);														// Ship Movement
 
 	// D-pad (Display on mobile device)
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {					// If the target platform is a mobile device
 	/*
 		if (visibleSize.height == 1080)
 			controller = DPad::create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
@@ -147,6 +188,7 @@ bool Level::init() {
 	newHUD = HUD::create(origin, visibleSize);																	// Create the HUD at the origin point (0,0), and passing in the screen resolution
 	this->addChild(newHUD);
 	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));			// Position: scale in MusicPlayer class throws off measurement (undo first)
+	//mplayer->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
 	this->addChild(mplayer);
 	
     return true;
@@ -218,7 +260,7 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		float randDuration = randomValueBetween(2.0F, 10.0F);
 
 		//Sprite *enemyShip = EnemyShipList->at(nextEnemyShip);
-		Sprite *enemyShip = EnemyShips->at(nextEnemyShip);
+		EnemyShip *enemyShip = EnemyShips->at(nextEnemyShip);
 		nextEnemyShip++;																					// Increment the enemy ship on the list
 
 
@@ -230,7 +272,8 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		enemyShip->stopAllActions();																		// CCNode.cpp
 		enemyShip->setPosition(winSize.width + enemyShip->getContentSize().width / 2, randY);
 		enemyShip->setVisible(true);
-		
+		enemyShip->setLives(3);
+
 		// Move the ship to the players coordinate
 		auto action = MoveTo::create(3, Point(player->getSprite()->getPositionX(), player->getSprite()->getPositionY()));
 		enemyShip->runAction(action);
@@ -338,10 +381,11 @@ void Level::checkCollisions() {
 			newHUD->updateLives();																		// Updates the displayed lives when the player collides with an object
 		}
 	}
-
+	
 	// Enemy ship collisions
-	//for (cocos2d::Sprite* enemyShip : *EnemyShipList) {													// JOR replaced auto specifier
-	for (cocos2d::Sprite* enemyShip : *EnemyShips) {													// JOR replaced auto specifier
+	//for (cocos2d::Sprite* enemyShip : *EnemyShipList) {												// JOR replaced auto specifier
+	//for (cocos2d::Sprite* enemyShip : *EnemyShips) {													//
+	for (EnemyShip* enemyShip : *EnemyShips) {													// 
 		if (!(enemyShip->isVisible())) continue;
 
 		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
@@ -352,7 +396,10 @@ void Level::checkCollisions() {
 				shipLaser->setVisible(false);															// Hide the player laser
 				Game::Instance()->updateScore(20);														// Award 20 points for destroying an enemy ship
 				if (enemyShip->isVisible()) Game::Instance()->incrementEnemyShipKills();				// Increment the total number of enemy ships destroyed
-				enemyShip->setVisible(false);															// Hide the asteroid
+				//enemyShip->setVisible(false);															// Hide the asteroid
+				enemyShip->setLives(enemyShip->getLives() - 1);		// DECREMENT LIVES
+				//enemyShip->updateBar( (enemyShip->getLives() * 100 )/ 3.0f);			
+				if (enemyShip->getLives() < 1) enemyShip->setVisible(false);
 			}
 		}
 	}
@@ -448,8 +495,16 @@ void Level::endScene(EndReason endReason) {
 
 
 
-	Color4F red(1, 0, 0, 1);
-	Color4F trans(1, 0, 0, 0.5f);
+
+
+
+
+
+
+
+
+
+	/*
 	if (Game::Instance()->getAsteroidCount() > 0) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
 			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 3.5f),					// Position
@@ -468,6 +523,16 @@ void Level::endScene(EndReason endReason) {
 			red, trans);																							// Colours
 		this->addChild(healthBar);
 	}
+	*/
+
+
+
+
+
+
+
+
+
 
 
 	// 3. Total Enemy Ships Destroyed

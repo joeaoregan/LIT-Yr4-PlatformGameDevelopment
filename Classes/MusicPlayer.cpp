@@ -13,7 +13,7 @@
 MusicPlayer* MusicPlayer::s_pInstance;																// MusicPlayer Singleton
 
 bool MusicPlayer::init(cocos2d::Layer *layer) {
-	cocos2d::Size visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+	visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
 
 	// If the target platform is a mobile device (android in this case)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
@@ -65,7 +65,7 @@ MusicPlayer *MusicPlayer::create(cocos2d::Point position) {
 		cocos2d::Menu *menu = cocos2d::Menu::create(s_pInstance->play, s_pInstance->pause, s_pInstance->forward, s_pInstance->back, NULL);
         menu->setPosition(cocos2d::Point(0,0));
 		s_pInstance->addChild(menu, 120);
-		s_pInstance->setScale(0.75);					// Make whole music player smaller, affects the screen positioning
+		s_pInstance->setScale((s_pInstance->visibleSize.height == 1080) ? 1.0f : 0.75f);					// Make whole music player smaller, affects the screen positioning
         
         return s_pInstance;
     }

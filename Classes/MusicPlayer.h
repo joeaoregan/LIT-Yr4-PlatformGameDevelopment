@@ -49,5 +49,7 @@ private:
 	cocos2d::Label* currentTrackLbl;						// Label to display current background music track
 	
 	static MusicPlayer* s_pInstance;						// Single instance of Game used as singleton, so only one instance exists thoughout the game
+
+	cocos2d::Size visibleSize;								// Screen resolution
 };
 #endif /* __M_PLAYER_H */

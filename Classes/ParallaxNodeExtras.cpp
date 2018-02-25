@@ -18,7 +18,7 @@ public:
 	static PointObject * create(Point ratio, Point offset) {
 		PointObject *ret = new PointObject();
 		ret->initWithPoint(ratio, offset);
-		ret->autorelease();
+		ret->autorelease();										// Autorelease memory allocated by new
 		return ret;
 	}
 
@@ -132,7 +132,7 @@ void ParallaxNodeExtras::update(float dt) {
 
 	// Parallax
 	cocos2d::Vector<cocos2d::Sprite*>* spaceDusts = new Vector<Sprite*>(2);					// JOR replaced auto specifier
-	spaceDusts->pushBack(_spaceDust1);
+		spaceDusts->pushBack(_spaceDust1);
 	spaceDusts->pushBack(_spaceDust2);
 	//for (auto spaceDust : *spaceDusts) {
 	for (cocos2d::Sprite* spaceDust : *spaceDusts) {
