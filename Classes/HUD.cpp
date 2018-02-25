@@ -4,7 +4,7 @@
 
 #define SCREEN_RESOLUTION_HEIGHT 720
 
-HUD* HUD::s_pInstance;							// Singleton for Heads Up Display
+HUD* HUD::s_pInstance;																							// Singleton for Heads Up Display
 
 void HUD::init(cocos2d::Layer *layer) {
 	currentTime = 0.0f;																							// Current game time, for timer, changed to float to solve Android timer issue
@@ -37,7 +37,6 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		s_pInstance->levelLabel->setTextColor(Color4B::RED);
 		s_pInstance->levelLabel->enableOutline(Color4B::WHITE, 3);
 		s_pInstance->levelLabel->setScale(scaleUp);																				// Scale up the image
-		//s_pInstance->levelLabel->enableOutline(Color4B::WHITE, 2);
 		s_pInstance->levelLabel->setPosition(Point((position.x + res.width * 0.1f) + s_pInstance->menuItem->getContentSize().width, position.y + res.height * 0.95));			// Then set the position
 		s_pInstance->addChild(s_pInstance->levelLabel);
 
@@ -69,8 +68,7 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		s_pInstance->livesList[3]->setVisible(false);
 		s_pInstance->livesList[4]->setVisible(false);
 
-		// Add exit button in bottom right corner. it's an autorelease object
-		//s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Level::menuCloseCallback, Director::getInstance()->getRunningScene()));	
+		// Add exit button in bottom right corner. it's an autorelease object	
 		s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png");	
 		s_pInstance->closeItem->setScale(scaleUp);
 		s_pInstance->closeItem->setPosition(cocos2d::Point((position.x + res.width - s_pInstance->closeItem->getContentSize().width / 2) * 0.99f, res.height * 0.05f));

@@ -14,9 +14,9 @@
 #define __AUDIO__
 
 // Horizontal health bar
-cocos2d::DrawNode* MenuScene::createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor) {
-	percent = (percent > 1.0f) ? 1.0f : (percent < 0.f) ? 0.f : percent;		// If greater than 1 set to 1, if minus set to 0
-
+cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor) {
+	percent = (percent > 1.0f) ? 1.0f : (percent < 0.0f) ? 0.0f : percent;		// If greater than 1 set to 1, if minus set to 0
+	
 	cocos2d::DrawNode* rectNode = cocos2d::DrawNode::create();
 	cocos2d::Color4F white(1, 1, 1, 1);
 	cocos2d::Vec2 foregroundRect[4];
@@ -28,8 +28,10 @@ cocos2d::DrawNode* MenuScene::createStatusBar(int x, int y, int w, int h, float 
 	backgroundRect[3] = cocos2d::Vec2(-w / 2, h / 2);
 
 	foregroundRect[0] = cocos2d::Vec2(-w / 2, -h / 2);
-	foregroundRect[1] = cocos2d::Vec2(w / 2 * percent, -h / 2);
-	foregroundRect[2] = cocos2d::Vec2(w / 2 * percent, h / 2);
+	//foregroundRect[1] = cocos2d::Vec2(w / 2 * percent, -h / 2);
+	//foregroundRect[2] = cocos2d::Vec2(w / 2 * percent, h / 2);
+	foregroundRect[1] = cocos2d::Vec2((-w / 2) + (w  * percent), -h / 2);
+	foregroundRect[2] = cocos2d::Vec2((-w / 2) + (w  * percent), h / 2);
 	foregroundRect[3] = cocos2d::Vec2(-w / 2, h / 2);
 
 

@@ -18,6 +18,8 @@
 #include <sstream>
 #include "Input.h"
 
+#include "HealthBar.h"
+
 #define NUM_LASERS_TO_FIRE 4
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -111,7 +113,7 @@ bool Level::init() {
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	
 	// Time
-	curTime = getTimeTick();																					// Current game time																						// Time to finish game
+	curTime = getTimeTick();																					// Current game time // Time to finish game
 	_gameOverTime = curTime + LEVEL_TIME;																		// Time to finish game
 
 	Game::Instance()->init();																					// Inite score and level	
@@ -177,6 +179,9 @@ void Level::spawnAsteroids(float curTimeMillis) {
 
 		if (_nextAsteroid >= _asteroids->size()) _nextAsteroid = 0;											// Loop back around to start of asteroids list
 
+
+		Game::Instance()->incrementAsteroidCount();
+
 		asteroid->stopAllActions();																			// CCNode.cpp
 		asteroid->setPosition(winSize.width + asteroid->getContentSize().width / 2, randY);
 		asteroid->setVisible(true);
@@ -200,11 +205,18 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		Sprite *enemyShip = EnemyShipList->at(nextEnemyShip);
 		nextEnemyShip++;																					// Increment the enemy ship on the list
 
+
+		Game::Instance()->incrementEnemyShipCount();
+
 		if (nextEnemyShip >= EnemyShipList->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
 
 		enemyShip->stopAllActions();																		// CCNode.cpp
 		enemyShip->setPosition(winSize.width + enemyShip->getContentSize().width / 2, randY);
 		enemyShip->setVisible(true);
+		
+		// Move the ship to the players coordinate
+		auto action = MoveTo::create(3, Point(player->getSprite()->getPositionX(), player->getSprite()->getPositionY()));
+		enemyShip->runAction(action);
 
 		enemyShip->runAction(
 			Sequence::create(
@@ -289,14 +301,14 @@ void Level::checkCollisions() {
 		if (!(asteroid->isVisible())) continue;
 
 		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
-			if (!(shipLaser->isVisible())) continue;
+			if (!(shipLaser->isVisible())) continue;													// If the ship is not visible
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
-				Audio::Instance()->explodeFX();
-				shipLaser->setVisible(false);
-				asteroid->setVisible(false);
-				//score += 10;																			// Award 10 points for destroying an asteroid
-				Game::Instance()->updateScore(10);
+				Audio::Instance()->explodeFX();															// Play the explosion effect
+				shipLaser->setVisible(false);															// Hide the laser
+				Game::Instance()->updateScore(10);														// Award 10 points for destroying an asteroid
+				if (asteroid->isVisible()) Game::Instance()->incrementAsteroidKills();					// Increment the number of asteroids destroyed
+				asteroid->setVisible(false);															// Hide the asteroid
 			}
 		}
 
@@ -304,7 +316,6 @@ void Level::checkCollisions() {
 		if (player->getSprite()->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {			// If the ship collides with an asteroid
 			asteroid->setVisible(false);																// Destroy the asteroid
 			player->getSprite()->runAction(Blink::create(1.0F, 9));										// Flash the Player ship
-																										//_lives--;																						// Decrement the number of lives
 			Game::Instance()->takeLife();																// Decrement the number of lives
 			//livesList[Game::Instance()->getLives()]->setVisible(false);								// Set the player lives invisible (in the order 2,1,0)
 			newHUD->updateLives();																		// Updates the displayed lives when the player collides with an object
@@ -319,11 +330,11 @@ void Level::checkCollisions() {
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
-				Audio::Instance()->explodeFX();
-				shipLaser->setVisible(false);
-				enemyShip->setVisible(false);
-				//score += 20;																			// Award 20 points for destroying an enemy ship
-				Game::Instance()->updateScore(20);
+				Audio::Instance()->explodeFX();															// Play explosion effect
+				shipLaser->setVisible(false);															// Hide the player laser
+				Game::Instance()->updateScore(20);														// Award 20 points for destroying an enemy ship
+				if (enemyShip->isVisible()) Game::Instance()->incrementEnemyShipKills();				// Increment the total number of enemy ships destroyed
+				enemyShip->setVisible(false);															// Hide the asteroid
 			}
 		}
 	}
@@ -381,8 +392,9 @@ void Level::checkGameOver(float currenTime) {															// If the player has
 }
 
 void Level::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
+	if (Game::Instance()->isGameOver()) return;													// If the ship is not visible
+
 	Audio::Instance()->laserFX();
-	//spawnLaser();
 	spawnLasers(NUM_LASERS_TO_FIRE);
 }
 
@@ -392,6 +404,8 @@ void Level::endScene(EndReason endReason) {
 	
 	(visibleSize.height == 720) ? scaleUp = 1.0f : scaleUp = 0.67f;
 
+	const int TOTAL_LIST_ELEMENTS = 9;
+
 	Game::Instance()->checkHighScore();																	// The game has ended, check if the current score is the high score and save it if it is
 
 	// Win / Lose Message
@@ -400,21 +414,59 @@ void Level::endScene(EndReason endReason) {
 	//if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
 	if (endReason == KENDREASONLOSE) message = "You Lose";
 
-	// Level Over Message
-	levelCompleteLbl = Label::createWithBMFont("Arial.fnt", message);									// JOR replaced auto specifier
-	levelCompleteLbl->setPosition(winSize.width / 2, winSize.height*0.75f);
+	// 1. Level Over Message
+	//levelCompleteLbl = Label::createWithBMFont("Arial.fnt", message);									// JOR replaced auto specifier
+	levelCompleteLbl = cocos2d::Label::createWithTTF(message, "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);
+	levelCompleteLbl->setPosition(winSize.width / 2, winSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 2));
 	this->addChild(levelCompleteLbl);
 	
-	// Restart Level
-	//strcpy(message, "Restart Game");
+	// 2. Total Asteroids Destroyed
+	cocos2d::Label* asteroidsLbl = cocos2d::Label::createWithTTF("Total Asteroids Destroyed: " + to_string(Game::Instance()->getAsteroidKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
+	asteroidsLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height - (visibleSize.height / TOTAL_LIST_ELEMENTS * 3)));
+	asteroidsLbl->setColor(Color3B::RED);
+	//asteroidsLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
+	this->addChild(asteroidsLbl);
+
+
+
+
+	Color4F red(1, 0, 0, 1);
+	Color4F trans(1, 0, 0, 0.5f);
+	if (Game::Instance()->getAsteroidCount() > 0) {
+		cocos2d::DrawNode* healthBar = createStatusBar(
+			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 3.5f),					// Position
+			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
+			(float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(),			// percentage
+			red, trans);																							// Colours
+		this->addChild(healthBar);
+	}
+
+
+	if (Game::Instance()->getEnemyShipCount() > 0) {
+		cocos2d::DrawNode* healthBar = createStatusBar(
+			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 4.5f),					// Position
+			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
+			(float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(),			// percentage
+			red, trans);																							// Colours
+		this->addChild(healthBar);
+	}
+
+
+	// 3. Total Enemy Ships Destroyed
+	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + to_string(Game::Instance()->getEnemyShipKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
+	enemyShipsLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 4)));
+	enemyShipsLbl->setColor(Color3B::RED);
+	this->addChild(enemyShipsLbl);
+
+	// 4. Restart Level
 	message = "Restart Game";
 	cocos2d::Label* restartLbl = Label::createWithBMFont("Arial.fnt", message);							// JOR replaced auto specifier
 	restartItem = MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));			// JOR replaced auto specifier
-	restartItem->setPosition(winSize.width / 2, winSize.height*0.5f);
+	restartItem->setPosition(winSize.width / 2, winSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 6));
 	
 	unsigned int level = Game::Instance()->getLevel();
 
-	// Continue To Next Level
+	// 5. Continue To Next Level
 	if (endReason != KENDREASONLOSE && level < 4)
 		message = "Start Level " + to_string(Game::Instance()->getLevel()+1);
 	if (level == 4 || endReason == KENDREASONLOSE)
@@ -435,17 +487,17 @@ void Level::endScene(EndReason endReason) {
 	else 
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-	continueItem->setPosition(winSize.width / 2, winSize.height*0.25f);		
+	continueItem->setPosition(winSize.width / 2, winSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 7));
 	continueItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the continue to next level label
 	
+	// clear label and menu
+	restartItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the restart button label
+	levelCompleteLbl->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));	// Scale the level complete message label
+
 	cocos2d::Menu* menu = Menu::create(restartItem, continueItem, NULL);								// JOR replaced auto specifier
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
 
-	// clear label and menu
-	restartItem->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the restart button label
-	levelCompleteLbl->runAction(ScaleTo::create(0.5F, (visibleSize.height == RES_720P) ? 1.0f : 1.5f));	// Scale the level complete message label
-		
 	this->unscheduleUpdate();																			// Terminate update callback
 }
 

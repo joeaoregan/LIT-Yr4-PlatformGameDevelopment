@@ -11,13 +11,6 @@
 	20180202	Added Audio class with singleton access
 */
 #include "Level1.h"
-#include "Level2.h"
-#include "MainMenu.h"
-#include "DPad.h"
-#include <string>
-#include <sstream>
-#include "Input.h"
-
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
@@ -37,6 +30,8 @@ bool Level1::init() {
 	newHUD->setLevel(1);						// Update HUD Level text display
 
 	Game::Instance()->setLives(3);				// Set the number of lives for the player
+	Game::Instance()->resetAsteroidKills();		// Reset the number of asteroids destroyed
+	Game::Instance()->resetEnemyShipKIlls();	// Reset the number of enemy ships destroyed
 	
 	// ParallaxNode
 	this->addChild(_backgroundNode, -1);		// Add the parallax background

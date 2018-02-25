@@ -18,6 +18,12 @@ bool Game::init() {
 	level = 1;				// Initialise the level value
 	_gameOver = false;
 	currentTime = 0;
+
+	// Reset totals
+	asteroidKills = 0;		// Number of asteroids destroyed
+	enemyShipKills = 0;		// Number of enemy ships destroyed
+	asteroidCount = 0;		// Number of asteroids spawned
+	enemyShipCount = 0;		// Number of enemy ships spawnedawned
 	
 	return true;
 }

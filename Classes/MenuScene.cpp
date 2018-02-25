@@ -17,7 +17,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <SDL.h>										// For gamepad support on desktop
 #endif
-#include "HealthBar.h"
+//#include "HealthBar.h"
 
 MenuScene* MenuScene::layer;
 
