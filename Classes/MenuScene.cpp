@@ -15,7 +15,7 @@
 #include "EnterName.h"
 #include "Game.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#include <SDL.h>										// For gamepad support on desktop
+//#include <SDL.h>										// For gamepad support on desktop
 #endif
 //#include "HealthBar.h"
 

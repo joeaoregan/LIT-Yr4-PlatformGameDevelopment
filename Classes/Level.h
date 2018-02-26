@@ -71,6 +71,11 @@ public:
 	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
 	void spawnLasers(int amount);											// 20180221
+	//void spawnEnemyLaser(float x, float y);								// 20180221
+	void spawnEnemyLaser(cocos2d::Point pos);								// 20180221
+
+	// Fire enemy lasers
+	void enemyFireLaser(float curTimeMillis);
 	
 	// Get / Set methods
 	Size getWinSize() { return winSize; }									// Get the window size
@@ -106,13 +111,15 @@ private:
 
 	// Weapons
 	int _nextShipLaser = 0;													// Ship laser list index
+	int nextEnemyLaser = 0;													// Enemy laser list index
 
 	// Object lists
 	Vector<Sprite*>* _asteroids;											// List of asteroids
 	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
 	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
 	//Vector <Sprite*> * EnemyShips;										// List of enemy ships
-	Vector<Sprite*> *_shipLasers;											// List of lasers
+	Vector<Sprite*> *_shipLasers;											// List of player lasers
+	Vector<Sprite*> *enemyLasers;											// List of Enemylasers
 	Sprite* livesList[MAX_LIVES];											// List of lives
 
 protected:

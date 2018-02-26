@@ -13,7 +13,6 @@
 #ifndef __HEALTH_BAR__
 #define __HEALTH_BAR__
 
-
 class HealthBar : public cocos2d::DrawNode {
 public:
 	static HealthBar* create(int x, int y, int w, int h, float pc, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor) {
@@ -21,30 +20,32 @@ public:
 	//cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor) {
 		HealthBar* hbar = new HealthBar();
 		hbar->autorelease();
+		hbar->width = w;
+		hbar->height = h;
 		
 		if (true) {
 			hbar->percent = (pc > 1.0f) ? 1.0f : (pc < 0.0f) ? 0.0f : pc;		// If greater than 1 set to 1, if minus set to 0
 
 			cocos2d::DrawNode* rectNode = cocos2d::DrawNode::create();
 			cocos2d::Color4F white(1, 1, 1, 1);
-			cocos2d::Vec2 foregroundRect[4];
+			//cocos2d::Vec2 foregroundRect[4];
 			cocos2d::Vec2 backgroundRect[4];
 
-			backgroundRect[0] = cocos2d::Vec2(-w / 2, -h / 2);
-			backgroundRect[1] = cocos2d::Vec2(w / 2, -h / 2);
-			backgroundRect[2] = cocos2d::Vec2(w / 2, h / 2);
-			backgroundRect[3] = cocos2d::Vec2(-w / 2, h / 2);
+			backgroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
+			backgroundRect[1] = cocos2d::Vec2(hbar->width / 2, -hbar->height / 2);
+			backgroundRect[2] = cocos2d::Vec2(hbar->width / 2, hbar->height / 2);
+			backgroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
 
-			foregroundRect[0] = cocos2d::Vec2(-w / 2, -h / 2);
+			hbar->foregroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
 			//foregroundRect[1] = cocos2d::Vec2(w / 2 * percent, -h / 2);
 			//foregroundRect[2] = cocos2d::Vec2(w / 2 * percent, h / 2);
-			foregroundRect[1] = cocos2d::Vec2((-w / 2) + (w  * hbar->percent), -h / 2);
-			foregroundRect[2] = cocos2d::Vec2((-w / 2) + (w  * hbar->percent), h / 2);
-			foregroundRect[3] = cocos2d::Vec2(-w / 2, h / 2);
+			hbar->foregroundRect[1] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), -hbar->height / 2);
+			hbar->foregroundRect[2] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), hbar->height / 2);
+			hbar->foregroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
 
 
 			rectNode->drawPolygon(backgroundRect, 4, BGColor, 1, white);
-			rectNode->drawPolygon(foregroundRect, 4, FGColor, 1, white);
+			rectNode->drawPolygon(hbar->foregroundRect, 4, FGColor, 1, white);
 			rectNode->setPosition(cocos2d::Point(x, y));
 			hbar->addChild(rectNode);
 		}
@@ -52,10 +53,23 @@ public:
 		return hbar;
 	}
 
+	//HealthBar* getDrawNode() { return hbar;  };
+
 	void setPercent(float set) { percent = set; }
+
+	void updateBar(float percent) {
+		foregroundRect[1] = cocos2d::Vec2((width / 2) + (width  * percent), -width / 2);
+		foregroundRect[2] = cocos2d::Vec2((width / 2) + (width  * percent), width / 2);
+	}
 
 private:
 	float percent;
+
+	float width, height;
+
+	cocos2d::Vec2 foregroundRect[4];
+
+	//static HealthBar* hbar;
 };
 
 

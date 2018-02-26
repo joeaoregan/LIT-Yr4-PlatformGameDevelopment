@@ -5,8 +5,8 @@
 */
 #include "AppDelegate.h"
 #include "SplashScene.h"
-//#include "AudioMenu.h"
-//#include "MenuScene.h"
+#include "AudioMenu.h"
+#include "MenuScene.h"
 //#include "Level.h"
 //#include "Settings.h"
 

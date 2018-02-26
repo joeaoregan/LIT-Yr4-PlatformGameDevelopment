@@ -5,13 +5,14 @@
 #include "HealthBar.h"
 
 #define MAX_SHIP_LIVES 3.0f
+#define ENEMY_FIRE_RATE 500
 
 class EnemyShip : public cocos2d::Sprite {
 public:
 
 	static EnemyShip* create(cocos2d::Size res);
 		
-	void update();
+	void update(float dt);
 
 	unsigned int getLives() { return lives; }
 	void setLives(unsigned int set) { lives = set; }
@@ -24,12 +25,23 @@ public:
 
 	//HealthBar* createHealthBar(cocos2d::Size res);
 
+
+	//void myUpdate();
+
+	unsigned int getNextFire() { return nextFire; }
+	void setNextFire(unsigned int set) { nextFire = set; }
+
 private:
 
 	cocos2d::Sprite* enemyShip;
 	unsigned int lives = 3;
 
 	HealthBar* bar;
+
+	unsigned int fireRate;
+	unsigned int nextFire;
+
+	cocos2d::DrawNode* myDrawNode;
 };
 
 

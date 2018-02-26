@@ -161,6 +161,15 @@ bool Level::init() {
 		_shipLasers->pushBack(shipLaser);
 	}
 
+	// Enemy Lasers
+	enemyLasers = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
+	for (int i = 0; i < KNUMLASERS; ++i) {
+		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
+		enemyLaser->setVisible(false);
+		_batchNode->addChild(enemyLaser);
+		enemyLasers->pushBack(enemyLaser);
+	}
+
 	// Touch screen / Mouse press
 	touchListener = EventListenerTouchAllAtOnce::create();													// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
@@ -223,6 +232,7 @@ float Level::getTimeTick() {
 }
 
 void Level::update(float dt) {
+
 	curTimeMillis = getTimeTick();																			// Current game time
 
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen (Needs to update here so lasers fire etc.)
@@ -238,10 +248,48 @@ void Level::update(float dt) {
 	checkCollisions();																						// Check have game objects collided with each other
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 	
+	enemyFireLaser(curTimeMillis);
+
 	player->update();																						// Update player sprite position
+
+	for (EnemyShip* enemyShip : *EnemyShips) {													// 
+		if (!(enemyShip->isVisible())) continue;
+		enemyShip->update(dt);
+	}
+
+
 
 	if (Game::Instance()->musicPlayerVisible()) mplayer->update();											// Update the music player
 	newHUD->update(curTimeMillis);																			// Update the HUD
+}
+
+void Level::enemyFireLaser(float curTimeMillis) {
+	for (EnemyShip* enemyShip : *EnemyShips) {													// 
+		if (!(enemyShip->isVisible())) continue;							// If the enemy ship is visible do this:
+		
+		//if (enemyShip->getPosition().x == visibleSize.width * 0.75f)
+		if (curTimeMillis > enemyShip->getNextFire() && enemyShip->isVisible()) {
+			spawnEnemyLaser(enemyShip->getPosition());
+			enemyShip->setNextFire(curTimeMillis + ENEMY_FIRE_RATE);
+		}
+
+		/*
+		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
+			if (!(shipLaser->isVisible())) continue;
+
+			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
+				Audio::Instance()->explodeFX();															// Play explosion effect
+				shipLaser->setVisible(false);															// Hide the player laser
+				Game::Instance()->updateScore(20);														// Award 20 points for destroying an enemy ship
+				if (enemyShip->isVisible()) Game::Instance()->incrementEnemyShipKills();				// Increment the total number of enemy ships destroyed
+																										//enemyShip->setVisible(false);															// Hide the asteroid
+				enemyShip->setLives(enemyShip->getLives() - 1);		// DECREMENT LIVES
+																	//enemyShip->updateBar( (enemyShip->getLives() * 100 )/ 3.0f);			
+				if (enemyShip->getLives() < 1) enemyShip->setVisible(false);
+			}
+		}
+		*/
+	}
 }
 
 void Level::spawnAsteroids(float curTimeMillis) {	
@@ -302,7 +350,6 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		EnemyShip *enemyShip = EnemyShips->at(nextEnemyShip);
 		nextEnemyShip++;																					// Increment the enemy ship on the list
 
-
 		Game::Instance()->incrementEnemyShipCount();
 
 		//if (nextEnemyShip >= EnemyShipList->size()) nextEnemyShip = 0;										// Loop back around to start of enemy ship list
@@ -324,6 +371,24 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 				NULL)	// TERMINATE WITH NULL
 		);
 	}
+}
+
+
+void Level::spawnEnemyLaser(cocos2d::Point pos) {
+	cocos2d::Sprite* enemyLaser = enemyLasers->at(nextEnemyLaser++);
+	if (nextEnemyLaser >= enemyLasers->size())
+		nextEnemyLaser = 0;
+
+	if (enemyLaser->isVisible()) return;
+
+	enemyLaser->setPosition(pos.x, pos.y);
+	enemyLaser->setVisible(true);
+	enemyLaser->stopAllActions();
+	
+	// Move the ship to the players coordinate
+	//auto action = MoveTo::create(3, Point(player->getSprite()->getPositionX(), player->getSprite()->getPositionY()));
+	auto action = MoveTo::create(0.5f, Point(0 - enemyLaser->getContentSize().width, pos.y));			// set to off screen the width of the laser
+	enemyLaser->runAction(action);
 }
 
 // 20180221 Up to 4 different types of laser, with different spawn points and rotations
@@ -395,6 +460,14 @@ void Level::setInvisible(Node * node) {
 }
 
 void Level::checkCollisions() {
+	// Enemy laser move off screen
+	for (Sprite* enemyLaser : *enemyLasers) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x == -enemyLaser->getContentSize().width)				// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);													// Hide the laser
+	}
+
 	if (powerUpLife->isVisible()) {
 		if (player->getSprite()->getBoundingBox().intersectsRect(powerUpLife->getBoundingBox())) {		// If the ship collides with an asteroid
 			player->getSprite()->runAction(Blink::create(1.0F, 9));										// Flash the Player ship

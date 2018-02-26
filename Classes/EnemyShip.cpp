@@ -1,6 +1,14 @@
 #include "EnemyShip.h"
 #include "Game.h"
+/*
+void EnemyShip::myUpdate() {
 
+	myDrawNode->clear();
+	myDrawNode->setPosition(cocos2d::Vec2(myDrawNode->getPosition().x + 5, myDrawNode->getPosition().y));
+	myDrawNode->drawCircle(myDrawNode->getPosition(), 100, 0.0f, 24, true, cocos2d::Color4F(1.0f, 1.0f, 1.0f, 1.0f));
+
+}
+*/
 EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	EnemyShip* eship = new EnemyShip();
 	
@@ -36,8 +44,8 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 		eship->bar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), eship->getPosition().y + eship->getContentSize().height,		// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,						// Dimensions
-			//float(eship->getLives() / MAX_SHIP_LIVES),			// percentage
-			float(2 / MAX_SHIP_LIVES),			// percentage
+			float(eship->getLives() / MAX_SHIP_LIVES),			// percentage
+			//float(2 / MAX_SHIP_LIVES),			// percentage
 			redBR, transBR);
 		eship->addChild(eship->bar);
 		
@@ -67,8 +75,15 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 	return 
 }
 */
-void EnemyShip::update() {
+void EnemyShip::update(float dt) {
+	//bar->clear();
+	//bar->redraw();
+	//bar->draw();
+	//bar->update(dt);
 
+
+	//float test = MAX_SHIP_LIVES;
+	//bar->updateBar(lives / test);
 }
 
 	/*
