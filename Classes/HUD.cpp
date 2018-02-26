@@ -97,6 +97,7 @@ void HUD::update(float curTimeMillis) {
 	updateTimer(curTimeMillis);																// Update the timer
 
 	if (s_pInstance->closeItem->isSelected()) {												// If the close menu button is selected
+		Audio::Instance()->selectMenuOption();
 		cocos2d::Director::getInstance()->end();											// Close the director
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -105,6 +106,7 @@ void HUD::update(float curTimeMillis) {
 	}
 
 	if (s_pInstance->menuItem->isSelected()) {
+		Audio::Instance()->selectMenuOption();
 		Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
 	}
 }

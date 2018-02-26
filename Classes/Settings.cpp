@@ -94,7 +94,8 @@ std::string Settings::gameDifficulty() {
 	else if (Game::Instance()->getDifficulty() == MEDIUM)
 		return "Difficulty Level: Medium";
 
-	return"Difficulty Level: Hard";																						// Show the difficulty level
+	return"Difficulty Level: Hard";															
+// Show the difficulty level
 }
 
 /*
@@ -112,6 +113,7 @@ std::string Settings::playerLabelText() {
 	Set the visibility of the music label, and adjust the label text
 */
 void Settings::showHideMusicControls(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	Game::Instance()->hideMusicPlayer(!Game::Instance()->musicPlayerVisible());
 	musicLbl->setString(playerLabelText());
 }
@@ -119,6 +121,8 @@ void Settings::showHideMusicControls(cocos2d::Ref *sender) {
 	Adjust the game difficulty, and set the label text to match
 */
 void Settings::changeDifficulty(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
+
 	if (Game::Instance()->getDifficulty() == EASY)
 		Game::Instance()->setDifficulty(MEDIUM);
 	else if (Game::Instance()->getDifficulty() == MEDIUM)
@@ -132,6 +136,8 @@ void Settings::changeDifficulty(cocos2d::Ref *sender) {
 	Change scene to the Audio menu scene
 */
 void Settings::goToAudioMenu(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
+
 	cocos2d::Scene* scene = AudioMenu::createScene();																	// Return to the Audio menu
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFade::create(TRANSITION_TIME, scene));			// Switch scenes with animated transition
 }

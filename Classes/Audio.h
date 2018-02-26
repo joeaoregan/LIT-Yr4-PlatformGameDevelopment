@@ -39,6 +39,7 @@ public:
 	void musicVolDecrease();			// Decrease the music volume
 	void sfxVolIncrease();				// Increase the FX volume
 	void sfxVolDecrease();				// Decrease the FX volume
+	void selectMenuOption();			// Play button sound
 
 	std::string getTrackName();			// Get the name of the track
 	bool isPaused();					// If music paused, show play button on music player

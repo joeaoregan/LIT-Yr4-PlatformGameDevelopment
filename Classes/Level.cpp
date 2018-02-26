@@ -503,14 +503,6 @@ void Level::endScene(EndReason endReason) {
 
 
 
-
-
-
-
-
-
-
-
 	/*
 	if (Game::Instance()->getAsteroidCount() > 0) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
@@ -531,15 +523,6 @@ void Level::endScene(EndReason endReason) {
 		this->addChild(healthBar);
 	}
 	*/
-
-
-
-
-
-
-
-
-
 
 
 	// 3. Total Enemy Ships Destroyed
@@ -593,22 +576,28 @@ void Level::endScene(EndReason endReason) {
 
 // Callbacks
 void Level::restartTapped(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 	Director::getInstance()->replaceScene(TransitionZoomFlipX::create(0.5, Level1::createScene()));		// Restart the current scene	
 	this->scheduleUpdate();																				// reschedule
 }
 void Level::startLevel2(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));		// Change scene, progressing to Level 2
 }
 void Level::startLevel3(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));		// Load level 3
 }
 void Level::startLevel4(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level4::createScene()));		// Load level 4
 }
 void Level::returnToMenu(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 	Director::getInstance()->replaceScene(TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
 }
 void Level::menuCloseCallback(Ref* pSender) {
+	Audio::Instance()->selectMenuOption();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
     return;

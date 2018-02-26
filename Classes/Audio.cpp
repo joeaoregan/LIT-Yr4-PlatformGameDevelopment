@@ -19,6 +19,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 // Windows / Android
 #define JOE_RIFF1 "joe_riff1.wav"
 #define JOE_RIFF2 "joe_riff2.wav"
+#define BUTTON_FX "buttonClick.wav"
 #define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
 #define LASER_SHIP "laser_ship.wav"
@@ -46,9 +47,12 @@ void Audio::init() {
 	// Preload the sound effects
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
 	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
+	SimpleAudioEngine::getInstance()->preloadEffect(BUTTON_FX);
 //#endif
 }
-
+void Audio::selectMenuOption() {
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
+}
 bool Audio::isPaused() {
 	return SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
 }
@@ -73,6 +77,7 @@ void Audio::skipTrackForwards() {
 	//if (currentTrack < NUM_TRACKS - 1)
 	//	currentTrack++;
 	//else currentTrack = 0;
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	(currentTrack < NUM_TRACKS - 1) ? currentTrack++ : currentTrack = 0;
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
@@ -80,24 +85,29 @@ void Audio::skipTrackForwards() {
 void Audio::skipTrackBackwards() {
 	//if (currentTrack > 0) currentTrack--;
 	//else currentTrack = NUM_TRACKS - 1;
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	(currentTrack == 0) ? currentTrack = NUM_TRACKS - 1 : currentTrack--;
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
 }
 
 void Audio::musicVolIncrease() {
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol + 0.1f);
 }
 void Audio::musicVolDecrease() {
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol - 0.1f);
 }
 void Audio::sfxVolIncrease() {
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol + 0.1f);
 }
 void Audio::sfxVolDecrease() {
+	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol - 0.1f);
 }

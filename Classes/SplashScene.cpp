@@ -35,7 +35,7 @@ bool SplashScene::init() {
 	backgroundSprite->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);											// Scale down the image size for lower resolution
     this->addChild( backgroundSprite );																				// Add background sprite as a child of the layer
 
-	backgroundSprite->runAction(ScaleTo::create(0.5F, 1.0f));														// Not working Android
+	backgroundSprite->runAction(ScaleTo::create(0.5F, (visibleSize.height == 720) ? 1.0f : 1.5f));					// Not working Android
     return true;
 }
 

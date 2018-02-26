@@ -47,32 +47,24 @@ bool MainMenu::init() {
 
 	// Button 1. Start Game Button
 	playItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));				// Set image for menu option
-	//playItem->setScale(scale * 0.8f);
-	//playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.6f + origin.y));							// Set image position
 	setYPosAndScale(playItem, 0.6f);
 
 	// Button 2. High Scores Button
 	scoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));	// Set image for menu option
-	//scoreItem->setScale(scale * 0.8f);
-	//scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.5f + origin.y));							// Set image position
 	setYPosAndScale(scoreItem, 0.5f);
 
 	// Button 3. Game Options
 	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
-	//optionsItem->setScale(scale * 0.8f);
-	//optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));						// Set image position
 	setYPosAndScale(optionsItem, 0.4f);
 	
 	// Button 4. Exit Button
 	exitItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MenuScene::menuCloseCallback, this));		// Set image for menu option
-	//exitItem->setScale(scale * 0.8f);
-	//exitItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.3f + origin.y));							// Set image position
 	setYPosAndScale(exitItem, 0.3f);
 
 	// Show current high score
 	//int highScore = def->getIntegerForKey("HIGHSCORE", 0);
 	highScore = def->getIntegerForKey("Score1", 0);																					// Load the high score
-	std::string playerName = def->getStringForKey("Name1");
+	std::string playerName = def->getStringForKey("Name1");																			// and the name of the player who got the score
 	
 	tempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);										// String to display the top score & player	
 
@@ -91,8 +83,8 @@ bool MainMenu::init() {
 
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
-		mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));								// Create the music control buttons
-		this->addChild(mplayer);																										// Add the music player to the layer
+		mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));							// Create the music control buttons
+		this->addChild(mplayer);																									// Add the music player to the layer
 	}
 	this->scheduleUpdate();																											// Start updating the scene
 
@@ -104,13 +96,14 @@ bool MainMenu::init() {
 */
 void MainMenu::update(float dt) {
 	if (Game::Instance()->musicPlayerVisible())
-		mplayer->update();																												// Update the music player
+		mplayer->update();																											// Update the music player
 }
 
 /* 
 	Callback: Start the Game Scene
 */
 void MainMenu::StartGame(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = Level1::createScene();																					// Create the game scene, JOR replaced auto specifier
 	Director::getInstance()->replaceScene(TransitionSlideInB::create(TRANSITION_TIME, scene));										// Create scene and transition
 }
@@ -119,6 +112,7 @@ void MainMenu::StartGame(cocos2d::Ref *sender) {
 	Callback: Start the High Scores Scene
 */
 void MainMenu::GoToScores(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = HighScores::createScene();																				// Create the high scores scene
 	Director::getInstance()->replaceScene(TransitionFadeUp::create(TRANSITION_TIME, scene));										// Load the high scores screen with transition
 }
@@ -127,6 +121,7 @@ void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	Callback: Start the Settings Scene
 */
 void MainMenu::GoToSettings(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = Settings::createScene();																				// Create the enter name scene
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));											// Load the enter name screen with transition
 }
@@ -135,6 +130,7 @@ void MainMenu::GoToSettings(cocos2d::Ref *sender) {
 	Callback: Start the Enter Name Scene
 */
 void MainMenu::GoToEnterName(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = EnterName::createScene();																				// Create the enter name scene
 	Director::getInstance()->replaceScene(TransitionFadeDown::create(TRANSITION_TIME, scene));										// Load the enter name screen with transition
 }

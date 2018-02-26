@@ -50,10 +50,8 @@ bool MenuScene::init() {
 	(visibleSize.height == 1080) ? scale = 1.0f : scale = 0.67f;
 	
 	// 1. Background image
-	//backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Choose Background image depending on resolution
+	//backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Choose Background image depending on resolution ONLY ONE IMAGE USED NOW
 	backgroundSprite = cocos2d::Sprite::create("BG1080p.png");																		// Use one high res background image for efficiency
-	//backgroundSprite->setScale(scale);
-	//backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));			// Set backgound position
 	setYPosAndScale(backgroundSprite, 0.5f);
 	this->addChild(backgroundSprite);																								// Add to layer
 	
@@ -66,8 +64,6 @@ bool MenuScene::init() {
 		
 	// 3. Scene Title
 	titleSprite = cocos2d::Sprite::create("MainMenu.png");																			// Scene Title image
-	//titleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.75f + origin.y));			// Set position on screen
-	//titleSprite->setScale(scale);
 	setYPosAndScale(titleSprite, 0.75f);
 	this->addChild(titleSprite);																									// Add to layer							
 
@@ -84,8 +80,6 @@ bool MenuScene::init() {
 
 	// 5. Back Button
 	btnBackImg = cocos2d::MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(MenuScene::returnToMenu, this));	// Set image for menu option
-	//btnBackImg->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));				// Set image position
-	//btnBackImg->setScale(scale);
 	setYPosAndScale(btnBackImg, 0.05f);																								// Set the scale
 
 	// 6. Exit button (autorelease object)
@@ -117,12 +111,14 @@ void MenuScene::setYPosAndScale(cocos2d::MenuItemImage* sprite, float y) {
 
 // The player can enter and store their name from this scene
 void MenuScene::GoToEnterName(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = EnterName::createScene();																				// Create the enter name scene
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFadeDown::create(TRANSITION_TIME, scene));					// Load the enter name screen with transition
 }
 
 // Change to the main menu scene
 void MenuScene::returnToMenu(cocos2d::Ref *sender) {
+	Audio::Instance()->selectMenuOption();
 	cocos2d::Scene* scene = MainMenu::createScene();																				// Return to the main menu
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFade::create(TRANSITION_TIME, scene));						// Switch scenes with animated transition
 }
