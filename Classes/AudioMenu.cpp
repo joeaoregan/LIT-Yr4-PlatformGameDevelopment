@@ -25,7 +25,7 @@ bool AudioMenu::init() {
 	titleSprite->setTexture("AudioMenu.png");																									// Change the title image text
 	
 	// Instructions (MarkerFelt.ttf Super Mario Bros..ttf)
-	//instructionLbl = cocos2d::LabelTTF::create("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);				// Label to display current high score	
+	//instructionLbl = cocos2d::LabelTTF::create("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);			// Label to display current high score	
 	instructionLbl = cocos2d::Label::createWithTTF("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);
 	instructionLbl->setPosition(cocos2d::Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.65f + origin.y));						// Set its position on screen
 	instructionLbl->setColor(cocos2d::Color3B::WHITE);																							// Set the text colour

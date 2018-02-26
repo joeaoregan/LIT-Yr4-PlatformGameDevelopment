@@ -91,13 +91,13 @@ void HUD::update(float curTimeMillis) {
 		livesList[Game::Instance()->getLives()]->setVisible(false);							// Set the lives invisible (2,1,0)
 	}
 	
-	scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));				// Update the displayed score
-	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
+	scoreLabel->setString("Score: " + to_string(Game::Instance()->getScore()));				// Update the displayed score text
+	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));				// Update the countdown timer text
 
-	updateTimer(curTimeMillis);
+	updateTimer(curTimeMillis);																// Update the timer
 
-	if (s_pInstance->closeItem->isSelected()) {
-		cocos2d::Director::getInstance()->end();	// Close the director
+	if (s_pInstance->closeItem->isSelected()) {												// If the close menu button is selected
+		cocos2d::Director::getInstance()->end();											// Close the director
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		exit(0);

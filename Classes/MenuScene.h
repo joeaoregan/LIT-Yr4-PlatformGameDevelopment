@@ -6,6 +6,11 @@
 	23/02/2018
 
 	Menu base class
+	
+	Code for initialising the background image has been implemented in MenuScene
+	This is inherited along with labels by menu sub-classes for the game and scene titles,
+	a back button, and the exit button. The Current Player menu text object
+	directs the player to the Enter Name scene.
 */
 
 #ifndef __MENU_H__

@@ -22,6 +22,8 @@
 #define RES_720P 720
 #define RES_1080P 1080
 
+enum difficulty {EASY, MEDIUM, HARD};
+
 class Game : public Layer {
 public:	
 	// Game singleton
@@ -50,6 +52,8 @@ public:
 	unsigned int getEnemyShipKills() { return enemyShipKills; }	// The total number of enemy ships destroyed
 	unsigned int getAsteroidCount() { return asteroidCount; }	// The total number of asteroids spawned in the game
 	unsigned int getEnemyShipCount() { return enemyShipCount; }	// The total number of enemy ships spawned
+	bool musicPlayerVisible() { return mPlayerVisible; }			// Is the music player to be hidden or not
+	unsigned int getDifficulty() { return difficulty; }
 
 	// Set
 	void setLevel(unsigned int set) { level = set; }			// Set the level number
@@ -70,18 +74,25 @@ public:
 	void resetAsteroidCount() { asteroidCount = 0; }			// Reset the number of asteroids spawned
 	void incrementEnemyShipCount() { enemyShipCount++; }		// Increase the number of enemy ships spawned by 1
 	void resetEnemyShipCount() { enemyShipCount = 0; }			// Reset the number of enemy ships spawned
+	void hideMusicPlayer(bool set) { mPlayerVisible = set;  }	// Show or hide the music player
+	void setDifficulty(unsigned int set) { difficulty = set; }
 
 private:
-	unsigned int _lives = 0;									// Player lives
-
 	std::string playerName;										// Current player name
+
+	// HUD
+	unsigned int _lives = 0;									// Player lives
 	unsigned int score;											// Current score
 	unsigned int level;											// Current level
 
 	static Game* s_pInstance;									// Single instance of Game used as singleton, so only one instance exists thoughout the game
 
+	// Time
 	unsigned int time;											// Countdown timer value
 	float currentTime;											// 20180221 Change to float to fix Android timer issue
+
+	// Music
+	bool mPlayerVisible = true;									// Show/Hide the music player in main menu and level scenes
 
 	// Total kills
 	unsigned int asteroidKills = 0;								// Number of asteroids destroyed
@@ -89,7 +100,9 @@ private:
 	unsigned int asteroidCount = 0;								// Number of asteroids spawned
 	unsigned int enemyShipCount = 0;							// Number of enemy ships spawned
 	
+	// Settings
 	bool _gameOver = false;										// Has the game been won or lost
+	unsigned int difficulty = MEDIUM;							// The game difficulty level, default value of MEDIUM
 };
 
 #endif // __GAME_SCENE_H__

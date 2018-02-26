@@ -2,9 +2,13 @@
 	AudioMenu.h
 
 	Joe O'Regan
+	K00203642
 	21/02/2018
 
 	Audio settings menu
+
+	This class inherits from MenuScene (Menu is already used by Cocos2d-x so could not be used as the name)
+	MenuScene is a subclass of Layer.
 */
 
 #ifndef __AUDIO_MENU_H__
@@ -34,8 +38,6 @@ private:
 	cocos2d::Sprite* musicLbl;						// Music volume setting label
 	cocos2d::Sprite* sfxLbl;						// SFX volume setting label
 	cocos2d::Sprite* trackLbl;						// Track select setting label
-	//cocos2d::LabelTTF* instructionLbl;				// Label to display current high score
-	//cocos2d::LabelTTF* currentTrackLbl;				// Label to display current background music track
 	cocos2d::Label* instructionLbl;					// Label to display current high score
 	cocos2d::Label* currentTrackLbl;				// Label to display current background music track
 
@@ -49,8 +51,7 @@ private:
 	cocos2d::MenuItemImage* btnTrackDownImg;		// Select the previous track Button menu option
 
 	// Menu
-	cocos2d::Menu* menu;
-		
+	cocos2d::Menu* menu;							// Add the menu options to a menu list		
 };
 
 #endif // __AUDIO_MENU_H__

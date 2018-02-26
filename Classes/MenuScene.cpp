@@ -108,6 +108,7 @@ bool MenuScene::init() {
 	Game::Instance()->setPlayerName(currentPlayerName);																				// Set the players name to a default value
 	changeNameLbl = cocos2d::Label::createWithBMFont("Arial.fnt", "Current Player:\n" + currentPlayerName);							// Display current players name
 	changeNameLbl->setScale(scale);
+
 	currentPlayerLbl = cocos2d::MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MenuScene::GoToEnterName, this));				// Go to enter name scene
 	currentPlayerLbl->setPosition(cocos2d::Point((visibleSize.width + origin.x) * 0.1f, visibleSize.height * 0.95f + origin.y));
 	currentPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));

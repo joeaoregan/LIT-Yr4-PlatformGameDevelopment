@@ -26,20 +26,20 @@
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
-Level* Level::layerInstance;																					// Singleton for Level
+Level* Level::layerInstance;																				// Singleton for Level
 
 Scene* Level::createScene() {
-	cocos2d::Scene* scene = Scene::create();																	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	layerInstance = Level::create();																			// 'layer' is an autorelease object, JOR replaced auto specifier   
-    scene->addChild(layerInstance);																				// Add layer as a child to scene	    
-    return scene;																								// Return the scene
+	cocos2d::Scene* scene = Scene::create();																// 'scene' is an autorelease object, JOR replaced auto specifier   
+	layerInstance = Level::create();																		// 'layer' is an autorelease object, JOR replaced auto specifier   
+    scene->addChild(layerInstance);																			// Add layer as a child to scene	    
+    return scene;																							// Return the scene
 }
 
 // on "init" you need to initialize your instance
 bool Level::init() {
-    if ( !Layer::init() ) { return false; }																		// super init first
+    if ( !Layer::init() ) { return false; }																	// super init first
 
-	Game::Instance()->setGameOver(false);																		// Needed for starting new level, or restarting game
+	Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
 
 	// Screen size and position
     visibleSize = Director::getInstance()->getVisibleSize();
@@ -50,18 +50,18 @@ bool Level::init() {
 /*
 	// Add exit button in bottom right corner. it's an autorelease object
 	closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-		CC_CALLBACK_1(Level::menuCloseCallback, this));															// JOR replaced auto specifier	
+		CC_CALLBACK_1(Level::menuCloseCallback, this));														// JOR replaced auto specifier	
 	closeItem->setScale(scaleUp);
 	closeItem->setPosition(cocos2d::Point((origin.x + visibleSize.width - closeItem->getContentSize().width / 2) * 0.99f ,
 		origin.y + closeItem->getContentSize().height / 1.97f));
 
 	// create menu, it's an autorelease object
-	menuClose = cocos2d::Menu::create(closeItem, NULL);															// JOR replaced auto specifier
+	menuClose = cocos2d::Menu::create(closeItem, NULL);														// JOR replaced auto specifier
 	menuClose->setPosition(cocos2d::Point::ZERO);
 	this->addChild(menuClose, 1);
 */
 	//  GALAXY
-	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");													// Player sprite is added here
+	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");												// Player sprite is added here
 	this->addChild(_batchNode);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
@@ -73,18 +73,18 @@ bool Level::init() {
 	// 1) Create the ParallaxNode
 	_backgroundNode = ParallaxNodeExtras::create();
 	//this->addChild(_backgroundNode, -1);
-	//_backgroundNode->init();																					// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
+	//_backgroundNode->init();																				// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
 
 	Level::addChild(ParticleSystemQuad::create("Stars1.plist"));
 	Level::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	Level::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
 	// Asteroids
-	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);															// List of asteroids
+	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);														// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
-		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName("asteroid.png");							// Asteroid sprite, JOR replaced auto specifier
+		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName("asteroid.png");						// Asteroid sprite, JOR replaced auto specifier
 		asteroid->setVisible(false);
-		asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);											// Increase scale of Asteroid for Android (My phone anyway)
+		asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);										// Increase scale of Asteroid for Android (My phone anyway)
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
 	}
@@ -107,17 +107,17 @@ bool Level::init() {
 		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
 		//enemyShip1->autorelease();
 
-		//Sprite* blah = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		//Sprite* blah = Sprite::create("EnemyShip.png");													// Asteroid sprite, JOR replaced auto specifier
 
 		//enemyShip1->setSprite(&(*blah));
 		//enemyShip1->setVisible(false);
-		//cocos2d::Sprite* enemySprite = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		//cocos2d::Sprite* enemySprite = Sprite::create("EnemyShip.png");									// Asteroid sprite, JOR replaced auto specifier
 		//enemyShip1->addChild(enemySprite);
-		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
+		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);									// Scale down the size for PC
 		/*
 		cocos2d::DrawNode* healthBar = createStatusBar(
 			enemyShip1->getPosition().x + enemyShip1->getContentSize().width, enemyShip1->getPosition().y + enemyShip1->getContentSize().height,		// Position
-			(visibleSize.height == 720) ? 80 : 120, (visibleSize.height == 720) ? 10 : 15,						// Dimensions
+			(visibleSize.height == 720) ? 80 : 120, (visibleSize.height == 720) ? 10 : 15,					// Dimensions
 			float (enemyShip1->getLives() / MAX_SHIP_LIVES),			// percentage
 			red, trans);		
 		// Colours
@@ -150,47 +150,53 @@ bool Level::init() {
 	}
 	*/
 	// Ship Lasers:
-	_shipLasers = new Vector<Sprite*>(KNUMLASERS);																// List of lasers
+	_shipLasers = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
 	for (int i = 0; i < KNUMLASERS; ++i) {
-		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");					// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
 		shipLaser->setVisible(false);
 		_batchNode->addChild(shipLaser);
 		_shipLasers->pushBack(shipLaser);
 	}
 
 	// Touch screen / Mouse press
-	touchListener = EventListenerTouchAllAtOnce::create();														// JOR replaced auto specifier
+	touchListener = EventListenerTouchAllAtOnce::create();													// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	
 	// Time
-	curTime = getTimeTick();																					// Current game time // Time to finish game
-	_gameOverTime = curTime + LEVEL_TIME;																		// Time to finish game
+	curTime = getTimeTick();																				// Current game time // Time to finish game
+	_gameOverTime = curTime + LEVEL_TIME;																	// Time to finish game
 
-	Game::Instance()->init();																					// Inite score and level	
-	Game::Instance()->setTimer(LEVEL_TIME / 1000);																// Set the countdown timer time
-	Input::Instance()->init(this, this->_eventDispatcher);														// Ship Movement
+	Game::Instance()->init();																				// Inite score and level	
+	Game::Instance()->setTimer(LEVEL_TIME / 1000);															// Set the countdown timer time
+	Input::Instance()->init(this, this->_eventDispatcher);													// Ship Movement
 
 	// D-pad (Display on mobile device)
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {					// If the target platform is a mobile device
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {				// If the target platform is a mobile device
 	/*
 		if (visibleSize.height == 1080)
 			controller = DPad::create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
 		else
 			controller = DPad::create("DPad/Base150.png", "DPad/Arrow.png", "DPad/ArrowPressed.png", Point(150, 150));
 		*/
-		controller = DPad::create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", (visibleSize.height == 1080) ? Point(375, 375) : Point(250, 250));
+		controller = DPad::create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", 
+			(visibleSize.height == 1080) ? Point(375, 375) : Point(250, 250));
 		controller->setScale((visibleSize.height == 1080) ? 1.0f : 0.67f);
 
 		this->addChild(controller);
 	}
 
-	newHUD = HUD::create(origin, visibleSize);																	// Create the HUD at the origin point (0,0), and passing in the screen resolution
+	newHUD = HUD::create(origin, visibleSize);																// Create the HUD at the origin point (0,0), and passing in the screen resolution
 	this->addChild(newHUD);
-	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33 )/ 2, visibleSize.height * 0.1f));			// Position: scale in MusicPlayer class throws off measurement (undo first)
-	//mplayer->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
-	this->addChild(mplayer);
-	
+
+	// Music Player
+
+	if (Game::Instance()->musicPlayerVisible()) {
+		mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.1f));	// Position: scale in MusicPlayer class throws off measurement (undo first)
+		//mplayer->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
+		this->addChild(mplayer);
+	}
+
     return true;
 }
 
@@ -218,7 +224,8 @@ void Level::update(float dt) {
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 	
 	player->update();																						// Update player sprite position
-	mplayer->update();																						// Update the music player
+
+	if (Game::Instance()->musicPlayerVisible()) mplayer->update();											// Update the music player
 	newHUD->update(curTimeMillis);																			// Update the HUD
 }
 

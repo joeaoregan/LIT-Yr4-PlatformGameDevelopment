@@ -2,76 +2,59 @@
 	EnterName.h
 
 	Joe O'Regan
+	K00203642
 	21/02/2018
 
-	Change game Settings, musics and effects volumes etc
+	Change game Settings
+
+	Previously implemented as a separate Layer sub-class
+	The Settings class is now a sub-class of MenuScene
+
+	MenuScene Sub-Class:
+	Code for initialising the background image has been implemented in MenuScene
+	This is inherited along with labels by menu sub-classes for the game and scene titles,
+	a back button, and the exit button. The Current Player menu text object
+	directs the player to the Enter Name scene.
 */
 
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-#include "cocos2d.h"
+#include "MenuScene.h"
 
-class Settings : public cocos2d::Layer {
+class Settings : public MenuScene {
 public:	
-	static cocos2d::Scene* createScene();			// Returns class instance pointer
+	static cocos2d::Scene* createScene();				// Returns class instance pointer
 		
-	virtual bool init();							// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
+	virtual bool init();								// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
 		
-	CREATE_FUNC(Settings);							// Static create() method implemented manually
-
-	void initBackground();							// Initialise the background image
+	CREATE_FUNC(Settings);								// Static create() method implemented manually
 
 private:
-	// Callbacks
-	void returnToMenu(cocos2d::Ref *sender);		// Return to the MainMenu
-	void musicVolUp(cocos2d::Ref *sender);			// Music volume up
-	void musicVolDown(cocos2d::Ref *sender);		// Music volume down
-	void sfxVolUp(cocos2d::Ref *sender);			// FX volume up
-	void sfxVolDown(cocos2d::Ref *sender);			// FX volume down
-	void skipTrackForwards(cocos2d::Ref *sender);	// FX volume up
-	void skipTrackBackwards(cocos2d::Ref *sender);	// FX volume down
-	
-	// Screen size
-	cocos2d::Size visibleSize;						// Visible screen size for the current platform
-	cocos2d::Vec2 origin;							// Screen origin point
+	void setLabelProperties(MenuItemLabel* l, float y);	// Set the properties for the specified label
 
-	cocos2d::Sprite* backgroundSprite;				// Sprite for background image
+	// Callbacks	
+	void showHideMusicControls(cocos2d::Ref *sender);	// Set the music player visiblity
+	void changeDifficulty(cocos2d::Ref *sender);		// Adjust the game difficulty
+	void goToAudioMenu(cocos2d::Ref *sender);			// Go to the Audio settings menu
 
-	__String *tempScore;							// Text to display
+	// Menu
+	cocos2d::MenuItemLabel* showMPlayerLbl;				// Show the music player
+	cocos2d::MenuItemLabel* setDifficultyLbl;			// Set the game difficult
+	cocos2d::MenuItemLabel* goToAudioLbl;				// Go to audio menu label
 
 	// Labels
-	cocos2d::Sprite* gameTitleSprite;				// Game name label
-	cocos2d::Sprite* titleSprite;					// Scene name label
-	cocos2d::Sprite* musicLbl;						// Music volume setting label
-	cocos2d::Sprite* sfxLbl;						// SFX volume setting label
-	cocos2d::Sprite* trackLbl;						// Track select setting label
-
-	// Menu button images
-	cocos2d::MenuItemImage* btnBackImg;				// Set image for Back Button menu option
-	cocos2d::MenuItemImage* btnVolUpImg;			// Set image for volume up Button menu option
-	cocos2d::MenuItemImage* btnVolDownImg;			// Set image for volume down Button menu option
-	cocos2d::MenuItemImage* btnFXUpImg;				// Set image for FX volume up Button menu option
-	cocos2d::MenuItemImage* btnFXDownImg;			// Set image for FX volume down Button menu option
-	cocos2d::MenuItemImage* btnTrackUpImg;			// Select the next track Button menu option
-	cocos2d::MenuItemImage* btnTrackDownImg;		// Select the previous track Button menu option
+	cocos2d::Label* instructionLbl;						// Label to display current high score
+	cocos2d::Label* musicLbl;							// Music volume setting label
+	cocos2d::Label* difficultyLbl;						// Set the game difficult
+	cocos2d::Label* audioMenuLbl;						// Go to audio menu label
 
 	// Menu buttons
-	cocos2d::Menu* btnBack;
-	cocos2d::Menu* btnVolUp;
-	cocos2d::Menu* btnVolDown;
-	cocos2d::Menu* btnFXUp;
-	cocos2d::Menu* btnFXDown;
-	cocos2d::Menu* btnTrackUp;
-	cocos2d::Menu* btnTrackDown;
+	cocos2d::Menu* menu;								// Create the menu options
 
-	// High Score
-	//cocos2d::LabelTTF* instructionLbl;			// Label to display current high score
-	//cocos2d::LabelTTF* currentTrackLbl;			// Label to display current background music track
-	cocos2d::Label* instructionLbl;					// Label to display current high score
-	cocos2d::Label* currentTrackLbl;				// Label to display current background music track
-	int trackSelect = 0;
-	//std::string currentTrack[3];					// The name of the current track
+	// Set label text
+	std::string playerLabelText();						// Set the text on Enable/Disable music player button label
+	std::string gameDifficulty();						// Set the game difficulty level
 };
 
 #endif // __SETTINGS_H__

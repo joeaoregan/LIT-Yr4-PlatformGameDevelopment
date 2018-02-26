@@ -84,9 +84,10 @@ bool MainMenu::init() {
 	this->addChild(menu);
 
 	// Music Player
-	mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));								// Create the music control buttons
-	this->addChild(mplayer);																										// Add the music player to the layer
-
+	if (Game::Instance()->musicPlayerVisible()) {
+		mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));								// Create the music control buttons
+		this->addChild(mplayer);																										// Add the music player to the layer
+	}
 	this->scheduleUpdate();																											// Start updating the scene
 
 	return true;
@@ -96,7 +97,8 @@ bool MainMenu::init() {
 	Update needed to swap pause and play buttons on music player controls
 */
 void MainMenu::update(float dt) {
-	mplayer->update();																												// Update the music player
+	if (Game::Instance()->musicPlayerVisible())
+		mplayer->update();																												// Update the music player
 }
 
 /* 
@@ -119,7 +121,7 @@ void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	Callback: Start the Settings Scene
 */
 void MainMenu::GoToSettings(cocos2d::Ref *sender) {
-	cocos2d::Scene* scene = AudioMenu::createScene();																				// Create the enter name scene
+	cocos2d::Scene* scene = Settings::createScene();																				// Create the enter name scene
 	Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));											// Load the enter name screen with transition
 }
 
