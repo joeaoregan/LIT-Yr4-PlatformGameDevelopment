@@ -28,6 +28,7 @@ public:
 
 	void explodeFX();					// Play explosion sound effect
 	void laserFX();						// Play laser sound effect
+	void powerUpFX();					// Play power up sound effect
 
 	void skipTrackForwards();			// Skip to the next track in the array, or first track if already at the last
 	void skipTrackBackwards();			// Skip to the previous track in the array, or last track if already at the 1st

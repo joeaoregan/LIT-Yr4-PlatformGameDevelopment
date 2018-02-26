@@ -18,10 +18,11 @@
 #include <sstream>
 #include "Input.h"
 
-//#include "HealthBar.h"
+#include "HealthBar.h"
 
-#define NUM_LASERS_TO_FIRE 4
+unsigned int NUM_LASERS_TO_FIRE = 2;
 
+unsigned int LEVEL_START_TIME = 30000;										// 30 Seconds until level is complete
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -47,19 +48,7 @@ bool Level::init() {
 
 	(visibleSize.height == 720) ? scaleUp = 1.0f : scaleUp = 1.5f;
 	(visibleSize.height == 1080) ? scaleDown = 1.0f : scaleDown = 0.67f;
-/*
-	// Add exit button in bottom right corner. it's an autorelease object
-	closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-		CC_CALLBACK_1(Level::menuCloseCallback, this));														// JOR replaced auto specifier	
-	closeItem->setScale(scaleUp);
-	closeItem->setPosition(cocos2d::Point((origin.x + visibleSize.width - closeItem->getContentSize().width / 2) * 0.99f ,
-		origin.y + closeItem->getContentSize().height / 1.97f));
 
-	// create menu, it's an autorelease object
-	menuClose = cocos2d::Menu::create(closeItem, NULL);														// JOR replaced auto specifier
-	menuClose->setPosition(cocos2d::Point::ZERO);
-	this->addChild(menuClose, 1);
-*/
 	//  GALAXY
 	_batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");												// Player sprite is added here
 	this->addChild(_batchNode);
@@ -79,6 +68,20 @@ bool Level::init() {
 	Level::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	Level::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
+	// Time
+	curTime = getTimeTick();																				// Current game time // Time to finish game
+
+	//powerUpLife = Sprite::createWithSpriteFrameName("powerHeart.png");
+	powerUpTime = curTime + randomValueBetween(10000, LEVEL_START_TIME);
+	powerUpY = randomValueBetween(0.1f, 0.8f);																// Random Y position for asteroid
+	powerUpLife = Sprite::Sprite::create("powerHeart.png");
+	//powerUpLife->autorelease();
+	powerUpLife->setVisible(false);
+	powerUpLife->setPosition(visibleSize.width + powerUpLife->getContentSize().width, visibleSize.height * powerUpY);
+	//_batchNode->addChild(powerUpLife);
+	this->addChild(powerUpLife);
+	
+
 	// Asteroids
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);														// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
@@ -90,11 +93,11 @@ bool Level::init() {
 	}
 	/*
 	// Enemy Ship
-	EnemyShipList = new Vector<Sprite*>(3);																		// List of enemy ships
+	EnemyShipList = new Vector<Sprite*>(3);																	// List of enemy ships
 	for (int i = 0; i < 3; ++i) {
-		cocos2d::Sprite* enemyShip = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		cocos2d::Sprite* enemyShip = Sprite::create("EnemyShip.png");										// Asteroid sprite, JOR replaced auto specifier
 		enemyShip->setVisible(false);
-		enemyShip->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
+		enemyShip->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);									// Scale down the size for PC
 		this->addChild(enemyShip);
 		EnemyShipList->pushBack(enemyShip);
 	}
@@ -105,12 +108,12 @@ bool Level::init() {
 		//cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
 		//EnemyShip* enemyShip1 = new EnemyShip();
 		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
-		//enemyShip1->autorelease();
+		enemyShip1->autorelease();
 
 		//Sprite* blah = Sprite::create("EnemyShip.png");													// Asteroid sprite, JOR replaced auto specifier
 
 		//enemyShip1->setSprite(&(*blah));
-		//enemyShip1->setVisible(false);
+		enemyShip1->setVisible(false);
 		//cocos2d::Sprite* enemySprite = Sprite::create("EnemyShip.png");									// Asteroid sprite, JOR replaced auto specifier
 		//enemyShip1->addChild(enemySprite);
 		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);									// Scale down the size for PC
@@ -162,13 +165,25 @@ bool Level::init() {
 	touchListener = EventListenerTouchAllAtOnce::create();													// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-	
-	// Time
-	curTime = getTimeTick();																				// Current game time // Time to finish game
-	_gameOverTime = curTime + LEVEL_TIME;																	// Time to finish game
+
+
+																											// Set the starting lives based on the difficulty
+	if (Game::Instance()->getDifficulty() == EASY) {
+		LEVEL_START_TIME = 25000;																			// Set the level length: 25 easy, 30 medium, 40 hard
+		NUM_LASERS_TO_FIRE = 3;																				// Start with 3 lasers easy, 2 medium, 1 hard
+	}
+	else if (Game::Instance()->getDifficulty() == HARD) {
+		LEVEL_START_TIME = 40000;																			// Set the level length	
+		NUM_LASERS_TO_FIRE = 1;
+	}
+
+	_gameOverTime = curTime + LEVEL_START_TIME;																// Time to finish game
 
 	Game::Instance()->init();																				// Inite score and level	
-	Game::Instance()->setTimer(LEVEL_TIME / 1000);															// Set the countdown timer time
+
+	
+	Game::Instance()->setTimer(LEVEL_START_TIME / 1000);													// Set the countdown timer time
+
 	Input::Instance()->init(this, this->_eventDispatcher);													// Ship Movement
 
 	// D-pad (Display on mobile device)
@@ -229,7 +244,25 @@ void Level::update(float dt) {
 	newHUD->update(curTimeMillis);																			// Update the HUD
 }
 
-void Level::spawnAsteroids(float curTimeMillis) {
+void Level::spawnAsteroids(float curTimeMillis) {	
+
+	//powerUpTime = 0;	// test
+
+	if (!spawned && curTimeMillis > powerUpTime) {
+		powerUpLife->setVisible(true);
+		//powerUpLife->setPosition(winSize.width + powerUpLife->getContentSize().width / 2, powerUpY);
+
+		auto actionpowerUp = MoveTo::create(5, Point(0 - powerUpLife->getContentSize().width, visibleSize.height * powerUpY));
+		powerUpLife->runAction(actionpowerUp);
+		/*
+		powerUpLife->runAction(
+			Sequence::create(MoveBy::create(0.5f, Point(0 - powerUpLife->getContentSize().width, powerUpY)), // change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)
+		);
+		*/
+		spawned = true;
+	}
+	
 	if (curTimeMillis > _nextAsteroidSpawn) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
@@ -241,8 +274,7 @@ void Level::spawnAsteroids(float curTimeMillis) {
 		_nextAsteroid++;																					// Increment the asteroid
 
 		if (_nextAsteroid >= _asteroids->size()) _nextAsteroid = 0;											// Loop back around to start of asteroids list
-
-
+		
 		Game::Instance()->incrementAsteroidCount();
 
 		asteroid->stopAllActions();																			// CCNode.cpp
@@ -363,6 +395,15 @@ void Level::setInvisible(Node * node) {
 }
 
 void Level::checkCollisions() {
+	if (powerUpLife->isVisible()) {
+		if (player->getSprite()->getBoundingBox().intersectsRect(powerUpLife->getBoundingBox())) {		// If the ship collides with an asteroid
+			player->getSprite()->runAction(Blink::create(1.0F, 9));										// Flash the Player ship
+			powerUpLife->setVisible(false);
+			Game::Instance()->addLife();
+			Audio::Instance()->powerUpFX();																// Play the power up sound effect
+		}
+	}
+
 	// Asteroids Collisions
 	for (cocos2d::Sprite* asteroid : *_asteroids) {														// JOR replaced auto specifier
 		if (!(asteroid->isVisible())) continue;

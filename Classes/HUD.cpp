@@ -65,8 +65,10 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 			s_pInstance->addChild(s_pInstance->playerLife);
 			s_pInstance->livesList[i] = s_pInstance->playerLife;																				// Add life sprite to list of lives
 		}
-		s_pInstance->livesList[3]->setVisible(false);
-		s_pInstance->livesList[4]->setVisible(false);
+		if (Game::Instance()->getDifficulty() > EASY) {
+			s_pInstance->livesList[3]->setVisible(false);
+			s_pInstance->livesList[4]->setVisible(false);
+		}
 
 		// Add exit button in bottom right corner. it's an autorelease object	
 		s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png");	

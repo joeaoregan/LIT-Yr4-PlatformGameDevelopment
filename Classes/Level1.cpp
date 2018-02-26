@@ -29,7 +29,14 @@ bool Level1::init() {
 	Game::Instance()->setLevel(1);				// for parallax node init
 	newHUD->setLevel(1);						// Update HUD Level text display
 
-	Game::Instance()->setLives(3);				// Set the number of lives for the player
+	// Set the starting lives based on the difficulty
+	if (Game::Instance()->getDifficulty() == EASY)
+		Game::Instance()->setLives(5);				// Set the number of lives for the player
+	else if (Game::Instance()->getDifficulty() == MEDIUM)
+		Game::Instance()->setLives(3);				// Set the number of lives for the player
+	else
+		Game::Instance()->setLives(2);				// Set the number of lives for the player
+
 	Game::Instance()->resetAsteroidKills();		// Reset the number of asteroids destroyed
 	Game::Instance()->resetEnemyShipKIlls();	// Reset the number of enemy ships destroyed
 	

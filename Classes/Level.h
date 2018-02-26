@@ -133,6 +133,12 @@ protected:
 	cocos2d::Label* levelCompleteLbl;
 	cocos2d::MenuItemLabel* restartItem;
 	cocos2d::MenuItemLabel* continueItem;
+
+	// Power ups
+	cocos2d::Sprite* powerUpLife;													// New life power up
+	float powerUpTime;
+	float powerUpY;
+	bool spawned = false;
 };
 
 #endif // __LEVEL_H__

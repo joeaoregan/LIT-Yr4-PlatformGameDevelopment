@@ -23,6 +23,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 #define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
 #define LASER_SHIP "laser_ship.wav"
+#define POWER_UP "powerup.wav"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)												// CAF: Core audio format
 #define SPACE_GAME "SpaceGame.caf"
 #define EXPLOSION_LARGE "explosion_large.caf"
@@ -63,6 +64,9 @@ void Audio::explodeFX() {
 
 void Audio::laserFX() {
 	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);								// Play laser sound effect
+}
+void Audio::powerUpFX() {
+	SimpleAudioEngine::getInstance()->playEffect(POWER_UP);									// Play power up sound effect
 }
 
 void Audio::play() {
