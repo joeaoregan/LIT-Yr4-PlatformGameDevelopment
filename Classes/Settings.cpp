@@ -35,17 +35,13 @@ bool Settings::init() {
 	visibleSize = Director::getInstance()->getVisibleSize();															// Get visible screen size
 	origin = Director::getInstance()->getVisibleOrigin();																// Get screen origin point
 
-	// Set scale depending on screen resolution
-	float scale = 0.67f;
-	if (visibleSize.height == 1080) scale = 1.0f;																		// If 1080p use higher scale
-	
 	// Instructions
 	instructionLbl = cocos2d::Label::createWithTTF("Adjust Game Settings", 
 		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);													// Label to display current high score
 
 	instructionLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.65f + origin.y));		// Set its position on screen
 	instructionLbl->setColor(Color3B::WHITE);																			// Set the text colour
-	//instructionLbl->setScale(scale);																					// Set the scale
+	instructionLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);												// Scale the lable depending on platform resolution																		// Set the scale
 	this->addChild(instructionLbl);																						// Add it to the layer
 
 	// 1. Show Hide Music Player
@@ -54,10 +50,7 @@ bool Settings::init() {
 	musicLbl->setColor(Color3B::RED);
 
 	showMPlayerLbl = cocos2d::MenuItemLabel::create(musicLbl, CC_CALLBACK_1(Settings::showHideMusicControls, this));	// Show/Hide Music Player
-	//showMPlayerLbl->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.55f + origin.y));
-	//showMPlayerLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
-	//showMPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
-	setLabelProperties(showMPlayerLbl, 0.55f);
+	setLabelProperties(showMPlayerLbl, 0.5f);
 
 	// 2. Set The Game Difficulty
 	difficultyLbl = cocos2d::Label::createWithTTF(gameDifficulty(), 
@@ -65,10 +58,7 @@ bool Settings::init() {
 	difficultyLbl->setColor(Color3B::RED);
 
 	setDifficultyLbl = cocos2d::MenuItemLabel::create(difficultyLbl, CC_CALLBACK_1(Settings::changeDifficulty, this));	// Set the game difficulty
-	//setDifficultyLbl->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.45f + origin.y));
-	//setDifficultyLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
-	//setDifficultyLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
-	setLabelProperties(setDifficultyLbl, 0.45f);
+	setLabelProperties(setDifficultyLbl, 0.35f);
 
 	// 3. Go To Audio Menu
 	audioMenuLbl = cocos2d::Label::createWithTTF("Audio Settings", 
@@ -76,10 +66,7 @@ bool Settings::init() {
 	audioMenuLbl->setColor(Color3B::RED);
 
 	goToAudioLbl = cocos2d::MenuItemLabel::create(audioMenuLbl, CC_CALLBACK_1(Settings::goToAudioMenu, this));			// Go to the Audio settings scene
-	//goToAudioLbl->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.35f + origin.y));
-	//goToAudioLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
-	//goToAudioLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
-	setLabelProperties(goToAudioLbl, 0.35f);
+	setLabelProperties(goToAudioLbl, 0.20f);
 
 	// Add the Menu options
 	menu = Menu::create(showMPlayerLbl, goToAudioLbl, setDifficultyLbl, NULL);											// Menu options to add
@@ -94,8 +81,8 @@ bool Settings::init() {
 */
 void Settings::setLabelProperties(MenuItemLabel* label, float yPos) {
 	label->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * yPos + origin.y));
-	label->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
-	label->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
+	//label->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
+	label->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? 1.5f : 1.0f));
 }
 
 /*

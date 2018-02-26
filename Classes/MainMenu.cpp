@@ -30,7 +30,6 @@ Scene* MainMenu::createScene() {
 // on "init" you need to initialize your instance
 bool MainMenu::init() {
 	MenuScene::init();							// Initialise base class
-
 	
 
 	/********************************************/
@@ -43,26 +42,32 @@ bool MainMenu::init() {
 	/********************************************/
 	//		2. Scene Specific Additions			*/
 	/********************************************/
+	
+	scale *= 0.8f;																													// Adjust the text size
 
 	// Button 1. Start Game Button
 	playItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));				// Set image for menu option
-	playItem->setScale(scale * 0.8f);
-	playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.6f + origin.y));							// Set image position
+	//playItem->setScale(scale * 0.8f);
+	//playItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.6f + origin.y));							// Set image position
+	setYPosAndScale(playItem, 0.6f);
 
 	// Button 2. High Scores Button
 	scoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));	// Set image for menu option
-	scoreItem->setScale(scale * 0.8f);
-	scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.5f + origin.y));							// Set image position
+	//scoreItem->setScale(scale * 0.8f);
+	//scoreItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.5f + origin.y));							// Set image position
+	setYPosAndScale(scoreItem, 0.5f);
 
 	// Button 3. Game Options
 	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
-	optionsItem->setScale(scale * 0.8f);
-	optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));						// Set image position
+	//optionsItem->setScale(scale * 0.8f);
+	//optionsItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.4f + origin.y));						// Set image position
+	setYPosAndScale(optionsItem, 0.4f);
 	
 	// Button 4. Exit Button
 	exitItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MenuScene::menuCloseCallback, this));		// Set image for menu option
-	exitItem->setScale(scale * 0.8f);
-	exitItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.3f + origin.y));							// Set image position
+	//exitItem->setScale(scale * 0.8f);
+	//exitItem->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.3f + origin.y));							// Set image position
+	setYPosAndScale(exitItem, 0.3f);
 
 	// Show current high score
 	//int highScore = def->getIntegerForKey("HIGHSCORE", 0);
@@ -71,11 +76,12 @@ bool MainMenu::init() {
 	
 	tempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);										// String to display the top score & player	
 
+	float scorePosition;
+	(Game::Instance()->musicPlayerVisible()) ? scorePosition = 0.2f : scorePosition = 0.1f;											// Move label to fill space if music player invisible
 	highScoreLbl = cocos2d::Label::createWithTTF(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);// Label to display current high score (Label replaces LabelTTF causing warnings)
-	//highScoreLbl = LabelTTF::create(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);			// Other fonts: MarkerFelt.ttf arial.ttf" Zombiebites.ttf Mario.ttf Super Mario Bros..ttf
-	highScoreLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height * 0.2f + origin.y));
+	highScoreLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height * scorePosition + origin.y));
 	highScoreLbl->setColor(Color3B::RED);
-	highScoreLbl->setScale(scale * 0.6f);
+	highScoreLbl->setScale(scale * 0.75f);
 	this->addChild(highScoreLbl);
 	
 	// Menu Items

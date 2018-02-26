@@ -49,60 +49,29 @@ bool MenuScene::init() {
 	origin = cocos2d::Director::getInstance()->getVisibleOrigin();																	// Get screen origin point		
 	(visibleSize.height == 1080) ? scale = 1.0f : scale = 0.67f;
 	
-	// Background image
+	// 1. Background image
 	//backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Choose Background image depending on resolution
 	backgroundSprite = cocos2d::Sprite::create("BG1080p.png");																		// Use one high res background image for efficiency
-	backgroundSprite->setScale(scale);
-	backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));				// Set backgound position
+	//backgroundSprite->setScale(scale);
+	//backgroundSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));			// Set backgound position
+	setYPosAndScale(backgroundSprite, 0.5f);
 	this->addChild(backgroundSprite);																								// Add to layer
 	
-	/*
-	// Draw Rect test
-	cocos2d::DrawNode* rectNode = DrawNode::create();
-	Vec2 rectangle[4];
-	rectangle[0] = Vec2(-50, -20); 
-	rectangle[1] = Vec2(50, -20);
-	rectangle[2] = Vec2(50, 20);
-	rectangle[3] = Vec2(-50, 20);
-
-	Vec2 rectangle2[4];
-	rectangle2[0] = Vec2(-48, -20);
-	rectangle2[1] = Vec2(48, -20);
-	rectangle2[2] = Vec2(48, 20);
-	rectangle2[3] = Vec2(-48, 20);
-	
-
-	Color4F white(1, 1, 1, 1);
-	Color4F red(1, 0, 0, 1);
-	Color4F trans(1, 0, 0, 0);
-	rectNode->drawPolygon(rectangle, 4, trans, 1, red);
-	rectNode->drawPolygon(rectangle2, 4, trans, 1, white);
-
-	rectNode->setPosition(Point(visibleSize.width / 2, visibleSize.height * 0.05f + origin.y));
-
-	this->addChild(rectNode);
-	 
-
-	Color4F red(1, 0, 0, 1);
-	Color4F green(0, 1, 0, 1);
-	cocos2d::DrawNode* healthBar = createStatusBar(100, 50, 100, 10, 0.8f, red, green);
-	this->addChild(healthBar);
-	*/
-
-	// Game Title
+	// 2. Game Title
 	gameTitleSprite = cocos2d::Sprite::create("GameTitle.png");																		// Game Title image
 	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width * 0.1f, visibleSize.height / 2 + origin.y));						// Set position on screen
 	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.9f + origin.y));			// Set position on screen
 	gameTitleSprite->setScale(1.75 * scale);
 	this->addChild(gameTitleSprite);																								// Add to layer		
 		
-	// Scene Title
+	// 3. Scene Title
 	titleSprite = cocos2d::Sprite::create("MainMenu.png");																			// Scene Title image
-	titleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.75f + origin.y));				// Set position on screen
-	titleSprite->setScale(scale);
+	//titleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.75f + origin.y));			// Set position on screen
+	//titleSprite->setScale(scale);
+	setYPosAndScale(titleSprite, 0.75f);
 	this->addChild(titleSprite);																									// Add to layer							
-	
-	// Show current player name. Can select to switch to Enter Name state
+
+	// 4. Show current player name. Can select to switch to Enter Name state
 	currentPlayerName = def->getStringForKey("CurrentPlayer", "Player");
 	//if (Game::Instance()->getPlayerName() == "") 
 	Game::Instance()->setPlayerName(currentPlayerName);																				// Set the players name to a default value
@@ -113,12 +82,13 @@ bool MenuScene::init() {
 	currentPlayerLbl->setPosition(cocos2d::Point((visibleSize.width + origin.x) * 0.1f, visibleSize.height * 0.95f + origin.y));
 	currentPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
 
-	// Back Button
+	// 5. Back Button
 	btnBackImg = cocos2d::MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(MenuScene::returnToMenu, this));	// Set image for menu option
-	btnBackImg->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));				// Set image position
-	btnBackImg->setScale(scale);																									// Set the scale
+	//btnBackImg->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.05f + origin.y));				// Set image position
+	//btnBackImg->setScale(scale);
+	setYPosAndScale(btnBackImg, 0.05f);																								// Set the scale
 
-	// Exit button (autorelease object)
+	// 6. Exit button (autorelease object)
 	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(MenuScene::menuCloseCallback, this));																			// Close game button, JOR replaced auto specifier
 	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
@@ -130,6 +100,19 @@ bool MenuScene::init() {
 	this->addChild(menu);
 
 	return true;
+}
+
+/*
+	Set Y position and scale for Sprites and Menu items in the scene
+*/
+void MenuScene::setYPosAndScale(cocos2d::Sprite* sprite, float y) {
+	sprite->setScale(scale);
+	sprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * y + origin.y));						// Set backgound position
+}
+void MenuScene::setYPosAndScale(cocos2d::MenuItemImage* sprite, float y) {
+	//sprite->setScale(scale);
+	sprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * y + origin.y));						// Set backgound position
+	sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale * 1.5f : scale * 1.0f));					// Animate the sprites when clicked
 }
 
 // The player can enter and store their name from this scene
@@ -157,3 +140,38 @@ void MenuScene::menuCloseCallback(Ref* pSender) {
 	exit(0);
 #endif
 }
+
+/*
+// Test status bar
+
+// Draw Rect test
+cocos2d::DrawNode* rectNode = DrawNode::create();
+Vec2 rectangle[4];
+rectangle[0] = Vec2(-50, -20);
+rectangle[1] = Vec2(50, -20);
+rectangle[2] = Vec2(50, 20);
+rectangle[3] = Vec2(-50, 20);
+
+Vec2 rectangle2[4];
+rectangle2[0] = Vec2(-48, -20);
+rectangle2[1] = Vec2(48, -20);
+rectangle2[2] = Vec2(48, 20);
+rectangle2[3] = Vec2(-48, 20);
+
+
+Color4F white(1, 1, 1, 1);
+Color4F red(1, 0, 0, 1);
+Color4F trans(1, 0, 0, 0);
+rectNode->drawPolygon(rectangle, 4, trans, 1, red);
+rectNode->drawPolygon(rectangle2, 4, trans, 1, white);
+
+rectNode->setPosition(Point(visibleSize.width / 2, visibleSize.height * 0.05f + origin.y));
+
+this->addChild(rectNode);
+
+
+Color4F red(1, 0, 0, 1);
+Color4F green(0, 1, 0, 1);
+cocos2d::DrawNode* healthBar = createStatusBar(100, 50, 100, 10, 0.8f, red, green);
+this->addChild(healthBar);
+*/

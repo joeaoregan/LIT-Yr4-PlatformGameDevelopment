@@ -69,23 +69,9 @@ public:
 
 	//cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FG, cocos2d::Color4F BG);
 
-private:
-	/*
-	void StartGame(cocos2d::Ref *sender);		// Start the game
-	void GoToScores(cocos2d::Ref *sender);		// Go to the high scores table
-	void GoToSettings(cocos2d::Ref *sender);	// Go to the options scene
-	
-	// Menu Images
-	cocos2d::MenuItemImage* playItem;			// Start the game
-	cocos2d::MenuItemImage*	scoreItem;			// Go to the high scores scene
-	cocos2d::MenuItemImage* optionsItem;		// Go to the options scene
-	cocos2d::MenuItemImage* closeItem;			// Exit the game
-	
-	int highScore;								// Load the first sorted score, which is the high score
-	cocos2d::__String *tempScore;				// Score text to display
-	cocos2d::LabelTTF* highScoreLbl;			// Label to display the score text
-	cocos2d::LabelTTF* currentPlayer;			// Label to display the current Player name
-	*/
+protected:
+	void setYPosAndScale(cocos2d::Sprite* sprite, float y);
+	void setYPosAndScale(cocos2d::MenuItemImage* sprite, float y);
 };
 
 #endif // __MENU_H__

@@ -88,8 +88,8 @@ bool AudioMenu::init() {
 	//btnTrackUpImg->setScale(scale);																											// Set the scale
 	
 	// Current Track
-	//currentTrackLbl = cocos2d::LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);	// Label to display current high score	
-	currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);
+	currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(),															// Label to display current high score	
+		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);
 	currentTrackLbl->setPosition(cocos2d::Point(visibleSize.width * 0.5 + origin.x, visibleSize.height * 0.15f + origin.y));					// Set its position on screen
 	currentTrackLbl->setColor(cocos2d::Color3B::WHITE);																							// Set the text colour
 	//currentTrackLbl->setScale(scale);																											// Set the scale
