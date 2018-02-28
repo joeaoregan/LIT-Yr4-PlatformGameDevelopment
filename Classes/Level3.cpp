@@ -13,9 +13,9 @@
 
 Scene* Level3::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	Level3* layer = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
-	layer->setName("Level3");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-	scene->addChild(layer);						// Add layer as a child to scene	    
+	layerInstance = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	//layer->setName("Level3");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
+	scene->addChild(layerInstance);						// Add layer as a child to scene	    
 	return scene;								// Return the scene
 }
 
@@ -25,10 +25,10 @@ Initialisation specific to Level 2
 bool Level3::init() {
 	Level::init();								// 20180221 Added Level base class
 
-	if (!Layer::init()) { return false; }		// super init first
-
 	Game::Instance()->setLevel(3);				// Specific to level 2
-	newHUD->setLevel(3);						// Update HUD Level text display
+	newHUD->setLevelLabel();					// Update HUD Level text display
+
+	if (!Layer::init()) { return false; }		// super init first
 
 	// ParallaxNode
 	this->addChild(_backgroundNode, -1);		// Add the parallax background

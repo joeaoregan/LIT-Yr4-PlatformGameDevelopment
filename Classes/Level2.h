@@ -12,17 +12,17 @@
 
 #include "Level.h"
 
-//USING_NS_CC;
-
 class Level2 : public Level {
 public:
     static cocos2d::Scene* createScene();		// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	    
     virtual bool init();						// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 
-	void checkCollisions();						// 20180202 Check is the game over or not
+	virtual void endScene(EndReason endReason);	// Do level complete stuff
+	
+	CREATE_FUNC(Level2);						// implement the "static create()" method manually
 
-    CREATE_FUNC(Level2);						// implement the "static create()" method manually
+	void checkCollisions();						// 20180202 Check is the game over or not
 
 private:
 
@@ -30,7 +30,6 @@ private:
 	//cocos2d::Sprite *EnemyShip;
 			
 	virtual void update(float dt);
-	virtual void endScene(EndReason endReason);	// Do level complete stuff
 };
 
 #endif // __LEVEL_2_H__

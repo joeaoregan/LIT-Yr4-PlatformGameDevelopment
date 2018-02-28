@@ -10,8 +10,6 @@
 
 #include "Level.h"
 
-//USING_NS_CC;
-
 class Level3 : public Level {
 public:
 	static cocos2d::Scene* createScene();		// there's no 'id' in cpp, so we recommend returning the class instance pointer

@@ -5,18 +5,14 @@
 
 	Added additional level
 */
-#include "Level.h"
+
 #include "Level2.h"
-#include "MainMenu.h"
-#include <string>
-#include <sstream>
-#include "Input.h"
 
 Scene* Level2::createScene() {  
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	Level2* layer = Level2::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
-	layer->setName("Level2");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-    scene->addChild(layer);						// Add layer as a child to scene	    
+	layerInstance = Level2::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	//layer->setName("Level2");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
+    scene->addChild(layerInstance);						// Add layer as a child to scene	    
     return scene;								// Return the scene
 }
 
@@ -24,18 +20,27 @@ Scene* Level2::createScene() {
 	Initialisation specific to Level 2
 */
 bool Level2::init() {
-	Level::init();								// 20180221 Added Level base class
+	Level::init();											// 20180221 Added Level base class
 
-    if ( !Layer::init() ) { return false; }		// super init first
+	Game::Instance()->setLevel(2);							// for parallax node init
+	newHUD->setLevelLabel();								// Update HUD Level text display
 
-	Game::Instance()->setLevel(2);				// Specific to level 2
-	newHUD->setLevel(2);						// Update HUD Level text display
-		
+	if (!Layer::init()) { return false; }					// super init first
+
 	// 1) Create the ParallaxNode
 	this->addChild(_backgroundNode, -1);		// Add the parallax background
 	_backgroundNode->init();					// Initialise the parallax scrolling background
+
+
+	Game::Instance()->resetAsteroidKills();					// Reset the number of asteroids destroyed
+	Game::Instance()->resetEnemyShipKIlls();				// Reset the number of enemy ships destroyed
+
+
+	CCLOG("Level %d: Background Initialised", Game::Instance()->getLevel());
 	
 	this->scheduleUpdate();						// Start updating the scene
+
+	CCLOG("Level %d: Initialised", Game::Instance()->getLevel());
 
     return true;
 }

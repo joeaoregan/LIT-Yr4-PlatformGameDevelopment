@@ -29,61 +29,40 @@ void Player::update() {
 	// Move the player ship
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
-            Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
 			moveLeft();
 		}
 		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
-                 Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
 			moveRight();
 		}
 
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
-            Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
 			moveUp();
 		}
 		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
-                 Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
 			moveDown();
 		}
 	}
-/*
-	// Android DPad
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
-		if (controller->getButton(8)->isSelected()) {
-			moveUp();
-		}
-		else if (controller->getButton(2)->isSelected()) {
-			moveDown();
-		}
-		if (controller->getButton(4)->isSelected()) {
-			moveLeft();
-		}
-		else if (controller->getButton(6)->isSelected()) {
-			moveRight();
-		}
-	} 
- // Android DPad
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
-		if (DPad::Instance()->getButton(8)->isSelected()) moveUp();
-		else if (DPad::Instance()->getButton(2)->isSelected()) moveDown();
-
-		if (DPad::Instance()->getButton(4)->isSelected()) moveLeft();
-		else if (DPad::Instance()->getButton(6)->isSelected()) moveRight();
-	}
-	*/
 }
 
 void Player::moveUp() {
-	player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
+	if (player->getPosition().y < visibleSize.height * 0.9f)
+		player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
 }
 void Player::moveDown() {
-	player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
+	if (player->getPosition().y > visibleSize.height * 0.125f)
+		player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
 }
 void Player::moveLeft() {
-	player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
+	if (player->getPosition().x > player->getContentSize().width / 4)
+		player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
 }
 void Player::moveRight() {
-	player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
+	if (player->getPosition().x < visibleSize.width - (player->getContentSize().width / 2))
+		player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
 }
 /*
 void Player::spawnLasers(int amount, cocos2d::Layer *layer) {

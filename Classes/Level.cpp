@@ -22,7 +22,7 @@
 
 unsigned int NUM_LASERS_TO_FIRE = 2;
 
-unsigned int LEVEL_START_TIME = 30000;										// 30 Seconds until level is complete
+//unsigned int LEVEL_START_TIME = 30000;										// 30 Seconds until level is complete
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -69,19 +69,10 @@ bool Level::init() {
 	Level::addChild(ParticleSystemQuad::create("Stars3.plist"));
 
 	// Time
-	curTime = getTimeTick();																				// Current game time // Time to finish game
+	curTime = Game::Instance()->getTimeTick();																// Current game time // Time to finish game
 
-	//powerUpLife = Sprite::createWithSpriteFrameName("powerHeart.png");
-	powerUpTime = curTime + randomValueBetween(10000, LEVEL_START_TIME);
-	powerUpY = randomValueBetween(0.1f, 0.8f);																// Random Y position for asteroid
-	powerUpLife = Sprite::Sprite::create("powerHeart.png");
-	//powerUpLife->autorelease();
-	powerUpLife->setVisible(false);
-	powerUpLife->setPosition(visibleSize.width + powerUpLife->getContentSize().width, visibleSize.height * powerUpY);
-	//_batchNode->addChild(powerUpLife);
-	this->addChild(powerUpLife);
+	initPowerUps();
 	
-
 	// Asteroids
 	_asteroids = new Vector<Sprite*>(KNUMASTEROIDS);														// List of asteroids
 	for (int i = 0; i < KNUMASTEROIDS; ++i) {
@@ -91,31 +82,14 @@ bool Level::init() {
 		_batchNode->addChild(asteroid);
 		_asteroids->pushBack(asteroid);
 	}
-	/*
-	// Enemy Ship
-	EnemyShipList = new Vector<Sprite*>(3);																	// List of enemy ships
-	for (int i = 0; i < 3; ++i) {
-		cocos2d::Sprite* enemyShip = Sprite::create("EnemyShip.png");										// Asteroid sprite, JOR replaced auto specifier
-		enemyShip->setVisible(false);
-		enemyShip->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);									// Scale down the size for PC
-		this->addChild(enemyShip);
-		EnemyShipList->pushBack(enemyShip);
-	}
-	*/
+
+	CCLOG("Level %d: Asteroids Initialised", Game::Instance()->getLevel());
+
 	EnemyShips = new Vector<EnemyShip*>(3);
 	for (int i = 0; i < 3; ++i) {
-		//EnemyShip *enemyShip = new EnemyShip(this);
-		//cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
-		//EnemyShip* enemyShip1 = new EnemyShip();
 		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
 		enemyShip1->autorelease();
-
-		//Sprite* blah = Sprite::create("EnemyShip.png");													// Asteroid sprite, JOR replaced auto specifier
-
-		//enemyShip1->setSprite(&(*blah));
 		enemyShip1->setVisible(false);
-		//cocos2d::Sprite* enemySprite = Sprite::create("EnemyShip.png");									// Asteroid sprite, JOR replaced auto specifier
-		//enemyShip1->addChild(enemySprite);
 		enemyShip1->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);									// Scale down the size for PC
 		/*
 		cocos2d::DrawNode* healthBar = createStatusBar(
@@ -128,81 +102,39 @@ bool Level::init() {
 		*/
 		this->addChild(enemyShip1);
 		EnemyShips->pushBack(enemyShip1);
-	}
-	/*
-	EnemyShips = new Vector<EnemyShip*>(3);
-	for (int i = 0; i < 3; ++i) {
-		//EnemyShip *enemyShip = new EnemyShip(this);
-		//cocos2d::Sprite* enemyShip1 = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
-		EnemyShip* enemyShip1 = new EnemyShip();
-		Sprite* blah = Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
-		enemyShip1->setSprite(&(*blah));
-		enemyShip1->getSprite()->setVisible(false);
-		enemyShip1->getSprite()->setScale((visibleSize.height == 720) ? 0.67f : 1.0f);										// Scale down the size for PC
-
-		cocos2d::DrawNode* healthBar = createStatusBar(
-			enemyShip1->getSprite()->getPosition().x + enemyShip1->getSprite()->getContentSize().height, enemyShip1->getSprite()->getPosition().y,		// Position
-			(visibleSize.height == 720) ? 100 : 150, (visibleSize.height == 720) ? 10 : 15,						// Dimensions
-			float(enemyShip1->getLives() / MAX_SHIP_LIVES),			// percentage
-			red, trans);
-		// Colours
-		enemyShip1->getSprite()->addChild(healthBar);
-
-		this->addChild(enemyShip1->getSprite());
-		EnemyShips->pushBack(enemyShip1);
-	}
-	*/
-	// Ship Lasers:
-	_shipLasers = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
-	for (int i = 0; i < KNUMLASERS; ++i) {
-		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
-		shipLaser->setVisible(false);
-		_batchNode->addChild(shipLaser);
-		_shipLasers->pushBack(shipLaser);
+		CCLOG("Add Enemy ship at array index %d", i);
 	}
 
-	// Enemy Lasers
-	enemyLasers = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
-	for (int i = 0; i < KNUMLASERS; ++i) {
-		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
-		enemyLaser->setVisible(false);
-		_batchNode->addChild(enemyLaser);
-		enemyLasers->pushBack(enemyLaser);
-	}
+	CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
+
+	initLasers();
+	CCLOG("Enemy Laser List Size: %d", enemyLaserList->size());
 
 	// Touch screen / Mouse press
 	touchListener = EventListenerTouchAllAtOnce::create();													// JOR replaced auto specifier
 	touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-
-
-																											// Set the starting lives based on the difficulty
+	
+	// Set the starting lives based on the difficulty
 	if (Game::Instance()->getDifficulty() == EASY) {
-		LEVEL_START_TIME = 25000;																			// Set the level length: 25 easy, 30 medium, 40 hard
+		//LEVEL_START_TIME = 25000;																			// Set the level length: 25 easy, 30 medium, 40 hard
 		NUM_LASERS_TO_FIRE = 3;																				// Start with 3 lasers easy, 2 medium, 1 hard
 	}
 	else if (Game::Instance()->getDifficulty() == HARD) {
-		LEVEL_START_TIME = 40000;																			// Set the level length	
+		//LEVEL_START_TIME = 40000;																			// Set the level length	
 		NUM_LASERS_TO_FIRE = 1;
 	}
 
-	_gameOverTime = curTime + LEVEL_START_TIME;																// Time to finish game
+	CCLOG("Level %d: Player Laser Beams Initialised", Game::Instance()->getLevel());
 
-	Game::Instance()->init();																				// Inite score and level	
+	//_gameOverTime = curTime + LEVEL_START_TIME;																// Time to finish game
 
-	
-	Game::Instance()->setTimer(LEVEL_START_TIME / 1000);													// Set the countdown timer time
-
+	Game::Instance()->init();																				// Inite score and level		
+	//Game::Instance()->setTimer(LEVEL_START_TIME / 1000);													// Set the countdown timer time
 	Input::Instance()->init(this, this->_eventDispatcher);													// Ship Movement
 
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {				// If the target platform is a mobile device
-	/*
-		if (visibleSize.height == 1080)
-			controller = DPad::create("DPad/Base300.png", "DPad/Arrow96.png", "DPad/Arrow96Pressed.png", Point(250, 250));
-		else
-			controller = DPad::create("DPad/Base150.png", "DPad/Arrow.png", "DPad/ArrowPressed.png", Point(150, 150));
-		*/
 		controller = DPad::create("Base300.png", "Arrow96.png", "Arrow96Pressed.png", 
 			(visibleSize.height == 1080) ? Point(375, 375) : Point(250, 250));
 		controller->setScale((visibleSize.height == 1080) ? 1.0f : 0.67f);
@@ -210,8 +142,12 @@ bool Level::init() {
 		this->addChild(controller);
 	}
 
+	CCLOG("Level %d: Controller Initialised", Game::Instance()->getLevel());
+
 	newHUD = HUD::create(origin, visibleSize);																// Create the HUD at the origin point (0,0), and passing in the screen resolution
 	this->addChild(newHUD);
+
+	CCLOG("Level %d: HUD Initialised", Game::Instance()->getLevel());
 
 	// Music Player
 
@@ -221,19 +157,52 @@ bool Level::init() {
 		this->addChild(mplayer);
 	}
 
+	CCLOG("Level %d: Music Player Initialised", Game::Instance()->getLevel());
+
     return true;
 }
 
-float Level::getTimeTick() {
-	timeval time;
-	gettimeofday(&time, NULL);
-	unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-	return (float)millisecs;
+void Level::initLasers() {
+	// Player Ship Lasers:
+	shipLaserList = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
+	for (int i = 0; i < KNUMLASERS; ++i) {
+		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
+		shipLaser->setVisible(false);
+		_batchNode->addChild(shipLaser);
+		shipLaserList->pushBack(shipLaser);
+	}
+	CCLOG("TEST Level::initLasers() Ship Lasers: %d", shipLaserList->size());
+
+	// Enemy Lasers
+	enemyLaserList = new Vector<Sprite*>(KNUMLASERS);															// List of lasers
+
+	for (int i = 0; i < KNUMLASERS; ++i) {
+		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName("laserbeam_blue.png");				// Laser sprite, JOR replaced auto specifier
+		enemyLaser->setVisible(false);
+		this->addChild(enemyLaser);
+		enemyLaserList->pushBack(enemyLaser);
+	}
+	CCLOG("TEST Level::initLasers() Enemy Lasers: %d", enemyLaserList->size());
+
+	CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
+}
+
+void Level::initPowerUps() {
+	// Power Up
+	powerUpTime = curTime + randomValueBetween(10000, Game::Instance()->getEndTime() - 5000);				// -5000 (5 secs before end Don't spawn it when the player has no chance of getting it
+	CCLOG("Power Up Spawn Time: %f", powerUpTime);
+
+	powerUpY = randomValueBetween(0.1f, 0.8f);																// Random Y position for asteroid
+	powerUpLife = Sprite::Sprite::create("powerHeart.png");
+	powerUpLife->setVisible(false);
+	powerUpLife->setPosition(visibleSize.width + powerUpLife->getContentSize().width, visibleSize.height * powerUpY);
+	this->addChild(powerUpLife);
+
+	CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
 }
 
 void Level::update(float dt) {
-
-	curTimeMillis = getTimeTick();																			// Current game time
+	curTimeMillis = Game::Instance()->getTimeTick();														// Current game time
 
 	winSize = Director::getInstance()->getWinSize();														// Dimensions of game screen (Needs to update here so lasers fire etc.)
 
@@ -243,29 +212,32 @@ void Level::update(float dt) {
 
 	_backgroundNode->update(dt);																			// Scroll the background objects
 
-	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
+	spawnObjects(curTimeMillis);																			// Spawn asteroids
 	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
+
+	//enemyFireLaser(curTimeMillis);
+
+
 	checkCollisions();																						// Check have game objects collided with each other
+
 	checkGameOver(curTimeMillis);																			// Check is the game over or not
 	
-	enemyFireLaser(curTimeMillis);
-
 	player->update();																						// Update player sprite position
-
-	for (EnemyShip* enemyShip : *EnemyShips) {													// 
-		if (!(enemyShip->isVisible())) continue;
-		enemyShip->update(dt);
+	
+	for (EnemyShip* enemyShip : *EnemyShips) {
+		CCLOG("Level %d: Update Enemy Ships", Game::Instance()->getLevel());
+		enemyShip->update(curTimeMillis);
 	}
 
+	if (Game::Instance()->musicPlayerVisible())
+		mplayer->update();																					// Update the music player
 
-
-	if (Game::Instance()->musicPlayerVisible()) mplayer->update();											// Update the music player
 	newHUD->update(curTimeMillis);																			// Update the HUD
 }
-
+/*
 void Level::enemyFireLaser(float curTimeMillis) {
-	for (EnemyShip* enemyShip : *EnemyShips) {													// 
-		if (!(enemyShip->isVisible())) continue;							// If the enemy ship is visible do this:
+	for (EnemyShip* enemyShip : *EnemyShips) {		
+		if (!(enemyShip->isVisible())) continue;															// If the enemy ship is visible do this:
 		
 		//if (enemyShip->getPosition().x == visibleSize.width * 0.75f)
 		if (curTimeMillis > enemyShip->getNextFire() && enemyShip->isVisible()) {
@@ -288,26 +260,43 @@ void Level::enemyFireLaser(float curTimeMillis) {
 				if (enemyShip->getLives() < 1) enemyShip->setVisible(false);
 			}
 		}
-		*/
+		
 	}
 }
+*/
 
-void Level::spawnAsteroids(float curTimeMillis) {	
+void Level::spawnObjects(float curTimeMillis) {	
+	float powerUpDuration = 3.5f;
+	if (Game::Instance()->getDifficulty() == EASY)
+		powerUpDuration = 5.0f;
+	else if (Game::Instance()->getDifficulty() == HARD)
+		powerUpDuration = 2.0f;
 
-	//powerUpTime = 0;	// test
+	powerUpTime = 2000;	// test
 
-	if (!spawned && curTimeMillis > powerUpTime) {
+	if (!spawned && curTimeMillis > powerUpTime) {		
 		powerUpLife->setVisible(true);
 		//powerUpLife->setPosition(winSize.width + powerUpLife->getContentSize().width / 2, powerUpY);
 
-		auto actionpowerUp = MoveTo::create(5, Point(0 - powerUpLife->getContentSize().width, visibleSize.height * powerUpY));
+		//auto action1 = cocos2d::ScaleTo::create(0.5f, 1.5f);
+		//auto action2 = cocos2d::ScaleTo::create(0.5f, 1.0f);
+		//auto sequence = cocos2d::Sequence::create(action1, action2, nullptr);
+		//livesList[i]->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
+
+		auto actionpowerUp = MoveTo::create(powerUpDuration, Point(0 - powerUpLife->getContentSize().width, visibleSize.height * powerUpY));
 		powerUpLife->runAction(actionpowerUp);
+
+		auto rotate = RotateBy::create(2.5f, -360.0f); 
+		auto sequence = cocos2d::Sequence::create(rotate, rotate, nullptr);
+		powerUpLife->runAction(sequence);
 		/*
 		powerUpLife->runAction(
 			Sequence::create(MoveBy::create(0.5f, Point(0 - powerUpLife->getContentSize().width, powerUpY)), // change to plus 100 for up - 100 for down
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)
 		);
 		*/
+
+		CCLOG("Spawn New Life Power Up");
 		spawned = true;
 	}
 	
@@ -334,6 +323,8 @@ void Level::spawnAsteroids(float curTimeMillis) {
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
 				NULL)	 // DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 		);
+
+		CCLOG("Spawn Asteroid");
 	}
 }
 
@@ -370,25 +361,42 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
 				NULL)	// TERMINATE WITH NULL
 		);
+
+		CCLOG("Spawn Enemy Ship");
 	}
 }
 
 
 void Level::spawnEnemyLaser(cocos2d::Point pos) {
-	cocos2d::Sprite* enemyLaser = enemyLasers->at(nextEnemyLaser++);
-	if (nextEnemyLaser >= enemyLasers->size())
-		nextEnemyLaser = 0;
+	//if (enemyLaserList->size() > 0) {
+		//CCLOG("Level::spawnEnemyLaser() %d / %d", nextEnemyLaser, enemyLasers->size());
+		CCLOG("*********************Level::spawnEnemyLaser() %d", nextEnemyLaser);
 
-	if (enemyLaser->isVisible()) return;
 
-	enemyLaser->setPosition(pos.x, pos.y);
-	enemyLaser->setVisible(true);
-	enemyLaser->stopAllActions();
-	
-	// Move the ship to the players coordinate
-	//auto action = MoveTo::create(3, Point(player->getSprite()->getPositionX(), player->getSprite()->getPositionY()));
-	auto action = MoveTo::create(0.5f, Point(0 - enemyLaser->getContentSize().width, pos.y));			// set to off screen the width of the laser
-	enemyLaser->runAction(action);
+		cocos2d::Sprite* enemyLaser = enemyLaserList->at(nextEnemyLaser);
+		nextEnemyLaser++;
+
+
+		CCLOG("******************************Level::spawnEnemyLaser() new sprite %d", nextEnemyLaser);
+
+		if (nextEnemyLaser >= enemyLaserList->size())
+			nextEnemyLaser = 0;
+
+		if (enemyLaser->isVisible()) return;
+
+		CCLOG("Enemy Laser: Set Position");
+		enemyLaser->setPosition(pos.x, pos.y);
+		CCLOG("Enemy Laser: Set Visible");
+		enemyLaser->setVisible(true);
+		CCLOG("Enemy Laser: Stop Actions");
+		enemyLaser->stopAllActions();
+
+		CCLOG("Enemy Laser: MoveTo");
+		// Move the ship to the players coordinate
+		//auto action = MoveTo::create(3, Point(player->getSprite()->getPositionX(), player->getSprite()->getPositionY()));
+		auto action = MoveTo::create(0.5f, Point(0 - enemyLaser->getContentSize().width, pos.y));			// set to off screen the width of the laser
+		enemyLaser->runAction(action);
+	//}
 }
 
 // 20180221 Up to 4 different types of laser, with different spawn points and rotations
@@ -396,16 +404,17 @@ void Level::spawnLasers(int amount) {
 	int yVal = 0, yPos = 0, rot = 0;	// y value for point to aim for, y position of laser spawn point, rotation of laser	
 
 	for (int i = 0; i < amount; i++) {
-		cocos2d::Sprite* shipLaser = _shipLasers->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
-		if (_nextShipLaser >= _shipLasers->size())
+		cocos2d::Sprite* shipLaser = shipLaserList->at(_nextShipLaser++);										// Next laser in the list, JOR replaced auto specifier
+		if (_nextShipLaser >= shipLaserList->size())
 			_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
 
 		// Set laser spawn points
-		if (amount < 4)
+		if (amount < 4)																						// If the number of lasers to fire is 4
 			(i == 0) ? yPos = 0 : (i == 1) ? yPos = -12 : yPos = 12;										// 0 = midd
 		else
 			(i == 0) ? yPos = 8 : (i == 1) ? yPos = -12 : (i == 2) ? yPos = 12 : yPos = -8;					// 0. = 5, 1. = 12, 2. = 12, 3. = -5
 
+		// Set the initial rotation of the lasers
 		shipLaser->setPosition(player->getSprite()->getPosition() + Point(shipLaser->getContentSize().width / 2, yPos));
 		if (amount == 2) (i == 0) ? rot = -5 : rot = 5;														// Top, bottom lasers
 		if (amount == 3) (i == 0) ? rot = 0 : (i == 1) ? rot = 5 : rot = -5;								// Middle, bottom, top lasers
@@ -415,32 +424,33 @@ void Level::spawnLasers(int amount) {
 		shipLaser->setVisible(true);
 		shipLaser->stopAllActions();
 
+		// Where to fire the lasers
 		if (amount == 2) (i == 0) ? yVal = 60 : yVal = -60;													// if 2 lasers, first one goes up, second goes down
 		if (amount == 3) (i == 1) ? yVal = -100 : (i == 2) ? yVal = 100 : yVal = 0;							// if 3 lasers, first goes straight, second goes down, third goes up
-		if (amount == 4) (i == 1) ? yVal = -120 : (i == 2) ? yVal = 120 : (i == 3) ? yVal = -40 : yVal = 40;	// if 3 lasers, first goes straight, second goes down, third goes up
+		if (amount == 4) (i == 1) ? yVal = -120 : (i == 2) ? yVal = 120 : (i == 3) ? yVal = -40 : yVal = 40;// if 3 lasers, first goes straight, second goes down, third goes up
 
 		shipLaser->runAction(
-			Sequence::create(MoveBy::create(0.5, Point(winSize.width, yVal)), // change to plus 100 for up - 100 for down
+			Sequence::create(MoveBy::create(0.5, Point(winSize.width, yVal)),								// change to plus 100 for up - 100 for down
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 	}
 }
 
 void Level::getInput() {
 	// Android DPad (maybe change to returning a point (0,0)(1,0)(0,1),(-1,0),(0,-1)
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {			// If the platform is mobile
-		if (controller->getButton(8)->isSelected()) {													// Up arrow pressed
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {				// If the platform is mobile
+		if (controller->getButton(8)->isSelected()) {														// Up arrow pressed
 			player->moveUp();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (controller->getButton(2)->isSelected()) {												// Down arrow pressed
+		else if (controller->getButton(2)->isSelected()) {													// Down arrow pressed
 			player->moveDown();
 			//CCLOG("Down button is pressed!");
 		}
-		if (controller->getButton(4)->isSelected()) {													// Left arrow pressed
+		if (controller->getButton(4)->isSelected()) {														// Left arrow pressed
 			player->moveLeft();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (controller->getButton(6)->isSelected()) {												// Right arrow pressed
+		else if (controller->getButton(6)->isSelected()) {													// Right arrow pressed
 			player->moveRight();
 			//CCLOG("Down button is pressed!");
 		}
@@ -461,11 +471,11 @@ void Level::setInvisible(Node * node) {
 
 void Level::checkCollisions() {
 	// Enemy laser move off screen
-	for (Sprite* enemyLaser : *enemyLasers) {
+	for (cocos2d::Sprite* enemyLaser : *enemyLaserList) {
 		if (!(enemyLaser->isVisible())) continue;
 
-		if (enemyLaser->getPosition().x == -enemyLaser->getContentSize().width)				// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);													// Hide the laser
+		if (enemyLaser->getPosition().x == -enemyLaser->getContentSize().width)							// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);																// Hide the laser
 	}
 
 	if (powerUpLife->isVisible()) {
@@ -481,7 +491,7 @@ void Level::checkCollisions() {
 	for (cocos2d::Sprite* asteroid : *_asteroids) {														// JOR replaced auto specifier
 		if (!(asteroid->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
+		for (cocos2d::Sprite* shipLaser : *shipLaserList) {												// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;													// If the ship is not visible
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
@@ -498,18 +508,17 @@ void Level::checkCollisions() {
 			asteroid->setVisible(false);																// Destroy the asteroid
 			player->getSprite()->runAction(Blink::create(1.0F, 9));										// Flash the Player ship
 			Game::Instance()->takeLife();																// Decrement the number of lives
+			Audio::Instance()->explodePlayerFX();														// Play the explosion effect
 			//livesList[Game::Instance()->getLives()]->setVisible(false);								// Set the player lives invisible (in the order 2,1,0)
-			newHUD->updateLives();																		// Updates the displayed lives when the player collides with an object
+			//newHUD->updateLives();																	// Updates the displayed lives when the player collides with an object
 		}
 	}
 	
 	// Enemy ship collisions
-	//for (cocos2d::Sprite* enemyShip : *EnemyShipList) {												// JOR replaced auto specifier
-	//for (cocos2d::Sprite* enemyShip : *EnemyShips) {													//
-	for (EnemyShip* enemyShip : *EnemyShips) {													// 
+	for (EnemyShip* enemyShip : *EnemyShips) {														
 		if (!(enemyShip->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *_shipLasers) {												// JOR replaced auto specifier
+		for (cocos2d::Sprite* shipLaser : *shipLaserList) {												// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
@@ -526,59 +535,19 @@ void Level::checkCollisions() {
 	}
 }
 
-/*
-void Level::update(float dt) {
-	
-	//HUD::Instance()->update();																			// Update the score (Not working)
-
-
-	// Update timer this class
-
-	// Update timer from Game class
-	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
-	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
-
-	//time -= ((int) dt % 10);
-	//time += dt;
-	//this->schedule(schedule_selector(Level1::updateTimer), 1.0f);											// Call the function every 1 second
-	//if (curTimeMillis > timerTime) {
-	//	timerTime = curTimeMillis + 1000;
-	//	time--;
-	//}
-
-	//timeLabel->setString("Time: " + to_string(time));
-
-	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
-	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
-	checkCollisions();																						// Check have game objects collided with each other
-	checkGameOver(curTimeMillis);																			// Check is the game over or not
-
-
-		// Update displayed lives
-	//if (_lives < 3 && !_gameOver) {																		// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_LIVES && !_gameOver) {											// If the players lives are less than the max num lives
-		livesList[Game::Instance()->getLives()]->setVisible(false);											// Set the lives invisible (2,1,0)
-	}
-
-	// Update the enemy ship position
-	//EnemyShip->setPosition(EnemyShip->getPosition().x - 2, EnemyShip->getPosition().y);
-	
-}
-*/
-
 void Level::checkGameOver(float currenTime) {															// If the player has run out of lives
 	if (Game::Instance()->getLives() <= 0) {															// If the player has run out of lives
 		player->getSprite()->stopAllActions();															// CCNode.cpp
 		player->getSprite()->setVisible(false);															// Destroy the ship
 		endScene(KENDREASONLOSE);																		// Player has died
 	}
-	else if (currenTime >= _gameOverTime) {
+	else if (currenTime >= Game::Instance()->getEndTime()) {
 		endScene(KENDREASONWIN);																		// Player stays playing for the length of time
 	}
 }
 
 void Level::onTouchesBegan(const std::vector<Touch*>& touches, Event  *event){
-	if (Game::Instance()->isGameOver()) return;													// If the ship is not visible
+	if (Game::Instance()->isGameOver()) return;															// If the ship is not visible
 
 	Audio::Instance()->laserFX();
 	spawnLasers(NUM_LASERS_TO_FIRE);
@@ -592,37 +561,30 @@ void Level::endScene(EndReason endReason) {
 
 	const int TOTAL_LIST_ELEMENTS = 9;
 
-	Game::Instance()->checkHighScore();																	// The game has ended, check if the current score is the high score and save it if it is
+	///Game::Instance()->checkHighScore();																// The game has ended, check if the current score is the high score and save it if it is
 
 	// Win / Lose Message
-	//char message[17] = "Level 1 Complete";
-	std::string message = "Level " + to_string(Game::Instance()->getLevel()) + " Complete";
-	//if (endReason == KENDREASONLOSE) strcpy(message, "You Lose");
+	std::string message = "Level " + StringUtils::toString(Game::Instance()->getLevel()) + " Complete";	// Win 
 	if (endReason == KENDREASONLOSE) message = "You Lose";
 
 	// 1. Level Over Message
-	//levelCompleteLbl = Label::createWithBMFont("Arial.fnt", message);									// JOR replaced auto specifier
 	levelCompleteLbl = cocos2d::Label::createWithTTF(message, "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);
 	levelCompleteLbl->setPosition(winSize.width / 2, winSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 2));
 	this->addChild(levelCompleteLbl);
 	
 	// 2. Total Asteroids Destroyed
-	cocos2d::Label* asteroidsLbl = cocos2d::Label::createWithTTF("Total Asteroids Destroyed: " + to_string(Game::Instance()->getAsteroidKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
+	cocos2d::Label* asteroidsLbl = cocos2d::Label::createWithTTF("Total Asteroids Destroyed: " + StringUtils::toString(Game::Instance()->getAsteroidKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
 	asteroidsLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height - (visibleSize.height / TOTAL_LIST_ELEMENTS * 3)));
 	asteroidsLbl->setColor(Color3B::RED);
 	//asteroidsLbl->setScale((visibleSize.height == 1080) ? 1.5f : 1.0f);
 	this->addChild(asteroidsLbl);
-
-
-
-
-
+	
 	/*
 	if (Game::Instance()->getAsteroidCount() > 0) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
 			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 3.5f),					// Position
 			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
-			(float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(),			// percentage
+			(float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(),				// percentage
 			red, trans);																							// Colours
 		this->addChild(healthBar);
 	}
@@ -637,10 +599,9 @@ void Level::endScene(EndReason endReason) {
 		this->addChild(healthBar);
 	}
 	*/
-
-
+	
 	// 3. Total Enemy Ships Destroyed
-	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + to_string(Game::Instance()->getEnemyShipKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
+	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + StringUtils::toString(Game::Instance()->getEnemyShipKills()), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);							// JOR replaced auto specifier
 	enemyShipsLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 4)));
 	enemyShipsLbl->setColor(Color3B::RED);
 	this->addChild(enemyShipsLbl);
@@ -655,21 +616,15 @@ void Level::endScene(EndReason endReason) {
 
 	// 5. Continue To Next Level
 	if (endReason != KENDREASONLOSE && level < 4)
-		message = "Start Level " + to_string(Game::Instance()->getLevel()+1);
+		message = "Start Level " + StringUtils::toString(Game::Instance()->getLevel()+1);
 	if (level == 4 || endReason == KENDREASONLOSE)
 		message = "Main Menu";
 
 	cocos2d::Label* continueLbl = Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
 	//continueLbl->setBMFontSize(10);																	// Test set font size
+	// Level Progression
 	if (endReason != KENDREASONLOSE) {
-		if (level == 1) 
-			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel2, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		else if (level == 2) 
-			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel3, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		else if (level == 3) 
-			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel4, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		else if (level == 4) 
-			continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		levelProgression(continueLbl);
 	}
 	else 
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -686,6 +641,19 @@ void Level::endScene(EndReason endReason) {
 	this->addChild(menu);
 
 	this->unscheduleUpdate();																			// Terminate update callback
+}
+
+void Level::levelProgression(cocos2d::Label* continueLbl) {
+	unsigned int level = Game::Instance()->getLevel();
+
+	if (level == 1)
+		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel2, this));
+	else if (level == 2)
+		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel3, this));
+	else if (level == 3)
+		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel4, this));
+	else if (level == 4)
+		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));
 }
 
 // Callbacks
@@ -724,3 +692,43 @@ void Level::menuCloseCallback(Ref* pSender) {
 #endif
 }
 
+
+/*
+void Level::update(float dt) {
+
+//HUD::Instance()->update();																			// Update the score (Not working)
+
+
+// Update timer this class
+
+// Update timer from Game class
+Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
+timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
+
+//time -= ((int) dt % 10);
+//time += dt;
+//this->schedule(schedule_selector(Level1::updateTimer), 1.0f);											// Call the function every 1 second
+//if (curTimeMillis > timerTime) {
+//	timerTime = curTimeMillis + 1000;
+//	time--;
+//}
+
+//timeLabel->setString("Time: " + to_string(time));
+
+spawnAsteroids(curTimeMillis);																			// Spawn asteroids
+spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
+checkCollisions();																						// Check have game objects collided with each other
+checkGameOver(curTimeMillis);																			// Check is the game over or not
+
+
+// Update displayed lives
+//if (_lives < 3 && !_gameOver) {																		// If the players lives are less than 3
+if (Game::Instance()->getLives() < MAX_LIVES && !_gameOver) {											// If the players lives are less than the max num lives
+livesList[Game::Instance()->getLives()]->setVisible(false);											// Set the lives invisible (2,1,0)
+}
+
+// Update the enemy ship position
+//EnemyShip->setPosition(EnemyShip->getPosition().x - 2, EnemyShip->getPosition().y);
+
+}
+*/

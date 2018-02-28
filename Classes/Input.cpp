@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "Game.h"
 
 Input* Input::s_pInstance;																// Singleton for Input
 
@@ -22,19 +23,22 @@ double Input::keyPressedDuration(cocos2d::EventKeyboard::KeyCode code) {
 
 void Input::init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher) {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
-		cocos2d::EventListenerKeyboard* eventListener = EventListenerKeyboard::create();	// JOR replaced auto specifier
-		Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
-		eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+		cocos2d::EventListenerKeyboard* eventListener = cocos2d::EventListenerKeyboard::create();	// JOR replaced auto specifier
+		cocos2d::Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
+		eventListener->onKeyPressed = [=](cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
 			// If a key already exists, do nothing as it will already have a time stamp
 			// Otherwise, set's the timestamp to now
 			if (keys.find(keyCode) == keys.end()) {
 				keys[keyCode] = std::chrono::high_resolution_clock::now();
 			}
 		};
-		eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {			
+
+		eventListener->onKeyReleased = [=](cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
 			keys.erase(keyCode);															// remove the key.  std::map.erase() doesn't care if the key doesnt exist
 		};
 
 		eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, layer);
 	}
+
+	CCLOG("Level %d: Input Initialised", Game::Instance()->getLevel());
 }

@@ -11,22 +11,84 @@
 
 #include "Game.h"
 
-Game* Game::s_pInstance;	// Game Singleton
+// Level length
+#define LEVEL_TIME_EASY 25000
+#define LEVEL_TIME_MED 30000
+#define LEVEL_TIME_HARD 40000
+
+Game* Game::s_pInstance;			// Game Singleton
+
+//unsigned int LEVEL_START_TIME = 30000;
 
 bool Game::init() {
-	score = 0;				// Initialise the score value
-	level = 1;				// Initialise the level value
-	_gameOver = false;
-	currentTime = 0;
+	// Set timer
+	m_levelDuration = LEVEL_TIME_MED;
+
+	if (m_difficulty == EASY) {
+		m_levelDuration = LEVEL_TIME_EASY;
+	}
+	else if (m_difficulty == HARD) {
+		m_levelDuration = LEVEL_TIME_HARD;			// Level start time
+	}
+
+	m_endTime = getTimeTick() + m_levelDuration;	// Set the level finish time
+	m_time = m_levelDuration / 1000;				// Set the time for the countdown timer
+	m_currentTime = 0;
+
+	// Initial level values
+	m_score = 0;									// Initialise the score value
+	m_level = 1;									// Initialise the level value
+	m_gameOver = false;
 
 	// Reset totals
-	asteroidKills = 0;		// Number of asteroids destroyed
-	enemyShipKills = 0;		// Number of enemy ships destroyed
-	asteroidCount = 0;		// Number of asteroids spawned
-	enemyShipCount = 0;		// Number of enemy ships spawnedawned
+	m_asteroidKills = 0;							// Number of asteroids destroyed
+	m_enemyShipKills = 0;							// Number of enemy ships destroyed
+	m_asteroidCount = 0;							// Number of asteroids spawned
+	m_enemyShipCount = 0;							// Number of enemy ships spawnedawned
+
+	CCLOG("Level %d: Countdown Timer Initialised", Game::Instance()->getLevel());
 	
 	return true;
 }
+
+void Game::addLife() { 
+	if (m_lives <= MAX_PLAYER_LIVES) 				// Increment the number of lives (Max 5)
+		m_lives++; 
+	CCLOG("Player Lives Incremented: %d", m_lives);
+}
+
+bool Game::checkHighScore() {
+	// Save Score
+	UserDefault* def = UserDefault::getInstance();
+	unsigned int highScore = def->getIntegerForKey("Score1", 0);
+
+	if (getScore() > highScore) {
+		return true;
+	}
+
+	return false;
+}
+
+void Game::updateTimer(float curTimeMillis) {
+	if (curTimeMillis > m_currentTime) {
+		m_currentTime = curTimeMillis + 1000.0f;
+		m_time--;
+
+		CCLOG("Countdown Timer: %d", m_time);
+	}
+	//timeLabel->setString("Time: " + to_string(time));
+}
+
+
+float Game::getTimeTick() {
+	timeval time;
+	gettimeofday(&time, NULL);
+	unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (float)millisecs;
+}
+
+/*
+// Used for single score saving
 
 // When the game has ended, check if the current score is a high score and save it if it is
 void Game::checkHighScore() {
@@ -42,11 +104,4 @@ void Game::checkHighScore() {
 
 	def->flush();
 }
-
-void Game::updateTimer(float curTimeMillis) {
-	if (curTimeMillis > currentTime) {
-		currentTime = curTimeMillis + 1000.0f;
-		time--;
-	}
-	//timeLabel->setString("Time: " + to_string(time));
-}
+*/

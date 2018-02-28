@@ -1,5 +1,7 @@
 #include "EnemyShip.h"
 #include "Game.h"
+#include "Level.h"
+
 /*
 void EnemyShip::myUpdate() {
 
@@ -11,8 +13,9 @@ void EnemyShip::myUpdate() {
 */
 EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	EnemyShip* eship = new EnemyShip();
-	
-	if (eship && eship->initWithFile("EnemyShip.png")) {
+
+	//if (eship && eship->initWithFile("EnemyShip.png")) {
+	if (eship && eship->initWithFile("ShipGreen.png")) {
 		eship->autorelease();
 		/*
 		// Don't know how to update????????????
@@ -75,7 +78,27 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 	return 
 }
 */
-void EnemyShip::update(float dt) {
+void EnemyShip::update(float curTimeMillis) {
+	// Fire laser
+	CCLOG("Enemy Ship Update");
+	
+	if (isVisible()) {
+		//CCLOG("Enemy Ship Is Visible");
+
+		if (curTimeMillis > getNextFire()) {
+			CCLOG("Enemy Call Fire Laser");
+
+			Level::Instance()->spawnEnemyLaser(getPosition());
+
+			CCLOG("Enemy Call Fire Laser");
+			nextFire = curTimeMillis + m_fireRate;
+
+			//setNextFire(curTimeMillis + ENEMY_FIRE_RATE);
+
+			CCLOG("Enemy Laser Fired");
+		}
+	}
+	
 	//bar->clear();
 	//bar->redraw();
 	//bar->draw();
@@ -84,6 +107,8 @@ void EnemyShip::update(float dt) {
 
 	//float test = MAX_SHIP_LIVES;
 	//bar->updateBar(lives / test);
+
+
 }
 
 	/*

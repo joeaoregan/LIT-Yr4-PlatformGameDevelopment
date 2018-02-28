@@ -39,19 +39,21 @@ public:
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
 	
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+	void initLasers();														// Create lists of bullets for player and enemies
+	void initPowerUps();													// Set up the power ups
 	
 	virtual void update(float dt);											// Update function
 	virtual void endScene(EndReason endReason);
     	
     void menuCloseCallback(cocos2d::Ref* pSender);							// Selector callback, exit the game when button pressed
-
-	float getTimeTick();													// Get current time in milliseconds
-
+	
 	void getInput();														// Get input from DPad
 	
 	void checkCollisions();													// 20180202 Check is the game over or not
 
 	void checkGameOver(float currenTime);									// 20180202 Check have game objects collided with each other
+
+	void levelProgression(cocos2d::Label* continueLbl);						// Decide what scene comes next
 
 	// Callbacks
 	void restartTapped(Ref* pSender);
@@ -68,15 +70,15 @@ public:
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
 
 	// Spawn game objects
-	void spawnAsteroids(float curTimeMillis);								// 20180202 Spawn asteroids
+	void spawnObjects(float curTimeMillis);								// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
 	void spawnLasers(int amount);											// 20180221
-	//void spawnEnemyLaser(float x, float y);								// 20180221
 	void spawnEnemyLaser(cocos2d::Point pos);								// 20180221
 
 	// Fire enemy lasers
-	void enemyFireLaser(float curTimeMillis);
-	
+	//void enemyFireLaser(float curTimeMillis);
+
+protected:
 	// Get / Set methods
 	Size getWinSize() { return winSize; }									// Get the window size
 	int getNextShipLaser() { return _nextShipLaser; }						// Next laser in laser list
@@ -95,34 +97,8 @@ public:
 	ParallaxNodeExtras *_backgroundNode;									// Scrolling background
 	Player* player;															// Player sprite
 	
-	Vector<Sprite*>* getLaserList() { return _shipLasers; }					// return ship lasers
-				
-private:
-	Sprite *playerLife;														// Indicate lives left
-	
-	// Asteroids
-	int _nextAsteroid = 0;
-	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
-
-	// Enemies
-	int nextEnemyShip = 0;	
-	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship	
-	
-
-	// Weapons
-	int _nextShipLaser = 0;													// Ship laser list index
-	int nextEnemyLaser = 0;													// Enemy laser list index
-
-	// Object lists
-	Vector<Sprite*>* _asteroids;											// List of asteroids
-	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
-	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
-	//Vector <Sprite*> * EnemyShips;										// List of enemy ships
-	Vector<Sprite*> *_shipLasers;											// List of player lasers
-	Vector<Sprite*> *enemyLasers;											// List of Enemylasers
-	Sprite* livesList[MAX_LIVES];											// List of lives
-
-protected:
+	Vector<Sprite*>* getLaserList() { return shipLaserList; }					// return ship lasers
+		
 	MusicPlayer* mplayer;													// Controls for playing/pausing music and skipping tracks
 	HUD* newHUD;															// Test hud
 	DPad *controller;														// Add directional pad for mobile device
@@ -142,10 +118,35 @@ protected:
 	cocos2d::MenuItemLabel* continueItem;
 
 	// Power ups
-	cocos2d::Sprite* powerUpLife;													// New life power up
+	cocos2d::Sprite* powerUpLife;											// New life power up
 	float powerUpTime;
 	float powerUpY;
 	bool spawned = false;
+
+	Sprite *playerLife;														// Indicate lives left
+
+	// Asteroids
+	int _nextAsteroid = 0;
+	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
+
+	// Enemies
+	int nextEnemyShip = 0;
+	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship		
+
+	// Weapons
+	int _nextShipLaser = 0;													// Ship laser list index
+	int nextEnemyLaser = 0;													// Enemy laser list index
+
+	// Object lists
+	Vector<Sprite*>* _asteroids;											// List of asteroids
+	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
+	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
+	Vector<Sprite*> *shipLaserList;											// List of player lasers
+	Vector<Sprite*> *enemyLaserList;											// List of Enemylasers
+	Sprite* livesList[MAX_PLAYER_LIVES];									// List of lives
+
+private:
+
 };
 
 #endif // __LEVEL_H__

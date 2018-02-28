@@ -27,6 +27,7 @@ public:
 	void init();						// Play music and preload effects
 
 	void explodeFX();					// Play explosion sound effect
+	void explodePlayerFX();				// Play player explosion sound effect
 	void laserFX();						// Play laser sound effect
 	void powerUpFX();					// Play power up sound effect
 

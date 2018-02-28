@@ -22,6 +22,7 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 #define BUTTON_FX "buttonClick.wav"
 #define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
+#define EXPLOSION_PLAYER "explosion.mp3"
 #define LASER_SHIP "laser_ship.wav"
 #define POWER_UP "powerup.wav"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)												// CAF: Core audio format
@@ -62,6 +63,9 @@ void Audio::explodeFX() {
 	SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_LARGE);							// Play explosion sound effect
 }
 
+void Audio::explodePlayerFX() {
+	SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_PLAYER);							// Play explosion sound effect
+}
 void Audio::laserFX() {
 	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);								// Play laser sound effect
 }

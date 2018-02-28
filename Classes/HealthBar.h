@@ -36,13 +36,16 @@ public:
 			backgroundRect[2] = cocos2d::Vec2(hbar->width / 2, hbar->height / 2);
 			backgroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
 
-			hbar->foregroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
-			//foregroundRect[1] = cocos2d::Vec2(w / 2 * percent, -h / 2);
-			//foregroundRect[2] = cocos2d::Vec2(w / 2 * percent, h / 2);
-			hbar->foregroundRect[1] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), -hbar->height / 2);
-			hbar->foregroundRect[2] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), hbar->height / 2);
-			hbar->foregroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
 
+
+			hbar->schedule([=](float dt) {
+				hbar->foregroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
+				//foregroundRect[1] = cocos2d::Vec2(w / 2 * percent, -h / 2);
+				//foregroundRect[2] = cocos2d::Vec2(w / 2 * percent, h / 2);
+				hbar->foregroundRect[1] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), -hbar->height / 2);
+				hbar->foregroundRect[2] = cocos2d::Vec2((-hbar->width / 2) + (hbar->width  * hbar->percent), hbar->height / 2);
+				hbar->foregroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
+			}, 1.0f, "callback");
 
 			rectNode->drawPolygon(backgroundRect, 4, BGColor, 1, white);
 			rectNode->drawPolygon(hbar->foregroundRect, 4, FGColor, 1, white);

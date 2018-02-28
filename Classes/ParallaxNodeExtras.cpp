@@ -83,7 +83,7 @@ bool ParallaxNodeExtras::init() {
 	else if (Game::Instance()->getLevel() == 3)
 		bgFileName = "bg_front_spacedust1080L3.png";
 
-/*
+	/*
 	if (visibleSize.height == 1080) {
 	} else {
 		if (Game::Instance()->getLevel() == 1 || Game::Instance()->getLevel() == 4)
@@ -93,23 +93,24 @@ bool ParallaxNodeExtras::init() {
 		else if (Game::Instance()->getLevel() == 3)
 			bgFileName = "bg_front_spacedustL3.png";
 	}
-*/
-	int scaleDown = (visibleSize.height == 1080) ? 1.0f : 0.67f;											// Scale down high res image
+	*/
+	float scaleDown = (visibleSize.height == 1080) ? 1.0f : 0.67f;											// Scale down high res image
+	//float scaleUp = (visibleSize.height == 1080) ? 1.5f : 1.0f;												// Scale up lower res image
+
 	_spaceDust1 = Sprite::create(bgFileName);
 	_spaceDust2 = Sprite::create(bgFileName);
-	_spaceDust1->setScale(scaleDown);
-	_spaceDust2->setScale(scaleDown);
+	//_spaceDust1->setScale(scaleDown);
+	//_spaceDust2->setScale(scaleDown);
 
 	_planetSunrise = Sprite::create("bg_planetsunrise.png");
 	_galaxy = Sprite::create("bg_galaxy.png");
 	_spatialAnomaly1 = Sprite::create("bg_spacialanomaly.png");
 	_spatialAnomaly2 = Sprite::create("bg_spacialanomaly2.png");
 
-	int scaleUp = (visibleSize.height == 1080) ? 1.5f : 1.0f;												// Scale up lower res image
-	_planetSunrise->setScale(scaleUp);
-	_galaxy->setScale(scaleUp);
-	_spatialAnomaly1->setScale(scaleUp);
-	_spatialAnomaly2->setScale(scaleUp);
+	_planetSunrise->setScale(scaleDown);
+	_galaxy->setScale(scaleDown);
+	_spatialAnomaly1->setScale(scaleDown);
+	_spatialAnomaly2->setScale(scaleDown);
 
 	// 3) Determine relative movement speeds for space dust and background
 	cocos2d::Point dustSpeed = Point(0.1F, 0.1F);															// JOR replaced auto specifier
@@ -123,6 +124,9 @@ bool ParallaxNodeExtras::init() {
 	addChild(_spatialAnomaly1, -1, bgSpeed, Point(900, visibleSize.height * 0.3));
 	addChild(_spatialAnomaly2, -1, bgSpeed, Point(1500, visibleSize.height * 0.9));
 
+
+	//setScale(scaleDown);
+
 	return true;
 }
 
@@ -132,9 +136,9 @@ void ParallaxNodeExtras::update(float dt) {
 
 	// Parallax
 	cocos2d::Vector<cocos2d::Sprite*>* spaceDusts = new Vector<Sprite*>(2);					// JOR replaced auto specifier
-		spaceDusts->pushBack(_spaceDust1);
+	spaceDusts->pushBack(_spaceDust1);
 	spaceDusts->pushBack(_spaceDust2);
-	//for (auto spaceDust : *spaceDusts) {
+
 	for (cocos2d::Sprite* spaceDust : *spaceDusts) {
 		float xPosition = convertToWorldSpace(spaceDust->getPosition()).x;
 		float size = spaceDust->getContentSize().width;

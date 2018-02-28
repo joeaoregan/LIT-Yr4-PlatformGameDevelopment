@@ -10,16 +10,13 @@
 #include "Game.h"
 #include "HighScores.h"
 #include "MainMenu.h"
-#include "LevelTest.h"	// was level1
-
-#include "HUD.h"
-//#include <UIText.h>
+//#include "HUD.h"
 
 #define MAX_SCORES_DISPLAYED 10
 
 // Arrays to store player names and scores
 unsigned int arrScores[MAX_SCORES_DISPLAYED + 1];								// Array of scores +1 for sorting
-std::string arrNames[MAX_SCORES_DISPLAYED + 1];								// Array of names +1 for sorting
+std::string arrNames[MAX_SCORES_DISPLAYED + 1];									// Array of names +1 for sorting
 
 Scene* HighScores::createScene() {
 	cocos2d::Scene* scene = Scene::create();		// 'scene' is an autorelease object, JOR replaced auto specifier
@@ -37,24 +34,21 @@ bool HighScores::init() {
 
 	titleSprite->setTexture("HighScores.png");									// Change the title image text
 		
-	// Scores
-	sortScores();																// set value for tempScore
-
-	//MarkerFelt.ttf Super Mario Bros..ttf 
-	//highScoreLbl = LabelTTF::create(tempScore->getCString(), 
-	//	"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score	
-	highScoreLbl = cocos2d::Label::createWithTTF(tempScore->getCString(),
+	m_scoresStr = sortScores();													// set value for tempScore
+		
+	//m_allScoresLbl = cocos2d::Label::createWithTTF(tempScore->getCString(),	// Label to display current high score	
+	m_allScoresLbl = cocos2d::Label::createWithTTF(m_scoresStr ,
 		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score (Label replaces LabelTTF causing warnings)
-	highScoreLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, 
+	m_allScoresLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, 
 		visibleSize.height * 0.4f + origin.y));									// Set its position on screen
-	highScoreLbl->setColor(Color3B::WHITE);										// Set the text colour
-	this->addChild(highScoreLbl);												// Add it to the layer
+	m_allScoresLbl->setColor(Color3B::WHITE);									// Set the text colour
+	this->addChild(m_allScoresLbl);												// Add it to the layer
 
 	return true;
 }
 
-// Sort the scores, and display them using a LabelTTF
-void HighScores::sortScores() {
+// Sort the scores, and display them using a Label
+std::string HighScores::sortScores() {
 	int swapScore = 0;
 	std::string tempName = "";
 	UserDefault* def = UserDefault::getInstance();
@@ -102,13 +96,16 @@ void HighScores::sortScores() {
 	for (int i = 0; i < MAX_SCORES_DISPLAYED; i++) {
 		if (arrScores[i] == 0) continue;										// No need to display if score is 0
 
-		scoreLabelText += "\n" + to_string(i + 1) + ".\t" + 
-			arrNames[i] + "\t " + to_string(arrScores[i]);
+		//scoreLabelText += "\n" + StringUtils::toString(i + 1) + ".\t" +
+		//	arrNames[i] + "\t " + StringUtils::toString(arrScores[i]);
+		scoreLabelText += "\n" + StringUtils::toString(i + 1) + ".  " +
+			arrNames[i] + "  " + StringUtils::toString(arrScores[i]);
 	} 
+	
+	saveScores();																// Save the newly sorted socres
 
-	tempScore = __String::create(scoreLabelText.c_str());						// Otherwise Reset the scores table with normal heading
-
-	saveScores();
+	CCLOG("%s", scoreLabelText.c_str());
+	return scoreLabelText;
 }
 
 void HighScores::saveScores() {
@@ -121,6 +118,8 @@ void HighScores::saveScores() {
 		sprintf(scoreTxt, "Name%d", i);
 		def->setStringForKey(scoreTxt, arrNames[i - 1]);						// and the player name
 	}
+
+	def->flush();
 }
 
 void HighScores::resetScores() {

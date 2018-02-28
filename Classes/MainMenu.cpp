@@ -31,7 +31,6 @@ Scene* MainMenu::createScene() {
 bool MainMenu::init() {
 	MenuScene::init();							// Initialise base class
 	
-
 	/********************************************/
 	/*		1. Make changes to base class		*/
 	/********************************************/
@@ -62,7 +61,6 @@ bool MainMenu::init() {
 	setYPosAndScale(exitItem, 0.3f);
 
 	// Show current high score
-	//int highScore = def->getIntegerForKey("HIGHSCORE", 0);
 	highScore = def->getIntegerForKey("Score1", 0);																					// Load the high score
 	std::string playerName = def->getStringForKey("Name1");																			// and the name of the player who got the score
 	

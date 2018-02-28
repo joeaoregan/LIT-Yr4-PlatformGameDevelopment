@@ -9,6 +9,10 @@
 #include "MenuScene.h"
 //#include "Level.h"
 //#include "Settings.h"
+#include "MainMenu.h"
+#include "Level1.h"
+#include "Level2.h"
+#include "Level3.h"
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor

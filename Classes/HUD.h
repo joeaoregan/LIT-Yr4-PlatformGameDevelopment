@@ -10,8 +10,9 @@
 #ifndef __HUD__
 #define __HUD__
 
-#define MAX_LIVES 5											// The maximum number of lives a player can have
+#define MAX_PLAYER_LIVES 5											// The maximum number of lives a player can have
 
+/*
 // Needed to use to_string method with android
 template <typename T>
 std::string to_string(T value) {
@@ -19,6 +20,7 @@ std::string to_string(T value) {
 	os << value;
 	return os.str();
 }
+*/
 
 class HUD : public cocos2d::Node {
 public:
@@ -39,11 +41,12 @@ public:
 	void update(float curTimeMillis);								// Update the HUD, passing the time in milliseconds for the timer
 
 	// Update variables
-	void updateLives();												// Update the displayed number of lives sprites
+	//void updateLives();											// Update the displayed number of lives sprites
 	void updateTimer(float curTimeMillis);							// 20180204 Update the countdown timer, 21/02/2018 Passing curTimeMillis solves Android timer issue
-	void setLevel(unsigned int set);								// Update the level number for levels after 1
+	void setLevelLabel();											// Update the level number for levels after 1
 
 private:
+	cocos2d::Size visibleSize;										// Screen resolution changes depending on the platform
 
 	static HUD* s_pInstance;										// Single instance of HUD used as singleton, so only one instance exists thoughout the game
 	
@@ -57,14 +60,14 @@ private:
 
 	// Lives
 	cocos2d::Sprite *playerLife;									// Indicate lives left
-	cocos2d::Sprite* livesList[MAX_LIVES];							// List of lives
+	cocos2d::Sprite* livesList[MAX_PLAYER_LIVES];					// List of lives
 
 	// Time
 	float currentTime;												// 20180221 Change to float to fix Android timer issue
 	unsigned int time;												// Countdown timer displayed time
 
 	// Level
-	unsigned int levelNum;
+	//unsigned int m_levelNum;										// The current level number
 };
 
 #endif // __AUDIO__

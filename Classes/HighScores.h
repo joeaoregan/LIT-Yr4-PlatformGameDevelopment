@@ -20,15 +20,14 @@ public:
 		
 	CREATE_FUNC(HighScores);					// Static create() method implemented manually
 	
-	void sortScores();							// Sort the high scores
+	std::string sortScores();					// Sort the high scores
 	void resetScores();							// Reset the scores
 	void saveScores();							// Save the names and scores to UserDefaults
 private:
 
 	// High Score
-	__String *tempScore;						// Text to display	
-	//cocos2d::LabelTTF* highScoreLbl;			// Label to display current high score
-	cocos2d::Label* highScoreLbl;				// Label to display current high score
+	std::string m_scoresStr;					// Text to display	
+	cocos2d::Label* m_allScoresLbl;				// Label to display current high score
 };
 
 #endif // __HIGH_SCORES_H__

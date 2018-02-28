@@ -28,8 +28,8 @@ public:
 
 	//void myUpdate();
 
-	unsigned int getNextFire() { return nextFire; }
-	void setNextFire(unsigned int set) { nextFire = set; }
+	float getNextFire() { return nextFire; }
+	void setNextFire(float set) { nextFire = set; }
 
 private:
 
@@ -39,7 +39,9 @@ private:
 	HealthBar* bar;
 
 	unsigned int fireRate;
-	unsigned int nextFire;
+	float nextFire;
+
+	unsigned int m_fireRate = 500;
 
 	cocos2d::DrawNode* myDrawNode;
 };

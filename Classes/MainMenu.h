@@ -15,7 +15,6 @@
 
 class MainMenu : public MenuScene {
 public:
-
 	static cocos2d::Scene* createScene();		// Returns class instance pointer
 		
 	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
