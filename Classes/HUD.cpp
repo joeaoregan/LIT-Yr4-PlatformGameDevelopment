@@ -101,13 +101,24 @@ void HUD::update(float curTimeMillis) {
 				auto action2 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.5f : 2.25f);
 				auto action3 = cocos2d::MoveTo::create(0.25f, cocos2d::Point(livesList[i]->getPosition().x, livesList[i]->getPosition().y));
 				auto action4 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.0f : 1.5f);
+
 				//auto sequence = cocos2d::Sequence::create(action1, action2, nullptr);
 				//auto sequence1 = cocos2d::Sequence::create(action1, action2, action2->reverse(), action1->reverse(), nullptr);
 				//auto sequence1 = cocos2d::Sequence::create(action1, action2, nullptr);
 				//livesList[i]->runAction(sequence1);
-				auto sequence2 = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action3, action4, nullptr), nullptr);
+				//auto sequence2 = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action3, action4, nullptr), nullptr);
+				//auto sequence3 = Spawn::create(action1, action2, nullptr);
+				//auto action = cocos2d::Sequence::create(sequence3, sequence3->reverse(), nullptr);
 				//livesList[i]->runAction(Spawn::create(action1, action2, nullptr));
-				livesList[i]->runAction(sequence2);
+				//auto sequence2 = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), nullptr);
+				//auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action2->reverse(), action1->reverse(), nullptr), nullptr);
+				//auto sequence = cocos2d::Sequence::create(action2, action2->reverse(), nullptr);
+				//auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), nullptr); // OK
+				//auto action = cocos2d::Sequence::create(sequence, sequence->reverse(), nullptr);
+
+				auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action3, action4, nullptr), nullptr); // OK
+
+				livesList[i]->runAction(sequence);
 
 				//livesList[i]->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
 				

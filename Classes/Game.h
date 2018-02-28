@@ -56,7 +56,7 @@ public:
 	unsigned int getEnemyShipCount() { return m_enemyShipCount; }	// The total number of enemy ships spawned
 	bool musicPlayerVisible() { return m_PlayerVisible; }			// Is the music player to be hidden or not
 	unsigned int getDifficulty() { return m_difficulty; }			// Get the difficulty setting
-	unsigned int getLevelDuration() { return m_levelDuration; }		// Get the level end time
+	float getLevelDuration() { return m_levelDuration; }		// Get the level end time
 	unsigned int getEndTime() { return m_endTime; }					// Get the level end time
 
 	// Set

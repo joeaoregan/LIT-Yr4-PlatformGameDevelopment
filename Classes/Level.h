@@ -41,6 +41,9 @@ public:
     virtual bool init();													// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	void initLasers();														// Create lists of bullets for player and enemies
 	void initPowerUps();													// Set up the power ups
+	void initAsteroids();													// Add asteroids to the vector list of asteroids
+	void initEnemyShips();													// Initialise the list of enemy ships
+	void initDifficulty();													// Initialise the game difficulty
 	
 	virtual void update(float dt);											// Update function
 	virtual void endScene(EndReason endReason);
@@ -109,7 +112,7 @@ protected:
 	double _gameOverTime;													// Game over time
 
 	// Time
-	double curTime;															// Current game time
+	float curTimeInit;														// Current game time
 	float curTimeMillis;													// Current time in milliseconds
 
 	// End of Level Labels
@@ -142,8 +145,13 @@ protected:
 	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
 	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
 	Vector<Sprite*> *shipLaserList;											// List of player lasers
-	Vector<Sprite*> *enemyLaserList;											// List of Enemylasers
+	Vector<Sprite*> *enemyLaserList;										// List of Enemylasers
 	Sprite* livesList[MAX_PLAYER_LIVES];									// List of lives
+
+	// Player fire rate
+	float m_nextFire;
+	unsigned int m_fireRate = 300;											// Set the fire rate millisecond interval depending on the difficult 200: easy, 300: normal, 400: hard
+	float m_powerUpDuration = 3.5f;											// How long the power up will remain on screen in seconds (Easy: 5, Medium: 3.5, Hard: 2)
 
 private:
 

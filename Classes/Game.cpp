@@ -12,9 +12,9 @@
 #include "Game.h"
 
 // Level length
-#define LEVEL_TIME_EASY 25000
-#define LEVEL_TIME_MED 30000
-#define LEVEL_TIME_HARD 40000
+#define LEVEL_TIME_EASY 25000.0f
+#define LEVEL_TIME_MED 30000.0f
+#define LEVEL_TIME_HARD 40000.0f
 
 Game* Game::s_pInstance;			// Game Singleton
 
@@ -24,6 +24,7 @@ bool Game::init() {
 	// Set timer
 	m_levelDuration = LEVEL_TIME_MED;
 
+
 	if (m_difficulty == EASY) {
 		m_levelDuration = LEVEL_TIME_EASY;
 	}
@@ -31,7 +32,12 @@ bool Game::init() {
 		m_levelDuration = LEVEL_TIME_HARD;			// Level start time
 	}
 
+	CCLOG("Game: Level Duration =  %f", m_levelDuration);
+
 	m_endTime = getTimeTick() + m_levelDuration;	// Set the level finish time
+
+	CCLOG("Game Endtime: %f", m_endTime);
+
 	m_time = m_levelDuration / 1000;				// Set the time for the countdown timer
 	m_currentTime = 0;
 
@@ -78,7 +84,6 @@ void Game::updateTimer(float curTimeMillis) {
 	}
 	//timeLabel->setString("Time: " + to_string(time));
 }
-
 
 float Game::getTimeTick() {
 	timeval time;

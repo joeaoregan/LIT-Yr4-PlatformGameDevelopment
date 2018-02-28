@@ -14,8 +14,8 @@ public:
 		
 	void update(float dt);
 
-	unsigned int getLives() { return lives; }
-	void setLives(unsigned int set) { lives = set; }
+	unsigned int getLives() { return m_lives; }
+	void setLives(unsigned int set) { m_lives = set; }
 
 	//void updateBar(float pc) {
 		//bar->setPercent(1);
@@ -23,24 +23,21 @@ public:
 	//	pt->setPercentage(pc);
 	//}
 
-	//HealthBar* createHealthBar(cocos2d::Size res);
-
-
+	//HealthBar* createHealthBar(cocos2d::Size res);	
 	//void myUpdate();
 
-	float getNextFire() { return nextFire; }
-	void setNextFire(float set) { nextFire = set; }
+	float getNextFire() { return m_nextFire; }
+	void setNextFire(float set) { m_nextFire = set; }
 
 private:
+	//cocos2d::Sprite* m_enemyShip;
 
-	cocos2d::Sprite* enemyShip;
-	unsigned int lives = 3;
-
+	// health
+	unsigned int m_lives = 3;
 	HealthBar* bar;
 
-	unsigned int fireRate;
-	float nextFire;
-
+	// Fire rate
+	float m_nextFire;
 	unsigned int m_fireRate = 500;
 
 	cocos2d::DrawNode* myDrawNode;

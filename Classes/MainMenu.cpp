@@ -81,7 +81,8 @@ bool MainMenu::init() {
 
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
-		mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));							// Create the music control buttons
+		//mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));							// Create the music control buttons
+		mplayer = MusicPlayer::create(Point(visibleSize.width / 2, visibleSize.height * 0.125f));							// Create the music control buttons
 		this->addChild(mplayer);																									// Add the music player to the layer
 	}
 	this->scheduleUpdate();																											// Start updating the scene

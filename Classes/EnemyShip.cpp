@@ -79,23 +79,23 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 }
 */
 void EnemyShip::update(float curTimeMillis) {
-	// Fire laser
-	CCLOG("Enemy Ship Update");
-	
+	//CCLOG("Level %d: Update Enemy Ships", Game::Instance()->getLevel());
+
+	// Fire laser	
 	if (isVisible()) {
 		//CCLOG("Enemy Ship Is Visible");
 
-		if (curTimeMillis > getNextFire()) {
-			CCLOG("Enemy Call Fire Laser");
+		if (curTimeMillis > m_nextFire) {
+			//CCLOG("Enemy Call Fire Laser");
 
 			Level::Instance()->spawnEnemyLaser(getPosition());
 
-			CCLOG("Enemy Call Fire Laser");
-			nextFire = curTimeMillis + m_fireRate;
+			//CCLOG("Enemy Call Fire Laser");
+			m_nextFire = curTimeMillis + m_fireRate;
 
 			//setNextFire(curTimeMillis + ENEMY_FIRE_RATE);
 
-			CCLOG("Enemy Laser Fired");
+			//CCLOG("Enemy Laser Fired");
 		}
 	}
 	

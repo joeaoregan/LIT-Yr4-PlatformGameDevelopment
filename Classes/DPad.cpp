@@ -36,9 +36,12 @@ bool DPad::init(cocos2d::Layer *layer) {
 }
 
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
+
     DPad *controller = new DPad();
 
     if (true) {
+		cocos2d::Size visibleSize = Director::getInstance()->getVisibleSize();
+
 		//int scaleDown = (controller->visibleSize.height == 1080) ? 1.0f : 0.67f;
         controller->autorelease();					// Set to autorelease
 
@@ -49,32 +52,30 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
         controller->down = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create down arrow menu item
 		controller->left = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create left arrow menu item
 		controller->right = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create right arrow menu item
+
 		controller->aBtn = MenuItemImage::create("btnA.png", "btnASelect.png");		// Create A button menu item
 		controller->bBtn = MenuItemImage::create("btnB.png", "btnBSelect.png");		// Create B button menu item
+
 		// Set positions and rotations
-		//controller->setScale(scaleDown);
-        controller->up->setPosition(Point(controller->bg->getPosition().x, controller->bg->getPosition().y + controller->bg->getContentSize().height/2 - controller->up->getContentSize().height/2));
-        controller->down->setPosition(Point(controller->bg->getPosition().x,controller->bg->getPosition().y - controller->bg->getContentSize().height/2 + controller->down->getContentSize().height/2));
-		controller->right->setPosition(Point(controller->bg->getPosition().x + controller->bg->getContentSize().width / 2 - controller->down->getContentSize().width / 2, controller->bg->getPosition().y));
-		controller->left->setPosition(Point(controller->bg->getPosition().x - controller->bg->getContentSize().width / 2 + controller->down->getContentSize().width / 2, controller->bg->getPosition().y));
-		//controller->aBtn->setPosition(Point(controller->visibleSize.width - controller->aBtn->getContentSize().width - (position.x * 2), controller->bg->getPosition().y + controller->bg->getContentSize().height / 2 - controller->up->getContentSize().height / 2));
-		//controller->bBtn->setPosition(Point(controller->visibleSize.width - controller->bBtn->getContentSize().width * 2 - (position.x * 2), controller->bg->getPosition().y - controller->bg->getContentSize().height / 2 + controller->down->getContentSize().height / 2));
-		controller->aBtn->setPosition(Point(1550, position.y - (controller->bBtn->getContentSize().height / 2)));
-		controller->bBtn->setPosition(Point(1750, position.y + (controller->bBtn->getContentSize().height / 2)));
-		//controller->aBtn->setPosition(Point(1550, position.y - controller->bBtn->getContentSize().height) / 2);
-		//controller->bBtn->setPosition(Point(1750, position.y + controller->bBtn->getContentSize().height) / 2);
+        controller->up->setPosition(Point(controller->bg->getPosition().x, controller->bg->getPosition().y + controller->bg->getContentSize().height * 0.6f - controller->up->getContentSize().height/2));
+        controller->down->setPosition(Point(controller->bg->getPosition().x,controller->bg->getPosition().y - controller->bg->getContentSize().height * 0.6f + controller->down->getContentSize().height/2));
+		controller->right->setPosition(Point(controller->bg->getPosition().x + controller->bg->getContentSize().width * 0.6f - controller->down->getContentSize().height / 2, controller->bg->getPosition().y));
+		controller->left->setPosition(Point(controller->bg->getPosition().x - controller->bg->getContentSize().width * 0.6f + controller->down->getContentSize().height / 2, controller->bg->getPosition().y));
+
+		controller->aBtn->setPosition(Point(visibleSize.width * 0.8f, position.y - (controller->bBtn->getContentSize().height / 2)));
+		controller->bBtn->setPosition(Point(visibleSize.width * 0.9f, position.y + (controller->bBtn->getContentSize().height / 2)));
+
         controller->right->setRotation(90);
         controller->down->setRotation(180);
         controller->left->setRotation(-90);
 		//controller->setScale(scaleDown);
-		//controller->down->setScale(scaleDown);
-		//controller->left->setScale(scaleDown);
-		//controller->right->setScale(scaleDown);
 
         Menu *menu = Menu::create(controller->up,controller->down,controller->left, controller->right, controller->aBtn, controller->bBtn, NULL);
         menu->setPosition(Point(0,0));
         controller->addChild(menu, 120);
         // assign color value
+
+		CCLOG("Controller Created");
         
         return controller;
     }
@@ -89,7 +90,9 @@ MenuItemImage *DPad::getButton(int button){
         case 8: result = DPad::up; break;		// Move up
         case 2: result = DPad::down; break;		// Move down
         case 6: result = DPad::right; break;	// Move left
-        case 4: result = DPad::left; break;		// Move right
+		case 4: result = DPad::left; break;		// Move right
+		case 10: result = DPad::aBtn; break;	// Move button A
+		case 11: result = DPad::bBtn; break;	// Move button B
         default: break;
     }
 

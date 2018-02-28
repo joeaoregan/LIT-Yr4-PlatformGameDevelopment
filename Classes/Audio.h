@@ -29,6 +29,7 @@ public:
 	void explodeFX();					// Play explosion sound effect
 	void explodePlayerFX();				// Play player explosion sound effect
 	void laserFX();						// Play laser sound effect
+	void laserFXEnemy();				// Play laser sound effect for enemy ship
 	void powerUpFX();					// Play power up sound effect
 
 	void skipTrackForwards();			// Skip to the next track in the array, or first track if already at the last

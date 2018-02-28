@@ -13,8 +13,8 @@
 MusicPlayer* MusicPlayer::s_pInstance;																// MusicPlayer Singleton
 
 bool MusicPlayer::init(cocos2d::Layer *layer) {
-	visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
-
+	//visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+	/*
 	// If the target platform is a mobile device (android in this case)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
 		if (visibleSize.height == 1080)
@@ -22,50 +22,56 @@ bool MusicPlayer::init(cocos2d::Layer *layer) {
 		else
 			layer->addChild(create(cocos2d::Point(150, 150)));
 	}
-	
+	*/
 	return true;
 }
 
 MusicPlayer *MusicPlayer::create(cocos2d::Point position) {
+	cocos2d::Size visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+
 	s_pInstance = new MusicPlayer();
 
     if (true) {        
-		s_pInstance->autorelease();																	// Set to autorelease
+		s_pInstance->autorelease();																		// Set to autorelease
 		
-		s_pInstance->play = cocos2d::MenuItemImage::create("btnPlay.png", "btnPlaySelect.png");		// Create play menu item
-		s_pInstance->pause = cocos2d::MenuItemImage::create("btnPause.png", "btnPauseSelect.png");	// Create pause menu item
-		s_pInstance->forward = cocos2d::MenuItemImage::create("btnSkip.png", "btnSkipSelect.png");	// Create track forwards menu item
-		s_pInstance->back = cocos2d::MenuItemImage::create("btnSkip.png", "btnSkipSelect.png");		// Create track backwards menu item
+		s_pInstance->m_playImg = cocos2d::MenuItemImage::create("btnPlay.png", "btnPlaySelect.png");	// Create play menu item
+		s_pInstance->m_pauseImg = cocos2d::MenuItemImage::create("btnPause.png", "btnPauseSelect.png");	// Create pause menu item
+		s_pInstance->m_forwardImg = cocos2d::MenuItemImage::create("btnSkip.png", "btnSkipSelect.png");	// Create track forwards menu item (Back image in reverse)
+		s_pInstance->m_backImg = cocos2d::MenuItemImage::create("btnSkip.png", "btnSkipSelect.png");	// Create track backwards menu item
 
 		// Set positions and rotations
-		s_pInstance->play->setPosition(cocos2d::Point(position.x, position.y));
-		s_pInstance->pause->setPosition(cocos2d::Point(position.x, position.y));
+		//s_pInstance->play->setPosition(cocos2d::Point(position.x, position.y));
+		//s_pInstance->pause->setPosition(cocos2d::Point(position.x, position.y));
+		//s_pInstance->pause->setScale(0.5f);
 
 		// Check to display pause or play
 		if (SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
-			s_pInstance->play->setVisible(false);													// Initially hide play, and reveal when pause button is pressed
+			s_pInstance->m_playImg->setVisible(false);													// Initially hide play, and reveal when pause button is pressed
 		else
-			s_pInstance->pause->setVisible(false);
+			s_pInstance->m_pauseImg->setVisible(false);
 
 		// Set button positions
-		s_pInstance->forward->setPosition(cocos2d::Point(position.x + s_pInstance->pause->getContentSize().width + s_pInstance->forward->getContentSize().width/2, position.y));
-		s_pInstance->back->setPosition(cocos2d::Point(position.x - s_pInstance->pause->getContentSize().width - s_pInstance->back->getContentSize().width/2, position.y));
-		s_pInstance->forward->setScale(-1);
+		s_pInstance->m_forwardImg->setPosition(cocos2d::Point(s_pInstance->m_pauseImg->getPosition().x + s_pInstance->m_pauseImg->getContentSize().width + s_pInstance->m_forwardImg->getContentSize().width/2, s_pInstance->m_pauseImg->getPosition().y));
+
+		s_pInstance->m_backImg->setPosition(cocos2d::Point(s_pInstance->m_pauseImg->getPosition().x - s_pInstance->m_pauseImg->getContentSize().width - s_pInstance->m_forwardImg->getContentSize().width / 2, s_pInstance->m_pauseImg->getPosition().y));
+		s_pInstance->m_forwardImg->setScale(-1);	// Reuse back arrow
 
 		// Display the current track information
-		//s_pInstance->currentTrackLbl = cocos2d::LabelTTF::create(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
-		s_pInstance->currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->pause->getContentSize().height * 0.4f);
-		s_pInstance->currentTrackLbl->setPosition(cocos2d::Point(position.x, position.y - (s_pInstance->pause->getContentSize().height) * 0.75f));
-		//s_pInstance->currentTrackLbl->setColor(cocos2d::Color3B::WHITE);
-		s_pInstance->currentTrackLbl->setTextColor(cocos2d::Color4B::RED);
-		s_pInstance->currentTrackLbl->enableOutline(cocos2d::Color4B::WHITE, 3);
-		s_pInstance->addChild(s_pInstance->currentTrackLbl);
-		//s_pInstance->addChild(currentTrackLbl, 100);
+		s_pInstance->m_currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(), "fonts/Super Mario Bros..ttf", s_pInstance->m_pauseImg->getContentSize().height * 0.4f);
+		s_pInstance->m_currentTrackLbl->setPosition(cocos2d::Point(s_pInstance->m_pauseImg->getPosition().x, s_pInstance->m_pauseImg->getPosition().y - (s_pInstance->m_pauseImg->getContentSize().height) * 0.75f));
+		s_pInstance->m_currentTrackLbl->setTextColor(cocos2d::Color4B::RED);
+		s_pInstance->m_currentTrackLbl->enableOutline(cocos2d::Color4B::WHITE, 3);
 
-		cocos2d::Menu *menu = cocos2d::Menu::create(s_pInstance->play, s_pInstance->pause, s_pInstance->forward, s_pInstance->back, NULL);
+		s_pInstance->addChild(s_pInstance->m_currentTrackLbl);
+
+		cocos2d::Menu *menu = cocos2d::Menu::create(s_pInstance->m_playImg, s_pInstance->m_pauseImg, s_pInstance->m_forwardImg, s_pInstance->m_backImg, NULL);
         menu->setPosition(cocos2d::Point(0,0));
 		s_pInstance->addChild(menu, 120);
-		s_pInstance->setScale((s_pInstance->visibleSize.height == 1080) ? 1.0f : 0.75f);					// Make whole music player smaller, affects the screen positioning
+
+		//s_pInstance->setScale((s_pInstance->visibleSize.height == 1080) ? 1.0f : 0.75f);					// Make whole music player smaller, affects the screen positioning
+		s_pInstance->setScale((visibleSize.height == 1080) ? 0.775f : 0.55f);
+
+		s_pInstance->setPosition(cocos2d::Point(position.x, position.y));
         
         return s_pInstance;
     }
@@ -92,10 +98,10 @@ void MusicPlayer::update() {
 cocos2d::MenuItemImage *MusicPlayer::getButton(int button){
 	cocos2d::MenuItemImage *result;
     switch (button) {
-		case 1: result = MusicPlayer::play; break;		// play music
-		case 2: result = MusicPlayer::pause; break;		// pause music
-        case 3: result = MusicPlayer::forward; break;	// next track
-        case 4: result = MusicPlayer::back; break;		// previous track
+		case 1: result = MusicPlayer::m_playImg; break;		// play music
+		case 2: result = MusicPlayer::m_pauseImg; break;		// pause music
+        case 3: result = MusicPlayer::m_forwardImg; break;	// next track
+        case 4: result = MusicPlayer::m_backImg; break;		// previous track
         default: break;
     }
 
@@ -105,21 +111,21 @@ cocos2d::MenuItemImage *MusicPlayer::getButton(int button){
 // Callbacks
 void MusicPlayer::playTrack() {
 	Audio::Instance()->play();
-	s_pInstance->pause->setVisible(true);
-	s_pInstance->play->setVisible(false);
-	s_pInstance->currentTrackLbl->setString(Audio::Instance()->getTrackName());
+	s_pInstance->m_pauseImg->setVisible(true);
+	s_pInstance->m_playImg->setVisible(false);
+	s_pInstance->m_currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }
 void MusicPlayer::pauseTrack() {
 	Audio::Instance()->pause();
-	s_pInstance->pause->setVisible(false);
-	s_pInstance->play->setVisible(true);
-	s_pInstance->currentTrackLbl->setString("Music Paused");
+	s_pInstance->m_pauseImg->setVisible(false);
+	s_pInstance->m_playImg->setVisible(true);
+	s_pInstance->m_currentTrackLbl->setString("Music Paused");
 }
 void MusicPlayer::nextTrack() {
 	Audio::Instance()->skipTrackForwards();
-	s_pInstance->currentTrackLbl->setString(Audio::Instance()->getTrackName());
+	s_pInstance->m_currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }
 void MusicPlayer::previousTrack() {
 	Audio::Instance()->skipTrackBackwards();
-	s_pInstance->currentTrackLbl->setString(Audio::Instance()->getTrackName());
+	s_pInstance->m_currentTrackLbl->setString(Audio::Instance()->getTrackName());
 }

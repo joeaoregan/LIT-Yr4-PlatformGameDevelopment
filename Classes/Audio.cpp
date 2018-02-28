@@ -19,11 +19,14 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 // Windows / Android
 #define JOE_RIFF1 "joe_riff1.wav"
 #define JOE_RIFF2 "joe_riff2.wav"
-#define BUTTON_FX "buttonClick.wav"
 #define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
+
+// Remember to preload!!!!
+#define BUTTON_FX "buttonClick.wav"
 #define EXPLOSION_LARGE "explosion_large.wav"
-#define EXPLOSION_PLAYER "explosion.mp3"
+#define EXPLOSION_PLAYER "explosion.wav"
 #define LASER_SHIP "laser_ship.wav"
+#define LASER_ENEMY "laserEnemy.wav"
 #define POWER_UP "powerup.wav"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)												// CAF: Core audio format
 #define SPACE_GAME "SpaceGame.caf"
@@ -48,8 +51,11 @@ void Audio::init() {
 
 	// Preload the sound effects
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
+	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_PLAYER);
 	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
+	SimpleAudioEngine::getInstance()->preloadEffect(LASER_ENEMY);
 	SimpleAudioEngine::getInstance()->preloadEffect(BUTTON_FX);
+	SimpleAudioEngine::getInstance()->preloadEffect(POWER_UP);
 //#endif
 }
 void Audio::selectMenuOption() {
@@ -68,6 +74,9 @@ void Audio::explodePlayerFX() {
 }
 void Audio::laserFX() {
 	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);								// Play laser sound effect
+}
+void Audio::laserFXEnemy() {
+	SimpleAudioEngine::getInstance()->playEffect(LASER_ENEMY);								// Play laser sound effect
 }
 void Audio::powerUpFX() {
 	SimpleAudioEngine::getInstance()->playEffect(POWER_UP);									// Play power up sound effect
