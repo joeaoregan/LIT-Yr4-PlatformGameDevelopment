@@ -9,7 +9,9 @@
 
 class EnemyShip : public cocos2d::Sprite {
 public:
-
+	EnemyShip() {}
+	~EnemyShip() {}
+	
 	static EnemyShip* create(cocos2d::Size res);
 		
 	void update(float dt);

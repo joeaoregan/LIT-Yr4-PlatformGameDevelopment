@@ -47,7 +47,7 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		s_pInstance->scoreLabel->setTextColor(Color4B::RED);
 		s_pInstance->scoreLabel->enableOutline(Color4B::WHITE, 3);
 		s_pInstance->scoreLabel->setScale(scaleUp);
-		s_pInstance->scoreLabel->setPosition(Point(res.width / 2 + position.x, res.height * 0.95 + position.y));
+		s_pInstance->scoreLabel->setPosition(Point(res.width / 2 + position.x, position.y + res.height * 0.95));
 		s_pInstance->addChild(s_pInstance->scoreLabel, 10000);
 
 		// Countdown Timer

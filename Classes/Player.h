@@ -3,13 +3,18 @@
 
 #include "cocos2d.h"
 
-class Player {
+class Player : public cocos2d::Sprite {
 public:
-	Player(cocos2d::Layer *layer);					// Player constructor
+	Player() {};								// Player constructor
+	~Player() {}
 
-	void update();									// Update player movement etc.
+	//Player(cocos2d::Layer *layer);			// Player constructor
 
-	cocos2d::Sprite* getSprite() { return player; }
+	static Player* create(cocos2d::Size res);
+
+	void update();								// Update player movement etc.
+
+	//cocos2d::Sprite* getSprite() { return player; }
 
 	// Movement
 	void moveUp();
@@ -17,13 +22,10 @@ public:
 	void moveLeft();
 	void moveRight();
 
-	//void spawnLasers(int amount, cocos2d::Layer *layer);
-
 private:
-	cocos2d::Size visibleSize;						// Visible screen size
-	cocos2d::Vec2 origin;							// Origin of the screen
+	cocos2d::Size visibleSize;					// Visible screen size
 
-	cocos2d::Sprite *player;						// Player sprite
+	//cocos2d::Sprite *player;					// Player sprite
 };
 
 #endif // __PLAYER_H__

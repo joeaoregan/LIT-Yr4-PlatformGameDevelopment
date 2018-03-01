@@ -1,13 +1,28 @@
 #include "Player.h"
-//#include "DPad.h"
 #include "Input.h"
 #include "Level.h"
 
-//DPad *controller;																	// Add directional pad for mobile device
-
 #define PLAYER_SPEED 3.0f
-#define PLAYER_COLLISION_BITMASK 0x000001
+//#define PLAYER_COLLISION_BITMASK 0x000001
 
+Player* Player::create(cocos2d::Size res) {
+	Player* player = new Player();
+	player->visibleSize = Director::getInstance()->getVisibleSize();					// screen size
+
+	if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) {
+
+		player->autorelease();
+		player->setPosition(res.width * 0.1, res.height * 0.5);			// Place in middle left of screen
+		player->setScale((res.height == 720) ? 1.0f : 1.5f);					// Increase scale of player for Android (My phone anywa
+	}
+	else {
+		delete player;
+	}
+
+	return player;
+}
+
+/*(
 Player::Player(cocos2d::Layer *layer) {
 	visibleSize = Director::getInstance()->getVisibleSize();						// screen size
 	origin = Director::getInstance()->getVisibleOrigin();							// origin coorinate
@@ -15,15 +30,16 @@ Player::Player(cocos2d::Layer *layer) {
 	player = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
 	player->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);			// Place in middle left of screen
 	player->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);					// Increase scale of player for Android (My phone anyway)
-/*
-	auto playerBody = PhysicsBody::createCircle(player->getContentSize().width / 2);
-	playerBody->setCollisionBitmask(PLAYER_COLLISION_BITMASK);
-	playerBody->setContactTestBitmask(true);
+
+	//auto playerBody = PhysicsBody::createCircle(player->getContentSize().width / 2);
+	//playerBody->setCollisionBitmask(PLAYER_COLLISION_BITMASK);
+	//playerBody->setContactTestBitmask(true);
 
 	player->setPhysicsBody(playerBody);
-*/
+
 	//layer->addChild(player, 10);	// _batchNode->addChild(player->getSprite());
 }
+*/
 
 void Player::update() {
 	// Move the player ship
@@ -49,7 +65,25 @@ void Player::update() {
 }
 
 void Player::moveUp() {
-	if (player->getPosition().y < visibleSize.height * 0.9f)
+	if (getPosition().y < visibleSize.height * 0.9f)
+		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED);
+}
+void Player::moveDown() {
+	if (getPosition().y > visibleSize.height * 0.125f)
+		setPosition(getPosition().x, getPosition().y - PLAYER_SPEED);
+}
+void Player::moveLeft() {
+	if (getPosition().x > getContentSize().width / 4)
+		setPosition(getPosition().x - PLAYER_SPEED, getPosition().y);
+}
+void Player::moveRight() {
+	if (getPosition().x < visibleSize.width - (getContentSize().width / 2))
+		setPosition(getPosition().x + PLAYER_SPEED, getPosition().y);
+}
+
+/*
+void Player::moveUp() {
+	if (getPosition().y < visibleSize.height * 0.9f)
 		player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
 }
 void Player::moveDown() {
@@ -64,7 +98,7 @@ void Player::moveRight() {
 	if (player->getPosition().x < visibleSize.width - (player->getContentSize().width / 2))
 		player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
 }
-/*
+
 void Player::spawnLasers(int amount, cocos2d::Layer *layer) {
 	int i;
 	for ((amount == 2) ? i = 1 : i = 0; i < amount; i++) {

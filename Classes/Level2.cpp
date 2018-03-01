@@ -52,7 +52,7 @@ bool Level2::init() {
 
 void Level2::initEnemyShips() {
 	//EnemyShips = new Vector<EnemyShip*>(3);
-	for (int i = 0; i < m_numEnemyShips; ++i) {
+	for (unsigned int i = 0; i < m_numEnemyShips; ++i) {
 		EnemyShip* enemyShip2 = EnemyShipKling::create(visibleSize);
 		this->addChild(enemyShip2);
 		m_enemyShipList->pushBack(enemyShip2);
