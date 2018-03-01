@@ -91,60 +91,40 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 
 void HUD::update(float curTimeMillis) {
 	// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_PLAYER_LIVES && !Game::Instance()->isGameOver()) {		// If the players lives are less than the max num lives
+	if (Game::Instance()->getLives() < MAX_PLAYER_LIVES && !Game::Instance()->isGameOver()) {				// If the players lives are less than the max num lives
 		for (unsigned int i = 0; i < MAX_PLAYER_LIVES; i++) {
 			if (i < Game::Instance()->getLives()) {
 				if (livesList[i]->isVisible()) continue;
-				livesList[i]->setVisible(true);							// Set the lives invisible (2,1,0
+				livesList[i]->setVisible(true);																// Set the lives invisible (2,1,0
 
-				auto action1 = cocos2d::MoveTo::create(0.25f, cocos2d::Point(livesList[i]->getPosition().x, livesList[i]->getPosition().y + livesList[i]->getContentSize().height * 0.2f));
-				auto action2 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.5f : 2.25f);
-				auto action3 = cocos2d::MoveTo::create(0.25f, cocos2d::Point(livesList[i]->getPosition().x, livesList[i]->getPosition().y));
-				auto action4 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.0f : 1.5f);
-
-				//auto sequence = cocos2d::Sequence::create(action1, action2, nullptr);
-				//auto sequence1 = cocos2d::Sequence::create(action1, action2, action2->reverse(), action1->reverse(), nullptr);
-				//auto sequence1 = cocos2d::Sequence::create(action1, action2, nullptr);
-				//livesList[i]->runAction(sequence1);
-				//auto sequence2 = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action3, action4, nullptr), nullptr);
-				//auto sequence3 = Spawn::create(action1, action2, nullptr);
-				//auto action = cocos2d::Sequence::create(sequence3, sequence3->reverse(), nullptr);
-				//livesList[i]->runAction(Spawn::create(action1, action2, nullptr));
-				//auto sequence2 = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), nullptr);
-				//auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action2->reverse(), action1->reverse(), nullptr), nullptr);
-				//auto sequence = cocos2d::Sequence::create(action2, action2->reverse(), nullptr);
-				//auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), nullptr); // OK
-				//auto action = cocos2d::Sequence::create(sequence, sequence->reverse(), nullptr);
-
-				auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr), Spawn::create(action3, action4, nullptr), nullptr); // OK
-
+				// Animate a new life on HUD
+				auto action1 = cocos2d::MoveTo::create(0.25f,												// Move the life up 20% of its height
+					cocos2d::Point(livesList[i]->getPosition().x, livesList[i]->getPosition().y +
+						livesList[i]->getContentSize().height * 0.2f));
+				auto action2 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.5f : 2.25f);	// Increase the size by 50%
+				auto action3 = cocos2d::MoveTo::create(0.25f, cocos2d::Point(livesList[i]->getPosition().x, 
+					livesList[i]->getPosition().y));
+				auto action4 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.0f : 1.5f);	// Decrease the size to original values
+				auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr),			// Create a sequence, using spawn to run the move and scale actions concurrently
+					Spawn::create(action3, action4, nullptr), nullptr);										// Run the reverse actions immediately after
 				livesList[i]->runAction(sequence);
-
-				//livesList[i]->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
 				
 			}
 			else {
 				if (!livesList[i]->isVisible()) continue;
-				livesList[i]->setVisible(false);							// Set the lives invisible (2,1,0)
+				livesList[i]->setVisible(false);															// Set the lives invisible (order 4,3,2,1,0)
 			}
 		}
 	}
-		/*
 
-		livesList[Game::Instance()->getLives()]->setVisible(false);							// Set the lives invisible (2,1,0)
-	}
-	else {
-		livesList[Game::Instance()->getLives()]->setVisible(true);							// Set the lives invisible (2,1,0)
-	}
-	*/
-	scoreLabel->setString("Score: " + StringUtils::toString(Game::Instance()->getScore()));	// Update the displayed score text
-	timeLabel->setString("Time: " + StringUtils::toString(Game::Instance()->getTimer()));	// Update the countdown timer text
+	scoreLabel->setString("Score: " + StringUtils::toString(Game::Instance()->getScore()));					// Update the displayed score text
+	timeLabel->setString("Time: " + StringUtils::toString(Game::Instance()->getTimer()));					// Update the countdown timer text
 
-	updateTimer(curTimeMillis);																// Update the timer
+	updateTimer(curTimeMillis);																				// Update the timer
 
-	if (s_pInstance->closeItem->isSelected()) {												// If the close menu button is selected
+	if (s_pInstance->closeItem->isSelected()) {																// If the close menu button is selected
 		Audio::Instance()->selectMenuOption();
-		cocos2d::Director::getInstance()->end();											// Close the director
+		cocos2d::Director::getInstance()->end();															// Close the director
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		exit(0);
@@ -158,26 +138,21 @@ void HUD::update(float curTimeMillis) {
 }
 
 /*
-	Updates the displayed lives when the player collides with an object
-
-void HUD::updateLives() {
-	livesList[Game::Instance()->getLives()]->setVisible(false);										// Set the player lives invisible (in the order 2,1,0)
-}
-*/
-/*
-update the HUD countdown timer
+	update the HUD countdown timer
 */
 void HUD::updateTimer(float curTimeMillis) {
-	if (curTimeMillis > currentTime) {						// If the game timer has reached the indicated point (every 1 second)
-		currentTime = curTimeMillis + 1000.0f;				// Set next time to reach
-		time--;												// Decrement the countdown timer
+	if (curTimeMillis > currentTime) {																		// If the game timer has reached the indicated point (every 1 second)
+		currentTime = curTimeMillis + 1000.0f;																// Set next time to reach
+		time--;																								// Decrement the countdown timer
 	}
 
-	timeLabel->setString("Time: " + StringUtils::toString(time));		// Update the countdown timers display
+	timeLabel->setString("Time: " + StringUtils::toString(time));											// Update the countdown timers display
 }
 
+/*
+	Update the displayed level number at the start of each level
+*/
 void HUD::setLevelLabel() {
 	levelLabel->setString("Level: " + StringUtils::toString(Game::Instance()->getLevel()));
-
-	CCLOG("Level Number Changed - Current Level: %d", Game::Instance()->getLevel());
+	//CCLOG("Level Number Changed - Current Level: %d", Game::Instance()->getLevel());
 }

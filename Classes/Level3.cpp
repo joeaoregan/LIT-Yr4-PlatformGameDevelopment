@@ -13,9 +13,9 @@
 
 Scene* Level3::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	layerInstance = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	s_pLayerInstance = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
 	//layer->setName("Level3");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-	scene->addChild(layerInstance);						// Add layer as a child to scene	    
+	scene->addChild(s_pLayerInstance);						// Add layer as a child to scene	    
 	return scene;								// Return the scene
 }
 

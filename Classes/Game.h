@@ -56,7 +56,7 @@ public:
 	unsigned int getEnemyShipCount() { return m_enemyShipCount; }	// The total number of enemy ships spawned
 	bool musicPlayerVisible() { return m_PlayerVisible; }			// Is the music player to be hidden or not
 	unsigned int getDifficulty() { return m_difficulty; }			// Get the difficulty setting
-	float getLevelDuration() { return m_levelDuration; }		// Get the level end time
+	float getLevelDuration() { return m_levelDuration; }			// Get the level end time
 	unsigned int getEndTime() { return m_endTime; }					// Get the level end time
 
 	// Set
@@ -86,8 +86,8 @@ private:
 
 	// HUD
 	unsigned int m_lives = 0;										// Player lives
-	unsigned int m_score = 0;											// Current score
-	unsigned int m_level = 1;											// Current level
+	unsigned int m_score = 0;										// Current score
+	unsigned int m_level = 1;										// Current level
 
 	static Game* s_pInstance;										// Single instance of Game used as singleton, so only one instance exists thoughout the game
 

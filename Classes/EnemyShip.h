@@ -29,7 +29,7 @@ public:
 	float getNextFire() { return m_nextFire; }
 	void setNextFire(float set) { m_nextFire = set; }
 
-private:
+protected:
 	//cocos2d::Sprite* m_enemyShip;
 
 	// health
@@ -41,6 +41,9 @@ private:
 	unsigned int m_fireRate = 500;
 
 	cocos2d::DrawNode* myDrawNode;
+
+	float m_dx = 0;
+	float m_dy = 0;
 };
 
 

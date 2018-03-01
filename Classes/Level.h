@@ -16,9 +16,9 @@
 #include "Game.h"
 #include "MusicPlayer.h"
 
-#define KNUMASTEROIDS 15						// Number of asteroids
-#define KNUMASTEROIDSL2 20						// Number of asteroids
-#define KNUMLASERS 8							// Number of lasers
+#define MAX_NUM_ASTEROIDS_L1 10												// Number of asteroids
+#define KNUMASTEROIDSL2 15													// Number of asteroids
+#define KNUMLASERS 8														// Number of lasers
 
 class Level : public Layer {
 public:
@@ -29,11 +29,11 @@ public:
 
 	// Level singleton
 	static Level* Instance() {
-		if (layerInstance == 0) {
-			layerInstance = new Level();
-			return layerInstance;
+		if (s_pLayerInstance == 0) {
+			s_pLayerInstance = new Level();
+			return s_pLayerInstance;
 		}
-		return layerInstance;
+		return s_pLayerInstance;
 	}
 
     static cocos2d::Scene* createScene();									// there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -73,7 +73,7 @@ public:
 	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
 
 	// Spawn game objects
-	void spawnObjects(float curTimeMillis);								// 20180202 Spawn asteroids
+	void spawnObjects(float curTimeMillis);									// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);								// 20180214 Spawn enemy ships
 	void spawnLasers(int amount);											// 20180221
 	void spawnEnemyLaser(cocos2d::Point pos);								// 20180221
@@ -81,44 +81,39 @@ public:
 	// Fire enemy lasers
 	//void enemyFireLaser(float curTimeMillis);
 
-protected:
 	// Get / Set methods
 	Size getWinSize() { return winSize; }									// Get the window size
 	int getNextShipLaser() { return _nextShipLaser; }						// Next laser in laser list
 	void setNextShipLaser(int set) { _nextShipLaser = set; }				// Set the next laser in the list
-	
+	Vector<Sprite*>* getLaserList() { return m_playerLaserList; }			// return ship lasers
+
+protected:
 	cocos2d::Size visibleSize;												// Screen resolution changes depending on the platform
 	cocos2d::Size winSize;													// Current size of the game window (constantly updated)
 	float scaleUp, scaleDown;												// Scale objects up in size for 1080p, or down for 720p
-	cocos2d::Point origin;
+	cocos2d::Point origin;													// Screen origin point
 	
-	// Menu
-	cocos2d::MenuItemImage* closeItem;										// Exit button in bottom right corner
-	cocos2d::Menu* menuClose;
-
+	// Background
 	SpriteBatchNode *_batchNode;											// Group nodes together for efficiency
 	ParallaxNodeExtras *_backgroundNode;									// Scrolling background
-	Player* player;															// Player sprite
-	
-	Vector<Sprite*>* getLaserList() { return shipLaserList; }					// return ship lasers
-		
+
+	// Objects
+	Player* player;															// Player sprite		
 	MusicPlayer* mplayer;													// Controls for playing/pausing music and skipping tracks
 	HUD* newHUD;															// Test hud
 	DPad *controller;														// Add directional pad for mobile device
 
-	static Level* layerInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
+	static Level* s_pLayerInstance;											// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 	cocos2d::EventListenerTouchAllAtOnce* touchListener;					// Touch listener
-
-	double _gameOverTime;													// Game over time
 
 	// Time
 	float curTimeInit;														// Current game time
 	float curTimeMillis;													// Current time in milliseconds
 
 	// End of Level Labels
-	cocos2d::Label* levelCompleteLbl;
-	cocos2d::MenuItemLabel* restartItem;
-	cocos2d::MenuItemLabel* continueItem;
+	cocos2d::Label* levelCompleteLbl;										// Level finished win/lose message
+	cocos2d::MenuItemLabel* restartItem;									// Restart the game button
+	cocos2d::MenuItemLabel* continueItem;									// Continue to next level button
 
 	// Power ups
 	cocos2d::Sprite* powerUpLife;											// New life power up
@@ -126,27 +121,24 @@ protected:
 	float powerUpY;
 	bool spawned = false;
 
-	Sprite *playerLife;														// Indicate lives left
-
 	// Asteroids
 	int _nextAsteroid = 0;
 	float _nextAsteroidSpawn = 0;											// time to spawn next asteroid
 
 	// Enemies
-	int nextEnemyShip = 0;
-	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship		
+	unsigned int nextEnemyShip = 0;											// Next in the list of enemy ships
+	float nextEnemyShipSpawnTime = 0;										// Time to spawn next enemy ship	
+	unsigned int m_numEnemyShips = 3;										// Number of enemy ships
 
 	// Weapons
 	int _nextShipLaser = 0;													// Ship laser list index
-	int nextEnemyLaser = 0;													// Enemy laser list index
+	int m_nextEnemyLaser = 0;												// Enemy laser list index
 
 	// Object lists
-	Vector<Sprite*>* _asteroids;											// List of asteroids
-	Vector<Sprite*>* EnemyShipList;											// List of enemy ships
-	Vector <EnemyShip*> * EnemyShips;										// List of enemy ships
-	Vector<Sprite*> *shipLaserList;											// List of player lasers
-	Vector<Sprite*> *enemyLaserList;										// List of Enemylasers
-	Sprite* livesList[MAX_PLAYER_LIVES];									// List of lives
+	Vector<Sprite*>* m_asteroidsList;										// List of asteroids
+	Vector <EnemyShip*> * m_enemyShipList;									// List of enemy ships
+	Vector<Sprite*> *m_playerLaserList;										// List of player lasers
+	Vector<Sprite*> *m_enemyLaserList;										// List of Enemylasers
 
 	// Player fire rate
 	float m_nextFire;

@@ -13,9 +13,9 @@ void EnemyShip::myUpdate() {
 */
 EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	EnemyShip* eship = new EnemyShip();
+	float scale = (res.height == 720) ? 0.67f : 1.0f;
 
-	//if (eship && eship->initWithFile("EnemyShip.png")) {
-	if (eship && eship->initWithFile("ShipGreen.png")) {
+	if (eship && eship->initWithFile("EnemyShip.png")) {
 		eship->autorelease();
 		/*
 		// Don't know how to update????????????
@@ -40,7 +40,12 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 			(float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(),			// percentage
 			red, trans);																							// Colours
 	*/
-		
+
+		eship->setVisible(false);
+		eship->setScale(scale);									// Scale down the size for PC
+
+		eship->m_dx = -0.65f * scale;
+
 		cocos2d::Color4F redBR(1, 0, 0, 1);
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
 
@@ -88,7 +93,7 @@ void EnemyShip::update(float curTimeMillis) {
 		if (curTimeMillis > m_nextFire) {
 			//CCLOG("Enemy Call Fire Laser");
 
-			Level::Instance()->spawnEnemyLaser(getPosition());
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), getPosition().y + (getContentSize().width * m_dy)));
 
 			//CCLOG("Enemy Call Fire Laser");
 			m_nextFire = curTimeMillis + m_fireRate;
@@ -107,8 +112,6 @@ void EnemyShip::update(float curTimeMillis) {
 
 	//float test = MAX_SHIP_LIVES;
 	//bar->updateBar(lives / test);
-
-
 }
 
 	/*

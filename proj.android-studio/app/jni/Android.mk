@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AudioMenu.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnemyShip.cpp \
+                   $(LOCAL_PATH)/../../../Classes/EnemyShipKling.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnterName.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp\
                    $(LOCAL_PATH)/../../../Classes/HighScores.cpp \

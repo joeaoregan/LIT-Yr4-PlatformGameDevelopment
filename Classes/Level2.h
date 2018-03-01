@@ -28,6 +28,7 @@ private:
 
 	//cocos2d::Sprite *playerLife;				// Indicate lives left
 	//cocos2d::Sprite *EnemyShip;
+	void initEnemyShips();
 			
 	virtual void update(float dt);
 };

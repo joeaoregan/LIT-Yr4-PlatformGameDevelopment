@@ -13,12 +13,10 @@
 
 // Level length
 #define LEVEL_TIME_EASY 25000.0f
-#define LEVEL_TIME_MED 30000.0f
+#define LEVEL_TIME_MED 10000.0f
 #define LEVEL_TIME_HARD 40000.0f
 
-Game* Game::s_pInstance;			// Game Singleton
-
-//unsigned int LEVEL_START_TIME = 30000;
+Game* Game::s_pInstance;							// Game Singleton
 
 bool Game::init() {
 	// Set timer
@@ -32,11 +30,12 @@ bool Game::init() {
 		m_levelDuration = LEVEL_TIME_HARD;			// Level start time
 	}
 
-	CCLOG("Game: Level Duration =  %f", m_levelDuration);
+	//CCLOG("Game: Level Duration =  %f", 
+	//	m_levelDuration);
 
 	m_endTime = getTimeTick() + m_levelDuration;	// Set the level finish time
 
-	CCLOG("Game Endtime: %f", m_endTime);
+	//CCLOG("Game Endtime: %f", m_endTime);
 
 	m_time = m_levelDuration / 1000;				// Set the time for the countdown timer
 	m_currentTime = 0;
@@ -52,7 +51,8 @@ bool Game::init() {
 	m_asteroidCount = 0;							// Number of asteroids spawned
 	m_enemyShipCount = 0;							// Number of enemy ships spawnedawned
 
-	CCLOG("Level %d: Countdown Timer Initialised", Game::Instance()->getLevel());
+	//CCLOG("Level %d: Countdown Timer Initialised", 
+	//	Game::Instance()->getLevel());
 	
 	return true;
 }
@@ -82,7 +82,6 @@ void Game::updateTimer(float curTimeMillis) {
 
 		CCLOG("Countdown Timer: %d", m_time);
 	}
-	//timeLabel->setString("Time: " + to_string(time));
 }
 
 float Game::getTimeTick() {
