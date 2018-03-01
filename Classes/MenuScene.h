@@ -34,7 +34,7 @@ public:
 	static cocos2d::Scene* createScene();		// Returns class instance pointer
 		
 	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
-	//void update(float dt);					// Update the menu
+	virtual void update(float dt);				// Update the menu
 		
 	CREATE_FUNC(MenuScene);						// Static create() method implemented manually
 	
@@ -69,9 +69,19 @@ public:
 
 	//cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FG, cocos2d::Color4F BG);
 
+	// Keyboard button highlight
+	void nextButton();
+	void prevButton();
+	
 protected:
 	void setYPosAndScale(cocos2d::Sprite* sprite, float y);
 	void setYPosAndScale(cocos2d::MenuItemImage* sprite, float y);
+
+	unsigned int m_totalButtons;
+	unsigned int m_currentBtn = 1;
+
+	float nextBtnTime;
+	float buttonRate = 300.0f;
 };
 
 #endif // __MENU_H__

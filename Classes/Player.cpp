@@ -1,3 +1,11 @@
+/*
+	Player.cpp
+
+	Joe O'Regan
+	K00203642
+
+	Player class is a sub class of Sprite
+*/
 #include "Player.h"
 #include "Input.h"
 #include "Level.h"
@@ -7,13 +15,14 @@
 
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
-	player->visibleSize = Director::getInstance()->getVisibleSize();					// screen size
+	player->visibleSize = Director::getInstance()->getVisibleSize();						// screen size
+	player->scale = (res.height == 720) ? 1.0f : 1.5f;
 
 	if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) {
 
 		player->autorelease();
-		player->setPosition(res.width * 0.1, res.height * 0.5);			// Place in middle left of screen
-		player->setScale((res.height == 720) ? 1.0f : 1.5f);					// Increase scale of player for Android (My phone anywa
+		player->setPosition(res.width * 0.1, res.height * 0.5);								// Place in middle left of screen
+		player->setScale(player->scale);													// Increase scale of player for Android (My phone anywa
 	}
 	else {
 		delete player;
@@ -43,7 +52,8 @@ Player::Player(cocos2d::Layer *layer) {
 
 void Player::update() {
 	// Move the player ship
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||
+		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
 			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
 			moveLeft();
@@ -66,39 +76,22 @@ void Player::update() {
 
 void Player::moveUp() {
 	if (getPosition().y < visibleSize.height * 0.9f)
-		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED);
+		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * scale);	// Need to cover more distance on larger screen
 }
 void Player::moveDown() {
 	if (getPosition().y > visibleSize.height * 0.125f)
-		setPosition(getPosition().x, getPosition().y - PLAYER_SPEED);
+		setPosition(getPosition().x, getPosition().y - PLAYER_SPEED * scale);
 }
 void Player::moveLeft() {
 	if (getPosition().x > getContentSize().width / 4)
-		setPosition(getPosition().x - PLAYER_SPEED, getPosition().y);
+		setPosition(getPosition().x - PLAYER_SPEED * scale, getPosition().y);
 }
 void Player::moveRight() {
 	if (getPosition().x < visibleSize.width - (getContentSize().width / 2))
-		setPosition(getPosition().x + PLAYER_SPEED, getPosition().y);
+		setPosition(getPosition().x + PLAYER_SPEED * scale, getPosition().y);
 }
 
 /*
-void Player::moveUp() {
-	if (getPosition().y < visibleSize.height * 0.9f)
-		player->setPosition(player->getPosition().x, player->getPosition().y + PLAYER_SPEED);
-}
-void Player::moveDown() {
-	if (player->getPosition().y > visibleSize.height * 0.125f)
-		player->setPosition(player->getPosition().x, player->getPosition().y - PLAYER_SPEED);
-}
-void Player::moveLeft() {
-	if (player->getPosition().x > player->getContentSize().width / 4)
-		player->setPosition(player->getPosition().x - PLAYER_SPEED, player->getPosition().y);
-}
-void Player::moveRight() {
-	if (player->getPosition().x < visibleSize.width - (player->getContentSize().width / 2))
-		player->setPosition(player->getPosition().x + PLAYER_SPEED, player->getPosition().y);
-}
-
 void Player::spawnLasers(int amount, cocos2d::Layer *layer) {
 	int i;
 	for ((amount == 2) ? i = 1 : i = 0; i < amount; i++) {

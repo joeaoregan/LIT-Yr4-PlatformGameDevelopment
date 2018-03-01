@@ -14,6 +14,8 @@
 #include "MenuScene.h"
 #include "EnterName.h"
 #include "Game.h"
+#include "Input.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 //#include <SDL.h>										// For gamepad support on desktop
 #endif
@@ -33,6 +35,9 @@ cocos2d::Scene* MenuScene::createScene() {
 // on "init" you need to initialize your instance
 bool MenuScene::init() {
 	if (!Layer::init()) return false;																								// Super init first
+
+
+	Input::Instance()->init(this, this->_eventDispatcher);													// Ship Movement
 
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 //	// SDL Gamepad Support for Windows
@@ -96,6 +101,23 @@ bool MenuScene::init() {
 	return true;
 }
 
+void MenuScene::update(float dt) {
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||										// Stops keyboard appearing for Android
+		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+			nextButton();
+			CCLOG("next button: %d", m_currentBtn);
+		}
+		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+			prevButton();
+			CCLOG("prev button: %d", m_currentBtn);
+		}
+	}
+}
+
+
 /*
 	Set Y position and scale for Sprites and Menu items in the scene
 */
@@ -135,6 +157,32 @@ void MenuScene::menuCloseCallback(Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
+}
+
+void MenuScene::nextButton() {
+	if (Game::Instance()->getTimeTick() > nextBtnTime) {
+		if (m_currentBtn < m_totalButtons) {
+			m_currentBtn++;
+		}
+		else {
+			m_currentBtn = 1;
+		}
+
+		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+	}
+}
+
+void MenuScene::prevButton() {
+	if (Game::Instance()->getTimeTick() > nextBtnTime) {
+		if (m_currentBtn > 1) {
+			m_currentBtn--;
+		}
+		else {
+			m_currentBtn = m_totalButtons;
+		}
+
+		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+	}
 }
 
 /*

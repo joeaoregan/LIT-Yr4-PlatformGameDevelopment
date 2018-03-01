@@ -4,6 +4,7 @@
 Input* Input::s_pInstance;																// Singleton for Input
 
 bool Input::isKeyPressed(cocos2d::EventKeyboard::KeyCode code) {	
+	//CCLOG("IS KEY PRESSED");
 	if (keys.find(code) != keys.end())														// Check if the key is currently pressed by seeing it it's in the std::map keys
 		return true;
 

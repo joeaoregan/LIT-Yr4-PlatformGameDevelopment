@@ -18,6 +18,7 @@
 #include "EnterName.h"							// Accessed by selecting current player menu text item
 #include "Settings.h"							// Menu Item
 #include "AudioMenu.h"							// Menu Item
+#include "Input.h"
 
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
@@ -82,11 +83,19 @@ bool MainMenu::init() {
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
 		//mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));							// Create the music control buttons
-		mplayer = MusicPlayer::create(Point(visibleSize.width / 2, visibleSize.height * 0.125f));							// Create the music control buttons
+		mplayer = MusicPlayer::create(Point(visibleSize.width / 2, visibleSize.height * 0.125f));									// Create the music control buttons
 		this->addChild(mplayer);																									// Add the music player to the layer
 	}
 	this->scheduleUpdate();																											// Start updating the scene
 
+	//CCLOG("MainMenu: init");
+	//CCLOG("m_currentBtn: %d", m_currentBtn);
+
+	nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+	playItem->selected();
+	m_totalButtons = 4;
+	m_currentBtn = 4;
+	
 	return true;
 }
 
@@ -94,9 +103,63 @@ bool MainMenu::init() {
 	Update needed to swap pause and play buttons on music player controls
 */
 void MainMenu::update(float dt) {
+	MenuScene::update(dt);
+	//CCLOG("MainMenu: update");
+
 	if (Game::Instance()->musicPlayerVisible())
 		mplayer->update();																											// Update the music player
+
+	CCLOG("m_currentBtn: %d", m_currentBtn);
+
+	highlightButton(m_currentBtn);
+
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||		// Stop keyboard appearing android
+		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
+		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_ENTER) ||
+			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RETURN)) {
+			if (Game::Instance()->getTimeTick() > nextBtnTime) {								// Set time between button presses
+
+				nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+
+				if (m_currentBtn == 1) exitItem->activate();
+				else if (m_currentBtn == 2) optionsItem->activate();
+				else if (m_currentBtn == 3) scoreItem->activate();
+				else if (m_currentBtn == 4) playItem->activate();
+			}
+		}
+	}
 }
+
+void MainMenu::highlightButton(unsigned int btn) {
+		if (btn == 1) exitItem->selected();
+		else exitItem->unselected();
+
+		if (btn == 2) optionsItem->selected();
+		else optionsItem->unselected();
+
+		if (btn == 3) scoreItem->selected();
+		else scoreItem->unselected();
+
+		if (btn == 4) playItem->selected();
+		else playItem->unselected();
+
+		CCLOG("highlight m_currentBtn: %d", m_currentBtn);
+	//}
+	/*
+	if (m_currentBtn == 1) getButton(1)->selected();
+	else getButton(1)->unselected();
+
+	if (m_currentBtn == 2) getButton(2)->selected();
+	else getButton(2)->unselected();
+
+	if (m_currentBtn == 3) getButton(3)->selected();
+	else getButton(3)->unselected();
+
+	if (m_currentBtn == 4) getButton(4)->selected();
+	else getButton(4)->unselected();
+	*/
+
+};
 
 /* 
 	Callback: Start the Game Scene
