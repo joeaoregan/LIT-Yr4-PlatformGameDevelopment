@@ -18,14 +18,16 @@ public:
 		}
 		return s_pInstance;
 	}
-	
+
 	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
+	bool isKeyPressedMenu(cocos2d::EventKeyboard::KeyCode code);
 
 	double keyPressedDuration(cocos2d::EventKeyboard::KeyCode code);
 
 	void init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher);
 
 	void update() {	}	// will update in class later
+	float getTimeTick();
 
 private:
 	Input() {};																					// Constructor is private for use as a Singleton. Initializes the variables
@@ -35,7 +37,10 @@ private:
 	
 	// Keyboard
 	static std::map<cocos2d::EventKeyboard::KeyCode,
-		std::chrono::high_resolution_clock::time_point> keys;									
+		std::chrono::high_resolution_clock::time_point> keys;
+
+	float nextBtnTime;
+	float buttonRate = 300.0f;
 };
 
 

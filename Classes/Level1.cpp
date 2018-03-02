@@ -14,9 +14,9 @@
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();				// 'scene' is an autorelease object, JOR replaced auto specifier   
-	s_pLayerInstance = Level1::create();						// 'layer' is an autorelease object, JOR replaced auto specifier  
+	s_pLayerInstance = Level1::create();					// 'layer' is an autorelease object, JOR replaced auto specifier  
 	//Level1->setName("Level1");							// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-    scene->addChild(s_pLayerInstance);							// Add layer as a child to scene	    
+    scene->addChild(s_pLayerInstance);						// Add layer as a child to scene	    
     return scene;											// Return the scene
 }
 
@@ -29,14 +29,14 @@ bool Level1::init() {
 
 	if ( !Layer::init() ) { return false; }					// super init first
 	
-	initLives();											// Choose the number of lives based on the game difficult
+	//initLives();											// Choose the number of lives based on the game difficult
 	
-	Game::Instance()->resetAsteroidKills();				// Reset the number of asteroids destroyed
+	Game::Instance()->resetAsteroidKills();					// Reset the number of asteroids destroyed
 	Game::Instance()->resetEnemyShipKIlls();				// Reset the number of enemy ships destroyed
 		
 	// ParallaxNode
-	this->addChild(_backgroundNode, -1);					// Add the parallax background
-	_backgroundNode->init();								// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);					// Add the parallax background
+	m_backgroundNode->init();								// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
 	
 	this->scheduleUpdate();
 	
@@ -45,7 +45,7 @@ bool Level1::init() {
 
 /*
 	Choose the number of lives based on the game difficulty
-*/
+	// MOVED TO LEVEL
 void Level1::initLives() {
 	// Set the starting lives based on the difficulty
 	if (Game::Instance()->getDifficulty() == EASY)
@@ -57,7 +57,7 @@ void Level1::initLives() {
 
 	CCLOG("Level 2 - Init Lives: %d", Game::Instance()->getLives());
 }
-
+*/
 void Level1::update(float dt) {
 	Level::update(dt);										// Call base class update function	
 }

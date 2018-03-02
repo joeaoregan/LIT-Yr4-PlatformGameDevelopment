@@ -11,11 +11,6 @@
 
 #include "Game.h"
 
-// Level length
-#define LEVEL_TIME_EASY 25000.0f
-#define LEVEL_TIME_MED 10000.0f
-#define LEVEL_TIME_HARD 40000.0f
-
 Game* Game::s_pInstance;							// Game Singleton
 
 bool Game::init() {

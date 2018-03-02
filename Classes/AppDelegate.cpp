@@ -30,7 +30,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	    
     director->setAnimationInterval((float) (1.0 / 60));								// set FPS. the default value is 1.0/60 if you don't call this
 
-	cocos2d::Scene* scene = MainMenu::createScene();								// Create the game splash screen, JOR replaced auto specifier
+	cocos2d::Scene* scene = SplashScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
 	//cocos2d::Scene* scene = AudioMenu::createScene();								// 20180223 Test Audio Menu with Menu base class
 	//cocos2d::Scene* scene = MenuScene::createScene();								// 20180224 Levels with Level base class
 	    

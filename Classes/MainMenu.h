@@ -38,8 +38,7 @@ public:
 	};
 	*/
 
-	void highlightButton(unsigned int m_currentBtn);
-
+	void highlightButton(unsigned int button);	// Highlight the buttons as the up and down arrows are pressed
 
 private:
 	// Callbacks
@@ -67,8 +66,10 @@ private:
 
 	// 20180223
 	// Keyboard and gamepad
-	//int currentBtn;								// Current selected menu button for keyboard / gamepad
-	//int numButtons;								// The number of buttons in the menu/state
+	//int currentBtn;							// Current selected menu button for keyboard / gamepad
+	//int numButtons;							// The number of buttons in the menu/state
+
+	bool SELECTED = false;
 };
 
 #endif // __MAIN_MENU_H__

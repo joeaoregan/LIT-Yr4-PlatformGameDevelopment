@@ -26,7 +26,7 @@ public:
 
 	void checkCollisions();							// Check collisions with different objects in different levels
 
-	void initLives();
+	//void initLives();								// Moved to level
 
 private:
 

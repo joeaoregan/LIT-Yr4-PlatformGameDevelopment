@@ -3,9 +3,7 @@
 
 #include "cocos2d.h"
 #include "HealthBar.h"
-
-#define MAX_SHIP_LIVES 3.0f
-#define ENEMY_FIRE_RATE 500
+#include "Defines.h"
 
 class EnemyShip : public cocos2d::Sprite {
 public:

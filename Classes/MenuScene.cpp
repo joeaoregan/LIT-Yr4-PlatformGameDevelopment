@@ -104,15 +104,15 @@ bool MenuScene::init() {
 void MenuScene::update(float dt) {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||										// Stops keyboard appearing for Android
 		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
-		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
-			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+		if (Input::Instance()->isKeyPressedMenu(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
+			Input::Instance()->isKeyPressedMenu(EventKeyboard::KeyCode::KEY_W)) {
 			nextButton();
-			CCLOG("next button: %d", m_currentBtn);
+			//CCLOG("next button: %d", m_currentBtn);
 		}
-		else if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
-			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+		else if (Input::Instance()->isKeyPressedMenu(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
+			Input::Instance()->isKeyPressedMenu(EventKeyboard::KeyCode::KEY_S)) {
 			prevButton();
-			CCLOG("prev button: %d", m_currentBtn);
+			//CCLOG("prev button: %d", m_currentBtn);
 		}
 	}
 }
@@ -128,7 +128,8 @@ void MenuScene::setYPosAndScale(cocos2d::Sprite* sprite, float y) {
 void MenuScene::setYPosAndScale(cocos2d::MenuItemImage* sprite, float y) {
 	//sprite->setScale(scale);
 	sprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * y + origin.y));						// Set backgound position
-	sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale * 1.5f : scale * 1.0f));					// Animate the sprites when clicked
+	//sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale * 1.5f : scale * 1.0f));					// Animate the sprites when clicked
+	sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale : scale ));					// Animate the sprites when clicked
 }
 
 // The player can enter and store their name from this scene
@@ -169,6 +170,7 @@ void MenuScene::nextButton() {
 		}
 
 		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+		CCLOG("NEXT BUTTON: highlight m_currentBtn: %d", m_currentBtn);
 	}
 }
 
@@ -182,6 +184,7 @@ void MenuScene::prevButton() {
 		}
 
 		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+		CCLOG("PREV BUTTON: highlight m_currentBtn: %d", m_currentBtn);
 	}
 }
 

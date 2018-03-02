@@ -33,6 +33,11 @@ bool SplashScene::init() {
     this->addChild( backgroundSprite );																						// Add background sprite as a child of the layer
 
 	backgroundSprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 720) ? 1.0f : 1.5f));					// Not working Android
+
+	auto action = cocos2d::FadeOut::create(3.0f);
+	backgroundSprite->runAction(action);
+
+
     return true;
 }
 

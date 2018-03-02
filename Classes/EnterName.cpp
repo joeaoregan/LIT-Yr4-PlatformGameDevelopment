@@ -11,8 +11,6 @@
 #include "EnterName.h"
 //#include <UIText.h>
 
-#define TRANSITION_TIME 0.5
-
 Scene* EnterName::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
 	layer = EnterName::create();				// 'layer' is an autorelease object, JOR replaced auto specifier

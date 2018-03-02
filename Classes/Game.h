@@ -15,15 +15,10 @@
 #include "Audio.h"
 #include "DPad.h"
 #include "HUD.h"
+#include "Defines.h"
 
-#define MAX_PLAYER_LIVES 5													// The maximum number of lives a player can have
 
-#define RES_720P 720
-#define RES_1080P 1080
-
-enum difficulty {EASY, MEDIUM, HARD};
-
-class Game : public Layer {
+class Game {
 public:	
 	// Game singleton
 	static Game* Instance() {
@@ -58,6 +53,7 @@ public:
 	unsigned int getDifficulty() { return m_difficulty; }			// Get the difficulty setting
 	float getLevelDuration() { return m_levelDuration; }			// Get the level end time
 	unsigned int getEndTime() { return m_endTime; }					// Get the level end time
+	bool getLivesCarried() { return m_carryLives; }					// Are the lives carried over to the next level or not
 
 	// Set
 	void setLevel(unsigned int set) { m_level = set; }				// Set the level number
@@ -80,6 +76,9 @@ public:
 	void resetEnemyShipCount() { m_enemyShipCount = 0; }			// Reset the number of enemy ships spawned
 	void hideMusicPlayer(bool set) { m_PlayerVisible = set;  }		// Show or hide the music player
 	void setDifficulty(unsigned int set) { m_difficulty = set; }	// Set the difficulty level
+	void setLivesCarried(bool set) { m_carryLives = set; }			// Carry over lives to next level
+
+	float nextTime;
 
 private:
 	std::string m_playerName;										// Current player name
@@ -109,6 +108,8 @@ private:
 	// Settings
 	bool m_gameOver = false;										// Has the game been won or lost
 	unsigned int m_difficulty = MEDIUM;								// The game difficulty level, default value of MEDIUM
+
+	bool m_carryLives = false;										// Carry over lives to next level (For testing)
 };
 
 #endif // __GAME_SCENE_H__

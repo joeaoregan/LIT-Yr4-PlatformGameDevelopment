@@ -11,6 +11,29 @@ bool Input::isKeyPressed(cocos2d::EventKeyboard::KeyCode code) {
 	return false;
 }
 
+float Input::getTimeTick() {
+	timeval time;
+	gettimeofday(&time, NULL);
+	unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	return (float)millisecs;
+}
+
+bool Input::isKeyPressedMenu(cocos2d::EventKeyboard::KeyCode code) {
+	bool buttonWasPressed = false;
+
+	//CCLOG("IS KEY PRESSED");
+	if (keys.find(code) != keys.end()) {											// Check if the key is currently pressed by seeing it it's in the std::map keys
+		if (getTimeTick() > nextBtnTime) {
+			buttonWasPressed = true;
+			nextBtnTime = getTimeTick() + buttonRate;
+		}
+		else {
+			buttonWasPressed = false;
+		}
+	}
+
+	return buttonWasPressed;
+}
 double Input::keyPressedDuration(cocos2d::EventKeyboard::KeyCode code) {
 	if (!isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_CTRL))
 		return 0;																			// Not pressed, so no duration yet

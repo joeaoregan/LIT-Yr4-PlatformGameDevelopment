@@ -31,8 +31,8 @@ bool Level4::init() {
 	if (!Layer::init()) { return false; }		// super init first
 	
 	// ParallaxNode
-	this->addChild(_backgroundNode, -1);		// Add the parallax background
-	_backgroundNode->init();					// Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);		// Add the parallax background
+	m_backgroundNode->init();					// Initialise the parallax scrolling background
 
 	this->scheduleUpdate();						// Start updating the scene
 

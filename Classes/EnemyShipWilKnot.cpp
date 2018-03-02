@@ -1,5 +1,5 @@
 /*
-	EnemyShipKling.cpp
+	EnemyShipWilKnot.cpp
 	
 	Joe O'Regan
 	K00203642
@@ -13,15 +13,15 @@
 	It should be more difficult as there is more for the player to avoid
 */
 
-#include "EnemyShipKling.h"
+#include "EnemyShipWilKnot.h"
 #include "Game.h"
 #include "Level.h"
 
-EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
-	EnemyShipKling* eship = new EnemyShipKling();
+EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
+	EnemyShipWilKnot* eship = new EnemyShipWilKnot();
 	float scale = (res.height == 720) ? 0.67f : 1.0f;
 
-	if (eship && eship->initWithFile("ShipGreen.png")) {
+	if (eship && eship->initWithFile("ShipGrey.png")) {
 		eship->autorelease();
 
 		eship->setVisible(false);
@@ -42,6 +42,37 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 			float(eship->getLives() / MAX_ENEMY_SHIP_LIVES),							// percentage
 			redBR, transBR);
 		eship->addChild(eship->bar);
+
+		eship->canon = Sprite::create("DoubleCanon.png");
+		//eship->canon->setPosition(cocos2d::Point(eship->getPosition().x, eship->getPosition().y));
+		eship->canon->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, eship->getContentSize().height / 2));
+		//eship->addChild(eship->canon);
+
+		
+		/*
+
+		// Put in update
+
+		float angle = 45.0f;
+		eship->targetX = res.width;
+		eship->targetY = res.height;
+
+		auto func = CallFunc::create(
+			float x = eship->canon->getPosition().x;
+			float y = eship->canon->getPosition().y;
+			[&]() {
+			Level::Instance()->spawnEnemyLaserAngled(Point(x, y), 
+				cocos2d::Point(eship->canon->getPosition().x + eship->targetX, eship->canon->getPosition().y + eship->targetY), 45.0f);
+		});
+
+
+		auto sequence = Sequence::create(action, func, nullptr);
+		*/
+		float angle = 360.0f;
+		auto action = RotateBy::create(5.0f, angle);
+		eship->canon->runAction(action);		
+
+		eship->addChild(eship->canon);
 	}
 	else {
 		delete eship;
@@ -50,7 +81,7 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 	return eship;
 }
 
-void EnemyShipKling::update(float curTimeMillis) {
+void EnemyShipWilKnot::update(float curTimeMillis) {
 	if (isVisible()) {
 		if (curTimeMillis > m_nextFire) {
 			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), 

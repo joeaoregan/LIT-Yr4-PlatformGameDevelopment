@@ -26,9 +26,13 @@ public:
 	void moveLeft();
 	void moveRight();
 
+	unsigned int getWeaponStrength() { return weaponStrength; }
+	void weaponUpgrade() { weaponStrength++; }					// Increment the weapon
+
 private:
 	cocos2d::Size visibleSize;					// Visible screen size
 	float scale;
+	unsigned int weaponStrength = 2;
 };
 
 #endif // __PLAYER_H__

@@ -2,8 +2,6 @@
 #include "HUD.h"
 #include "MainMenu.h"
 
-//#define SCREEN_RESOLUTION_HEIGHT 720
-
 HUD* HUD::s_pInstance;																							// Singleton for Heads Up Display
 
 void HUD::init(cocos2d::Layer *layer) {
@@ -26,12 +24,25 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 
 		// Scale up text for my Android phone
 		float scaleUp, scaleDown;
-		(res.height == 1080) ? scaleUp = 1.5f : scaleUp = 1.0f;
+		(res.height == 1080) ? scaleUp = 1.45f : scaleUp = 1.0f;
 		(res.height == 1080) ? scaleDown = 1.0f : scaleDown = 0.67f;
+
+		// Bottom panel
+		cocos2d::Sprite* bottomPanel = Sprite::create("Panel.png");
+		bottomPanel->setScale(scaleDown);
+		bottomPanel->setPosition(cocos2d::Point(res.width / 2, (bottomPanel->getContentSize().height / 2) * scaleDown));
+		s_pInstance->addChild(bottomPanel);
+
+		// Top panel
+		cocos2d::Sprite* topPanel = Sprite::create("Panel.png");
+		topPanel->setScale(scaleDown);
+		topPanel->setScaleY(topPanel->getScaleY() * 0.80f);
+		topPanel->setPosition(cocos2d::Point(s_pInstance->visibleSize.width / 2, (res.height * 0.995f) - ((topPanel->getContentSize().height * topPanel->getScaleY()) / 2)));
+		s_pInstance->addChild(topPanel);
 
 		// Menu Icon
 		s_pInstance->menuItem = cocos2d::MenuItemImage::create("MenuWR.png", "MenuWG.png");
-		s_pInstance->menuItem->setScale(scaleDown);
+		s_pInstance->menuItem->setScale(scaleDown * 1.25f);
 		s_pInstance->menuItem->setPosition(cocos2d::Point((position.x + res.width * 0.05f) * 0.99f, res.height * 0.95 + position.y));
 
 		// Current Level
@@ -60,10 +71,10 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 
 		// Player number of lives
 		for (unsigned int i = 0; i < MAX_PLAYER_LIVES; i++) {
-			s_pInstance->playerLife = Sprite::create("PlayerLife.png");
+			s_pInstance->playerLife = Sprite::create("PlayerLifeNew2.png");
 			//s_pInstance->playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
-			s_pInstance->playerLife->setScale(scaleUp);
-			s_pInstance->playerLife->setPosition(position.x + res.width * 0.05f + (i * (s_pInstance->playerLife->getContentSize().width * scaleUp)), res.height * 0.05f);
+			s_pInstance->playerLife->setScale(scaleDown); // 20180302 Fixed
+			s_pInstance->playerLife->setPosition(position.x + res.width * 0.05f + (i * (s_pInstance->playerLife->getContentSize().width * scaleDown)), res.height * 0.05f);
 			s_pInstance->addChild(s_pInstance->playerLife);
 			s_pInstance->livesList[i] = s_pInstance->playerLife;																				// Add life sprite to list of lives
 		}
@@ -75,7 +86,7 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		// Add exit button in bottom right corner. it's an autorelease object	
 		s_pInstance->closeItem = cocos2d::MenuItemImage::create("CloseNormal.png", "CloseSelected.png");	
 		s_pInstance->closeItem->setScale(scaleUp);
-		s_pInstance->closeItem->setPosition(cocos2d::Point((position.x + res.width - s_pInstance->closeItem->getContentSize().width / 2) * 0.99f, res.height * 0.05f));
+		s_pInstance->closeItem->setPosition(cocos2d::Point((position.x + res.width - s_pInstance->closeItem->getContentSize().width / 2) * 0.975f, res.height * 0.05f));
 
 		// Create A Menu, it's an autorelease object
 		s_pInstance->menuClose = cocos2d::Menu::create(s_pInstance->closeItem, s_pInstance->menuItem, NULL);															// JOR replaced auto specifier
@@ -90,8 +101,8 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 }
 
 void HUD::update(float curTimeMillis) {
-	// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_PLAYER_LIVES && !Game::Instance()->isGameOver()) {				// If the players lives are less than the max num lives
+	// If the players lives are less than max lives
+	if (Game::Instance()->getLives() <= MAX_PLAYER_LIVES && !Game::Instance()->isGameOver()) {				// If the players lives are less than the max num lives
 		for (unsigned int i = 0; i < MAX_PLAYER_LIVES; i++) {
 			if (i < Game::Instance()->getLives()) {
 				if (livesList[i]->isVisible()) continue;
@@ -101,10 +112,10 @@ void HUD::update(float curTimeMillis) {
 				auto action1 = cocos2d::MoveTo::create(0.25f,												// Move the life up 20% of its height
 					cocos2d::Point(livesList[i]->getPosition().x, livesList[i]->getPosition().y +
 						livesList[i]->getContentSize().height * 0.2f));
-				auto action2 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.5f : 2.25f);	// Increase the size by 50%
+				auto action2 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 1080) ? 1.5f : 1.0f);	// Increase the size by 50%
 				auto action3 = cocos2d::MoveTo::create(0.25f, cocos2d::Point(livesList[i]->getPosition().x, 
 					livesList[i]->getPosition().y));
-				auto action4 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 720) ? 1.0f : 1.5f);	// Decrease the size to original values
+				auto action4 = cocos2d::ScaleTo::create(0.25f, (visibleSize.height == 1080) ? 1.0f : 0.67f);	// Decrease the size to original values
 				auto sequence = cocos2d::Sequence::create(Spawn::create(action1, action2, nullptr),			// Create a sequence, using spawn to run the move and scale actions concurrently
 					Spawn::create(action3, action4, nullptr), nullptr);										// Run the reverse actions immediately after
 				livesList[i]->runAction(sequence);

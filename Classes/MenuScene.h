@@ -18,7 +18,7 @@
 
 #include "cocos2d.h"
 
-#define TRANSITION_TIME 0.5
+#include "Defines.h"
 
 class MenuScene : public cocos2d::Layer
 {

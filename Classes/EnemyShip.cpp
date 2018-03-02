@@ -16,6 +16,7 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	float scale = (res.height == 720) ? 0.67f : 1.0f;
 
 	if (eship && eship->initWithFile("EnemyShip.png")) {
+	//if (eship && eship->initWithFile("ShipGrey.png")) {								// Test new ship sprite image
 		eship->autorelease();
 		/*
 		// Don't know how to update????????????
@@ -52,12 +53,11 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 		eship->bar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), eship->getPosition().y + eship->getContentSize().height,		// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,						// Dimensions
-			float(eship->getLives() / MAX_SHIP_LIVES),			// percentage
+			float(eship->getLives() / MAX_ENEMY_SHIP_LIVES),			// percentage
 			//float(2 / MAX_SHIP_LIVES),			// percentage
 			redBR, transBR);
 		eship->addChild(eship->bar);
 		
-
 		//HealthBar* healthBar = HealthBar::create(
 	}
 	else {

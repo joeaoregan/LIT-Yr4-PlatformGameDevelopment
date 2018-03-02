@@ -10,15 +10,22 @@
 #include "Input.h"
 #include "Level.h"
 
-#define PLAYER_SPEED 3.0f
-//#define PLAYER_COLLISION_BITMASK 0x000001
 
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
 	player->visibleSize = Director::getInstance()->getVisibleSize();						// screen size
 	player->scale = (res.height == 720) ? 1.0f : 1.5f;
+	
+	//if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) { //xxxxxxxxxx
 
-	if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) {
+
+	if (player && player->initWithFile("PlayerShip3.png")) {
+		// Set the amount of lasers to fire at the beginning
+		if (Game::Instance()->getDifficulty() == EASY)
+			player->weaponStrength = 3;
+		else if (Game::Instance()->getDifficulty() == HARD) {
+			player->weaponStrength = 1;
+		}
 
 		player->autorelease();
 		player->setPosition(res.width * 0.1, res.height * 0.5);								// Place in middle left of screen
@@ -75,7 +82,7 @@ void Player::update() {
 }
 
 void Player::moveUp() {
-	if (getPosition().y < visibleSize.height * 0.9f)
+	if (getPosition().y < visibleSize.height * 0.895f)
 		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * scale);	// Need to cover more distance on larger screen
 }
 void Player::moveDown() {
