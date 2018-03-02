@@ -15,6 +15,7 @@
 #include "EnemyShip.h"
 #include "Game.h"
 #include "MusicPlayer.h"
+#include "Asteroid.h"
 
 class Level : public Layer {
 public:
@@ -89,7 +90,7 @@ public:
 	Vector<Sprite*>* getLaserList() { return m_playerLaserList; }				// return ship lasers
 	
 	void initLives();															// Moved to Level base class to test all levels
-
+	
 protected:
 	cocos2d::Size visibleSize;													// Screen resolution changes depending on the platform
 	cocos2d::Size winSize;														// Current size of the game window (constantly updated)
@@ -138,14 +139,13 @@ protected:
 	int m_nextEnemyLaser = 0;													// Enemy laser list index
 
 	// Object lists
-	Vector<Sprite*>* m_asteroidsList;											// List of asteroids
-	Vector <EnemyShip*> * m_enemyShipList;										// List of enemy ships
+	Vector<Asteroid*> * m_asteroidsList;											// List of asteroids
+	Vector<EnemyShip*> * m_enemyShipList;										// List of enemy ships
 	Vector<Sprite*> *m_playerLaserList;											// List of player lasers
 	Vector<Sprite*> *m_enemyLaserList1;											// List of Enemylasers
 	Vector<Sprite*> *m_enemyLaserList2;											// List of lasers for 2nd enemy
 	Vector<Sprite*> *m_enemyLaserList3;											// List of lasers for 3rd enemy
-
-
+	
 	// Player fire rate
 	float m_nextFire;
 	unsigned int m_fireRate = 300;												// Set the fire rate millisecond interval depending on the difficult 200: easy, 300: normal, 400: hard

@@ -23,7 +23,9 @@ public:
 
 	static EnemyShipWilKnot* create(cocos2d::Size res);
 		
-	void update(float dt);
+	virtual void update(float dt);
+
+	virtual void moveCanon();
 
 	cocos2d::Sprite* canon;
 	static EnemyShipWilKnot* eship;

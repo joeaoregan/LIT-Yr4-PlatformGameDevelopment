@@ -33,6 +33,10 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->m_dy = 0.375f * scale;
 		eship->m_dx = -0.33f * scale;
 
+		// Use to set spawn duration this gives slower time to travel across screen
+		eship->m_speedMin = 17.0f;
+		eship->m_speedMax = 20.0f;
+
 		cocos2d::Color4F redBR(1, 0, 0, 1);
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
 
@@ -49,7 +53,8 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->canon->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, eship->getContentSize().height / 2));
 		//eship->addChild(eship->canon);
 
-		
+		eship->moveCanon();
+
 		/*
 		// Put in update
 
@@ -68,17 +73,23 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 
 		auto sequence = Sequence::create(action, func, nullptr);
 		*/
-		float angle = 360.0f;
-		auto action = RotateBy::create(5.0f, angle);
-		eship->canon->runAction(action);		
-
-		eship->addChild(eship->canon);
+		
 	}
 	else {
 		delete eship;
 	}
 
 	return eship;
+}
+
+
+void EnemyShipWilKnot::moveCanon() {
+	float angle = 360.0f;
+	auto action = RotateBy::create(5.0f, angle);
+	auto repeat = RepeatForever::create(action);
+	canon->runAction(repeat);
+
+	addChild(canon);
 }
 
 void EnemyShipWilKnot::update(float curTimeMillis) {

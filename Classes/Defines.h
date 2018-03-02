@@ -22,7 +22,7 @@
 
 #define L3_NUM_ENEMY_1 1
 #define L3_NUM_ENEMY_2 2
-#define L3_NUM_ENEMY_3 3
+#define L3_NUM_ENEMY_3 2														// Two of the larger ship on screen at once
 
 
 /* Images */
@@ -44,14 +44,14 @@
 
 // Enemies and obstacles
 #define NUM_ENEMIES 3
-#define MAX_NUM_ASTEROIDS_L1 10													// Number of asteroids
-#define KNUMASTEROIDSL2 15														// Number of asteroids
-#define NUM_LASERS 8															// Number of lasers
+#define MAX_NUM_ASTEROIDS_L1 10								// Number of asteroids
+#define NUM_ASTEROIDS_L2 15									// Number of asteroids
+#define NUM_LASERS 8										// Number of lasers
 #define ENEMY_FIRE_RATE 500
 #define MAX_ENEMY_SHIP_LIVES 3.0f
 
 // Player
-#define MAX_PLAYER_LIVES 5														// The maximum number of lives a player can have
+#define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have
 #define PLAYER_SPEED 3.0f
 
 // Screen Resolution
@@ -64,6 +64,7 @@
 
 enum difficulty { EASY, MEDIUM, HARD };
 enum laserTypes { BLUE, ORANGE, GREEN1, GREEN2, GREEN3 };
+enum asteroidType { STATIC_ROID, DYNAMIC_ROID };
 
 //static unsigned int NUM_LASERS_TO_FIRE = 2;	// Moved to player class
 

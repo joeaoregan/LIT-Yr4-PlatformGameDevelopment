@@ -20,6 +20,7 @@
 #include "HealthBar.h"
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
+#include "AsteroidOriginal.h"
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -62,7 +63,7 @@ bool Level::init() {
 	this->addChild(player);
 
 	// 1) Create the ParallaxNode
-	m_backgroundNode = ParallaxNodeExtras::create();															// Create the parallax scrolling background
+	m_backgroundNode = ParallaxNodeExtras::create();														// Create the parallax scrolling background
 
 	Level::addChild(ParticleSystemQuad::create("Stars1.plist"));											// Add the star particles
 	Level::addChild(ParticleSystemQuad::create("Stars2.plist"));
@@ -154,13 +155,19 @@ void Level::initEnemyShips() {
 
 void Level::initAsteroids() {
 	// Asteroids
-	m_asteroidsList = new Vector<Sprite*>(MAX_NUM_ASTEROIDS_L1);											// List of asteroids
+	m_asteroidsList = new Vector<Asteroid*>(MAX_NUM_ASTEROIDS_L1);											// List of asteroids
 	for (int i = 0; i < MAX_NUM_ASTEROIDS_L1; ++i) {
-		cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName(ASTEROID_IMG);						// Asteroid sprite, JOR replaced auto specifier
-		asteroid->setVisible(false);
-		asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);										// Increase scale of Asteroid for Android (My phone anyway)
+		//cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName(ASTEROID_IMG);						// Asteroid sprite, JOR replaced auto specifier
+		Asteroid* asteroid = AsteroidOriginal::create(visibleSize);						// Asteroid sprite, JOR replaced auto specifier
+		//asteroid->setVisible(false);
+		//asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);										// Increase scale of Asteroid for Android (My phone anyway)
 		m_batchNode->addChild(asteroid);
 		m_asteroidsList->pushBack(asteroid);
+
+		// Add base class asteroid
+		Asteroid* asteroid2 = Asteroid::create(visibleSize);
+		this->addChild(asteroid2);
+		m_asteroidsList->pushBack(asteroid2);
 	}
 	//CCLOG("Level %d: Asteroids Initialised", Game::Instance()->getLevel());
 }
@@ -270,24 +277,29 @@ void Level::spawnObjects(float curTimeMillis) {
 		float randMillisecs = randomValueBetween(0.20F, 1.0F) * 1000;
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
 
-		float randY = randomValueBetween(0.0F, winSize.height);												// Random Y position for asteroid
-		float randDuration = randomValueBetween(2.0F, 10.0F);
-
-		Sprite *asteroid = m_asteroidsList->at(_nextAsteroid);
+		Asteroid *asteroid = m_asteroidsList->at(_nextAsteroid);
 		_nextAsteroid++;																					// Increment the asteroid
 
 		if (_nextAsteroid >= m_asteroidsList->size()) _nextAsteroid = 0;									// Loop back around to start of asteroids list
-		
-		Game::Instance()->incrementAsteroidCount();
 
+		Game::Instance()->incrementAsteroidCount();
+		
+		float randY = randomValueBetween(0.0f, winSize.height);												// Random Y position for asteroid
+		//float randDuration = randomValueBetween(asteroid->minSpeed(), asteroid->maxSpeed());
+
+		/*
 		asteroid->stopAllActions();																			// CCNode.cpp
 		asteroid->setPosition(winSize.width + asteroid->getContentSize().width / 2, randY);
 		asteroid->setVisible(true);
-		asteroid->setScale(((visibleSize.height == 720) ? 1.0f : 1.5f) * (randDuration / 10.0f) * 1.25f);				// Fast = small
+
+		asteroid->setScale(((visibleSize.height == 720) ? 1.0f : 1.5f) * (randDuration / 10.0f) * 1.25f);	// Fast = small
+		*/
+		asteroid->move(visibleSize, asteroid->getSpeed(), randY);
 		asteroid->runAction(Sequence::create(
-				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
+				MoveBy::create(asteroid->getSpeed(), Point(-winSize.width - asteroid->getContentSize().width, 0)),
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)							// DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
-		);
+		);	
+
 		//CCLOG("Spawn Asteroid");
 	}
 }
@@ -295,36 +307,38 @@ void Level::spawnObjects(float curTimeMillis) {
 void Level::spawnEnemyShips(float curTimeMillis) {
 	if (m_enemyLaserList1->size() > 0) {
 		if (curTimeMillis > nextEnemyShipSpawnTime) {
-			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
-			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;												// Set the time to spawn the next ship
-
-			float randY = randomValueBetween(0.0F, winSize.height);												// Random Y position for enemy ship
-			float randDuration = randomValueBetween(2.0F, 10.0F);
-
+			// Moved to use min and max speed
 			EnemyShip *enemyShip = m_enemyShipList->at(nextEnemyShip);
-			nextEnemyShip++;																					// Increment the enemy ship on the list
+			nextEnemyShip++;
+
+			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
+			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;														// Set the time to spawn the next ship
+
+			float randY = randomValueBetween(0.0F, winSize.height);														// Random Y position for enemy ship
+			float randDuration = randomValueBetween(enemyShip->minSpeed(), enemyShip->maxSpeed());						// Speed range depends on player
+									// Increment the enemy ship on the list
 
 			Game::Instance()->incrementEnemyShipCount();
 
-			if (nextEnemyShip >= m_enemyShipList->size()) nextEnemyShip = 0;									// Loop back around to start of enemy ship list
+			if (nextEnemyShip >= (unsigned int) m_enemyShipList->size()) nextEnemyShip = 0;											// Loop back around to start of enemy ship list
 
-			enemyShip->stopAllActions();																		// CCNode.cpp
+			enemyShip->stopAllActions();																				// CCNode.cpp
 			enemyShip->setPosition(winSize.width + enemyShip->getContentSize().width / 2, randY);
 			enemyShip->setVisible(true);
 			enemyShip->setLives(3);
 
 			// Move the ship to the players coordinate
-			auto action = MoveTo::create(3, Point(player->getPositionX(), player->getPositionY()));
+			auto action = MoveTo::create(randDuration * 0.67f, Point(player->getPositionX(), player->getPositionY()));	// Part of time spent moving to player, the rest moving off screen
 			enemyShip->runAction(action);
 
 			enemyShip->runAction(
 				Sequence::create(
-					MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),	// move off the screen its full width
-					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),								// Then make invisible
+					MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),			// move off the screen its full width
+					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),										// Then make invisible
 					NULL)	// TERMINATE WITH NULL
 			);
 
-			CCLOG("Spawn Enemy Ship");
+			//CCLOG("Spawn Enemy Ship");
 		}
 	}
 }
@@ -425,13 +439,16 @@ void Level::spawnEnemyLaser(cocos2d::Point pos, int type) {
 	
 	if (type == GREEN2)
 		action = MoveTo::create(0.525f,
-			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y + visibleSize.height * 0.33f));
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - 
+				getContentSize().width, pos.y + visibleSize.height * 0.33f));
 	else if (type == GREEN3)
 		action = MoveTo::create(0.525f,
-			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y - visibleSize.height * 0.33f));
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - 
+				getContentSize().width, pos.y - visibleSize.height * 0.33f));
 	else 
 		action = MoveTo::create(0.5f,
-			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y));	// set to off screen the width of the laser + the screen width
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - 
+				getContentSize().width, pos.y));	// set to off screen the width of the laser + the screen width
 
 	enemyLaser->runAction(action);
 }
@@ -460,9 +477,9 @@ void Level::spawnLasers(int amount) {
 
 			// Set the initial rotation of the lasers
 			shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width/2,yPos));
-			if (amount == 2) (i == 0) ? rot = -5 : rot = 5;													// Top, bottom lasers
-			if (amount == 3) (i == 0) ? rot = 0 : (i == 1) ? rot = 5 : rot = -5;							// Middle, bottom, top lasers
-			if (amount == 4) (i == 0) ? rot = -3 : (i == 1) ? rot = 5 : (i == 2) ? rot = -5 : rot = 3;		// laser 1: i = 2 (5), laser 2: i = 0 (3), laser 3: i = ,laser 4: i = 1 (-5)
+			if (amount == 2) (i == 0) ? rot = -5 : rot = 5;														// Top, bottom lasers
+			if (amount == 3) (i == 0) ? rot = 0 : (i == 1) ? rot = 5 : rot = -5;								// Middle, bottom, top lasers
+			if (amount == 4) (i == 0) ? rot = -3 : (i == 1) ? rot = 5 : (i == 2) ? rot = -5 : rot = 3;			// laser 1: i = 2 (5), laser 2: i = 0 (3), laser 3: i = ,laser 4: i = 1 (-5)
 			shipLaser->setRotation(rot);
 
 			shipLaser->setVisible(true);
@@ -474,11 +491,11 @@ void Level::spawnLasers(int amount) {
 			if (amount == 4) (i == 1) ? yVal = -120 : (i == 2) ? yVal = 120 : (i == 3) ? yVal = -40 : yVal = 40;// if 3 lasers, first goes straight, second goes down, third goes up
 
 			shipLaser->runAction(
-				Sequence::create(MoveBy::create(0.5, Point(winSize.width, yVal)),							// change to plus 100 for up - 100 for down
+				Sequence::create(MoveBy::create(0.5, Point(winSize.width, yVal)),								// change to plus 100 for up - 100 for down
 					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 		}
 
-		m_nextFire = curTimeMillis + m_fireRate;															// Set the next time to fire
+		m_nextFire = curTimeMillis + m_fireRate;																// Set the next time to fire
 	}
 }
 
@@ -677,22 +694,23 @@ void Level::endScene(EndReason endReason) {
 	this->addChild(asteroidsLbl);
 	
 	/*
+	// status bars displaying percentages -> changed the health bar function while trying to get enemy ship healthbars working
 	if (Game::Instance()->getAsteroidCount() > 0) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
-			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 3.5f),					// Position
-			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
-			(float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(),				// percentage
-			red, trans);																							// Colours
+			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 3.5f),			// Position
+			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,					// Dimensions
+			(float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(),		// percentage
+			red, trans);																					// Colours
 		this->addChild(healthBar);
 	}
 
 
 	if (Game::Instance()->getEnemyShipCount() > 0) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
-			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 4.5f),					// Position
-			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
-			(float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(),			// percentage
-			red, trans);																							// Colours
+			winSize.width * 0.5f, winSize.height - ((winSize.height / TOTAL_LIST_ELEMENTS) * 4.5f),			// Position
+			(visibleSize.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,					// Dimensions
+			(float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(),	// percentage
+			red, trans);																					// Colours
 		this->addChild(healthBar);
 	}
 	*/

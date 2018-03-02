@@ -12,10 +12,12 @@ public:
 	
 	static EnemyShip* create(cocos2d::Size res);
 		
-	void update(float dt);
+	virtual void update(float dt);
 
 	unsigned int getLives() { return m_lives; }
 	void setLives(unsigned int set) { m_lives = set; }
+
+	virtual void moveCanon() {}
 
 	//void updateBar(float pc) {
 		//bar->setPercent(1);
@@ -28,6 +30,9 @@ public:
 
 	float getNextFire() { return m_nextFire; }
 	void setNextFire(float set) { m_nextFire = set; }
+
+	float minSpeed() { return m_speedMin; }
+	float maxSpeed() { return m_speedMax; }
 
 	//void moveTo();
 
@@ -46,6 +51,9 @@ protected:
 
 	float m_dx = 0;
 	float m_dy = 0;
+
+	float m_speedMin = 2.0f;
+	float m_speedMax = 10.0f;
 };
 
 

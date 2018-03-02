@@ -61,7 +61,7 @@ bool Level3::init() {
 
 void Level3::initEnemyShips() {
 	//m_enemyLaserList->clear();
-	for (unsigned int i = 0; i <= m_enemyShipList->size()+1; ++i) {
+	for (int i = 0; i <= m_enemyShipList->size()+1; ++i) {
 		m_enemyShipList->popBack();
 		CCLOG("Remove Enemy ship %d / %d from list", i, m_enemyShipList->size());
 	}
