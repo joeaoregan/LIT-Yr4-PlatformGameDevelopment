@@ -65,9 +65,6 @@ private:
 	// Time
 	float currentTime;												// 20180221 Change to float to fix Android timer issue
 	unsigned int time;												// Countdown timer displayed time
-
-	// Level
-	//unsigned int m_levelNum;										// The current level number
 };
 
 #endif // __AUDIO__

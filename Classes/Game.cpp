@@ -17,7 +17,6 @@ bool Game::init() {
 	// Set timer
 	m_levelDuration = LEVEL_TIME_MED;
 
-
 	if (m_difficulty == EASY) {
 		m_levelDuration = LEVEL_TIME_EASY;
 	}
@@ -36,8 +35,8 @@ bool Game::init() {
 	m_currentTime = 0;
 
 	// Initial level values
-	m_score = 0;									// Initialise the score value
-	m_level = 1;									// Initialise the level value
+	if (m_levelNum == 1) m_score = 0;				// Initialise the score value		xxxx resets the score each level
+	//m_levelNum = 1;								// Initialise the level value
 	m_gameOver = false;
 
 	// Reset totals

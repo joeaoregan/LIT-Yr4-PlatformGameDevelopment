@@ -13,6 +13,8 @@
 #include "cocos2d.h"
 
 // Level length
+#define MAX_LEVELS 4
+
 #define LEVEL_TIME_EASY 25000.0f
 #define LEVEL_TIME_MED 20000.0f
 #define LEVEL_TIME_HARD 40000.0f
@@ -54,6 +56,7 @@
 // Player
 #define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have
 #define PLAYER_SPEED 3.0f
+#define MAX_WEAPON_LEVEL 4
 
 // Screen Resolution
 #define RES_720P 720

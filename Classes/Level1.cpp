@@ -22,7 +22,7 @@ Scene* Level1::createScene() {
 
 // on "init" you need to initialize your instance
 bool Level1::init() {
-	Game::Instance()->setLevel(1);							// for parallax node init
+	//Game::Instance()->setLevel(1);							// For parallax node init
 
 	Level::init();											// 20180221 Added Level base class
 

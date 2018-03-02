@@ -23,7 +23,7 @@ Scene* Level2::createScene() {
 bool Level2::init() {
 	Level::init();													// 20180221 Added Level base class
 
-	Game::Instance()->setLevel(2);									// for parallax node init
+	//Game::Instance()->setLevel(2);									// for parallax node init
 	newHUD->setLevelLabel();										// Update HUD Level text display
 
 	if (!Layer::init()) { return false; }							// super init first
@@ -59,23 +59,23 @@ void Level2::initEnemyShips() {
 }
 
 void Level2::update(float dt) {
-	Level::update(dt);														// Call base class update function		
+	Level::update(dt);												// Call base class update function		
 }
 
 
 void Level2::checkCollisions() {
-	Level::checkCollisions();															// Call base class function
+	Level::checkCollisions();										// Call base class function
 	// Check collisions with different objects in different levels
 
 	// Check collisions for new type of laser
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
 		if (!(enemyLaser->isVisible())) continue;
 
-		if (enemyLaser->getPosition().x <= 0)											// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);												// Hide the laser
+		if (enemyLaser->getPosition().x <= 0)						// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);							// Hide the laser
 	}
 }
 
 void Level2::endScene(EndReason endReason) {
-	Level::endScene(endReason);															// End the scene
+	Level::endScene(endReason);										// End the scene
 }

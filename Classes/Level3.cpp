@@ -27,9 +27,9 @@ Scene* Level3::createScene() {
 bool Level3::init() {
 	Level::init();								// 20180221 Added Level base class
 
-	Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
+	//Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
 
-	Game::Instance()->setLevel(3);				// Specific to level 2
+	//Game::Instance()->setLevel(3);				// Specific to level 2
 	newHUD->setLevelLabel();					// Update HUD Level text display
 
 	if (!Layer::init()) { return false; }		// super init first

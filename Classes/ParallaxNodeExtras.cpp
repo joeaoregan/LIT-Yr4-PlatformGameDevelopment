@@ -76,7 +76,7 @@ bool ParallaxNodeExtras::init() {
 
 	// 2) Create the sprites will be added to the ParallaxNode
 	// Choose the background image based on the screen resolution and current level
-	if (Game::Instance()->getLevel() == 1 || Game::Instance()->getLevel() == 4)
+	if (Game::Instance()->getLevel() <= 1 || Game::Instance()->getLevel() == 4)
 		bgFileName = "bg_front_spacedust1080.png";
 	else if (Game::Instance()->getLevel() == 2)
 		bgFileName = "bg_front_spacedust1080L2.png";

@@ -70,7 +70,7 @@ bool Level::init() {
 	Level::addChild(ParticleSystemQuad::create("Stars2.plist"));
 	Level::addChild(ParticleSystemQuad::create("Stars3.plist"));
 		
-	Game::Instance()->init();																				// Inite score and level	
+	Game::Instance()->init();																				// Init score and level	
 	Input::Instance()->init(this, this->_eventDispatcher);													// Ship Movement
 
 	initLives();																							// Initialise the number of lives, set or carry over from previous level
@@ -612,15 +612,17 @@ void Level::checkCollisions() {
 			m_powerUpLife->setVisible(false);
 			Game::Instance()->addLife();
 			Audio::Instance()->powerUpFX();																// Play the power up sound effect
+			Game::Instance()->updateScore(50);															// Award 50 points for collecting a power up
 		}
 	}
 	if (m_powerUpWeapon->isVisible()) {
-		if (player->getBoundingBox().intersectsRect(m_powerUpWeapon->getBoundingBox())) {					// If the ship collides with an asteroid
+		if (player->getBoundingBox().intersectsRect(m_powerUpWeapon->getBoundingBox())) {				// If the ship collides with an asteroid
 			player->runAction(Blink::create(1.0F, 9));													// Flash the Player ship
 			m_powerUpWeapon->setVisible(false);
 			//Game::Instance()->addLife();
 			player->upgradeWeapon();
 			Audio::Instance()->powerUpFX();																// Play the power up sound effect
+			Game::Instance()->updateScore(50);															// Award 50 points for collecting a power up
 		}
 	}
 
@@ -698,9 +700,7 @@ void Level::endScene(EndReason endReason) {
 	Game::Instance()->setLivesCarried(true);															// Carry over lives to next level
 	
 	const int TOTAL_LIST_ELEMENTS = 9;																	// Used to vertically space menu items
-
-	///Game::Instance()->checkHighScore();																// The game has ended, check if the current score is the high score and save it if it is
-
+	
 	// Win / Lose Message
 	std::string message = "Level " + StringUtils::toString(Game::Instance()->getLevel()) + " Complete";	// Win 
 	if (endReason == KENDREASONLOSE) message = "You Lose";
@@ -769,14 +769,14 @@ void Level::endScene(EndReason endReason) {
 		message = "Main Menu";
 
 	cocos2d::Label* continueLbl = Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
-	//continueLbl->setBMFontSize(10);																	// Test set font size
 	// Level Progression
 	if (endReason != KENDREASONLOSE) {
 		levelProgression(continueLbl);
 	}
-	else 
+	else {
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
+		Game::Instance()->setLevel(1);																	// Start again
+	}
 	continueItem->setPosition(winSize.width / 2, 
 		winSize.height - (winSize.height / TOTAL_LIST_ELEMENTS * 7));
 
@@ -803,6 +803,8 @@ void Level::levelProgression(cocos2d::Label* continueLbl) {
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel4, this));
 	else if (level == 4)
 		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));
+
+	Game::Instance()->setNextLevel();																	// for parallax node init
 }
 
 // Callbacks
@@ -839,38 +841,3 @@ void Level::menuCloseCallback(Ref* pSender) {
     exit(0);
 #endif
 }
-
-/*
-void Level::update(float dt) {
-	//HUD::Instance()->update();																			// Update the score (Not working)
-	
-	// Update timer this class
-
-	// Update timer from Game class
-	Game::Instance()->updateTimer(curTimeMillis);															// Update the countdown timer, pass in curTimeMillies solves Android Timer issue
-	timeLabel->setString("Time: " + to_string(Game::Instance()->getTimer()));
-
-	//time -= ((int) dt % 10);
-	//time += dt;
-	//this->schedule(schedule_selector(Level1::updateTimer), 1.0f);											// Call the function every 1 second
-	//if (curTimeMillis > timerTime) {
-	//	timerTime = curTimeMillis + 1000;
-	//	time--;
-	//}
-
-	//timeLabel->setString("Time: " + to_string(time));
-
-	spawnAsteroids(curTimeMillis);																			// Spawn asteroids
-	spawnEnemyShips(curTimeMillis);																			// Spawn asteroids
-	checkCollisions();																						// Check have game objects collided with each other
-	checkGameOver(curTimeMillis);																			// Check is the game over or not
-		// Update displayed lives
-	//if (_lives < 3 && !_gameOver) {																		// If the players lives are less than 3
-	if (Game::Instance()->getLives() < MAX_LIVES && !_gameOver) {											// If the players lives are less than the max num lives
-	livesList[Game::Instance()->getLives()]->setVisible(false);												// Set the lives invisible (2,1,0)
-	}
-
-	// Update the enemy ship position
-	//EnemyShip->setPosition(EnemyShip->getPosition().x - 2, EnemyShip->getPosition().y);
-}
-*/

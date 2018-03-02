@@ -39,7 +39,7 @@ public:
 	// Get
 	float getTimeTick();											// Get current time in milliseconds
 
-	unsigned int getLevel() { return m_level; }						// 20180218 Return the current level
+	unsigned int getLevel() { return m_levelNum; }					// 20180218 Return the current level
 	unsigned int getScore() { return m_score; }						// 20180214 Return the current score
 	unsigned int getLives() { return m_lives; }						// 20180218 Return the players number of lives
 	std::string getPlayerName() { return m_playerName; }			// 20180221 Return the name of the player
@@ -57,7 +57,11 @@ public:
 	float getCurrentWeapon() { return m_currentWeapon; }			// Get the stored weapon level
 
 	// Set
-	void setLevel(unsigned int set) { m_level = set; }				// Set the level number
+	void setLevel(unsigned int set) { m_levelNum = set; }			// Set the level number
+	void setNextLevel() { 
+		if (m_levelNum < MAX_LEVELS) m_levelNum++; 					// Set the next level number
+		else m_levelNum = 1;										// Loop back around to level 1
+	}	
 	void updateScore(unsigned int set) { m_score += set; }			// Add the value passed as a parameter to the current score
 	void setLives(unsigned int set) { m_lives = set; }				// Set the number of livess
 	void takeLife() { m_lives--; };									// Decrement the number of lives
@@ -90,7 +94,7 @@ private:
 	// HUD
 	unsigned int m_lives = 0;										// Player lives
 	unsigned int m_score = 0;										// Current score
-	unsigned int m_level = 1;										// Current level
+	unsigned int m_levelNum = 1;									// Current level
 
 	static Game* s_pInstance;										// Single instance of Game used as singleton, so only one instance exists thoughout the game
 

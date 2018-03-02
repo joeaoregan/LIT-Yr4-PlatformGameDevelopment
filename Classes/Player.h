@@ -34,14 +34,17 @@ public:
 	void moveRight();
 
 	unsigned int getWeaponStrength() { return m_weaponStrength; }	// Current player weapon grade or level
-	void weaponUpgrade() { m_weaponStrength++; }					// Increment the weapon
+	void weaponUpgrade() { 
+		if (m_weaponStrength < MAX_WEAPON_LEVEL)					// If the weapons level isn't maxed out already
+			m_weaponStrength++; 									// Increment the weapon
+	}	
 
 private:
 	cocos2d::Size visibleSize;										// Visible screen size
 	float scale;
 	unsigned int m_weaponStrength = 2;
 
-	cocos2d::Sprite* canon;
+	cocos2d::Sprite* canon;											// Canon made visible 
 };
 
 #endif // __PLAYER_H__
