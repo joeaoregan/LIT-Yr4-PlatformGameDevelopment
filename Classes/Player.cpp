@@ -10,21 +10,22 @@
 #include "Input.h"
 #include "Level.h"
 
-
+/*
+	Create a player sprite, initiallising the number of lasers, 
+	and scale depending on screen resolution
+*/
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
 	player->visibleSize = Director::getInstance()->getVisibleSize();						// screen size
 	player->scale = (res.height == 720) ? 1.0f : 1.5f;
 	
 	//if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) { //xxxxxxxxxx
-
-
 	if (player && player->initWithFile("PlayerShip3.png")) {
 		// Set the amount of lasers to fire at the beginning
 		if (Game::Instance()->getDifficulty() == EASY)
-			player->weaponStrength = 3;
+			player->weaponStrength = 3;														// Start with 3 lasers easy, 2 medium, 1 hard
 		else if (Game::Instance()->getDifficulty() == HARD) {
-			player->weaponStrength = 1;
+			player->weaponStrength = 1;														// Less laser beams initially
 		}
 
 		player->autorelease();
@@ -57,6 +58,9 @@ Player::Player(cocos2d::Layer *layer) {
 }
 */
 
+/*
+	Get input from keyboard to update the players position
+*/
 void Player::update() {
 	// Move the player ship
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||
@@ -81,9 +85,12 @@ void Player::update() {
 	}
 }
 
+/*
+	Move the player
+*/
 void Player::moveUp() {
 	if (getPosition().y < visibleSize.height * 0.895f)
-		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * scale);	// Need to cover more distance on larger screen
+		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * scale);				// Need to cover more distance on larger screen
 }
 void Player::moveDown() {
 	if (getPosition().y > visibleSize.height * 0.125f)

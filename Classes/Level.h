@@ -42,13 +42,13 @@ public:
 	void initDifficulty();														// Initialise the game difficulty
 	
 	virtual void update(float dt);												// Update function
-	virtual void endScene(EndReason endReason);
+	virtual void endScene(EndReason endReason);									// End the scene
+	virtual void checkCollisions();												// 20180202 Check is the game over or not
     	
     void menuCloseCallback(cocos2d::Ref* pSender);								// Selector callback, exit the game when button pressed
 	
 	void getInput();															// Get input from DPad
 	
-	void checkCollisions();														// 20180202 Check is the game over or not
 
 	void checkGameOver(float currenTime);										// 20180202 Check have game objects collided with each other
 
@@ -74,6 +74,7 @@ public:
 	void spawnLasers(int amount);												// 20180221
 	void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
 	void spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
+	virtual void spawnEnemyLaserOrange(cocos2d::Point pos) {}
 
 	// Fire enemy lasers
 	//void enemyFireLaser(float curTimeMillis);

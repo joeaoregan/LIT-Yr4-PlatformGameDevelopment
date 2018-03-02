@@ -36,6 +36,7 @@
 // Background
 #define ASTEROID_IMG "asteroid.png"
 #define LASER_BLUE_IMG "laserbeam_blue.png"
+#define LASER_ORANGE_IMG "LaserOrange.png"
 
 
 // Enemies and obstacles

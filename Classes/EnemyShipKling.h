@@ -24,6 +24,8 @@ public:
 	static EnemyShipKling* create(cocos2d::Size res);
 		
 	void update(float dt);
+
+	cocos2d::Size winSize;
 };
 
 #endif // __ENEMY_SHIP_K_H__

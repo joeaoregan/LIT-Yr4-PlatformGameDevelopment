@@ -130,12 +130,10 @@ void Level::initLives() {
 void Level::initDifficulty() {
 	// Set the starting lives based on the difficulty
 	if (Game::Instance()->getDifficulty() == EASY) {
-		//NUM_LASERS_TO_FIRE = 3;																				// Start with 3 lasers easy, 2 medium, 1 hard
 		m_fireRate = 200;																					// Set the players weapon fire rate to a shorter time interval
 		m_powerUpDuration = 5.0f;																			// Easy Difficulty: Power up remains on screen longer time
 	}
 	else if (Game::Instance()->getDifficulty() == HARD) {
-		//NUM_LASERS_TO_FIRE = 1;																				// Less laser beams initially
 		m_fireRate = 400;																					// Set the players weapon fire rate to a longer time interval
 		m_powerUpDuration = 2.0f;																			// Hard Difficulty: Power up remains on screen less time
 	}
@@ -171,7 +169,7 @@ void Level::initLasers() {
 	// Player Ship Lasers:
 	m_playerLaserList = new Vector<Sprite*>(NUM_LASERS);													// List of lasers
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);				// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* shipLaser = Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);						// Laser sprite, JOR replaced auto specifier
 		shipLaser->setVisible(false);
 		m_batchNode->addChild(shipLaser);
 		m_playerLaserList->pushBack(shipLaser);
@@ -182,12 +180,11 @@ void Level::initLasers() {
 	m_enemyLaserList = new Vector<Sprite*>(NUM_LASERS);														// List of lasers
 
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);				// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);					// Laser sprite, JOR replaced auto specifier
 		enemyLaser->setVisible(false);
-		this->addChild(enemyLaser);
+		m_batchNode->addChild(enemyLaser);
 		m_enemyLaserList->pushBack(enemyLaser);
 	}
-	//CCLOG("TEST Level::initLasers() Enemy Lasers: %d", m_enemyLaserList->size());
 	//CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
 }
 
@@ -361,8 +358,7 @@ void Level::spawnEnemyLaser(cocos2d::Point pos) {
 	// Move the ship to the players coordinate
 	//auto action = MoveTo::create(0.5f, Point(0 - enemyLaser->getContentSize().width, pos.y));									// set to off screen the width of the laser
 	auto action = MoveTo::create(0.5f, Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width, pos.y));				// set to off screen the width of the laser + the screen width
-
-	float distance = pos.x - visibleSize.width;
+	//float distance = pos.x - visibleSize.width;
 
 	enemyLaser->runAction(action);
 }

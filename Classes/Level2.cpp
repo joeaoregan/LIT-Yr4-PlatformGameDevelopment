@@ -56,17 +56,53 @@ void Level2::initEnemyShips() {
 		m_enemyShipList->pushBack(enemyShip2);
 		//CCLOG("Add New Enemy ship at array index %d", i);
 	}
+	
+	m_enemyLaserList2 = new Vector<Sprite*>(NUM_LASERS);					// List of lasers
+	for (int i = 0; i < NUM_LASERS; ++i) {
+		cocos2d::Sprite* enemyLaser = Sprite::create(LASER_ORANGE_IMG);		// Laser sprite, JOR replaced auto specifier
+		enemyLaser->setVisible(false);
+		this->addChild(enemyLaser);
+		m_enemyLaserList2->pushBack(enemyLaser);
+	}	
 }
 
 void Level2::update(float dt) {
-	Level::update(dt);												// Call base class update function		
+	Level::update(dt);														// Call base class update function		
+}
+
+void Level2::spawnEnemyLaserOrange(cocos2d::Point pos) {
+	cocos2d::Sprite* enemyLaser = m_enemyLaserList2->at(m_nextEnemyLaser);
+	m_nextEnemyLaser++;
+
+	if (m_nextEnemyLaser >= m_enemyLaserList2->size())
+		m_nextEnemyLaser = 0;
+
+	if (enemyLaser->isVisible()) return;
+	Audio::Instance()->laserFXEnemy();
+
+	enemyLaser->setPosition(pos.x, pos.y);
+	enemyLaser->setVisible(true);
+	enemyLaser->stopAllActions();
+
+	auto action = MoveTo::create(0.5f, 
+		Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y));	// set to off screen the width of the laser + the screen width
+
+	enemyLaser->runAction(action);
 }
 
 void Level2::checkCollisions() {
-	Level::checkCollisions();										// Call base class function
+	Level::checkCollisions();															// Call base class function
 	// Check collisions with different objects in different levels
+
+	// Check collisions for new type of laser
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x <= 0)											// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);												// Hide the laser
+	}
 }
 
 void Level2::endScene(EndReason endReason) {
-	Level::endScene(endReason);										// End the scene
+	Level::endScene(endReason);															// End the scene
 }
