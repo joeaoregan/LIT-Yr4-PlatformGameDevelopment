@@ -30,6 +30,8 @@ public:
 
 	float targetX;
 	float targetY;
+
+	cocos2d::Size screenSize;
 };
 
 #endif // __ENEMY_SHIP_WK_H__

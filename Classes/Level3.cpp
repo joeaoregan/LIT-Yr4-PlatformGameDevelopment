@@ -45,6 +45,14 @@ bool Level3::init() {
 	// ParallaxNode
 	this->addChild(m_backgroundNode, -1);		// Add the parallax background
 	m_backgroundNode->init();					// Initialise the parallax scrolling background
+
+	m_enemyLaserList3 = new Vector<Sprite*>(NUM_LASERS);					// List of lasers
+	for (int i = 0; i < NUM_LASERS; ++i) {
+		cocos2d::Sprite* enemyLaser = Sprite::create(LASER_GREEN_IMG);		// Laser sprite, JOR replaced auto specifier
+		enemyLaser->setVisible(false);
+		this->addChild(enemyLaser);
+		m_enemyLaserList3->pushBack(enemyLaser);
+	}
 	
 	this->scheduleUpdate();						// Start updating the scene
 
@@ -83,12 +91,27 @@ void Level3::initEnemyShips() {
 }
 
 void Level3::update(float dt) {
-	Level::update(dt);							// Call base class update function		
+	Level::update(dt);													// Call base class update function		
 }
 
 void Level3::checkCollisions() {
-	Level::checkCollisions();					// Call base class function
-												// Check collisions with different objects in different levels
+	Level::checkCollisions();											// Call base class function
+
+	// Check collisions with different objects in different levels
+
+	// Check collisions for new type of laser
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x <= 0)							// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);								// Hide the laser
+	}
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList3) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x <= 0)							// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);								// Hide the laser
+	}
 }
 
 void Level3::endScene(EndReason endReason) {

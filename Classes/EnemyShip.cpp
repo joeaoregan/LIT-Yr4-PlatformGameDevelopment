@@ -68,6 +68,14 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 }
 
 /*
+void EnemyShip::moveTo() {
+	// Move the ship to the players coordinate
+	auto action = MoveTo::create(3, Point(player->getPositionX(), player->getPositionY()));
+	enemyShip->runAction(action);
+}
+*/
+
+/*
 // I thought maybe returning a new healthbar when a ship is hit
 HealthBar* createHealthBar(cocos2d::Size res) {
 	cocos2d::Color4F redBR(1, 0, 0, 1);

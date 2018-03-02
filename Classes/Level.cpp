@@ -177,15 +177,24 @@ void Level::initLasers() {
 	//CCLOG("TEST Level::initLasers() Ship Lasers: %d", m_playerLaserList->size());
 
 	// Enemy Lasers
-	m_enemyLaserList = new Vector<Sprite*>(NUM_LASERS);														// List of lasers
+	m_enemyLaserList1 = new Vector<Sprite*>(NUM_LASERS);														// List of lasers
 
 	for (int i = 0; i < NUM_LASERS; ++i) {
 		cocos2d::Sprite* enemyLaser = Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);					// Laser sprite, JOR replaced auto specifier
 		enemyLaser->setVisible(false);
 		m_batchNode->addChild(enemyLaser);
-		m_enemyLaserList->pushBack(enemyLaser);
+		m_enemyLaserList1->pushBack(enemyLaser);
 	}
 	//CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
+
+	// eNEMY 2 LASERS
+	m_enemyLaserList2 = new Vector<Sprite*>(NUM_LASERS);					// List of lasers
+	for (int i = 0; i < NUM_LASERS; ++i) {
+		cocos2d::Sprite* enemyLaser = Sprite::create(LASER_ORANGE_IMG);		// Laser sprite, JOR replaced auto specifier
+		enemyLaser->setVisible(false);
+		this->addChild(enemyLaser);
+		m_enemyLaserList2->pushBack(enemyLaser);
+	}
 }
 
 void Level::initPowerUps() {
@@ -274,6 +283,7 @@ void Level::spawnObjects(float curTimeMillis) {
 		asteroid->stopAllActions();																			// CCNode.cpp
 		asteroid->setPosition(winSize.width + asteroid->getContentSize().width / 2, randY);
 		asteroid->setVisible(true);
+		asteroid->setScale(((visibleSize.height == 720) ? 1.0f : 1.5f) * (randDuration / 10.0f) * 1.25f);				// Fast = small
 		asteroid->runAction(Sequence::create(
 				MoveBy::create(randDuration, Point(-winSize.width - asteroid->getContentSize().width, 0)),
 				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)							// DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
@@ -283,7 +293,7 @@ void Level::spawnObjects(float curTimeMillis) {
 }
 
 void Level::spawnEnemyShips(float curTimeMillis) {
-	if (m_enemyLaserList->size() > 0) {
+	if (m_enemyLaserList1->size() > 0) {
 		if (curTimeMillis > nextEnemyShipSpawnTime) {
 			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
 			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;												// Set the time to spawn the next ship
@@ -309,8 +319,8 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 
 			enemyShip->runAction(
 				Sequence::create(
-					MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),
-					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),
+					MoveBy::create(randDuration, Point(-winSize.width - enemyShip->getContentSize().width, 0)),	// move off the screen its full width
+					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)),								// Then make invisible
 					NULL)	// TERMINATE WITH NULL
 			);
 
@@ -318,11 +328,11 @@ void Level::spawnEnemyShips(float curTimeMillis) {
 		}
 	}
 }
-
+/*
 void Level::spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angle) {
-	cocos2d::Sprite* enemyLaser = m_enemyLaserList->at(m_nextEnemyLaser);
+	cocos2d::Sprite* enemyLaser = m_enemyLaserList1->at(m_nextEnemyLaser);
 	m_nextEnemyLaser++;
-	if (m_nextEnemyLaser >= m_enemyLaserList->size()) m_nextEnemyLaser = 0;	
+	if (m_nextEnemyLaser >= m_enemyLaserList1->size()) m_nextEnemyLaser = 0;	
 	if (enemyLaser->isVisible()) return;
 
 	Audio::Instance()->laserFXEnemy();
@@ -338,10 +348,10 @@ void Level::spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angl
 }
 
 void Level::spawnEnemyLaser(cocos2d::Point pos) {
-	cocos2d::Sprite* enemyLaser = m_enemyLaserList->at(m_nextEnemyLaser);
+	cocos2d::Sprite* enemyLaser = m_enemyLaserList1->at(m_nextEnemyLaser);
 	m_nextEnemyLaser++;
 		
-	if (m_nextEnemyLaser >= m_enemyLaserList->size())
+	if (m_nextEnemyLaser >= m_enemyLaserList1->size())
 		m_nextEnemyLaser = 0;
 
 	if (enemyLaser->isVisible()) return;
@@ -362,6 +372,71 @@ void Level::spawnEnemyLaser(cocos2d::Point pos) {
 
 	enemyLaser->runAction(action);
 }
+
+void Level::spawnEnemyLaserOrange(cocos2d::Point pos) {
+	cocos2d::Sprite* enemyLaser = m_enemyLaserList2->at(m_nextEnemyLaser);
+	m_nextEnemyLaser++;
+
+	if (m_nextEnemyLaser >= m_enemyLaserList2->size())
+		m_nextEnemyLaser = 0;
+
+	if (enemyLaser->isVisible()) return;
+	Audio::Instance()->laserFXEnemy();
+
+	enemyLaser->setPosition(pos.x, pos.y);
+	enemyLaser->setVisible(true);
+	enemyLaser->stopAllActions();
+
+	auto action = MoveTo::create(0.5f,
+		Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y));	// set to off screen the width of the laser + the screen width
+
+	enemyLaser->runAction(action);
+}
+*/
+void Level::spawnEnemyLaser(cocos2d::Point pos, int type) {
+	cocos2d::Sprite* enemyLaser;
+	Vector<Sprite*> *tempList;
+
+	if (type == BLUE)
+		tempList = m_enemyLaserList1;
+		//enemyLaser = m_enemyLaserList1->at(m_nextEnemyLaser);
+	else 
+		if (type == ORANGE)
+		tempList = m_enemyLaserList2;
+		//enemyLaser = m_enemyLaserList2->at(m_nextEnemyLaser);
+	else if (type == GREEN1 || type == GREEN2 || type == GREEN3)
+		tempList = m_enemyLaserList3;
+	
+	enemyLaser = tempList->at(m_nextEnemyLaser);
+	
+	m_nextEnemyLaser++;
+
+	if (m_nextEnemyLaser >= tempList->size())
+		m_nextEnemyLaser = 0;
+
+	if (enemyLaser->isVisible()) return;
+	Audio::Instance()->laserFXEnemy();
+
+	enemyLaser->setPosition(pos.x, pos.y);
+	enemyLaser->setVisible(true);
+	enemyLaser->stopAllActions();
+
+	cocos2d::MoveTo *action;
+	
+	if (type == GREEN2)
+		action = MoveTo::create(0.525f,
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y + visibleSize.height * 0.33f));
+	else if (type == GREEN3)
+		action = MoveTo::create(0.525f,
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y - visibleSize.height * 0.33f));
+	else 
+		action = MoveTo::create(0.5f,
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - getContentSize().width, pos.y));	// set to off screen the width of the laser + the screen width
+
+	enemyLaser->runAction(action);
+}
+
+
 
 /* 
 	20180221 Up to 4 different types of laser, with different spawn points and rotations
@@ -486,7 +561,7 @@ void Level::setInvisible(Node * node) {
 
 void Level::checkCollisions() {
 	// Enemy laser move off screen
-	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList) {
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList1) {
 		if (!(enemyLaser->isVisible())) continue;
 
 		if (enemyLaser->getPosition().x <= -enemyLaser->getContentSize().width)							// If the laser moves off screen it's own width

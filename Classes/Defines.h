@@ -35,8 +35,11 @@
 
 // Background
 #define ASTEROID_IMG "asteroid.png"
+
+// Weapoons
 #define LASER_BLUE_IMG "laserbeam_blue.png"
 #define LASER_ORANGE_IMG "LaserOrange.png"
+#define LASER_GREEN_IMG "LaserGreen.png"
 
 
 // Enemies and obstacles
@@ -60,11 +63,9 @@
 
 
 enum difficulty { EASY, MEDIUM, HARD };
-
-
+enum laserTypes { BLUE, ORANGE, GREEN1, GREEN2, GREEN3 };
 
 //static unsigned int NUM_LASERS_TO_FIRE = 2;	// Moved to player class
-
 
 #endif // _DEFINES_H_
 

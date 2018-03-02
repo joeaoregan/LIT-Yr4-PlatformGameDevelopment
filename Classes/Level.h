@@ -72,9 +72,12 @@ public:
 	void spawnObjects(float curTimeMillis);										// 20180202 Spawn asteroids
 	void spawnEnemyShips(float curTimeMillis);									// 20180214 Spawn enemy ships
 	void spawnLasers(int amount);												// 20180221
-	void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
-	void spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
-	virtual void spawnEnemyLaserOrange(cocos2d::Point pos) {}
+	//void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
+	//void spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
+
+	//void spawnEnemyLaserOrange(cocos2d::Point pos);
+	//void spawnEnemyLaserBlue(cocos2d::Point pos);
+	void spawnEnemyLaser(cocos2d::Point pos, int type = BLUE);
 
 	// Fire enemy lasers
 	//void enemyFireLaser(float curTimeMillis);
@@ -138,7 +141,10 @@ protected:
 	Vector<Sprite*>* m_asteroidsList;											// List of asteroids
 	Vector <EnemyShip*> * m_enemyShipList;										// List of enemy ships
 	Vector<Sprite*> *m_playerLaserList;											// List of player lasers
-	Vector<Sprite*> *m_enemyLaserList;											// List of Enemylasers
+	Vector<Sprite*> *m_enemyLaserList1;											// List of Enemylasers
+	Vector<Sprite*> *m_enemyLaserList2;											// List of lasers for 2nd enemy
+	Vector<Sprite*> *m_enemyLaserList3;											// List of lasers for 3rd enemy
+
 
 	// Player fire rate
 	float m_nextFire;

@@ -26,9 +26,10 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 
 		eship->setVisible(false);
 		eship->setScale(scale);													// Scale down the size for PC
+		eship->screenSize = res;
 
 		/* Different */
-		eship->m_fireRate = 750;
+		eship->m_fireRate = 800;
 		eship->m_dy = 0.375f * scale;
 		eship->m_dx = -0.33f * scale;
 
@@ -50,7 +51,6 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 
 		
 		/*
-
 		// Put in update
 
 		float angle = 45.0f;
@@ -82,11 +82,18 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 }
 
 void EnemyShipWilKnot::update(float curTimeMillis) {
-	if (isVisible()) {
+	if (isVisible() && getPosition().x < screenSize.width - getContentSize().width) {
 		if (curTimeMillis > m_nextFire) {
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), 
-				getPosition().y - (getContentSize().width * m_dy)));
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+				getPosition().y + (getContentSize().height * m_dy)), GREEN2);
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+				getPosition().y), GREEN1);
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+				getPosition().y - (getContentSize().height * m_dy)), GREEN3);
+
+			m_nextFire = curTimeMillis + m_fireRate;
 		}
 	}
-	EnemyShip::update(curTimeMillis);											// Next fire time set here, not need to set twice, will cancel second laser
+
+	//EnemyShip::update(curTimeMillis);											// Next fire time set here, not need to set twice, will cancel second laser
 }

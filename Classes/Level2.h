@@ -24,7 +24,7 @@ public:
 
 	virtual void checkCollisions();							// 20180202 Check is the game over or not
 
-	virtual void spawnEnemyLaserOrange(cocos2d::Point pos);
+	//virtual void spawnEnemyLaserOrange(cocos2d::Point pos);
 
 private:
 
@@ -32,7 +32,6 @@ private:
 			
 	virtual void update(float dt);							// Update the level
 
-	Vector<Sprite*> *m_enemyLaserList2;						// List of lasers for 2nd enemy
 };
 
 #endif // __LEVEL_2_H__

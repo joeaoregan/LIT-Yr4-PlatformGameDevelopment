@@ -29,6 +29,8 @@ public:
 	float getNextFire() { return m_nextFire; }
 	void setNextFire(float set) { m_nextFire = set; }
 
+	//void moveTo();
+
 protected:
 	//cocos2d::Sprite* m_enemyShip;
 

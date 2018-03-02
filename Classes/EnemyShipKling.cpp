@@ -54,11 +54,11 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 void EnemyShipKling::update(float curTimeMillis) {
 	if (isVisible() && getPosition().x) {						// Don't shot until visibility set
 		if (curTimeMillis > m_nextFire) {
-			Level::Instance()->spawnEnemyLaserOrange(Point(getPosition().x + (getContentSize().width * m_dx), 
-				getPosition().y - (getContentSize().width * m_dy)));
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), 
+				getPosition().y - (getContentSize().width * m_dy)), ORANGE);
 
-			Level::Instance()->spawnEnemyLaserOrange(Point(getPosition().x + (getContentSize().width * m_dx),
-				getPosition().y + (getContentSize().width * m_dy)));
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+				getPosition().y + (getContentSize().width * m_dy)), ORANGE);
 
 			m_nextFire = curTimeMillis + m_fireRate;
 		}
