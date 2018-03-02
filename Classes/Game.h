@@ -54,6 +54,7 @@ public:
 	float getLevelDuration() { return m_levelDuration; }			// Get the level end time
 	unsigned int getEndTime() { return m_endTime; }					// Get the level end time
 	bool getLivesCarried() { return m_carryLives; }					// Are the lives carried over to the next level or not
+	float getCurrentWeapon() { return m_currentWeapon; }			// Get the stored weapon level
 
 	// Set
 	void setLevel(unsigned int set) { m_level = set; }				// Set the level number
@@ -77,11 +78,14 @@ public:
 	void hideMusicPlayer(bool set) { m_PlayerVisible = set;  }		// Show or hide the music player
 	void setDifficulty(unsigned int set) { m_difficulty = set; }	// Set the difficulty level
 	void setLivesCarried(bool set) { m_carryLives = set; }			// Carry over lives to next level
+	void setCurrentWeapon(float set) { m_currentWeapon = set; }		// Save the players current weapon
 
 	float nextTime;
 
 private:
+	// Player
 	std::string m_playerName;										// Current player name
+	unsigned int m_currentWeapon;									// Store weapons grade between levels
 
 	// HUD
 	unsigned int m_lives = 0;										// Player lives

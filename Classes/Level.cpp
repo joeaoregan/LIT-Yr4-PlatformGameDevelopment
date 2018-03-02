@@ -21,6 +21,7 @@
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
 #include "AsteroidOriginal.h"
+//#include "PowerUp.h"
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -206,17 +207,22 @@ void Level::initLasers() {
 
 void Level::initPowerUps() {
 	// Power Up
-	curTimeInit = Game::Instance()->getTimeTick();															// Current game time // Time to finish game	
-	float lastSpawnTime = Game::Instance()->getLevelDuration() - 5000.0f;
-	powerUpTime = curTimeInit + randomValueBetween(2000.0f, lastSpawnTime);									// -5000 (5 secs before end Don't spawn it when the player has no chance of getting it	
-	CCLOG("Level: Power Up Spawn Time: %f", (powerUpTime - curTimeInit) / 1000.0f);
+	//curTimeInit = Game::Instance()->getTimeTick();															// Current game time // Time to finish game	
+	//float lastSpawnTime = Game::Instance()->getLevelDuration() - 5000.0f;
+	//m_powerUpTimeLife = curTimeInit + randomValueBetween(2000.0f, lastSpawnTime);									// -5000 (5 secs before end Don't spawn it when the player has no chance of getting it	
+	//CCLOG("Level: Power Up Spawn Time: %f", (powerUpTime - curTimeInit) / 1000.0f);
+	///powerUpY = randomValueBetween(0.1f, 0.8f);																// Random Y position for asteroid
 
-	powerUpY = randomValueBetween(0.1f, 0.8f);																// Random Y position for asteroid
-	m_powerUpLife = Sprite::Sprite::create(POWER_UP_LIFE_IMG);
-	m_powerUpLife->setVisible(false);
-	m_powerUpLife->setPosition(visibleSize.width + m_powerUpLife->getContentSize().width, 
-		visibleSize.height * powerUpY);
+
+	//m_powerUpLife = Sprite::Sprite::create(POWER_UP_LIFE_IMG);
+	//m_powerUpLife->setVisible(false);
+	//m_powerUpLife->setPosition(visibleSize.width + m_powerUpLife->getContentSize().width, 
+	//	visibleSize.height * powerUpY);
+
+	m_powerUpLife = PowerUp::create(visibleSize, NEW_LIFE);
 	this->addChild(m_powerUpLife);
+	m_powerUpWeapon = PowerUp::create(visibleSize, WEAPON_UPGRADE);
+	this->addChild(m_powerUpWeapon);
 
 	//CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
 }
@@ -250,18 +256,31 @@ void Level::update(float dt) {
 	newHUD->update(curTimeMillis);																			// Update the HUD
 }
 
-void Level::spawnObjects(float curTimeMillis) {	
-	//powerUpTime = 2000;	// test
-	if (!spawned && curTimeMillis > powerUpTime) {		
-		m_powerUpLife->setVisible(true);
+void Level::spawnObjects(float curTimeMillis) {
+	// Rotate
+	auto rotate = RotateBy::create(2.5f, -360.0f);
+	auto repeat = RepeatForever::create(rotate);
+	//auto sequence = cocos2d::Sequence::create(rotate, rotate, nullptr);
 
-		auto actionpowerUp = MoveTo::create(m_powerUpDuration, 
-			Point(0 - m_powerUpLife->getContentSize().width, visibleSize.height * powerUpY));
+	//powerUpTime = 2000;	// test
+	if (!m_powerUpLife->isSpawned() && curTimeMillis > m_powerUpLife->getSpawnTime()) {
+		m_powerUpLife->setVisible(true);
+		auto actionpowerUp = MoveTo::create(m_powerUpDuration,
+			//Point(0 - m_powerUpLife->getContentSize().width, visibleSize.height * powerUpY));
+			Point(0 - m_powerUpLife->getContentSize().width, visibleSize.height * m_powerUpLife->getRandY()));
 		m_powerUpLife->runAction(actionpowerUp);
 
-		auto rotate = RotateBy::create(2.5f, -360.0f); 
-		auto sequence = cocos2d::Sequence::create(rotate, rotate, nullptr);
-		m_powerUpLife->runAction(sequence);
+		m_powerUpLife->runAction(repeat);
+		m_powerUpLife->setSpawned();
+	}
+
+	if (!m_powerUpWeapon->isSpawned() && curTimeMillis > m_powerUpWeapon->getSpawnTime()) {
+		m_powerUpWeapon->setVisible(true);
+		auto actionpowerUp2 = MoveTo::create(m_powerUpDuration,
+			Point(0 - m_powerUpWeapon->getContentSize().width, visibleSize.height * m_powerUpWeapon->getRandY()));
+		m_powerUpWeapon->runAction(actionpowerUp2);
+		m_powerUpWeapon->runAction(repeat);														// Reuse the same sequence for weapon power ups
+		
 		/*
 		powerUpLife->runAction(
 			Sequence::create(MoveBy::create(0.5f, Point(0 - powerUpLife->getContentSize().width, powerUpY)), // change to plus 100 for up - 100 for down
@@ -269,8 +288,9 @@ void Level::spawnObjects(float curTimeMillis) {
 		);
 		*/
 
-		CCLOG("Spawn New Life Power Up");
-		spawned = true;
+		CCLOG("Spawn Weapon Power Up");
+		//spawned = true;
+		m_powerUpWeapon->setSpawned();
 	}
 	
 	if (curTimeMillis > _nextAsteroidSpawn) {
@@ -591,6 +611,15 @@ void Level::checkCollisions() {
 			player->runAction(Blink::create(1.0F, 9));													// Flash the Player ship
 			m_powerUpLife->setVisible(false);
 			Game::Instance()->addLife();
+			Audio::Instance()->powerUpFX();																// Play the power up sound effect
+		}
+	}
+	if (m_powerUpWeapon->isVisible()) {
+		if (player->getBoundingBox().intersectsRect(m_powerUpWeapon->getBoundingBox())) {					// If the ship collides with an asteroid
+			player->runAction(Blink::create(1.0F, 9));													// Flash the Player ship
+			m_powerUpWeapon->setVisible(false);
+			//Game::Instance()->addLife();
+			player->upgradeWeapon();
 			Audio::Instance()->powerUpFX();																// Play the power up sound effect
 		}
 	}

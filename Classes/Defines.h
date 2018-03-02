@@ -14,7 +14,7 @@
 
 // Level length
 #define LEVEL_TIME_EASY 25000.0f
-#define LEVEL_TIME_MED 30000.0f
+#define LEVEL_TIME_MED 20000.0f
 #define LEVEL_TIME_HARD 40000.0f
 
 // Amount of each type of enemy to add to enemy vector list
@@ -27,6 +27,7 @@
 
 /* Images */
 #define POWER_UP_LIFE_IMG "powerHeart.png"
+#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"
 
 // Dpad
 #define DPAD_BASE "BaseCircle320b.png"
@@ -65,6 +66,7 @@
 enum difficulty { EASY, MEDIUM, HARD };
 enum laserTypes { BLUE, ORANGE, GREEN1, GREEN2, GREEN3 };
 enum asteroidType { STATIC_ROID, DYNAMIC_ROID };
+enum powerUpTypes { NEW_LIFE, WEAPON_UPGRADE };
 
 //static unsigned int NUM_LASERS_TO_FIRE = 2;	// Moved to player class
 

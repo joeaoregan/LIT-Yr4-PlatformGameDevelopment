@@ -22,9 +22,10 @@ Scene* Level1::createScene() {
 
 // on "init" you need to initialize your instance
 bool Level1::init() {
+	Game::Instance()->setLevel(1);							// for parallax node init
+
 	Level::init();											// 20180221 Added Level base class
 
-	Game::Instance()->setLevel(1);							// for parallax node init
 	newHUD->setLevelLabel();								// Update HUD Level text display
 
 	if ( !Layer::init() ) { return false; }					// super init first

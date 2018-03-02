@@ -22,15 +22,25 @@ Player* Player::create(cocos2d::Size res) {
 	//if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) { //xxxxxxxxxx
 	if (player && player->initWithFile("PlayerShip3.png")) {
 		// Set the amount of lasers to fire at the beginning
-		if (Game::Instance()->getDifficulty() == EASY)
-			player->weaponStrength = 3;														// Start with 3 lasers easy, 2 medium, 1 hard
-		else if (Game::Instance()->getDifficulty() == HARD) {
-			player->weaponStrength = 1;														// Less laser beams initially
+		if (Game::Instance()->getLevel() <= 1) {
+			if (Game::Instance()->getDifficulty() == EASY)
+				player->m_weaponStrength = 3;													// Start with 3 lasers easy, 2 medium, 1 hard
+			else if (Game::Instance()->getDifficulty() == HARD) {
+				player->m_weaponStrength = 1;													// Less laser beams initially
+			}
 		}
+		else
+			player->m_weaponStrength = Game::Instance()->getCurrentWeapon();
 
 		player->autorelease();
 		player->setPosition(res.width * 0.1, res.height * 0.5);								// Place in middle left of screen
-		player->setScale(player->scale);													// Increase scale of player for Android (My phone anywa
+		player->setScale(player->scale);													// Increase scale of player for Android (My phone anyway)
+
+		player->canon = Sprite::create("PlayerShipGun.png");
+		player->canon->setVisible(false);
+		//player->canon->setPosition((player->getPosition().x / 2) + player->getContentSize().width * 0.25f, (player->getPosition().y) / 2);
+		player->canon->setPosition((player->getContentSize().width / 2) + player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
+		player->addChild(player->canon);
 	}
 	else {
 		delete player;

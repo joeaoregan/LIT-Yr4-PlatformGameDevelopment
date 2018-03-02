@@ -16,6 +16,7 @@
 #include "Game.h"
 #include "MusicPlayer.h"
 #include "Asteroid.h"
+#include "PowerUp.h"
 
 class Level : public Layer {
 public:
@@ -111,7 +112,7 @@ protected:
 	cocos2d::EventListenerTouchAllAtOnce* touchListener;						// Touch listener
 
 	// Time
-	float curTimeInit;															// Current game time
+	//float curTimeInit;															// Current game time
 	float curTimeMillis;														// Current time in milliseconds
 
 	// End of Level Labels
@@ -120,9 +121,13 @@ protected:
 	cocos2d::MenuItemLabel* continueItem;										// Continue to next level button
 
 	// Power ups
-	cocos2d::Sprite* m_powerUpLife;												// New life power up
-	float powerUpTime;
-	float powerUpY;
+	//cocos2d::Sprite* m_powerUpLife;												// New life power up
+	PowerUp* m_powerUpLife;
+	PowerUp* m_powerUpWeapon;
+
+	//float m_powerUpTimeLife;
+	//float m_powerUpTimeWeapon;
+	//float powerUpY;
 	bool spawned = false;
 
 	// Asteroids
@@ -139,7 +144,7 @@ protected:
 	int m_nextEnemyLaser = 0;													// Enemy laser list index
 
 	// Object lists
-	Vector<Asteroid*> * m_asteroidsList;											// List of asteroids
+	Vector<Asteroid*> * m_asteroidsList;										// List of asteroids
 	Vector<EnemyShip*> * m_enemyShipList;										// List of enemy ships
 	Vector<Sprite*> *m_playerLaserList;											// List of player lasers
 	Vector<Sprite*> *m_enemyLaserList1;											// List of Enemylasers

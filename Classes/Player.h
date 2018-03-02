@@ -10,15 +10,22 @@
 #define __PLAYER_H__
 
 #include "cocos2d.h"
+#include "Game.h"
 
 class Player : public cocos2d::Sprite {
 public:
-	Player() {};								// Player constructor
+	Player() {};													// Player constructor
 	~Player() {}
 	
 	static Player* create(cocos2d::Size res);
 
-	void update();								// Update player movement etc.
+	void update();													// Update player movement etc.
+
+	void upgradeWeapon() {
+		weaponUpgrade();
+		canon->setVisible(true);
+		Game::Instance()->setCurrentWeapon(m_weaponStrength);
+	}
 
 	// Movement
 	void moveUp();
@@ -26,13 +33,15 @@ public:
 	void moveLeft();
 	void moveRight();
 
-	unsigned int getWeaponStrength() { return weaponStrength; }
-	void weaponUpgrade() { weaponStrength++; }					// Increment the weapon
+	unsigned int getWeaponStrength() { return m_weaponStrength; }	// Current player weapon grade or level
+	void weaponUpgrade() { m_weaponStrength++; }					// Increment the weapon
 
 private:
-	cocos2d::Size visibleSize;					// Visible screen size
+	cocos2d::Size visibleSize;										// Visible screen size
 	float scale;
-	unsigned int weaponStrength = 2;
+	unsigned int m_weaponStrength = 2;
+
+	cocos2d::Sprite* canon;
 };
 
 #endif // __PLAYER_H__
