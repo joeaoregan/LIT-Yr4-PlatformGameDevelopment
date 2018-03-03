@@ -16,10 +16,11 @@
 #define MAX_LEVELS 4
 
 #define LEVEL_TIME_EASY 25000.0f
-#define LEVEL_TIME_MED 20000.0f
+#define LEVEL_TIME_MED 30000.0f
 #define LEVEL_TIME_HARD 40000.0f
 
 // Amount of each type of enemy to add to enemy vector list
+#define L2_NUM_ENEMY_1 2
 #define L2_NUM_ENEMY_2 3
 
 #define L3_NUM_ENEMY_1 1
@@ -59,7 +60,7 @@
 #define MAX_ENEMY_SHIP1_LIVES 3.0f							// EnemyShip 
 #define MAX_ENEMY_SHIP2_LIVES 4.0f							// EnemyShipKling
 #define MAX_ENEMY_SHIP3_LIVES 5.0f							// EnemyShipWilknot
-#define MAX_ENEMY_SHIP4_LIVES 10.0f							// EnemyShipDerpStar
+#define MAX_ENEMY_SHIP4_LIVES 40.0f							// EnemyShipDerpStar
 #define ENEMY_FIRE_RATE 500.0f								// Time between laser spawns
 
 // Player

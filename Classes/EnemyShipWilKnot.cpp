@@ -86,7 +86,6 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	return eship;
 }
 
-
 void EnemyShipWilKnot::moveCanon() {
 	float angle = 360.0f;
 	auto action = RotateBy::create(5.0f, angle);

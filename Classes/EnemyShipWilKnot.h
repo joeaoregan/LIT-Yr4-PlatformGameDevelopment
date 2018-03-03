@@ -26,12 +26,12 @@ public:
 	virtual void update(float dt);
 
 	virtual void moveCanon();
-
+	
+private:
 	cocos2d::Sprite* canon;
-	static EnemyShipWilKnot* eship;
+	//static EnemyShipWilKnot* eship;
 
-	float targetX;
-	float targetY;
+	//float targetX, targetY;
 
 	cocos2d::Size screenSize;
 };

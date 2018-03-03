@@ -41,7 +41,7 @@ public:
 	void initLasers();															// Create lists of bullets for player and enemies
 	void initPowerUps();														// Set up the power ups
 	void initAsteroids();														// Add asteroids to the vector list of asteroids
-	void initEnemyShips();														// Initialise the list of enemy ships
+	virtual void initEnemyShips();												// Initialise the list of enemy ships
 	void initDifficulty();														// Initialise the game difficulty
 	
 	virtual void update(float dt);												// Update function
@@ -53,7 +53,7 @@ public:
 	void getInput();															// Get input from DPad
 	
 
-	void checkGameOver(float currenTime);										// 20180202 Check have game objects collided with each other
+	virtual void checkGameOver(float currenTime);										// 20180202 Check have game objects collided with each other
 
 	void levelProgression(cocos2d::Label* continueLbl);							// Decide what scene comes next
 
@@ -73,7 +73,7 @@ public:
 
 	// Spawn game objects
 	void spawnObjects(float curTimeMillis);										// 20180202 Spawn asteroids
-	void spawnEnemyShips(float curTimeMillis);									// 20180214 Spawn enemy ships
+	virtual void spawnEnemyShips(float curTimeMillis);							// 20180214 Spawn enemy ships (Changes in Level 4)
 	void spawnLasers(int amount);												// 20180221
 	//void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
 	//void spawnEnemyLaserAngled(cocos2d::Point a,cocos2d::Point b,float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going

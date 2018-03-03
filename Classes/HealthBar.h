@@ -20,6 +20,8 @@ public:
 
 	void updateBar(float percent);
 
+	void setLabelTag(std::string set) { labelTag = set; }
+
 private:
 	float percent;
 
@@ -29,6 +31,11 @@ private:
 
 	cocos2d::DrawNode* rectNode;
 	cocos2d::DrawNode* frontNode;
+
+	cocos2d::Label* percentLbl;
+
+	bool labelPresent;
+	std::string labelTag = "Percent: ";
 };
 
 

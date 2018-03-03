@@ -103,7 +103,7 @@ void EnemyShip::init(cocos2d::Size res) {
 	setLives(m_totalLives);														// Reset the number of lives available
 	//updateBar();
 	//m_bar->setVisible(true);
-	m_bar->updateBar(m_lives / m_totalLives);
+	m_bar->updateBar(m_lives / m_totalLives);									// Update the health bar
 	//m_bar->updateBar(0.67f);
 }
 

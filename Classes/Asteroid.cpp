@@ -60,7 +60,7 @@ void Asteroid::rotateAsteroid() {
 	float direction = Level::Instance()->randomValueBetween(1.0f, 10.0f);		// Random number decides if rotating forwards or backwards
 
 	int rotateDirection = ((int)direction % 2 == 0) ? 1.0f : -1.0f;				// multiply by -1 to revese rotation if odd number randomly generated
-	CCLOG("Asteroid Rotate Direction %d", rotateDirection);
+	//CCLOG("Asteroid Rotate Direction %d", rotateDirection);
 	auto rotate = cocos2d::RotateBy::create(m_duration, angle * rotateDirection);	// Rotate the asteroid 360 degrees forwards/backwards
 	auto repeat = cocos2d::RepeatForever::create(rotate);						// Set the action to loop
 	this->runAction(repeat);													// Then run it

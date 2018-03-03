@@ -28,7 +28,7 @@ public:
 
 private:
 
-	void initEnemyShips();
+	virtual void initEnemyShips();							// initialise the enemy ships in the scene
 			
 	virtual void update(float dt);							// Update the level
 

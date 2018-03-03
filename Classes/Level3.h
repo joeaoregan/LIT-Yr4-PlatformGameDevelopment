@@ -24,7 +24,7 @@ private:
 	virtual void update(float dt);				// Update the level
 	virtual void endScene(EndReason endReason);	// Do level complete stuff
 
-	void initEnemyShips();
+	virtual void initEnemyShips();				// Add the enemies to appear in this level in the order required
 };
 
 #endif // __LEVEL_3_H__

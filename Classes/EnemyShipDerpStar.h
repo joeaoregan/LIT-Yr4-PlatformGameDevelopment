@@ -8,27 +8,38 @@
 	Enemy Boss
 */
 
-#ifndef __ENEMY_SHIP_WK_H__
-#define __ENEMY_SHIP_WK_H__
+#ifndef __ENEMY_SHIP_DERPSTAR_H__
+#define __ENEMY_SHIP_DERPSTAR_H__
 
 #include "EnemyShip.h"
 
 class EnemyShipDerpStar : public EnemyShip {
 public:
 
-	static EnemyShipDerpStar* create(cocos2d::Size res);
+	static EnemyShipDerpStar* create(cocos2d::Size res);// Create Enemy Ship of type DerpStar
 		
 	virtual void update(float dt);
 
-	virtual void moveCanon();
+	virtual void init(cocos2d::Size res);
 
-	cocos2d::Sprite* canon;
-	static EnemyShipDerpStar* eship;
+	virtual void spawnLaser();
 
-	float targetX;
-	float targetY;
+	//cocos2d::Sprite* canon1;
+	//cocos2d::Sprite* canon2;
+	//cocos2d::Sprite* canon3;
+		
+private:
+	void initHealthBar(cocos2d::Size res);				// Initialise the healthbar
+	void addCanons();									// Add canons to the enemy ship
+	virtual void moveCanon();							// Apply actions to the canons (rotate them)
 
-	cocos2d::Size screenSize;
+
+	cocos2d::Size screenSize;							// Screen resolution
+
+	float m_speedMin = 15.0f;							// Set the min duration to travel across screen (Speed = faster)
+	float m_speedMax = 20.0f;							// Set the max duration to travel across screen (Speed = slower)
 };
 
-#endif // __ENEMY_SHIP_WK_H__
+typedef EnemyShipDerpStar DerpStar;
+
+#endif // __ENEMY_SHIP_DERPSTAR_H__

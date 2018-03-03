@@ -21,7 +21,7 @@ public:
 	
 	static EnemyShip* create(cocos2d::Size res);
 	
-	void init(cocos2d::Size res);
+	virtual void init(cocos2d::Size res);
 	virtual void update(float dt);
 
 	unsigned int getLives() { return m_lives; }
@@ -41,6 +41,13 @@ public:
 
 	float getDuration() { return m_duration; }	// Random duration on screen, used in spawnObject() for applying action sequence
 	
+
+	virtual void spawnLaser() { }
+
+	cocos2d::Sprite* canon1;
+	cocos2d::Sprite* canon2;
+	cocos2d::Sprite* canon3;
+
 protected:
 	// health
 	unsigned int m_lives = MAX_ENEMY_SHIP1_LIVES;		// Number of lives (Defines.h)

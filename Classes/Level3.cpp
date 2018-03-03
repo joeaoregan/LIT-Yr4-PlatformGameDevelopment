@@ -36,12 +36,11 @@ bool Level3::init() {
 
 	CCLOG("Clear enemy ship vector");
 
-	initEnemyShips();							// Add the new enemy with double lasers to the list of enemies
+	//initEnemyShips();							// Add the new enemy with double lasers to the list of enemies
 
 	Game::Instance()->resetAsteroidKills();		// Reset the number of asteroids destroyed
 	Game::Instance()->resetEnemyShipKIlls();	// Reset the number of enemy ships destroyed
-
-
+	
 	// ParallaxNode
 	this->addChild(m_backgroundNode, -1);									// Add the parallax background
 	m_backgroundNode->init();												// Initialise the parallax scrolling background
@@ -60,11 +59,13 @@ bool Level3::init() {
 }
 
 void Level3::initEnemyShips() {
+	// Made function virtual not need to clear list now, as function in level not loaded
+
 	//m_enemyLaserList->clear();
-	for (int i = 0; i <= m_enemyShipList->size()+1; ++i) {
-		m_enemyShipList->popBack();
-		CCLOG("Remove Enemy ship %d / %d from list", i, m_enemyShipList->size());
-	}
+	//for (int i = 0; i <= m_enemyShipList->size()+1; ++i) {
+	//	m_enemyShipList->popBack();
+	//	CCLOG("Remove Enemy ship %d / %d from list", i, m_enemyShipList->size());
+	//}
 
 	// Add 2 x Enemy Ship Type 2 - These will appear first on screen
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_2; ++i) {
@@ -80,11 +81,18 @@ void Level3::initEnemyShips() {
 		m_enemyShipList->pushBack(enemyShip1);
 	}
 
-	// Add 3 x Enemy Ship Type 3
+	// Add 3 x Enemy Ship Type 3 - Third on screen
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_3; ++i) {
 		EnemyShip* enemyShip3 = EnemyShipWilKnot::create(visibleSize);
 		this->addChild(enemyShip3);
 		m_enemyShipList->pushBack(enemyShip3);
+	}
+
+	// Add 2 x Enemy Ship Type 1 - 4th
+	for (unsigned int i = 0; i < L3_NUM_ENEMY_1+1; ++i) {
+		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
+		this->addChild(enemyShip1);
+		m_enemyShipList->pushBack(enemyShip1);
 	}
 
 	CCLOG("Add enemy ships");

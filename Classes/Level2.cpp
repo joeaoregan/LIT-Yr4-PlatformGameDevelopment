@@ -28,7 +28,7 @@ bool Level2::init() {
 
 	if (!Layer::init()) { return false; }							// super init first
 	
-	initEnemyShips();												// Add the new enemy with double lasers to the list of enemies
+	//initEnemyShips();												// Add the new enemy with double lasers to the list of enemies
 
 	// 1) Create the ParallaxNode
 	this->addChild(m_backgroundNode, -1);							// Add the parallax background
@@ -50,12 +50,19 @@ bool Level2::init() {
 
 void Level2::initEnemyShips() {
 	//EnemyShips = new Vector<EnemyShip*>(3);
+	//CCLOG("LEVEL initEnemyShips() - Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
 	for (unsigned int i = 0; i < L2_NUM_ENEMY_2; ++i) {
 		EnemyShip* enemyShip2 = EnemyShipKling::create(visibleSize);
 		this->addChild(enemyShip2);
 		m_enemyShipList->pushBack(enemyShip2);
-		//CCLOG("Add New Enemy ship at array index %d", i);
-	}	
+		//CCLOG("LEVEL 2 - Add New Enemy ship at array index %d", i);
+	}
+
+	for (unsigned int i = 0; i < L2_NUM_ENEMY_1; ++i) {
+		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
+		this->addChild(enemyShip1);
+		m_enemyShipList->pushBack(enemyShip1);
+	}
 }
 
 void Level2::update(float dt) {

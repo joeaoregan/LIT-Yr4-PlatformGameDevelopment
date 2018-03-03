@@ -15,7 +15,9 @@ HealthBar* HealthBar::create(int x, int y, int w, int h, float pc, cocos2d::Colo
 	hbar->autorelease();
 	hbar->width = w;
 	hbar->height = h;
-		
+
+	hbar->labelPresent = showLabel;
+
 	if (true) {
 		hbar->percent = (pc > 1.0f) ? 1.0f : (pc < 0.0f) ? 0.0f : pc;					// If greater than 1 set to 1, if minus set to 0
 
@@ -49,15 +51,15 @@ HealthBar* HealthBar::create(int x, int y, int w, int h, float pc, cocos2d::Colo
 		// Add the nodes
 		hbar->addChild(hbar->rectNode);
 		hbar->addChild(hbar->frontNode);
-
+		
 		// Create a label in the status bar
 		if (showLabel) {
-			cocos2d::Label* percentLbl = cocos2d::Label::createWithTTF("Percent: " + 
+			hbar->percentLbl = cocos2d::Label::createWithTTF(hbar->labelTag +
 				cocos2d::StringUtils::toString((int)(hbar->percent * 100)) + "%",
 				"fonts/Super Mario Bros..ttf", h * 1.0f);
-			percentLbl->setColor(cocos2d::Color3B::WHITE);
-			percentLbl->setPosition(cocos2d::Point(x, y));
-			hbar->addChild(percentLbl);
+			hbar->percentLbl->setColor(cocos2d::Color3B::WHITE);
+			hbar->percentLbl->setPosition(cocos2d::Point(x, y));
+			hbar->addChild(hbar->percentLbl);
 		}
 	}
 
@@ -68,4 +70,10 @@ void HealthBar::updateBar(float percent) {
 	frontNode->setScaleX(percent);
 
 	frontNode->setPosition(cocos2d::Point(rectNode->getPosition().x - (width/2) + (width/2 * percent), frontNode->getPosition().y));
+
+	//if (percentLbl->isVisible())
+	//if (isVisible())
+	//if (percentLbl)
+	if (labelPresent)
+		percentLbl->setString(labelTag + cocos2d::StringUtils::toString((int)(percent * 100)) + "%");	// Null pointer error -> no labels on some, only update the ones that do
 }

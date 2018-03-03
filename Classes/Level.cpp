@@ -71,6 +71,7 @@ bool Level::init() {
 	initLives();																							// Initialise the number of lives, set or carry over from previous level
 	initPowerUps();																							// Initialise the power ups
 	initAsteroids();
+	m_enemyShipList = new Vector<EnemyShip*>(3);															// initEnemyShips now virtual function so Vector must be outside function
 	initEnemyShips();
 	initLasers();
 	initDifficulty();																						// Initialise fire rate, weapons state, and power up duration on screen
@@ -138,15 +139,14 @@ void Level::initDifficulty() {
 }
 
 void Level::initEnemyShips() {
-	m_enemyShipList = new Vector<EnemyShip*>(3);
+	CCLOG("LEVEL initEnemyShips() - Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
 	for (int i = 0; i < NUM_ENEMIES; ++i) {
 		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
 		//EnemyShipWilKnot* enemyShip1 = EnemyShipWilKnot::create(visibleSize);								// Test New Enemies
 		this->addChild(enemyShip1);
 		m_enemyShipList->pushBack(enemyShip1);
-		//CCLOG("Add Enemy ship at array index %d", i);
+		//CCLOG("LEVEL - Add Enemy ship at array index %d", i);
 	}
-	//CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
 }
 
 void Level::initAsteroids() {
@@ -165,7 +165,7 @@ void Level::initAsteroids() {
 		this->addChild(asteroid2);
 		m_asteroidsList->pushBack(asteroid2);
 	}
-	//CCLOG("Level %d: Asteroids Initialised", Game::Instance()->getLevel());
+	CCLOG("Level %d: Asteroids Initialised", Game::Instance()->getLevel());
 }
 
 void Level::initLasers() {
@@ -208,7 +208,7 @@ void Level::initPowerUps() {
 	this->addChild(m_powerUpLife);
 	m_powerUpWeapon = PowerUp::create(visibleSize, WEAPON_UPGRADE);
 	this->addChild(m_powerUpWeapon);
-	//CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
+	CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
 }
 
 void Level::update(float dt) {
@@ -299,29 +299,35 @@ void Level::spawnObjects(float curTimeMillis) {
 
 void Level::spawnEnemyShips(float curTimeMillis) {
 	if (m_enemyLaserList1->size() > 0) {
-		if (curTimeMillis > nextEnemyShipSpawnTime) {			
-			EnemyShip *enemyShip = m_enemyShipList->at(nextEnemyShip); nextEnemyShip++;						// Moved to use min and max speed
-
+		CCLOG("Spawn Enemy Ship - size > 0");
+		if (curTimeMillis > nextEnemyShipSpawnTime) {
 			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
-			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;											// Set the time to spawn the next ship							
+			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;											// Set the time to spawn the next ship			
+
+			EnemyShip *enemyShip = m_enemyShipList->at(nextEnemyShip); 
+			nextEnemyShip++;																				// Moved to use min and max speed
+			if (nextEnemyShip >= (unsigned int)m_enemyShipList->size()) nextEnemyShip = 0;					// Loop back around to start of enemy ship list
+										
+			//if (enemyShip->isVisible()) return;
 
 			Game::Instance()->incrementEnemyShipCount();													// Increment the enemy ship on the list
-			if (nextEnemyShip >= (unsigned int) m_enemyShipList->size()) nextEnemyShip = 0;					// Loop back around to start of enemy ship list
-
+			
 			enemyShip->init(visibleSize);																	// Stop actions, set position, set visible, and set lives
 
+			CCLOG("Spawn Enemy Ship init enemy ship");
 			// Apply Actions: Move the ship to the players coordinate
 			cocos2d::MoveTo* action = MoveTo::create(enemyShip->getDuration() * 0.67f, 
 				Point(player->getPositionX(), player->getPositionY()));										// Part of time spent moving to player, the rest moving off screen
 			enemyShip->runAction(action);
 
+			CCLOG("Spawn Enemy Ship - MoveTo");
 			enemyShip->runAction(																						
 				Sequence::create(
 					MoveBy::create(enemyShip->getDuration(), 
 						Point(-winSize.width - enemyShip->getContentSize().width, 0)),						// move off the screen its full width
 					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)						// Then set invisible if it reaches the target - TERMINATE WITH NULL
 			);
-			//CCLOG("Spawn Enemy Ship");
+			CCLOG("Spawn Enemy Ship - END");
 		}
 	}
 }
@@ -353,22 +359,42 @@ void Level::spawnEnemyLaser(cocos2d::Point pos, int type) {
 	if (enemyLaser->isVisible()) return;													// If the laser is already visible skip it
 	Audio::Instance()->laserFXEnemy();														// Play audio
 
+	enemyLaser->setRotation(0);
 	enemyLaser->setPosition(pos.x, pos.y);													// Set the postion relevant to the ships coordinates
 	enemyLaser->setVisible(true);															// Set visible on screen
 	enemyLaser->stopAllActions();															// Stop actions for the laser
 
 	cocos2d::MoveTo *action;																// Declare the action
+	cocos2d::MoveBy *action2;
 	
 	if (type == GREEN2)
+/*
+		enemyLaser->runAction(
+			Sequence::create(MoveBy::create(0.525f, Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
+				getContentSize().width, pos.y + visibleSize.height * 0.33f)),								// change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
+*/
 		action = MoveTo::create(0.525f,														// This is where Euclidean distance would be handy
 			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
 				getContentSize().width, pos.y + visibleSize.height * 0.33f));
 	else if (type == GREEN3)
+		/*
+		enemyLaser->runAction(
+		Sequence::create(MoveBy::create(0.525f, 
+			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
+			getContentSize().width, pos.y - visibleSize.height * 0.33f)),								// change to plus 100 for up - 100 for down
+			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
+		*/
 		action = MoveTo::create(0.525f,
 			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 3 travels down
 				getContentSize().width, pos.y - visibleSize.height * 0.33f));
-	else 
-		action = MoveTo::create(0.5f,														// Laser 1 travels centrally
+	else
+/*		enemyLaser->runAction(
+			Sequence::create(MoveBy::create(0.5f, 
+				Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
+				getContentSize().width, pos.y)),								// change to plus 100 for up - 100 for down
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
+*/		action = MoveTo::create(0.5f,														// Laser 1 travels centrally
 			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width - 
 				getContentSize().width, pos.y));											// set to off screen the width of the laser + the screen width
 
