@@ -48,28 +48,28 @@ private:
 	void GoToEnterName(cocos2d::Ref *sender);	// Go to the enter name scene
 	
 	// Menu Images
-	cocos2d::MenuItemImage* playItem;			// Start the game
-	cocos2d::MenuItemImage*	scoreItem;			// Go to the high scores scene
-	cocos2d::MenuItemImage* optionsItem;		// Go to the options scene
-	cocos2d::MenuItemImage* exitItem;			// Exit the game
+	cocos2d::MenuItemImage* m_pPlayItem;		// Start the game
+	cocos2d::MenuItemImage*	m_pScoreItem;		// Go to the high scores scene
+	cocos2d::MenuItemImage* m_pOptionsItem;		// Go to the options scene
+	cocos2d::MenuItemImage* m_pExitItem;		// Exit the game
 
 	// Menu Buttons
-	cocos2d::Menu* menu;						// Button 1 start the game
+	cocos2d::Menu* m_pMenu;						// Button 1 start the game
 
 	// High Score
 	int highScore;								// Load the first sorted score, which is the high score
-	cocos2d::__String *tempScore;				// Score text to display
-	cocos2d::Label* highScoreLbl;				// Label to display the score text
+	cocos2d::__String *m_pTempScore;			// Score text to display
+	cocos2d::Label* m_pHighScoreLbl;			// Label to display the score text
 
 	// Music Player
-	MusicPlayer *mplayer;						// Music Player
+	MusicPlayer *m_pPlayer;						// Music Player
 
 	// 20180223
 	// Keyboard and gamepad
 	//int currentBtn;							// Current selected menu button for keyboard / gamepad
 	//int numButtons;							// The number of buttons in the menu/state
 
-	bool SELECTED = false;
+	bool m_selected = false;
 };
 
 #endif // __MAIN_MENU_H__

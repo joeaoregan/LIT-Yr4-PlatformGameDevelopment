@@ -35,14 +35,14 @@ EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 
 		/* Different */
 		// Set the lives based on the game difficulty setting
-		derp->m_totalLives = MAX_ENEMY_SHIP4_LIVES;														// Total lives set to 40 lives Defines.h
+		derp->m_totalLives = MAX_ENEMY_SHIP4_LIVES;														// Total lives set to 80 lives Defines.h
 		derp->m_fireRate = 500;
 		if (Game::Instance()->getDifficulty() == EASY) {
-			derp->m_totalLives -= 10;																	// 30 total lives
+			derp->m_totalLives -= 20;																	// 60 total lives
 			derp->m_fireRate += 100;																	// Decrease the fire rate
 		}
 		else if (Game::Instance()->getDifficulty() == HARD) {
-			derp->m_totalLives += 10;																	// 50 lives
+			derp->m_totalLives += 20;																	// 100 lives
 			derp->m_fireRate -= 100;																	// Increase the fire rate
 		}
 
@@ -64,56 +64,60 @@ EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 	return derp;
 }
 
+/*
+	Spawn a laser
+*/
 void EnemyShipDerpStar::spawnLaser() {
 	if (Game::Instance()->getTimeTick() > m_nextFire) {
-		Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+		Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + 
+			(getContentSize().width * m_dx),
 			getPosition().y + (getContentSize().width * m_dy)));
-		m_nextFire = Game::Instance()->getTimeTick() + m_fireRate;
+		m_nextFire = Game::Instance()->getTimeTick() + m_fireRate;										// Set the next time to fire
 	}
 }
 
+/*
+	Initialise the Enemy Ship
+*/
 void EnemyShipDerpStar::init(cocos2d::Size res) {
-	stopAllActions();																	// Stop any previous actions for the Node (Asteroids are reused)
-	setPosition(res.width + getContentSize().width / 2, m_randYPos);					// Set the postion off screen to the right, at random Y value
-	setVisible(true);																	// Set visible
+	stopAllActions();																					// Stop any previous actions for the Node (Asteroids are reused)
+	setPosition(res.width + getContentSize().width / 2, m_randYPos);									// Set the postion off screen to the right, at random Y value
+	setVisible(true);																					// Set visible
 
-	m_bar->updateBar(m_lives / m_totalLives);											// Update the health bar
+	m_pBar->updateBar(m_lives / m_totalLives);															// Update the health bar
 }
 
 /*
 	Initialise the healthbar
 */
 void EnemyShipDerpStar::initHealthBar(cocos2d::Size res) {
-	float scale = (res.height == 720) ? 0.67f : 1.0f;									// Scale for PC / Mobile depending on resolution
+	float scale = (res.height == 720) ? 0.67f : 1.0f;													// Scale for PC / Mobile depending on resolution
 
-	cocos2d::Color4F fgColour(0.52f, 0.52f, 0.52f, 1);
-	cocos2d::Color4F bgColour(1, 0, 0, 0.5f);
+	cocos2d::Color4F fgColour(0.52f, 0.52f, 0.52f, 1);													// Foreground colour
+	cocos2d::Color4F bgColour(1, 0, 0, 0.5f);															// Background colour
 
-	m_bar = HealthBar::create(
-		getContentSize().width / 2, getPosition().y - (getContentSize().height * scale * 0.95f),	// Position
-		getContentSize().width*0.67f, (res.height == 720) ? 20 : 30,					// Dimensions
-		float(m_lives / m_totalLives),													// percentage (Current lives / Max lives - 5)
-		fgColour, bgColour, true);														// Bar colours, setting and updating percentage text causes nullptr error (was because it was updating bars with no child label)
-	m_bar->setLabelTag("Derp Health: ");
-	addChild(m_bar);
+	m_pBar = HealthBar::create(
+		getContentSize().width / 2, getPosition().y - (getContentSize().height * scale * 0.95f),		// Position
+		getContentSize().width*0.67f, (res.height == 720) ? 20 : 30,									// Dimensions
+		float(m_lives / m_totalLives),																	// percentage (Current lives / Max lives - 5)
+		fgColour, bgColour, true);																		// Bar colours, setting and updating percentage text causes nullptr error (was because it was updating bars with no child label)
+	m_pBar->setLabelTag("Derp Health: ");
+	addChild(m_pBar);
 }
 
 /*
 	Add canons to the enemy ship
 */
 void EnemyShipDerpStar::addCanons() {
-	canon1 = Sprite::create("DoubleCanon.png");
-	canon1->setPosition(cocos2d::Point(getContentSize().width * 0.6f,
-		getContentSize().height / 2));
-	canon1->setRotation(-30.0f);
+	m_pCanon1 = Sprite::create("DoubleCanon.png");
+	m_pCanon1->setPosition(cocos2d::Point(getContentSize().width * 0.6f, getContentSize().height / 2));
+	m_pCanon1->setRotation(-30.0f);																		// Canon1 starts at -30, then rotates 60 to +30 then -60 to -30 and loops, firing lasers in between
 
-	canon2 = Sprite::create("DoubleCanon.png");
-	canon2->setPosition(cocos2d::Point(getContentSize().width * 0.3f,
-		getContentSize().height * 0.75f));
+	m_pCanon2 = Sprite::create("DoubleCanon.png");
+	m_pCanon2->setPosition(cocos2d::Point(getContentSize().width * 0.3f, getContentSize().height * 0.75f));
 
-	canon3 = Sprite::create("DoubleCanon.png");
-	canon3->setPosition(cocos2d::Point(getContentSize().width * 0.3f,
-		getContentSize().height * 0.25f));
+	m_pCanon3 = Sprite::create("DoubleCanon.png");
+	m_pCanon3->setPosition(cocos2d::Point(getContentSize().width * 0.3f, getContentSize().height * 0.25f));
 }
 
 /*
@@ -121,53 +125,45 @@ void EnemyShipDerpStar::addCanons() {
 */
 void EnemyShipDerpStar::moveCanon() {
 	float angle = 360.0f;
-	auto action = RotateBy::create(5.0f, angle);
-	auto action2 = RotateBy::create(5.0f, -angle);
+	cocos2d::RotateBy* action = cocos2d::RotateBy::create(5.0f, angle);
+	cocos2d::RotateBy* action2 = cocos2d::RotateBy::create(5.0f, -angle);
 
 	// Canon 1
-	auto action3 = RotateBy::create(5.0f, 60.0f);
-	auto action4 = RotateBy::create(5.0f, -60.0f);
+	cocos2d::RotateBy* action3 = cocos2d::RotateBy::create(5.0f, 60.0f);
+	cocos2d::RotateBy* action4 = cocos2d::RotateBy::create(5.0f, -60.0f);
 
-	//auto repeat3 = RepeatForever::create(action3);
-	//auto repeat4 = RepeatForever::create(action4);
-	auto sequence = Sequence::create(action3, action4, nullptr);
-	auto repeat1 = RepeatForever::create(sequence);
+	cocos2d::Sequence* sequence = cocos2d::Sequence::create(action3, action4, nullptr);
+	cocos2d::RepeatForever* repeat1 = cocos2d::RepeatForever::create(sequence);
 
-	auto repeat2 = RepeatForever::create(action);
-	auto repeat3 = RepeatForever::create(action2);
+	cocos2d::RepeatForever* repeat2 = cocos2d::RepeatForever::create(action);
+	cocos2d::RepeatForever* repeat3 = cocos2d::RepeatForever::create(action2);
 
 	//canon1->runAction(repeat1);	// middle gun
-	canon2->runAction(repeat2);	// top
-	canon3->runAction(repeat3);	// bottom
+	m_pCanon2->runAction(repeat2);	// top
+	m_pCanon3->runAction(repeat3);	// bottom
 
-	addChild(canon1);
-	addChild(canon2);
-	addChild(canon3);
-
-
-	//auto func = CallFunc::create(CC_CALLBACK_0(Level4::spawnDerpLaser, this));
+	addChild(m_pCanon1);
+	addChild(m_pCanon2);
+	addChild(m_pCanon3);
 }
 
+/*
+	Update the Enemy Ship
+*/
 void EnemyShipDerpStar::update(float curTimeMillis) {
 	if (isVisible() && getPosition().x < screenSize.width - getContentSize().width) {
 
 		CCLOG("Derpstar Update");
 
 		if (curTimeMillis > m_nextFire) {
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y + (getContentSize().height * m_dy)), GREEN2);
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y), GREEN1);
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y - (getContentSize().height * m_dy)), GREEN3);
 
 			m_nextFire = curTimeMillis + m_fireRate;
 		}
-
-		//if (canon1->getRotation() == 30)
-		//	Level::Instance()->spawnEnemyLaser(Point(canon1->getPosition().x,
-		//		canon1->getPosition().y), GREEN2);
 	}
-	//Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
-	//	getPosition().y + (getContentSize().height * m_dy)), GREEN1);
 }

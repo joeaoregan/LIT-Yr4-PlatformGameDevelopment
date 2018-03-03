@@ -38,11 +38,11 @@ Player* Player::create(cocos2d::Size res) {
 		player->setScale(player->scale);													// Increase scale of player for Android (My phone anyway)
 
 		// Weapon graphic
-		player->canon = Sprite::create(PLAYER_CANON);										// The weapon on the players ship
-		player->canon->setVisible(false);													// Hide the canon to begin with
-		player->canon->setPosition((player->getContentSize().width / 2) +					// Set its position relative to the Player Sprite
+		player->m_pCanon = Sprite::create(PLAYER_CANON);										// The weapon on the players ship
+		player->m_pCanon->setVisible(false);													// Hide the canon to begin with
+		player->m_pCanon->setPosition((player->getContentSize().width / 2) +					// Set its position relative to the Player Sprite
 			player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
-		player->addChild(player->canon);													// Attach to player
+		player->addChild(player->m_pCanon);													// Attach to player
 	}
 	else {
 		delete player;
@@ -106,6 +106,6 @@ void Player::moveRight() {
 */
 void Player::upgradeWeapon() {
 	weaponUpgrade();
-	canon->setVisible(true);
+	m_pCanon->setVisible(true);
 	Game::Instance()->setCurrentWeapon(m_weaponStrength);
 }

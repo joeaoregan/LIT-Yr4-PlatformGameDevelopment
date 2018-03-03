@@ -26,21 +26,21 @@ public:
 
 	void init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher);
 
-	void update() {	}	// will update in class later
-	float getTimeTick();
+	void update() {	}															// Update the input
+	float getTimeTick();														// Get current time
 
 private:
-	Input() {};																					// Constructor is private for use as a Singleton. Initializes the variables
-	~Input() {};																				// Private destructor shuts down and cleans up the mixer API
+	Input() {};																	// Constructor is private for use as a Singleton. Initializes the variables
+	~Input() {};																// Private destructor shuts down and cleans up the mixer API
 
-	static Input* s_pInstance;																	// Single instance of Input used as singleton so only one instance exists thoughout the game
+	static Input* s_pInstance;													// Single instance of Input used as singleton so only one instance exists thoughout the game
 	
 	// Keyboard
 	static std::map<cocos2d::EventKeyboard::KeyCode,
-		std::chrono::high_resolution_clock::time_point> keys;
+		std::chrono::high_resolution_clock::time_point> keys;					// Map of keyboard key codes
 
-	float nextBtnTime;
-	float buttonRate = 300.0f;
+	float m_nextBtnTime;														// Next button press time
+	float m_buttonRate = 300.0f;												// Time between button presses
 };
 
 

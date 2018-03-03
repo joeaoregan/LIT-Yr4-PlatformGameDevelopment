@@ -46,3 +46,13 @@ void PowerUp::rotate() {
 	auto repeat = cocos2d::RepeatForever::create(rotate);
 	this->runAction(repeat);
 }
+
+
+void PowerUp::move(cocos2d::Size res, float duration, float y) {
+	stopAllActions();
+	setPosition(res.width + getContentSize().width / 2, y);
+	setVisible(true);
+	setScale(((res.height == 720) ? 1.0f : 1.5f) * (duration / 10.0f) * 1.25f);
+
+	rotate();
+};

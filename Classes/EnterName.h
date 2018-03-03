@@ -15,9 +15,7 @@
 #include "extensions/cocos-ext.h"										// UI
 #include "ui/CocosGUI.h"
 
-USING_NS_CC_EXT;
-//using namespace ui;
-
+USING_NS_CC_EXT;														// Required for entering text
 
 class EnterName : public MenuScene {
 public:	
@@ -29,16 +27,15 @@ public:
 	
 private:
 
-	cocos2d::__String *tempScore;												// Text to display
+	cocos2d::__String *m_pTempScore;										// Text to display
 
 	// High Score
-	//cocos2d::LabelTTF* instructionLbl;									// Label to display current high score
-	cocos2d::Label* instructionLbl;									// Label to display current high score
+	cocos2d::Label* m_pInstructionLbl;										// Label to display current high score
 
 	// Text Input
-	cocos2d::ui::TextField* txtField;									// Text entered
+	cocos2d::ui::TextField* m_pTxtField;									// Text entered
 	void textFieldEvent(Ref* sender, cocos2d::ui::TextField::EventType type);
-	cocos2d::UserDefault* def;											// UserDefault used to save and load variables
+	cocos2d::UserDefault* m_pDef;											// UserDefault used to save and load variables
 };
 
 #endif // __ENTER_NAME_H__

@@ -29,13 +29,13 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 		cocos2d::Color4F redBR(1, 0, 0, 1);									// Foreground colour
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);							// Background colour
 		
-		eship->m_bar = HealthBar::create(
+		eship->m_pBar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2),
 			eship->getPosition().y + eship->getContentSize().height,		// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,	// Dimensions
 			float(eship->getLives() / eship->m_totalLives),					// percentage  (Max 4 lives)
 			redBR, transBR);
-		eship->addChild(eship->m_bar);		
+		eship->addChild(eship->m_pBar);		
 		//eship->updateBar();
 		//eship->m_bar->setVisible(false);
 	}
@@ -60,7 +60,7 @@ void EnemyShip::takeLife() {
 		//m_bar->clear();
 	}
 	//if (isVisible()) m_bar->updateBar(m_lives / MAX_ENEMY_SHIP_LIVES);
-	if (isVisible()) m_bar->updateBar(m_lives / m_totalLives);					// The health bar percentage is lives / max lives
+	if (isVisible()) m_pBar->updateBar(m_lives / m_totalLives);					// The health bar percentage is lives / max lives
 	//if (isVisible() && m_bar->isVisible()) updateBar();
 	//else m_bar->clear();
 }
@@ -103,7 +103,7 @@ void EnemyShip::init(cocos2d::Size res) {
 	setLives(m_totalLives);														// Reset the number of lives available
 	//updateBar();
 	//m_bar->setVisible(true);
-	m_bar->updateBar(m_lives / m_totalLives);									// Update the health bar
+	m_pBar->updateBar(m_lives / m_totalLives);									// Update the health bar
 	//m_bar->updateBar(0.67f);
 }
 

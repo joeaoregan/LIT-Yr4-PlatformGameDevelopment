@@ -15,7 +15,6 @@
 #define __AUDIO_MENU_H__
 
 #include "MenuScene.h"
-//#include "cocos2d.h"
 
 class AudioMenu : public MenuScene {
 public:
@@ -51,7 +50,7 @@ private:
 	cocos2d::MenuItemImage* btnTrackDownImg;		// Select the previous track Button menu option
 
 	// Menu
-	cocos2d::Menu* menu;							// Add the menu options to a menu list		
+	cocos2d::Menu* m_menu;							// Add the menu options to a menu list		
 };
 
 #endif // __AUDIO_MENU_H__

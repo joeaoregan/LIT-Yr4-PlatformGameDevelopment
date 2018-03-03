@@ -9,40 +9,28 @@ public:
 	PowerUp() {}
 	~PowerUp() {}
 
-	static PowerUp* create(cocos2d::Size res, int type);
+	static PowerUp* create(cocos2d::Size res, int type);	// Create a power up by specifying the type
 
-	virtual void update(float dt) {}
+	virtual void update(float dt) {}						// Update the power up	
 
-	float minSpeed() { return m_speedMin; }
-	float maxSpeed() { return m_speedMax; }
+	void move(cocos2d::Size res, float duration, float y);	// Reset the power up before moving
+		
+	void rotate();											// Rotate the power up
 
-	void move(cocos2d::Size res, float duration, float y) {
-		stopAllActions();
-		setPosition(res.width + getContentSize().width / 2, y);
-		setVisible(true);
-		setScale(((res.height == 720) ? 1.0f : 1.5f) * (duration / 10.0f) * 1.25f);
-
-		rotate();
-	};
-
-	void rotate();
-
-	float getSpeed() { return m_speed; }
-	bool isSpawned() { return m_spawned; }
-	void setSpawned() { m_spawned = true; }
-	float getRandY() { return m_randYPos; }
-	float getSpawnTime() { return m_spawnTime; }
+	float getSpeed() const { return m_speed; }				// Get the duration
+	bool isSpawned() const { return m_spawned; }			// Is the power up spawned already (only spawn once)
+	void setSpawned() { m_spawned = true; }					// Set spawned
+	float getRandY() const { return m_randYPos; }			// Get a random value on the Y axis of the screen for spawning
+	float getSpawnTime() const { return m_spawnTime; }		// Time to spawn the power up
 
 protected:
-	float m_speed = 0;
-	float m_speedMin = 2.0f;
-	float m_speedMax = 10.0f;
+	float m_speed = 0;										// Duration to remain on screen (speed0
+	float m_speedMin = 2.0f;								// Minimum value for generating random duration
+	float m_speedMax = 10.0f;								// Max value
 
-	bool m_spawned = false; 
-	float m_randYPos;
-	float m_spawnTime;
-
-	//int m_type = STATIC_ROID;
+	bool m_spawned = false;									// Is the power up spawned
+	float m_randYPos;										// Random position to spawn on Y axis
+	float m_spawnTime;										// Spawn time
 };
 
 #endif // __POWER_UP_H__

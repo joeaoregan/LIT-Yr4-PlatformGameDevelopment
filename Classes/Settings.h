@@ -39,18 +39,18 @@ private:
 	void goToAudioMenu(cocos2d::Ref *sender);			// Go to the Audio settings menu
 
 	// Menu
-	cocos2d::MenuItemLabel* showMPlayerLbl;				// Show the music player
-	cocos2d::MenuItemLabel* setDifficultyLbl;			// Set the game difficult
-	cocos2d::MenuItemLabel* goToAudioLbl;				// Go to audio menu label
+	cocos2d::MenuItemLabel* m_pShowMPlayerLbl;			// Show the music player
+	cocos2d::MenuItemLabel* m_pSetDifficultyLbl;		// Set the game difficult
+	cocos2d::MenuItemLabel* m_pGoToAudioLbl;			// Go to audio menu label
 
 	// Labels
-	cocos2d::Label* instructionLbl;						// Label to display current high score
-	cocos2d::Label* musicLbl;							// Music volume setting label
-	cocos2d::Label* difficultyLbl;						// Set the game difficult
-	cocos2d::Label* audioMenuLbl;						// Go to audio menu label
+	cocos2d::Label* m_pInstructionLbl;					// Label to display current high score
+	cocos2d::Label* m_pMusicLbl;						// Music volume setting label
+	cocos2d::Label* m_pDifficultyLbl;					// Set the game difficult
+	cocos2d::Label* m_pAudioMenuLbl;					// Go to audio menu label
 
 	// Menu buttons
-	cocos2d::Menu* menu;								// Create the menu options
+	cocos2d::Menu* m_menu;								// Create the menu options
 
 	// Set label text
 	std::string playerLabelText();						// Set the text on Enable/Disable music player button label

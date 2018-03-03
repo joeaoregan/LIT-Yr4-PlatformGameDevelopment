@@ -40,7 +40,7 @@ private:
 	float scale;													// Scale of the player based on the screen resolution
 	unsigned int m_weaponStrength = 2;								// Current weapon
 
-	cocos2d::Sprite* canon;											// Canon made visible 
+	cocos2d::Sprite* m_pCanon;										// Canon made visible 
 };
 
 #endif // __PLAYER_H__

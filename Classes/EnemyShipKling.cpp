@@ -40,13 +40,13 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 		cocos2d::Color4F redBR(0.39f, 0.65f, 0.7f, 1);
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
 
-		eship->m_bar = HealthBar::create(
+		eship->m_pBar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), 
 			eship->getPosition().y + eship->getContentSize().height,			// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,		// Dimensions
 			float(eship->getLives() / eship->m_totalLives),						// percentage (Max 4 lives)
 			redBR, transBR);
-		eship->addChild(eship->m_bar);
+		eship->addChild(eship->m_pBar);
 	}
 	else {
 		delete eship;

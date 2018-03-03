@@ -53,7 +53,7 @@ private:
 
 	static Audio* s_pInstance;			// Single instance of Audio used as singleton so only one instance exists thoughout the game
 
-	float currentVol;					// Current music volume
+	float m_currentVol;					// Current music volume
 };
 
 #endif // __AUDIO__

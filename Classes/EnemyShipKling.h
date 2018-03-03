@@ -21,9 +21,9 @@
 class EnemyShipKling : public EnemyShip {
 public:
 
-	static EnemyShipKling* create(cocos2d::Size res);
+	static EnemyShipKling* create(cocos2d::Size res);	// Create the Enemy Ship
 		
-	void update(float dt);
+	void update(float dt);								// Update
 };
 
 #endif // __ENEMY_SHIP_K_H__

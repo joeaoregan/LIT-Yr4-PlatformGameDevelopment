@@ -21,13 +21,13 @@
 #endif
 //#include "HealthBar.h"
 
-MenuScene* MenuScene::layer;
+MenuScene* MenuScene::m_pLayer;
 
 cocos2d::Scene* MenuScene::createScene() {
 	cocos2d::Scene* scene = cocos2d::Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
-	layer = MenuScene::create();						// 'layer' is an autorelease object, JOR replaced auto specifier
+	m_pLayer = MenuScene::create();						// 'layer' is an autorelease object, JOR replaced auto specifier
 		
-	scene->addChild(layer);								// Add layer as a child to scene
+	scene->addChild(m_pLayer);								// Add layer as a child to scene
 		
 	return scene;										// Return the scene
 }
@@ -47,54 +47,54 @@ bool MenuScene::init() {
 //	}									// For gamepad support on desktop
 //#endif
 	
-	def = cocos2d::UserDefault::getInstance();																						// User defaults used to store/load values
+	m_def = cocos2d::UserDefault::getInstance();																						// User defaults used to store/load values
 	
 	// Screen size
-	visibleSize = cocos2d::Director::getInstance()->getVisibleSize();																// Get visible screen size
-	origin = cocos2d::Director::getInstance()->getVisibleOrigin();																	// Get screen origin point		
-	(visibleSize.height == 1080) ? scale = 1.0f : scale = 0.67f;
+	m_visibleSize = cocos2d::Director::getInstance()->getVisibleSize();																// Get visible screen size
+	m_origin = cocos2d::Director::getInstance()->getVisibleOrigin();																	// Get screen origin point		
+	(m_visibleSize.height == 1080) ? m_scale = 1.0f : m_scale = 0.67f;
 	
 	// 1. Background image
 	//backgroundSprite = cocos2d::Sprite::create((visibleSize.height == 1080) ? "BG1080p.png" : "BG720p.png");						// Choose Background image depending on resolution ONLY ONE IMAGE USED NOW
-	backgroundSprite = cocos2d::Sprite::create("BG1080p.png");																		// Use one high res background image for efficiency
-	setYPosAndScale(backgroundSprite, 0.5f);
-	this->addChild(backgroundSprite);																								// Add to layer
+	m_pBackgroundSprite = cocos2d::Sprite::create("BG1080p.png");																		// Use one high res background image for efficiency
+	setYPosAndScale(m_pBackgroundSprite, 0.5f);
+	this->addChild(m_pBackgroundSprite);																								// Add to layer
 	
 	// 2. Game Title
-	gameTitleSprite = cocos2d::Sprite::create("GameTitle.png");																		// Game Title image
-	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width * 0.1f, visibleSize.height / 2 + origin.y));						// Set position on screen
-	gameTitleSprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * 0.9f + origin.y));			// Set position on screen
-	gameTitleSprite->setScale(1.75 * scale);
-	this->addChild(gameTitleSprite);																								// Add to layer		
+	m_pGameTitleSprite = cocos2d::Sprite::create("GameTitle.png");																		// Game Title image
+	m_pGameTitleSprite->setPosition(cocos2d::Point(m_visibleSize.width * 0.1f, m_visibleSize.height / 2 + m_origin.y));						// Set position on screen
+	m_pGameTitleSprite->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.9f + m_origin.y));			// Set position on screen
+	m_pGameTitleSprite->setScale(1.75 * m_scale);
+	this->addChild(m_pGameTitleSprite);																								// Add to layer		
 		
 	// 3. Scene Title
-	titleSprite = cocos2d::Sprite::create("MainMenu.png");																			// Scene Title image
-	setYPosAndScale(titleSprite, 0.75f);
-	this->addChild(titleSprite);																									// Add to layer							
+	m_pTitleSprite = cocos2d::Sprite::create("MainMenu.png");																			// Scene Title image
+	setYPosAndScale(m_pTitleSprite, 0.75f);
+	this->addChild(m_pTitleSprite);																									// Add to layer							
 
 	// 4. Show current player name. Can select to switch to Enter Name state
-	currentPlayerName = def->getStringForKey("CurrentPlayer", "Player");
+	m_currentPlayerName = m_def->getStringForKey("CurrentPlayer", "Player");
 	//if (Game::Instance()->getPlayerName() == "") 
-	Game::Instance()->setPlayerName(currentPlayerName);																				// Set the players name to a default value
-	changeNameLbl = cocos2d::Label::createWithBMFont("Arial.fnt", "Current Player:\n" + currentPlayerName);							// Display current players name
-	changeNameLbl->setScale(scale);
+	Game::Instance()->setPlayerName(m_currentPlayerName);																				// Set the players name to a default value
+	m_changeNameLbl = cocos2d::Label::createWithBMFont("Arial.fnt", "Current Player:\n" + m_currentPlayerName);							// Display current players name
+	m_changeNameLbl->setScale(m_scale);
 
-	currentPlayerLbl = cocos2d::MenuItemLabel::create(changeNameLbl, CC_CALLBACK_1(MenuScene::GoToEnterName, this));				// Go to enter name scene
-	currentPlayerLbl->setPosition(cocos2d::Point((visibleSize.width + origin.x) * 0.1f, visibleSize.height * 0.95f + origin.y));
-	currentPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
+	m_pCurrentPlayerLbl = cocos2d::MenuItemLabel::create(m_changeNameLbl, CC_CALLBACK_1(MenuScene::GoToEnterName, this));				// Go to enter name scene
+	m_pCurrentPlayerLbl->setPosition(cocos2d::Point((m_visibleSize.width + m_origin.x) * 0.1f, m_visibleSize.height * 0.95f + m_origin.y));
+	m_pCurrentPlayerLbl->runAction(cocos2d::ScaleTo::create(0.5F, 1.0F));
 
 	// 5. Back Button
-	btnBackImg = cocos2d::MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(MenuScene::returnToMenu, this));	// Set image for menu option
-	setYPosAndScale(btnBackImg, 0.05f);																								// Set the scale
+	m_pBtnBackImg = cocos2d::MenuItemImage::create("btnBack.png", "btnBackSelect.png", CC_CALLBACK_1(MenuScene::returnToMenu, this));	// Set image for menu option
+	setYPosAndScale(m_pBtnBackImg, 0.05f);																								// Set the scale
 
 	// 6. Exit button (autorelease object)
-	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+	m_pCloseItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
 		CC_CALLBACK_1(MenuScene::menuCloseCallback, this));																			// Close game button, JOR replaced auto specifier
-	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
-		origin.y + closeItem->getContentSize().height / 2));
+	m_pCloseItem->setPosition(Point(m_origin.x + m_visibleSize.width - m_pCloseItem->getContentSize().width / 2,
+		m_origin.y + m_pCloseItem->getContentSize().height / 2));
 
 	// Menu Items
-	menu = cocos2d::Menu::create(currentPlayerLbl, btnBackImg, closeItem, NULL);													// Handles menu item touches
+	menu = cocos2d::Menu::create(m_pCurrentPlayerLbl, m_pBtnBackImg, m_pCloseItem, NULL);													// Handles menu item touches
 	menu->setPosition(cocos2d::Point::ZERO);
 	this->addChild(menu);
 
@@ -122,14 +122,14 @@ void MenuScene::update(float dt) {
 	Set Y position and scale for Sprites and Menu items in the scene
 */
 void MenuScene::setYPosAndScale(cocos2d::Sprite* sprite, float y) {
-	sprite->setScale(scale);
-	sprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * y + origin.y));						// Set backgound position
+	sprite->setScale(m_scale);
+	sprite->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * y + m_origin.y));						// Set backgound position
 }
 void MenuScene::setYPosAndScale(cocos2d::MenuItemImage* sprite, float y) {
 	//sprite->setScale(scale);
-	sprite->setPosition(cocos2d::Point(visibleSize.width / 2 + origin.x, visibleSize.height * y + origin.y));						// Set backgound position
+	sprite->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * y + m_origin.y));						// Set backgound position
 	//sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale * 1.5f : scale * 1.0f));					// Animate the sprites when clicked
-	sprite->runAction(cocos2d::ScaleTo::create(0.5F, (visibleSize.height == 1080) ? scale : scale ));					// Animate the sprites when clicked
+	sprite->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == 1080) ? m_scale : m_scale ));					// Animate the sprites when clicked
 }
 
 // The player can enter and store their name from this scene
@@ -161,7 +161,7 @@ void MenuScene::menuCloseCallback(Ref* pSender) {
 }
 
 void MenuScene::nextButton() {
-	if (Game::Instance()->getTimeTick() > nextBtnTime) {
+	if (Game::Instance()->getTimeTick() > m_nextBtnTime) {
 		if (m_currentBtn < m_totalButtons) {
 			m_currentBtn++;
 		}
@@ -169,13 +169,13 @@ void MenuScene::nextButton() {
 			m_currentBtn = 1;
 		}
 
-		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+		m_nextBtnTime = Game::Instance()->getTimeTick() + m_buttonRate;
 		CCLOG("NEXT BUTTON: highlight m_currentBtn: %d", m_currentBtn);
 	}
 }
 
 void MenuScene::prevButton() {
-	if (Game::Instance()->getTimeTick() > nextBtnTime) {
+	if (Game::Instance()->getTimeTick() > m_nextBtnTime) {
 		if (m_currentBtn > 1) {
 			m_currentBtn--;
 		}
@@ -183,7 +183,7 @@ void MenuScene::prevButton() {
 			m_currentBtn = m_totalButtons;
 		}
 
-		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+		m_nextBtnTime = Game::Instance()->getTimeTick() + m_buttonRate;
 		CCLOG("PREV BUTTON: highlight m_currentBtn: %d", m_currentBtn);
 	}
 }

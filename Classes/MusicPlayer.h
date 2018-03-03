@@ -6,6 +6,7 @@
 	22/02/2018
 
 	Controls for background music
+	Forwards, backwards, play, and pause
 */
 
 #ifndef __M_PLAYER_H
@@ -38,7 +39,7 @@ public:
 	void nextTrack();										// Skip to the next track
 	void previousTrack();									// Skip to previous track
 
-	cocos2d::MenuItemImage *getButton(int button);			// Get the active button
+	cocos2d::MenuItemImage *getButton (int button) const;	// Get the active button
 	
 private:
 	cocos2d::MenuItemImage *m_playImg;						// Play music button

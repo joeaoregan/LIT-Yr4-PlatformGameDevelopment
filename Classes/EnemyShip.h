@@ -19,47 +19,46 @@ public:
 	EnemyShip() {}
 	~EnemyShip() {}
 	
-	static EnemyShip* create(cocos2d::Size res);
+	static EnemyShip* create(cocos2d::Size res);		// Create the enemy ship
 	
-	virtual void init(cocos2d::Size res);
-	virtual void update(float dt);
+	virtual void init(cocos2d::Size res);				// Initialise the enemy
 
-	unsigned int getLives() { return m_lives; }
+	virtual void update(float dt);						// Virtual update function
+
+	virtual void moveCanon() {}							// Used with third enemy type (EnemyShipWillKnot) to move its (ornamental) canon
+		
+	void takeLife();									// Decrement the number of lives
+
+	void updateBar();									// Update the health bar, uses ScaleTo to display an updated percentage in HealthBar class
+
+	unsigned int getLives() const { return m_lives; }	// Get the lives left for the Enemy Ship
 	void setLives(unsigned int set) { m_lives = set; }
 
-	void takeLife();
+	float getNextFire() const { return m_nextFire; }	// Get the current fire rate	
+	//void setNextFire(float set) { m_nextFire = set; }	// Set the fire rate
 
-	void updateBar();
+	//float minSpeed() { return m_speedMin; }			// Minimum duration
+	//float maxSpeed() { return m_speedMax; }
 
-	virtual void moveCanon() {}					// Used with third enemy type (EnemyShipWillKnot) to move its (ornamental) canon
-
-	float getNextFire() { return m_nextFire; }
-	void setNextFire(float set) { m_nextFire = set; }
-
-	float minSpeed() { return m_speedMin; }
-	float maxSpeed() { return m_speedMax; }
-
-	float getDuration() { return m_duration; }	// Random duration on screen, used in spawnObject() for applying action sequence
+	float getDuration() { return m_duration; }			// Random duration on screen, used in spawnObject() for applying action sequence
 	
 
-	virtual void spawnLaser() { }
+	virtual void spawnLaser() { }						// Spawn a laser
 
-	cocos2d::Sprite* canon1;
-	cocos2d::Sprite* canon2;
-	cocos2d::Sprite* canon3;
+	cocos2d::Sprite* m_pCanon1;							// Ship canons (only used on Wilknot, and Derp Star enemies)
+	cocos2d::Sprite* m_pCanon2;
+	cocos2d::Sprite* m_pCanon3;
 
 protected:
 	// health
 	unsigned int m_lives = MAX_ENEMY_SHIP1_LIVES;		// Number of lives (Defines.h)
-	float m_totalLives = MAX_ENEMY_SHIP1_LIVES;		// Total lives for this enemy to set/rest lives (Defines.h)
-	HealthBar* m_bar;									// HealthBar
+	float m_totalLives = MAX_ENEMY_SHIP1_LIVES;			// Total lives for this enemy to set/rest lives (Defines.h)
+	HealthBar* m_pBar;									// HealthBar
 	cocos2d::Size m_winSize;							// Screen resolution
 
 	// Fire rate
 	float m_nextFire;									// Time next laser spawned
 	unsigned int m_fireRate = ENEMY_FIRE_RATE;			// Time between lasers (Defines.h)
-
-	cocos2d::DrawNode* myDrawNode;						// Failed attempt at health bar
 
 	float m_dx = 0;										// Offset for spawning the laser in front of the ship
 	float m_dy = 0;

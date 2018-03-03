@@ -40,7 +40,8 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/Player.cpp \
                    $(LOCAL_PATH)/../../../Classes/PowerUp.cpp \
                    $(LOCAL_PATH)/../../../Classes/Settings.cpp \
-                   $(LOCAL_PATH)/../../../Classes/SplashScene.cpp
+                   $(LOCAL_PATH)/../../../Classes/SplashScene.cpp \
+                   $(LOCAL_PATH)/../../../Classes/StoryScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 

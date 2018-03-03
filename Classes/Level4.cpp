@@ -38,18 +38,17 @@ bool Level4::init() {
 	m_backgroundNode->init();											// Initialise the parallax scrolling background
 	
 	this->scheduleUpdate();												// Start updating the scene
+	
 
-
-
-	derpStar = DerpStar::create(visibleSize);							// Create boss enemy
-	this->addChild(derpStar);											// Add to scene
+	m_pDerpStar = DerpStar::create(visibleSize);							// Create boss enemy
+	this->addChild(m_pDerpStar);											// Add to scene
 	
 
 	cocos2d::MoveTo* derpForward = MoveTo::create(4.0f,
 		Point(visibleSize.width * 0.75f, player->getPositionY()));		// Part of time spent moving to player, the rest moving off scre
 
 	cocos2d::MoveTo* derpBack = MoveTo::create(2.0f, 
-		Point(visibleSize.width + derpStar->getContentSize().width, player->getPositionY()));
+		Point(visibleSize.width + m_pDerpStar->getContentSize().width, player->getPositionY()));
 
 
 	//derpStar->runAction(actionDerp);
@@ -67,7 +66,7 @@ bool Level4::init() {
 	auto sequence = Sequence::create(derpForward,
 		MoveBy::create(2.5f,
 			//Point(winSize.width - derpStar->getContentSize().width, 0)),						// move off the screen its full width
-			Point(winSize.width - derpStar->getContentSize().width, player->getPositionY() - (derpStar->getContentSize().height / 2))),
+			Point(winSize.width - m_pDerpStar->getContentSize().width, player->getPositionY() - (m_pDerpStar->getContentSize().height / 2))),
 		//CallFuncN::create(CC_CALLBACK_1(Level4::spawnDerpLaser(), this)), NULL)						// Then set invisible if it reaches the target - TERMINATE WITH NULL
 		//CallFuncN::create(spawnDerpLaser(), NULL)						// Then set invisible if it reaches the target - TERMINATE WITH NULL
 		func, derpBack, func, func1, NULL);
@@ -75,7 +74,7 @@ bool Level4::init() {
 	auto repeat = RepeatForever::create(sequence);
 
 	//derpStar->setPosition(Point(visibleSize.width*0.75f, visibleSize.height / 2));
-	derpStar->runAction(repeat);
+	m_pDerpStar->runAction(repeat);
 
 	auto action3 = RotateBy::create(2.0f, 60.0f);									// Starting at -30, rotate to 60
 	auto action4 = RotateBy::create(2.0f, -60.0f);									// Then back again
@@ -85,7 +84,7 @@ bool Level4::init() {
 	auto canonSequence = Sequence::create(action3, fire1, action4, fire2, NULL);
 	auto canonRepeat = RepeatForever::create(canonSequence);
 
-	derpStar->canon1->runAction(canonRepeat);
+	m_pDerpStar->m_pCanon1->runAction(canonRepeat);
 	//derpStar->canon1->setVisible(false);
 
 
@@ -120,15 +119,15 @@ void Level4::spawnCanonLaser1() {
 
 	//enemyLaser->setPosition(derpStar->getPosition().x + derpStar->getContentSize().width * 0.6f, (derpStar->getPosition().y/2) + derpStar->getContentSize().height / 2);													// Set the postion relevant to the ships coordinates
 
-	enemyLaser->setPosition(derpStar->getPosition().x, derpStar->getPosition().y * 1.05f);
+	enemyLaser->setPosition(m_pDerpStar->getPosition().x, m_pDerpStar->getPosition().y * 1.05f);
 	//enemyLaser->setPosition(derpStar->getPosition().x - (derpStar->getContentSize().width / 2) + derpStar->canon1->getPosition().x, derpStar->getPosition().y * 1.05f);
 	enemyLaser->setRotation(30.0f);
 
 	enemyLaser->setVisible(true);															// Set visible on screen
 	enemyLaser->stopAllActions();															// Stop actions for the laser
 
-	float x = derpStar->canon1->getPosition().x - visibleSize.width;
-	float y = derpStar->canon1->getPosition().y + laserY;
+	float x = m_pDerpStar->m_pCanon1->getPosition().x - visibleSize.width;
+	float y = m_pDerpStar->m_pCanon1->getPosition().y + laserY;
 
 	CCLOG("Laser end coords X: %f, Y: %f", x, y);
 
@@ -149,13 +148,13 @@ void Level4::spawnCanonLaser2() {
 	Audio::Instance()->laserFXEnemy();														// Play audio
 
 	//enemyLaser->setPosition(derpStar->getPosition().x + getContentSize().width * 0.6f, derpStar->getPosition().y + getContentSize().height / 2);
-	enemyLaser->setPosition(derpStar->getPosition().x, derpStar->getPosition().y * 0.95f);
+	enemyLaser->setPosition(m_pDerpStar->getPosition().x, m_pDerpStar->getPosition().y * 0.95f);
 	enemyLaser->setRotation(-30.0f);														// Set the postion relevant to the ships coordinates
 	enemyLaser->setVisible(true);															// Set visible on screen
 	enemyLaser->stopAllActions();															// Stop actions for the laser
 
-	float x = derpStar->canon1->getPosition().x - visibleSize.width;
-	float y = derpStar->canon1->getPosition().y + laserY;
+	float x = m_pDerpStar->m_pCanon1->getPosition().x - visibleSize.width;
+	float y = m_pDerpStar->m_pCanon1->getPosition().y + laserY;
 	
 	enemyLaser->runAction(
 		Sequence::create(MoveBy::create(0.5f, Point(x, y)),									// change to plus 100 for up - 100 for down
@@ -166,7 +165,7 @@ void Level4::spawnCanonLaser2() {
 void Level4::spawnDerpLaser() {
 	CCLOG("Spawn lasers");		// Set the node invisible
 
-	derpStar->spawnLaser();
+	m_pDerpStar->spawnLaser();
 }
 
 void Level4::spawnShips() {
@@ -265,7 +264,7 @@ void Level4::initEnemyShips() {
 }
 
 void Level4::update(float dt) {
-	derpStar->update(dt);
+	m_pDerpStar->update(dt);
 	Level::update(dt);									// Call base class update function		
 }
 
@@ -277,17 +276,17 @@ void Level4::checkCollisions() {
 	for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {											// JOR replaced auto specifier
 		if (!(shipLaser->isVisible())) continue;
 
-		if (shipLaser->getBoundingBox().intersectsRect(derpStar->getBoundingBox())) {
+		if (shipLaser->getBoundingBox().intersectsRect(m_pDerpStar->getBoundingBox())) {
 			Audio::Instance()->explodeFX();															// Play explosion effect
 			shipLaser->setVisible(false);															// Hide the player laser
 			Game::Instance()->updateScore(20);														// Award 20 points for destroying an enemy ship
-			derpStar->takeLife();
+			m_pDerpStar->takeLife();
 		}
 	}
 }
 
 void Level4::endScene(EndReason endReason) {
-	cocos2d::Label* derpMessage = cocos2d::Label::createWithTTF(messageEOL,
+	cocos2d::Label* derpMessage = cocos2d::Label::createWithTTF(m_messageEOL,
 		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.05);										// JOR replaced auto specifier
 	derpMessage->setPosition(Point(visibleSize.width * 0.5f + origin.x,
 		visibleSize.height - (winSize.height / 9 * 5.25f)));
@@ -298,17 +297,15 @@ void Level4::endScene(EndReason endReason) {
 	Level::endScene(endReason);							// End the scene
 
 														// 3. Total Enemy Ships Destroyed
-	
 
 }
 
-
 void Level4::checkGameOver(float currenTime) {															// If the player has run out of lives
 	// DerpStar destroyed
-	if (!derpStar->isVisible()) {
-		derpStar->stopAllActions();
-		derpStar->canon1->stopAllActions();
-		messageEOL = "DerpStar Has Been Destroyed";
+	if (!m_pDerpStar->isVisible()) {
+		m_pDerpStar->stopAllActions();
+		m_pDerpStar->m_pCanon1->stopAllActions();
+		m_messageEOL = "DerpStar Has Been Destroyed";
 		endScene(KENDREASONWIN);
 	}
 	
@@ -320,12 +317,12 @@ void Level4::checkGameOver(float currenTime) {															// If the player ha
 	}
 	// Time ran out
 	else if (currenTime >= Game::Instance()->getEndTime()) {
-		if (derpStar->isVisible()) {
-			messageEOL = "Failed To Destroy The DerpStar";
+		if (m_pDerpStar->isVisible()) {
+			m_messageEOL = "Failed To Destroy The DerpStar";
 			endScene(KENDREASONLOSE);																	// Player has lost if derpstar is still alive when time runs out
 		}
 		else {
-			messageEOL = "You Win";
+			m_messageEOL = "You Win";
 			endScene(KENDREASONWIN);																		// Player stays playing for the length of time
 		}
 	}

@@ -21,6 +21,7 @@ public:
 	CREATE_FUNC(Level3);						// implement the "static create()" method manually
 
 private:
+
 	virtual void update(float dt);				// Update the level
 	virtual void endScene(EndReason endReason);	// Do level complete stuff
 

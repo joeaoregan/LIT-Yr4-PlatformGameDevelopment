@@ -22,18 +22,13 @@ public:
 
 	virtual void init(cocos2d::Size res);
 
-	virtual void spawnLaser();
-
-	//cocos2d::Sprite* canon1;
-	//cocos2d::Sprite* canon2;
-	//cocos2d::Sprite* canon3;
+	virtual void spawnLaser();							// Spawn lasers
 		
 private:
 	void initHealthBar(cocos2d::Size res);				// Initialise the healthbar
 	void addCanons();									// Add canons to the enemy ship
 	virtual void moveCanon();							// Apply actions to the canons (rotate them)
-
-
+	
 	cocos2d::Size screenSize;							// Screen resolution
 
 	float m_speedMin = 15.0f;							// Set the min duration to travel across screen (Speed = faster)

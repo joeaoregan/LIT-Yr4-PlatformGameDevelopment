@@ -19,11 +19,11 @@ unsigned int arrScores[MAX_SCORES_DISPLAYED + 1];								// Array of scores +1 f
 std::string arrNames[MAX_SCORES_DISPLAYED + 1];									// Array of names +1 for sorting
 
 Scene* HighScores::createScene() {
-	cocos2d::Scene* scene = Scene::create();		// 'scene' is an autorelease object, JOR replaced auto specifier
-	layer = HighScores::create();					// 'layer' is an autorelease object, JOR replaced auto specifier		
-	scene->addChild(layer);							// Add layer as a child to scene
+	cocos2d::Scene* scene = Scene::create();									// 'scene' is an autorelease object, JOR replaced auto specifier
+	m_pLayer = HighScores::create();												// 'layer' is an autorelease object, JOR replaced auto specifier		
+	scene->addChild(m_pLayer);														// Add layer as a child to scene
 		
-	return scene;									// Return the scene
+	return scene;																// Return the scene
 }
 
 // on "init" you need to initialize your instance
@@ -32,15 +32,15 @@ bool HighScores::init() {
 
 	//resetScores();															// Test resetting scores
 
-	titleSprite->setTexture("HighScores.png");									// Change the title image text
+	m_pTitleSprite->setTexture("HighScores.png");									// Change the title image text
 		
 	m_scoresStr = sortScores();													// set value for tempScore
 		
 	//m_allScoresLbl = cocos2d::Label::createWithTTF(tempScore->getCString(),	// Label to display current high score	
 	m_allScoresLbl = cocos2d::Label::createWithTTF(m_scoresStr ,
-		"fonts/Super Mario Bros..ttf", visibleSize.height * 0.06f);				// Label to display current high score (Label replaces LabelTTF causing warnings)
-	m_allScoresLbl->setPosition(Point(visibleSize.width * 0.5 + origin.x, 
-		visibleSize.height * 0.4f + origin.y));									// Set its position on screen
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.06f);				// Label to display current high score (Label replaces LabelTTF causing warnings)
+	m_allScoresLbl->setPosition(Point(m_visibleSize.width * 0.5 + m_origin.x, 
+		m_visibleSize.height * 0.4f + m_origin.y));									// Set its position on screen
 	m_allScoresLbl->setColor(Color3B::WHITE);									// Set the text colour
 	this->addChild(m_allScoresLbl);												// Add it to the layer
 
@@ -114,12 +114,12 @@ void HighScores::saveScores() {
 	// Set the new values in PlayerPrefs
 	for (int i = 1; i <= MAX_SCORES_DISPLAYED; i++) {
 		sprintf(scoreTxt, "Score%d", i);
-		def->setIntegerForKey(scoreTxt, arrScores[i - 1]);						// Write the ordered score back to PlayerPrefs
+		m_def->setIntegerForKey(scoreTxt, arrScores[i - 1]);						// Write the ordered score back to PlayerPrefs
 		sprintf(scoreTxt, "Name%d", i);
-		def->setStringForKey(scoreTxt, arrNames[i - 1]);						// and the player name
+		m_def->setStringForKey(scoreTxt, arrNames[i - 1]);						// and the player name
 	}
 
-	def->flush();
+	m_def->flush();
 }
 
 void HighScores::resetScores() {

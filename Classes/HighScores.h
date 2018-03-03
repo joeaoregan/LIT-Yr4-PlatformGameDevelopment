@@ -23,6 +23,7 @@ public:
 	std::string sortScores();					// Sort the high scores
 	void resetScores();							// Reset the scores
 	void saveScores();							// Save the names and scores to UserDefaults
+
 private:
 
 	// High Score

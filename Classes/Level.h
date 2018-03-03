@@ -47,53 +47,53 @@ public:
 	virtual void update(float dt);												// Update function
 	virtual void endScene(EndReason endReason);									// End the scene
 	virtual void checkCollisions();												// 20180202 Check is the game over or not
-    	
+	    	
     void menuCloseCallback(cocos2d::Ref* pSender);								// Selector callback, exit the game when button pressed
 	
 	void getInput();															// Get input from DPad
 	
 
-	virtual void checkGameOver(float currenTime);										// 20180202 Check have game objects collided with each other
+	virtual void checkGameOver(float currenTime);								// 20180202 Check have game objects collided with each other
 
 	void levelProgression(cocos2d::Label* continueLbl);							// Decide what scene comes next
 
 	// Callbacks
-	void restartTapped(Ref* pSender);
+	void restartTapped(cocos2d::Ref* pSender);
+	void goToStoryScreen(cocos2d::Ref* pSender);
+	/*
 	void startLevel2(Ref* pSender);												// 20180218 Progress to the next level
 	void startLevel3(Ref* pSender);
 	void startLevel4(Ref* pSender);
-	void returnToMenu(Ref* pSender);											// 20180218 Return to the main menu
+	*/
+	void returnToMenu(cocos2d::Ref* pSender);									// 20180218 Return to the main menu
 
 	float randomValueBetween(float low, float high);							// Select a random value from a given range
-	void setInvisible(Node * node);												// Hide the node/sprite
+	void setInvisible(cocos2d::Node * node);									// Hide the node/sprite
 		     
     CREATE_FUNC(Level);															// Create the level layer
 		
-	void onTouchesBegan(const std::vector<Touch*>& touches, Event  *event);
+	void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event  *event);
 
 	// Spawn game objects
 	void spawnObjects(float curTimeMillis);										// 20180202 Spawn asteroids
 	virtual void spawnEnemyShips(float curTimeMillis);							// 20180214 Spawn enemy ships (Changes in Level 4)
 	void spawnLasers(int amount);												// 20180221
-	//void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
-	//void spawnEnemyLaserAngled(cocos2d::Point a,cocos2d::Point b,float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
-
-	//void spawnEnemyLaserOrange(cocos2d::Point pos);
-	//void spawnEnemyLaserBlue(cocos2d::Point pos);
-	void spawnEnemyLaser(cocos2d::Point pos, int type = BLUE);
+	
+	void spawnEnemyLaser(cocos2d::Point pos, int type = BLUE);					// Spawn enemy lasers, default is blue laser
 
 	// Fire enemy lasers
 	//void enemyFireLaser(float curTimeMillis);
 
 	// Get / Set methods
-	Size getWinSize() { return winSize; }										// Get the window size
-	int getNextShipLaser() { return _nextShipLaser; }							// Next laser in laser list
+	//cocos2d::Size getWinSize() { return winSize; }							// Get the window size
+	int getNextShipLaser() const { return _nextShipLaser; }						// Next laser in laser list
 	void setNextShipLaser(int set) { _nextShipLaser = set; }					// Set the next laser in the list
-	Vector<Sprite*>* getLaserList() { return m_playerLaserList; }				// return ship lasers
+	cocos2d::Vector<cocos2d::Sprite*>* const getLaserList() { 
+		return m_playerLaserList; }												// return ship lasers list
 	
 	void initLives();															// Moved to Level base class to test all levels
 
-	void PowerUpCollision(PowerUp* powerUp);
+	void PowerUpCollision(PowerUp* powerUp);									// Check collision with power ups
 	
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
 	
@@ -104,7 +104,7 @@ protected:
 	cocos2d::Point origin;														// Screen origin point
 	
 	// Background
-	SpriteBatchNode *m_batchNode;												// Group nodes together for efficiency
+	cocos2d::SpriteBatchNode *m_batchNode;										// Group nodes together for efficiency
 	ParallaxNodeExtras *m_backgroundNode;										// Scrolling background
 
 	// Objects
@@ -127,16 +127,16 @@ protected:
 
 	// Power ups
 	//cocos2d::Sprite* m_powerUpLife;											// New life power up
-	PowerUp* m_powerUpLife;
-	PowerUp* m_powerUpWeapon;
+	PowerUp* m_pPowerUpLife;													// New life power up
+	PowerUp* m_pPowerUpWeapon;													// Weapon upgrade power up
 
 	//float m_powerUpTimeLife;
 	//float m_powerUpTimeWeapon;
 	//float powerUpY;
-	bool spawned = false;
+	bool spawned = false;														// Is the power up spawned already
 
 	// Asteroids
-	int m_nextAsteroid = 0;
+	int m_nextAsteroid = 0;														// Asteroid list index
 	float _nextAsteroidSpawn = 0;												// time to spawn next asteroid
 
 	// Enemies
@@ -149,12 +149,12 @@ protected:
 	int m_nextEnemyLaser = 0;													// Enemy laser list index
 
 	// Object lists
-	Vector<Asteroid*> * m_asteroidsList;										// List of asteroids
-	Vector<EnemyShip*> * m_enemyShipList;										// List of enemy ships
-	Vector<Sprite*> *m_playerLaserList;											// List of player lasers
-	Vector<Sprite*> *m_enemyLaserList1;											// List of Enemylasers
-	Vector<Sprite*> *m_enemyLaserList2;											// List of lasers for 2nd enemy
-	Vector<Sprite*> *m_enemyLaserList3;											// List of lasers for 3rd enemy
+	cocos2d::Vector<Asteroid*> * m_asteroidsList;								// List of asteroids
+	cocos2d::Vector<EnemyShip*> * m_enemyShipList;								// List of enemy ships
+	cocos2d::Vector<cocos2d::Sprite*> *m_playerLaserList;						// List of player lasers
+	cocos2d::Vector<cocos2d::Sprite*> *m_enemyLaserList1;						// List of Enemylasers
+	cocos2d::Vector<cocos2d::Sprite*> *m_enemyLaserList2;						// List of lasers for 2nd enemy
+	cocos2d::Vector<cocos2d::Sprite*> *m_enemyLaserList3;						// List of lasers for 3rd enemy
 	
 	// Player fire rate
 	float m_nextFire;

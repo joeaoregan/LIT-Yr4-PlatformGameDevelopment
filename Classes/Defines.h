@@ -60,7 +60,7 @@
 #define MAX_ENEMY_SHIP1_LIVES 3.0f							// EnemyShip 
 #define MAX_ENEMY_SHIP2_LIVES 4.0f							// EnemyShipKling
 #define MAX_ENEMY_SHIP3_LIVES 5.0f							// EnemyShipWilknot
-#define MAX_ENEMY_SHIP4_LIVES 40.0f							// EnemyShipDerpStar
+#define MAX_ENEMY_SHIP4_LIVES 80.0f							// EnemyShipDerpStar
 #define ENEMY_FIRE_RATE 500.0f								// Time between laser spawns
 
 // Player
@@ -74,6 +74,9 @@
 
 // Menus
 #define TRANSITION_TIME 0.5									// Transition time between sceness
+
+#define DISPLAY_TIME_SPLASH_SCENE 2							// Time to display the spash scene for
+#define DISPLAY_TIME_SPLASH_STORY 10						// Time to display the story between levels
 
 // Types etc.
 enum difficulty { EASY, MEDIUM, HARD };

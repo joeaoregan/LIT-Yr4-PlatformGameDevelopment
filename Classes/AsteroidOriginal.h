@@ -17,7 +17,7 @@
 class AsteroidOriginal : public Asteroid {
 public:
 
-	static AsteroidOriginal* create(cocos2d::Size res);
+	static AsteroidOriginal* create(cocos2d::Size res);	// Creat the asteroid
 		
 	virtual void update(float dt) {};					// Update not necessary
 };

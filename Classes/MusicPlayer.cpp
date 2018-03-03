@@ -5,6 +5,7 @@
 
 	Controls for background music
 	Child class of cocos2d::Node
+	Forwards, backwards, play, and pause
 */
 
 #include "MusicPlayer.h"
@@ -97,7 +98,7 @@ void MusicPlayer::update() {
 	}
 }
 
-cocos2d::MenuItemImage *MusicPlayer::getButton(int button){
+cocos2d::MenuItemImage *MusicPlayer::getButton(int button) const {
 	cocos2d::MenuItemImage *result;
     switch (button) {
 		case 1: result = MusicPlayer::m_playImg; break;		// play music

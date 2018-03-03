@@ -43,7 +43,7 @@ const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.
 std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, guitar solo by Jimmy" };
 
 void Audio::init() {
-	currentVol = 1.0f;
+	m_currentVol = 1.0f;
 
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 	if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())						// If the background music isn't already playing
@@ -110,23 +110,23 @@ void Audio::skipTrackBackwards() {
 
 void Audio::musicVolIncrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
-	if (currentVol < MAX_VOL)
-		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol + 0.1f);
+	if (m_currentVol < MAX_VOL)
+		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(m_currentVol + 0.1f);
 }
 void Audio::musicVolDecrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
-	if (currentVol > MIN_VOL)
-		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(currentVol - 0.1f);
+	if (m_currentVol > MIN_VOL)
+		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(m_currentVol - 0.1f);
 }
 void Audio::sfxVolIncrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
-	if (currentVol < MAX_VOL)
-		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol + 0.1f);
+	if (m_currentVol < MAX_VOL)
+		SimpleAudioEngine::getInstance()->setEffectsVolume(m_currentVol + 0.1f);
 }
 void Audio::sfxVolDecrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
-	if (currentVol > MIN_VOL)
-		SimpleAudioEngine::getInstance()->setEffectsVolume(currentVol - 0.1f);
+	if (m_currentVol > MIN_VOL)
+		SimpleAudioEngine::getInstance()->setEffectsVolume(m_currentVol - 0.1f);
 }
 
 std::string Audio::getTrackName() {

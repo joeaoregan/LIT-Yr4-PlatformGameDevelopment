@@ -24,60 +24,44 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	if (eship && eship->initWithFile("ShipGrey.png")) {
 		eship->autorelease();
 
-		eship->setVisible(false);
-		eship->setScale(scale);													// Scale down the size for PC
-		eship->screenSize = res;
+		eship->setVisible(false);															// Initially invisible until spawned
+		eship->setScale(scale);																// Scale down the size for PC
+		eship->m_screenSize = res;															// Store the screen size
 
 		/* Different */
 		// Set the lives
-		eship->m_totalLives = MAX_ENEMY_SHIP3_LIVES;
-		eship->m_lives = eship->m_totalLives;
+		eship->m_totalLives = MAX_ENEMY_SHIP3_LIVES;										// Total lives
+		eship->m_lives = eship->m_totalLives;												// Current lives
 
-		eship->m_fireRate = 800;
-		eship->m_dy = 0.375f * scale;
+		eship->m_fireRate = 800;															// Fire rate
+
+		if (Game::Instance()->getDifficulty() == EASY) eship->m_fireRate += 100;			// Slow down fire rate
+		else if (Game::Instance()->getDifficulty() == EASY) eship->m_fireRate -= 100;		// Slow down fire rate
+
+		eship->m_dy = 0.375f * scale;														// Offset the laser firing
 		eship->m_dx = -0.33f * scale;
 
 		// Use to set spawn duration this gives slower time to travel across screen
-		eship->m_speedMin = 17.0f;
+		eship->m_speedMin = 17.0f;															// Duration to travel across screen
 		eship->m_speedMax = 20.0f;
 
-		cocos2d::Color4F redBR(0.52f, 0.52f, 0.52f, 1);
-		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
+		cocos2d::Color4F redBR(0.52f, 0.52f, 0.52f, 1);										// Healthbar foreground colour
+		cocos2d::Color4F transBR(1, 0, 0, 0.5f);											//  Background colour
 
-		eship->m_bar = HealthBar::create(
+		eship->m_pBar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), 
-			eship->getPosition().y + eship->getContentSize().height,			// Position
-			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,		// Dimensions
-			float(eship->getLives() / eship->m_totalLives),						// percentage (Max 5 lives)
+			eship->getPosition().y + eship->getContentSize().height,						// Position
+			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,					// Dimensions
+			float(eship->getLives() / eship->m_totalLives),									// percentage (Max 5 lives)
 			redBR, transBR);
-		eship->addChild(eship->m_bar);
+		eship->addChild(eship->m_pBar);
 
-		eship->canon = Sprite::create("DoubleCanon.png");
-		//eship->canon->setPosition(cocos2d::Point(eship->getPosition().x, eship->getPosition().y));
-		eship->canon->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, eship->getContentSize().height / 2));
-		//eship->addChild(eship->canon);
+		// Create the ships canon
+		eship->m_pCanon1 = Sprite::create("DoubleCanon.png");
+		eship->m_pCanon1->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, 
+			eship->getContentSize().height / 2));
 
-		eship->moveCanon();
-
-		/*
-		// Put in update
-
-		float angle = 45.0f;
-		eship->targetX = res.width;
-		eship->targetY = res.height;
-
-		auto func = CallFunc::create(
-			float x = eship->canon->getPosition().x;
-			float y = eship->canon->getPosition().y;
-			[&]() {
-			Level::Instance()->spawnEnemyLaserAngled(Point(x, y), 
-				cocos2d::Point(eship->canon->getPosition().x + eship->targetX, eship->canon->getPosition().y + eship->targetY), 45.0f);
-		});
-
-
-		auto sequence = Sequence::create(action, func, nullptr);
-		*/
-		
+		eship->moveCanon();																	// Move the canon
 	}
 	else {
 		delete eship;
@@ -86,28 +70,32 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	return eship;
 }
 
+/*
+	Move the canon weapon (doesn't fire yet
+*/
 void EnemyShipWilKnot::moveCanon() {
 	float angle = 360.0f;
-	auto action = RotateBy::create(5.0f, angle);
-	auto repeat = RepeatForever::create(action);
-	canon->runAction(repeat);
+	auto action = cocos2d::RotateBy::create(5.0f, angle);
+	auto repeat = cocos2d::RepeatForever::create(action);
+	m_pCanon1->runAction(repeat);
 
-	addChild(canon);
+	addChild(m_pCanon1);
 }
 
+/*
+	Update the enemy ship
+*/
 void EnemyShipWilKnot::update(float curTimeMillis) {
-	if (isVisible() && getPosition().x < screenSize.width - getContentSize().width) {
+	if (isVisible() && getPosition().x < m_screenSize.width - getContentSize().width) {
 		if (curTimeMillis > m_nextFire) {
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y + (getContentSize().height * m_dy)), GREEN2);
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y), GREEN1);
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx),
+			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y - (getContentSize().height * m_dy)), GREEN3);
 
 			m_nextFire = curTimeMillis + m_fireRate;
 		}
 	}
-
-	//EnemyShip::update(curTimeMillis);											// Next fire time set here, not need to set twice, will cancel second laser
 }

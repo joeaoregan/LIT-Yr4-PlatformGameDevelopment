@@ -16,7 +16,7 @@ DPad::DPad(){}				// Constructor
 DPad::~DPad() {}			// Destructor
 
 bool DPad::init(cocos2d::Layer *layer) {	
-	visibleSize = Director::getInstance()->getVisibleSize();
+	m_visibleSize = Director::getInstance()->getVisibleSize();
 	/*
 	// If the target platform is a mobile device (android in this case)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) {
@@ -45,32 +45,32 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
 		//int scaleDown = (controller->visibleSize.height == 1080) ? 1.0f : 0.67f;
         controller->autorelease();					// Set to autorelease
 
-        controller->bg = Sprite::create(base);		// Set the background image
-        controller->bg->setPosition(position);		// Set the background position
-        controller->addChild(controller->bg,100);	// Add as child of bg
-        controller->up = MenuItemImage::create(buttonImage,pressedButtonImage);		// Create up arrow menu item
-        controller->down = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create down arrow menu item
-		controller->left = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create left arrow menu item
-		controller->right = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create right arrow menu item
+        controller->m_pBGSprite = Sprite::create(base);		// Set the background image
+        controller->m_pBGSprite->setPosition(position);		// Set the background position
+        controller->addChild(controller->m_pBGSprite,100);	// Add as child of bg
+        controller->m_pUpItem = MenuItemImage::create(buttonImage,pressedButtonImage);		// Create up arrow menu item
+        controller->m_pDownItem = MenuItemImage::create(buttonImage,pressedButtonImage);	// Create down arrow menu item
+		controller->m_pLeftItem = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create left arrow menu item
+		controller->m_pRightItem = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create right arrow menu item
 
-		controller->aBtn = MenuItemImage::create("btnA.png", "btnASelect.png");		// Create A button menu item
-		controller->bBtn = MenuItemImage::create("btnB.png", "btnBSelect.png");		// Create B button menu item
+		controller->m_pABtnItem = MenuItemImage::create("btnA.png", "btnASelect.png");		// Create A button menu item
+		controller->m_pBBtnItem = MenuItemImage::create("btnB.png", "btnBSelect.png");		// Create B button menu item
 
 		// Set positions and rotations
-        controller->up->setPosition(Point(controller->bg->getPosition().x, controller->bg->getPosition().y + controller->bg->getContentSize().height * 0.6f - controller->up->getContentSize().height/2));
-        controller->down->setPosition(Point(controller->bg->getPosition().x,controller->bg->getPosition().y - controller->bg->getContentSize().height * 0.6f + controller->down->getContentSize().height/2));
-		controller->right->setPosition(Point(controller->bg->getPosition().x + controller->bg->getContentSize().width * 0.6f - controller->down->getContentSize().height / 2, controller->bg->getPosition().y));
-		controller->left->setPosition(Point(controller->bg->getPosition().x - controller->bg->getContentSize().width * 0.6f + controller->down->getContentSize().height / 2, controller->bg->getPosition().y));
+        controller->m_pUpItem->setPosition(Point(controller->m_pBGSprite->getPosition().x, controller->m_pBGSprite->getPosition().y + controller->m_pBGSprite->getContentSize().height * 0.6f - controller->m_pUpItem->getContentSize().height/2));
+        controller->m_pDownItem->setPosition(Point(controller->m_pBGSprite->getPosition().x,controller->m_pBGSprite->getPosition().y - controller->m_pBGSprite->getContentSize().height * 0.6f + controller->m_pDownItem->getContentSize().height/2));
+		controller->m_pRightItem->setPosition(Point(controller->m_pBGSprite->getPosition().x + controller->m_pBGSprite->getContentSize().width * 0.6f - controller->m_pDownItem->getContentSize().height / 2, controller->m_pBGSprite->getPosition().y));
+		controller->m_pLeftItem->setPosition(Point(controller->m_pBGSprite->getPosition().x - controller->m_pBGSprite->getContentSize().width * 0.6f + controller->m_pDownItem->getContentSize().height / 2, controller->m_pBGSprite->getPosition().y));
 
-		controller->aBtn->setPosition(Point(visibleSize.width * 0.8f, position.y - (controller->bBtn->getContentSize().height / 2)));
-		controller->bBtn->setPosition(Point(visibleSize.width * 0.9f, position.y + (controller->bBtn->getContentSize().height / 2)));
+		controller->m_pABtnItem->setPosition(Point(visibleSize.width * 0.8f, position.y - (controller->m_pBBtnItem->getContentSize().height / 2)));
+		controller->m_pBBtnItem->setPosition(Point(visibleSize.width * 0.9f, position.y + (controller->m_pBBtnItem->getContentSize().height / 2)));
 
-        controller->right->setRotation(90);
-        controller->down->setRotation(180);
-        controller->left->setRotation(-90);
+        controller->m_pRightItem->setRotation(90);
+        controller->m_pDownItem->setRotation(180);
+        controller->m_pLeftItem->setRotation(-90);
 		//controller->setScale(scaleDown);
 
-        Menu *menu = Menu::create(controller->up,controller->down,controller->left, controller->right, controller->aBtn, controller->bBtn, NULL);
+        Menu *menu = Menu::create(controller->m_pUpItem,controller->m_pDownItem,controller->m_pLeftItem, controller->m_pRightItem, controller->m_pABtnItem, controller->m_pBBtnItem, NULL);
         menu->setPosition(Point(0,0));
         controller->addChild(menu, 120);
         // assign color value
@@ -87,12 +87,12 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
 MenuItemImage *DPad::getButton(int button){
     MenuItemImage *result;
     switch (button) {
-        case 8: result = DPad::up; break;		// Move up
-        case 2: result = DPad::down; break;		// Move down
-        case 6: result = DPad::right; break;	// Move left
-		case 4: result = DPad::left; break;		// Move right
-		case 10: result = DPad::aBtn; break;	// Move button A
-		case 11: result = DPad::bBtn; break;	// Move button B
+        case 8: result = DPad::m_pUpItem; break;		// Move up
+        case 2: result = DPad::m_pDownItem; break;		// Move down
+        case 6: result = DPad::m_pRightItem; break;	// Move left
+		case 4: result = DPad::m_pLeftItem; break;		// Move right
+		case 10: result = DPad::m_pABtnItem; break;	// Move button A
+		case 11: result = DPad::m_pBBtnItem; break;	// Move button B
         default: break;
     }
 
@@ -103,24 +103,24 @@ void DPad::setCorner(int corner){
     Point position;
 	switch (corner) {
 		case 1:
-            position = Point(bg->getContentSize().width/2, Director::getInstance()->getWinSize().height - bg->getContentSize().height/2);
+            position = Point(m_pBGSprite->getContentSize().width/2, Director::getInstance()->getWinSize().height - m_pBGSprite->getContentSize().height/2);
 			break;
 		case 2:
-            position = Point(Director::getInstance()->getWinSize().width - bg->getContentSize().width/2,Director::getInstance()->getWinSize().height - bg->getContentSize().height/2);
+            position = Point(Director::getInstance()->getWinSize().width - m_pBGSprite->getContentSize().width/2,Director::getInstance()->getWinSize().height - m_pBGSprite->getContentSize().height/2);
 			break;
 		case 3:
-			position = Point(bg->getContentSize().width/2,bg->getContentSize().height/2);
+			position = Point(m_pBGSprite->getContentSize().width/2,m_pBGSprite->getContentSize().height/2);
 			break;
 		case 4:
-			position = Point(Director::getInstance()->getWinSize().width - bg->getContentSize().width/2,bg->getContentSize().height/2);
+			position = Point(Director::getInstance()->getWinSize().width - m_pBGSprite->getContentSize().width/2,m_pBGSprite->getContentSize().height/2);
 			break;
 		default:
 			break;
 	}
 
-	bg->setPosition(position);
-	up->setPosition(Point(bg->getPosition().x,bg->getPosition().y + bg->getContentSize().height/2 - up->getContentSize().height/2));
-	down->setPosition(Point(bg->getPosition().x,bg->getPosition().y - bg->getContentSize().height/2 + down->getContentSize().height/2));
-	right->setPosition(Point(bg->getPosition().x + bg->getContentSize().width/2 - right->getContentSize().width/2,bg->getPosition().y));
-	left->setPosition(Point(bg->getPosition().x - bg->getContentSize().width/2 + left->getContentSize().width/2,bg->getPosition().y));
+	m_pBGSprite->setPosition(position);
+	m_pUpItem->setPosition(Point(m_pBGSprite->getPosition().x,m_pBGSprite->getPosition().y + m_pBGSprite->getContentSize().height/2 - m_pUpItem->getContentSize().height/2));
+	m_pDownItem->setPosition(Point(m_pBGSprite->getPosition().x,m_pBGSprite->getPosition().y - m_pBGSprite->getContentSize().height/2 + m_pDownItem->getContentSize().height/2));
+	m_pRightItem->setPosition(Point(m_pBGSprite->getPosition().x + m_pBGSprite->getContentSize().width/2 - m_pRightItem->getContentSize().width/2,m_pBGSprite->getPosition().y));
+	m_pLeftItem->setPosition(Point(m_pBGSprite->getPosition().x - m_pBGSprite->getContentSize().width/2 + m_pLeftItem->getContentSize().width/2,m_pBGSprite->getPosition().y));
 }

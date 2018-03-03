@@ -24,64 +24,64 @@ class MenuScene : public cocos2d::Layer
 {
 public:
 	static MenuScene* Layer() {
-		if (layer == 0) {
-			layer = new MenuScene();
-			return layer;
+		if (m_pLayer == 0) {
+			m_pLayer = new MenuScene();
+			return m_pLayer;
 		}
-		return layer;
+		return m_pLayer;
 	}
 
-	static cocos2d::Scene* createScene();		// Returns class instance pointer
+	static cocos2d::Scene* createScene();							// Returns class instance pointer
 		
-	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
-	virtual void update(float dt);				// Update the menu
+	virtual bool init();											// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
+	virtual void update(float dt);									// Update the menu
 		
-	CREATE_FUNC(MenuScene);						// Static create() method implemented manually
-	
-	// Screen size
-	cocos2d::Size visibleSize;					// Visible screen size for the current platform
-	cocos2d::Vec2 origin;						// Screen origin point
-	float scale = 0.67f;						// Scale images with screen resolution
-
-	// Menu Buttons
-	cocos2d::Menu* menu;						// Button 1 start the game
-
+	CREATE_FUNC(MenuScene);											// Static create() method implemented manually
+		
 	// Callbacks
-	void menuCloseCallback(Ref* pSender);		// Exit the game
-	void GoToEnterName(cocos2d::Ref *sender);	// Go to the enter name scene
-	void returnToMenu(cocos2d::Ref *sender);	// Return to the MainMenu
-
-	// Sprites
-	cocos2d::Sprite* backgroundSprite;			// Background image
-	cocos2d::Sprite* gameTitleSprite;			// Game title image
-	cocos2d::Sprite* titleSprite;				// Scene title image
-
-	static MenuScene* layer;					// Layer
-
-	// Player Name
-	cocos2d::UserDefault* def;					// UserDefault used to save and load variables
-	cocos2d::Label* changeNameLbl; 
-	std::string currentPlayerName;
-	// Menu Buttons
-	cocos2d::MenuItemImage* btnBackImg;			// Set image for Back Button menu option
-	cocos2d::MenuItemLabel* currentPlayerLbl;	// Player name text changes scene to enter name scene when pressed
-	cocos2d::MenuItemImage* closeItem;			// Close button, bottom right corner
-
-	//cocos2d::DrawNode* createStatusBar(int x, int y, int w, int h, float percent, cocos2d::Color4F FG, cocos2d::Color4F BG);
+	void menuCloseCallback(Ref* pSender);							// Exit the game
+	void GoToEnterName(cocos2d::Ref *sender);						// Go to the enter name scene
+	void returnToMenu(cocos2d::Ref *sender);						// Return to the MainMenu
 
 	// Keyboard button highlight
-	void nextButton();
-	void prevButton();
+	void nextButton();												// Go to next button
+	void prevButton();												// Go to previous button
 	
 protected:
-	void setYPosAndScale(cocos2d::Sprite* sprite, float y);
-	void setYPosAndScale(cocos2d::MenuItemImage* sprite, float y);
 
-	unsigned int m_totalButtons;
-	unsigned int m_currentBtn = 1;
+	static MenuScene* m_pLayer;										// Statpic pointer to the Layer
 
-	float nextBtnTime;
-	float buttonRate = 300.0f;
+	// Screen size
+	cocos2d::Size m_visibleSize;									// Visible screen size for the current platform
+	cocos2d::Vec2 m_origin;											// Screen origin point
+	float m_scale = 0.67f;											// Scale images with screen resolution
+
+	// Player Name
+	cocos2d::UserDefault* m_def;									// UserDefault used to save and load variables
+	cocos2d::Label* m_changeNameLbl;								// Player name label
+	std::string m_currentPlayerName;								// Players name text
+
+	// Sprites
+	cocos2d::Sprite* m_pBackgroundSprite;							// Background image
+	cocos2d::Sprite* m_pGameTitleSprite;							// Game title image
+	cocos2d::Sprite* m_pTitleSprite;								// Scene title image
+
+	cocos2d::MenuItemImage* m_pBtnBackImg;							// Set image for Back Button menu option
+	cocos2d::MenuItemLabel* m_pCurrentPlayerLbl;					// Player name text changes scene to enter name scene when pressed
+	cocos2d::MenuItemImage* m_pCloseItem;							// Close button, bottom right corner
+
+	void setYPosAndScale(cocos2d::Sprite* sprite, float y);			// Set objects position and scale
+	void setYPosAndScale(cocos2d::MenuItemImage* sprite, float y);	// Set position and scale for multiple objects
+
+	unsigned int m_totalButtons;									// Total number of buttons in the scene
+	unsigned int m_currentBtn = 1;									// Current selected button
+
+	// Keyboard
+	float m_nextBtnTime;											// Time to next button press (keyboard)
+	float m_buttonRate = 300.0f;									// The time between button presses		
+
+	// Menu Buttons
+	cocos2d::Menu* menu;											// Button 1 start the game
 };
 
 #endif // __MENU_H__

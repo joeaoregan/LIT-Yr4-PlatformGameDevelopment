@@ -18,24 +18,24 @@ class HealthBar : public cocos2d::DrawNode {
 public:
 	static HealthBar* create(int x, int y, int w, int h, float pc, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor, bool showLabel = false);
 
-	void updateBar(float percent);
+	void updateBar(float percent);							// Update the health bar
 
-	void setLabelTag(std::string set) { labelTag = set; }
+	void setLabelTag(std::string set) { m_labelTag = set; }	// Update the bar label text
 
 private:
-	float percent;
+	float m_percent;										// Health bar percentage
 
-	float width, height;
+	float m_width, m_height;								// Health bar dimensions
 
-	cocos2d::Vec2 foregroundRect[4];
+	cocos2d::Vec2 m_foregroundRect[4];						// Foreground rectangle scaled to show percentage
 
-	cocos2d::DrawNode* rectNode;
-	cocos2d::DrawNode* frontNode;
+	cocos2d::DrawNode* m_pRectNode;							// Background rectangle
+	cocos2d::DrawNode* m_pFrontNode;						// Foreground rectangle
 
-	cocos2d::Label* percentLbl;
-
-	bool labelPresent;
-	std::string labelTag = "Percent: ";
+	// Label
+	cocos2d::Label* m_pPercentLbl;							// Show the percentage in text
+	bool m_labelPresent;									// Is a label being used on the health bar
+	std::string m_labelTag = "Percent: ";					// String used to set the label
 };
 
 

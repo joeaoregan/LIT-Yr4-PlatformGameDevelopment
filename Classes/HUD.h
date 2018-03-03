@@ -7,6 +7,7 @@
 	Heads up display
 	Shows level number, score, and time remaining each level
 */
+
 #ifndef __HUD__
 #define __HUD__
 
@@ -46,25 +47,25 @@ public:
 	void setLevelLabel();											// Update the level number for levels after 1
 
 private:
-	cocos2d::Size visibleSize;										// Screen resolution changes depending on the platform
+	cocos2d::Size m_visibleSize;									// Screen resolution changes depending on the platform
 
-	static HUD* s_pInstance;										// Single instance of HUD used as singleton, so only one instance exists thoughout the game
+	static HUD* s_pInstance;										// Static pointer for single instance of HUD used as singleton, so only one instance exists thoughout the game
 	
-	cocos2d::Label *levelLabel;										// Display the current level
-	cocos2d::Label *scoreLabel;										// Display the current score
-	cocos2d::Label *timeLabel;										// Display the time remaining
+	cocos2d::Label *m_pLevelLabel;									// Display the current level
+	cocos2d::Label *m_pScoreLabel;									// Display the current score
+	cocos2d::Label *m_pTimeLabel;									// Display the time remaining
 
-	cocos2d::MenuItemImage* closeItem;								// Exit button in bottom right corner
-	cocos2d::MenuItemImage* menuItem;								// Menu sprite
-	cocos2d::Menu* menuClose;										// Menu items
+	cocos2d::MenuItemImage* m_pCloseItem;							// Exit button in bottom right corner
+	cocos2d::MenuItemImage* m_pMenuItem;							// Menu sprite
+	cocos2d::Menu* m_pMenuClose;									// Menu items
 
 	// Lives
-	cocos2d::Sprite *playerLife;									// Indicate lives left
-	cocos2d::Sprite* livesList[MAX_PLAYER_LIVES];					// List of lives
+	cocos2d::Sprite *m_pPlayerLife;									// Indicate lives left
+	cocos2d::Sprite* m_pLivesList[MAX_PLAYER_LIVES];				// List of lives
 
 	// Time
-	float currentTime;												// 20180221 Change to float to fix Android timer issue
-	unsigned int time;												// Countdown timer displayed time
+	float m_currentTime;											// 20180221 Change to float to fix Android timer issue
+	unsigned int m_time;											// Countdown timer displayed time
 };
 
 #endif // __AUDIO__

@@ -24,7 +24,7 @@ AsteroidOriginal* AsteroidOriginal::create(cocos2d::Size res) {
 		asteroid->autorelease();
 
 		asteroid->m_winSize = res;										// Store the screen size (future use)
-		asteroid->m_type = DYNAMIC_ROID;								// Set the asteroid type
+		//asteroid->m_type = DYNAMIC_ROID;								// Set the asteroid type
 		asteroid->setVisible(false);									// Set invisible to begin with
 		asteroid->setScale(scale);										// Scale down the size for PC
 		//asteroid->m_duration = Level::Instance()->randomValueBetween(asteroid->m_speedMin, asteroid->m_speedMax);

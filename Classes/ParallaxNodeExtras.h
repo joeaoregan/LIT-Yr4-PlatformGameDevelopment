@@ -14,10 +14,10 @@ public:
 		
 	void incrementOffset(cocos2d::Point offset, cocos2d::Node* node);	// Facility method (it’s expected to have it soon in COCOS2DX)
 
-	bool init();
-	void update(float dt);
+	bool init();														// Initialise the background
+	void update(float dt);												// Update the background
 
 private:
-	cocos2d::Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;
+	cocos2d::Sprite *_spaceDust1, *_spaceDust2, *_planetSunrise;		// Background sprites
 	cocos2d::Sprite *_galaxy, *_spatialAnomaly1, *_spatialAnomaly2;
 };

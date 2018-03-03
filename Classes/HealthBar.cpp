@@ -13,53 +13,53 @@
 HealthBar* HealthBar::create(int x, int y, int w, int h, float pc, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor, bool showLabel) {
 	HealthBar* hbar = new HealthBar();
 	hbar->autorelease();
-	hbar->width = w;
-	hbar->height = h;
+	hbar->m_width = w;
+	hbar->m_height = h;
 
-	hbar->labelPresent = showLabel;
+	hbar->m_labelPresent = showLabel;
 
 	if (true) {
-		hbar->percent = (pc > 1.0f) ? 1.0f : (pc < 0.0f) ? 0.0f : pc;					// If greater than 1 set to 1, if minus set to 0
+		hbar->m_percent = (pc > 1.0f) ? 1.0f : (pc < 0.0f) ? 0.0f : pc;					// If greater than 1 set to 1, if minus set to 0
 
-		hbar->rectNode = cocos2d::DrawNode::create();									// Create the nodes needed
-		hbar->frontNode = cocos2d::DrawNode::create();
+		hbar->m_pRectNode = cocos2d::DrawNode::create();									// Create the nodes needed
+		hbar->m_pFrontNode = cocos2d::DrawNode::create();
 
 		cocos2d::Color4F white(1, 1, 1, 1);												// Border colour
 		cocos2d::Vec2 backgroundRect[4];												// Background polygon, transparent red
 
 		// Create the background polygon
-		backgroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
-		backgroundRect[1] = cocos2d::Vec2(hbar->width / 2, -hbar->height / 2);
-		backgroundRect[2] = cocos2d::Vec2(hbar->width / 2, hbar->height / 2);
-		backgroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
+		backgroundRect[0] = cocos2d::Vec2(-hbar->m_width / 2, -hbar->m_height / 2);
+		backgroundRect[1] = cocos2d::Vec2(hbar->m_width / 2, -hbar->m_height / 2);
+		backgroundRect[2] = cocos2d::Vec2(hbar->m_width / 2, hbar->m_height / 2);
+		backgroundRect[3] = cocos2d::Vec2(-hbar->m_width / 2, hbar->m_height / 2);
 			
 		// Create the points for the foreground shape
-		hbar->foregroundRect[0] = cocos2d::Vec2(-hbar->width / 2, -hbar->height / 2);
-		hbar->foregroundRect[1] = cocos2d::Vec2((-hbar->width / 2) + 
-			(hbar->width  * hbar->percent), -hbar->height / 2);
-		hbar->foregroundRect[2] = cocos2d::Vec2((-hbar->width / 2) + 
-			(hbar->width  * hbar->percent), hbar->height / 2);
-		hbar->foregroundRect[3] = cocos2d::Vec2(-hbar->width / 2, hbar->height / 2);
+		hbar->m_foregroundRect[0] = cocos2d::Vec2(-hbar->m_width / 2, -hbar->m_height / 2);
+		hbar->m_foregroundRect[1] = cocos2d::Vec2((-hbar->m_width / 2) + 
+			(hbar->m_width  * hbar->m_percent), -hbar->m_height / 2);
+		hbar->m_foregroundRect[2] = cocos2d::Vec2((-hbar->m_width / 2) + 
+			(hbar->m_width  * hbar->m_percent), hbar->m_height / 2);
+		hbar->m_foregroundRect[3] = cocos2d::Vec2(-hbar->m_width / 2, hbar->m_height / 2);
 
 		// Draw the polygons and set their positions
-		hbar->rectNode->drawPolygon(backgroundRect, 4, BGColor, 1, white);
-		hbar->frontNode->drawPolygon(hbar->foregroundRect, 4, FGColor, 1, white);
-		hbar->rectNode->setPosition(cocos2d::Point(x, y));
-		hbar->frontNode->setPosition(cocos2d::Point(x - 
-			hbar->rectNode->getContentSize().width + hbar->frontNode->getContentSize().width, y));
+		hbar->m_pRectNode->drawPolygon(backgroundRect, 4, BGColor, 1, white);
+		hbar->m_pFrontNode->drawPolygon(hbar->m_foregroundRect, 4, FGColor, 1, white);
+		hbar->m_pRectNode->setPosition(cocos2d::Point(x, y));
+		hbar->m_pFrontNode->setPosition(cocos2d::Point(x - 
+			hbar->m_pRectNode->getContentSize().width + hbar->m_pFrontNode->getContentSize().width, y));
 
 		// Add the nodes
-		hbar->addChild(hbar->rectNode);
-		hbar->addChild(hbar->frontNode);
+		hbar->addChild(hbar->m_pRectNode);
+		hbar->addChild(hbar->m_pFrontNode);
 		
 		// Create a label in the status bar
 		if (showLabel) {
-			hbar->percentLbl = cocos2d::Label::createWithTTF(hbar->labelTag +
-				cocos2d::StringUtils::toString((int)(hbar->percent * 100)) + "%",
+			hbar->m_pPercentLbl = cocos2d::Label::createWithTTF(hbar->m_labelTag +
+				cocos2d::StringUtils::toString((int)(hbar->m_percent * 100)) + "%",
 				"fonts/Super Mario Bros..ttf", h * 1.0f);
-			hbar->percentLbl->setColor(cocos2d::Color3B::WHITE);
-			hbar->percentLbl->setPosition(cocos2d::Point(x, y));
-			hbar->addChild(hbar->percentLbl);
+			hbar->m_pPercentLbl->setColor(cocos2d::Color3B::WHITE);
+			hbar->m_pPercentLbl->setPosition(cocos2d::Point(x, y));
+			hbar->addChild(hbar->m_pPercentLbl);
 		}
 	}
 
@@ -67,13 +67,13 @@ HealthBar* HealthBar::create(int x, int y, int w, int h, float pc, cocos2d::Colo
 }
 
 void HealthBar::updateBar(float percent) {
-	frontNode->setScaleX(percent);
+	m_pFrontNode->setScaleX(percent);
 
-	frontNode->setPosition(cocos2d::Point(rectNode->getPosition().x - (width/2) + (width/2 * percent), frontNode->getPosition().y));
+	m_pFrontNode->setPosition(cocos2d::Point(m_pRectNode->getPosition().x - (m_width/2) + (m_width/2 * percent), m_pFrontNode->getPosition().y));
 
 	//if (percentLbl->isVisible())
 	//if (isVisible())
 	//if (percentLbl)
-	if (labelPresent)
-		percentLbl->setString(labelTag + cocos2d::StringUtils::toString((int)(percent * 100)) + "%");	// Null pointer error -> no labels on some, only update the ones that do
+	if (m_labelPresent)
+		m_pPercentLbl->setString(m_labelTag + cocos2d::StringUtils::toString((int)(percent * 100)) + "%");	// Null pointer error -> no labels on some, only update the ones that do
 }

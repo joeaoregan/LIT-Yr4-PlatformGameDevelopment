@@ -13,6 +13,7 @@
 
 #include "Game.h"
 #include "MainMenu.h"
+#include "StoryScene.h"
 #include "Level1.h"								// Menu Item: Start game WAS LEVEL1
 #include "HighScores.h"							// Menu Item: High Scores
 #include "EnterName.h"							// Accessed by selecting current player menu text item
@@ -22,8 +23,8 @@
 
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
-	layer = MainMenu::create();					// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
-	scene->addChild(layer);						// Add layer as a child to scene
+	m_pLayer = MainMenu::create();					// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
+	scene->addChild(m_pLayer);						// Add layer as a child to scene
 		
 	return scene;								// Return the scene
 }
@@ -35,64 +36,64 @@ bool MainMenu::init() {
 	/********************************************/
 	/*		1. Make changes to base class		*/
 	/********************************************/
-	titleSprite->setTexture("MainMenu.png");	// Change the title image text
-	btnBackImg->setVisible(false);				// Hide back to main menu button, not needed
-	MenuScene::closeItem->setVisible(false);	// Hide close button
+	m_pTitleSprite->setTexture("MainMenu.png");	// Change the title image text
+	m_pBtnBackImg->setVisible(false);				// Hide back to main menu button, not needed
+	MenuScene::m_pCloseItem->setVisible(false);	// Hide close button
 
 	/********************************************/
 	//		2. Scene Specific Additions			*/
 	/********************************************/
 	
-	CCLOG("MainMenu init scale: %f", scale);
+	CCLOG("MainMenu init scale: %f", m_scale);
 
-	scale *= 0.8f;																													// Adjust the text size (Scaled even smaller)
+	m_scale *= 0.8f;																													// Adjust the text size (Scaled even smaller)
 
 	// Button 1. Start Game Button
-	playItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));				// Set image for menu option
-	setYPosAndScale(playItem, 0.6f);
+	m_pPlayItem = MenuItemImage::create("btnStart.png", "btnStartSelect.png", CC_CALLBACK_1(MainMenu::StartGame, this));				// Set image for menu option
+	setYPosAndScale(m_pPlayItem, 0.6f);
 
 	// Button 2. High Scores Button
-	scoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));	// Set image for menu option
-	setYPosAndScale(scoreItem, 0.5f);
+	m_pScoreItem = MenuItemImage::create("btnHighScores.png", "btnHighScoresSelect.png", CC_CALLBACK_1(MainMenu::GoToScores, this));	// Set image for menu option
+	setYPosAndScale(m_pScoreItem, 0.5f);
 
 	// Button 3. Game Options
-	optionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
-	setYPosAndScale(optionsItem, 0.4f);
+	m_pOptionsItem = MenuItemImage::create("btnSettings.png", "btnSettingsSelect.png", CC_CALLBACK_1(MainMenu::GoToSettings, this));	// Set image for options option
+	setYPosAndScale(m_pOptionsItem, 0.4f);
 	
 	// Button 4. Exit Button
-	exitItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MenuScene::menuCloseCallback, this));		// Set image for menu option
-	setYPosAndScale(exitItem, 0.3f);
+	m_pExitItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MenuScene::menuCloseCallback, this));		// Set image for menu option
+	setYPosAndScale(m_pExitItem, 0.3f);
 
 	// Show current high score
-	highScore = def->getIntegerForKey("Score1", 0);																					// Load the high score
-	std::string playerName = def->getStringForKey("Name1");																			// and the name of the player who got the score
+	highScore = m_def->getIntegerForKey("Score1", 0);																					// Load the high score
+	std::string playerName = m_def->getStringForKey("Name1");																			// and the name of the player who got the score
 	
-	tempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);										// String to display the top score & player	
+	m_pTempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);										// String to display the top score & player	
 
 	float scorePosition;
 	(Game::Instance()->musicPlayerVisible()) ? scorePosition = 0.2f : scorePosition = 0.1f;											// Move label to fill space if music player invisible
-	highScoreLbl = cocos2d::Label::createWithTTF(tempScore->getCString(), "fonts/Super Mario Bros..ttf", visibleSize.height * 0.125f);// Label to display current high score (Label replaces LabelTTF causing warnings)
-	highScoreLbl->setPosition(Point(visibleSize.width * 0.5f + origin.x, visibleSize.height * scorePosition + origin.y));
-	highScoreLbl->setColor(Color3B::RED);
-	highScoreLbl->setScale((visibleSize.height == 1080) ? 0.5f : 0.4f);
-	this->addChild(highScoreLbl);
+	m_pHighScoreLbl = cocos2d::Label::createWithTTF(m_pTempScore->getCString(), "fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.125f);// Label to display current high score (Label replaces LabelTTF causing warnings)
+	m_pHighScoreLbl->setPosition(Point(m_visibleSize.width * 0.5f + m_origin.x, m_visibleSize.height * scorePosition + m_origin.y));
+	m_pHighScoreLbl->setColor(Color3B::RED);
+	m_pHighScoreLbl->setScale((m_visibleSize.height == 1080) ? 0.5f : 0.4f);
+	this->addChild(m_pHighScoreLbl);
 	
 	// Menu Items
-	menu = Menu::create(playItem, scoreItem, optionsItem, exitItem, NULL);															// Handles menu item touches (Can do more than one at a time)
+	menu = Menu::create(m_pPlayItem, m_pScoreItem, m_pOptionsItem, m_pExitItem, NULL);															// Handles menu item touches (Can do more than one at a time)
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
 
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
 		//mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));							// Create the music control buttons
-		mplayer = MusicPlayer::create(Point(visibleSize.width / 2, visibleSize.height * 0.125f));									// Create the music control buttons
+		m_pPlayer = MusicPlayer::create(Point(m_visibleSize.width / 2, m_visibleSize.height * 0.125f));									// Create the music control buttons
 		//mplayer->setscale(mplayer->getScale() * 1.2f);
-		this->addChild(mplayer);																									// Add the music player to the layer
+		this->addChild(m_pPlayer);																									// Add the music player to the layer
 	}																																// Start updating the scene
 	
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||										// Mobile platform doesn't need to handle keyboard input
 		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
-		nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
+		m_nextBtnTime = Game::Instance()->getTimeTick() + m_buttonRate;
 		m_totalButtons = 4;
 		m_currentBtn = 4;
 	}
@@ -129,7 +130,7 @@ void MainMenu::update(float dt) {
 	//CCLOG("MainMenu: update");
 
 	if (Game::Instance()->musicPlayerVisible())
-		mplayer->update();																											// Update the music player
+		m_pPlayer->update();																											// Update the music player
 
 	//CCLOG("m_currentBtn: %d", m_currentBtn);
 
@@ -142,31 +143,31 @@ void MainMenu::update(float dt) {
 		//if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_ENTER) ||
 		//	Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RETURN)) {
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_ENTER)) {
-			if (Game::Instance()->getTimeTick() > Game::Instance()->nextTime) {														// Set time between button presses
-				CCLOG("Enter Pressed");
+			if (Game::Instance()->getTimeTick() > Game::Instance()->getButtonTimer()) {												// Set time between button presses
+				//CCLOG("Enter Pressed");
 				//nextBtnTime = Game::Instance()->getTimeTick() + buttonRate;
-				Game::Instance()->nextTime = Game::Instance()->getTimeTick() + buttonRate;
+				Game::Instance()->setButtonTimer(Game::Instance()->getTimeTick() + m_buttonRate);										// Stored in game, think there was an issue between scenes
 
-				if (m_currentBtn == 1 && !SELECTED) {
-					CCLOG("exitItem Activated ********************************************");
-					if (!SELECTED) exitItem->activate();
-					SELECTED = true;
+				if (m_currentBtn == 1 && !m_selected) {
+					//CCLOG("exitItem Activated ********************************************");	// test
+					if (!m_selected) m_pExitItem->activate();
+					m_selected = true;
 					//exitItem->
 				}
 				else if (m_currentBtn == 2) {
-					CCLOG("optionsItem Activated ********************************************");
-					optionsItem->activate();
-					SELECTED = true;
+					//CCLOG("optionsItem Activated ********************************************");
+					m_pOptionsItem->activate();
+					m_selected = true;
 				}
 				else if (m_currentBtn == 3) {
-					CCLOG("scoreItem Activated ********************************************");
-					scoreItem->activate();
-					SELECTED = true;
+					//CCLOG("scoreItem Activated ********************************************");
+					m_pScoreItem->activate();
+					m_selected = true;
 				}
 				else if (m_currentBtn == 4) {
-					CCLOG("playItem Activated ********************************************");
-					playItem->activate();
-					SELECTED = true;
+					//CCLOG("playItem Activated ********************************************");
+					m_pPlayItem->activate();
+					m_selected = true;
 				}
 			}
 		}
@@ -174,17 +175,17 @@ void MainMenu::update(float dt) {
 }
 
 void MainMenu::highlightButton(unsigned int btn) {
-		if (btn == 1) exitItem->selected();
-		else exitItem->unselected();
+		if (btn == 1) m_pExitItem->selected();
+		else m_pExitItem->unselected();
 
-		if (btn == 2) optionsItem->selected();
-		else optionsItem->unselected();
+		if (btn == 2) m_pOptionsItem->selected();
+		else m_pOptionsItem->unselected();
 
-		if (btn == 3) scoreItem->selected();
-		else scoreItem->unselected();
+		if (btn == 3) m_pScoreItem->selected();
+		else m_pScoreItem->unselected();
 
-		if (btn == 4) playItem->selected();
-		else playItem->unselected();
+		if (btn == 4) m_pPlayItem->selected();
+		else m_pPlayItem->unselected();
 
 		//CCLOG("highlight m_currentBtn: %d", m_currentBtn);
 	//}
@@ -208,10 +209,10 @@ void MainMenu::highlightButton(unsigned int btn) {
 	Callback: Start the Game Scene
 */
 void MainMenu::StartGame(cocos2d::Ref *sender) {
-	if (!SELECTED) {
+	if (!m_selected) {
 		CCLOG("Start Game Selected");
 		Audio::Instance()->selectMenuOption();
-		cocos2d::Scene* scene = Level1::createScene();																					// Create the game scene, JOR replaced auto specifier
+		cocos2d::Scene* scene = StoryScene::createScene();																					// Create the game scene, JOR replaced auto specifier
 		Director::getInstance()->replaceScene(TransitionSlideInB::create(TRANSITION_TIME, scene));										// Create scene and transition
 	}
 }
@@ -220,7 +221,7 @@ void MainMenu::StartGame(cocos2d::Ref *sender) {
 	Callback: Start the High Scores Scene
 */
 void MainMenu::GoToScores(cocos2d::Ref *sender) {
-	if (!SELECTED) {
+	if (!m_selected) {
 		CCLOG("High Scores Selected");
 		Audio::Instance()->selectMenuOption();
 		cocos2d::Scene* scene = HighScores::createScene();																				// Create the high scores scene
@@ -232,7 +233,7 @@ void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	Callback: Start the Settings Scene
 */
 void MainMenu::GoToSettings(cocos2d::Ref *sender) {
-	if (!SELECTED) {
+	if (!m_selected) {
 		CCLOG("Settings Selected");
 		Audio::Instance()->selectMenuOption();
 		cocos2d::Scene* scene = Settings::createScene();																				// Create the enter name scene
@@ -244,7 +245,7 @@ void MainMenu::GoToSettings(cocos2d::Ref *sender) {
 	Callback: Start the Enter Name Scene
 */
 void MainMenu::GoToEnterName(cocos2d::Ref *sender) {
-	if (!SELECTED) {
+	if (!m_selected) {
 		CCLOG("Enter Name Selected");
 		Audio::Instance()->selectMenuOption();
 		cocos2d::Scene* scene = EnterName::createScene();																				// Create the enter name scene

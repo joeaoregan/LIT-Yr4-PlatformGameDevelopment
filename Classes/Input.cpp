@@ -23,9 +23,9 @@ bool Input::isKeyPressedMenu(cocos2d::EventKeyboard::KeyCode code) {
 
 	//CCLOG("IS KEY PRESSED");
 	if (keys.find(code) != keys.end()) {											// Check if the key is currently pressed by seeing it it's in the std::map keys
-		if (getTimeTick() > nextBtnTime) {
+		if (getTimeTick() > m_nextBtnTime) {
 			buttonWasPressed = true;
-			nextBtnTime = getTimeTick() + buttonRate;
+			m_nextBtnTime = getTimeTick() + m_buttonRate;
 		}
 		else {
 			buttonWasPressed = false;

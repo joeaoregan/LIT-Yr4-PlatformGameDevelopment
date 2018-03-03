@@ -1,6 +1,8 @@
 /*
-	Joe O'Regan
 	AppDelegate.h
+
+	Joe O'Regan
+	k00203642
 	02/02/2018
 */
 #ifndef  _APP_DELEGATE_H_
