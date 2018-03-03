@@ -1,3 +1,14 @@
+/*
+	Asteroid.h
+
+	Joe O'Regan
+	K00203642
+	02/03/2018
+
+	Create asteroid at random position, scaled to suit screen resolution
+	Pic a movement speed based on a random range
+*/
+
 #ifndef __ASTEROID_H__
 #define __ASTEROID_H__
 
@@ -12,27 +23,23 @@ public:
 	static Asteroid* create(cocos2d::Size res);
 		
 	virtual void update(float dt) {}
+	void init(cocos2d::Size res);
 
 	float minSpeed() { return m_speedMin; }
 	float maxSpeed() { return m_speedMax; }
 
-	void move(cocos2d::Size res, float duration, float y) {
-		stopAllActions();
-		setPosition(res.width + getContentSize().width / 2, y);
-		setVisible(true);
-		setScale(((res.height == 720) ? 1.0f : 1.5f) * (duration / 10.0f) * 1.25f);
-
-		rotateAsteroid();
-	};
-
+	float getRandY() { return m_randYPos; }
+	
 	void rotateAsteroid();
 
-	float getSpeed() { return m_speed; }
+	float getDuration() { return m_duration; }	// Random duration on screen, used in spawnObject() for applying action sequence
 
 protected:
-	float m_speed = 0;
-	float m_speedMin = 2.0f;
-	float m_speedMax = 10.0f;
+	cocos2d::Size m_winSize;					// Size of the window
+	float m_duration = 0;						// Speed of the asteroid
+	float m_speedMin = 2.0f;					// Set the min duration to travel across screen (Speed = faster)
+	float m_speedMax = 10.0f;					// Set the max duration to travel across screen (Speed = slower)
+	float m_randYPos;							// Spawn at random position on Y access
 
 	int m_type = STATIC_ROID;
 };

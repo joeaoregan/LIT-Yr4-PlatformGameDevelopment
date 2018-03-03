@@ -23,7 +23,7 @@ Scene* Level2::createScene() {
 bool Level2::init() {
 	Level::init();													// 20180221 Added Level base class
 
-	//Game::Instance()->setLevel(2);									// for parallax node init
+	Game::Instance()->setLevel(2);									// for parallax node init
 	newHUD->setLevelLabel();										// Update HUD Level text display
 
 	if (!Layer::init()) { return false; }							// super init first

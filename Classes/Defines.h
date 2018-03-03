@@ -24,10 +24,15 @@
 
 #define L3_NUM_ENEMY_1 1
 #define L3_NUM_ENEMY_2 2
-#define L3_NUM_ENEMY_3 2														// Two of the larger ship on screen at once
+#define L3_NUM_ENEMY_3 2									// Two of the larger ship on screen at once
 
 
 /* Images */
+
+#define PLAYER_OLD_IMG "SpaceFlier_sm_1.png"				// Old player sprite on sprite sheet using _drawNode
+#define PLAYER_IMG "PlayerShip3.png"						// New Player sprite
+#define PLAYER_CANON "PlayerShipGun.png"					// The weapon on the players ship
+
 #define POWER_UP_LIFE_IMG "powerHeart.png"
 #define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"
 
@@ -44,14 +49,17 @@
 #define LASER_ORANGE_IMG "LaserOrange.png"
 #define LASER_GREEN_IMG "LaserGreen.png"
 
-
 // Enemies and obstacles
 #define NUM_ENEMIES 3
 #define MAX_NUM_ASTEROIDS_L1 10								// Number of asteroids
 #define NUM_ASTEROIDS_L2 15									// Number of asteroids
 #define NUM_LASERS 8										// Number of lasers
-#define ENEMY_FIRE_RATE 500
-#define MAX_ENEMY_SHIP_LIVES 3.0f
+
+// Max Enemy Lives - floats used to create percentage for health bars
+#define MAX_ENEMY_SHIP1_LIVES 3.0f							// EnemyShip 
+#define MAX_ENEMY_SHIP2_LIVES 4.0f							// EnemyShipKling
+#define MAX_ENEMY_SHIP3_LIVES 5.0f							// EnemyShipWilknot
+#define ENEMY_FIRE_RATE 500.0f								// Time between laser spawns
 
 // Player
 #define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have

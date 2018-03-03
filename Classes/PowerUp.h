@@ -30,7 +30,7 @@ public:
 	float getSpeed() { return m_speed; }
 	bool isSpawned() { return m_spawned; }
 	void setSpawned() { m_spawned = true; }
-	float getRandY() { return m_powerUpY; }
+	float getRandY() { return m_randYPos; }
 	float getSpawnTime() { return m_spawnTime; }
 
 protected:
@@ -39,7 +39,7 @@ protected:
 	float m_speedMax = 10.0f;
 
 	bool m_spawned = false; 
-	float m_powerUpY;
+	float m_randYPos;
 	float m_spawnTime;
 
 	//int m_type = STATIC_ROID;

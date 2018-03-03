@@ -5,15 +5,7 @@
 */
 #include "AppDelegate.h"
 #include "SplashScene.h"
-#include "AudioMenu.h"
-#include "MenuScene.h"
-//#include "Level.h"
-//#include "Settings.h"
-#include "MainMenu.h"
-#include "Level1.h"
-#include "Level2.h"
 #include "Level3.h"
-#include "Level4.h"
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
@@ -31,9 +23,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	    
     director->setAnimationInterval((float) (1.0 / 60));								// set FPS. the default value is 1.0/60 if you don't call this
 
-	cocos2d::Scene* scene = Level4::createScene();									// Create the game splash screen, JOR replaced auto specifier
-	//cocos2d::Scene* scene = AudioMenu::createScene();								// 20180223 Test Audio Menu with Menu base class
-	//cocos2d::Scene* scene = MenuScene::createScene();								// 20180224 Levels with Level base class
+	cocos2d::Scene* scene = Level3::createScene();								// Create the game splash screen, JOR replaced auto specifier
 	    
     director->runWithScene(scene);													// run
 

@@ -6,6 +6,7 @@
 	21/02/2018
 
 	Base class for levels
+	Controls spawning, collisions, end of game/level conditions
 */
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
@@ -75,7 +76,7 @@ public:
 	void spawnEnemyShips(float curTimeMillis);									// 20180214 Spawn enemy ships
 	void spawnLasers(int amount);												// 20180221
 	//void spawnEnemyLaser(cocos2d::Point pos);									// 20180221
-	//void spawnEnemyLaserAngled(cocos2d::Point a, cocos2d::Point b, float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
+	//void spawnEnemyLaserAngled(cocos2d::Point a,cocos2d::Point b,float angle);// 20180302 fire from point A to point B, rotate the laser to face the direction its going
 
 	//void spawnEnemyLaserOrange(cocos2d::Point pos);
 	//void spawnEnemyLaserBlue(cocos2d::Point pos);
@@ -91,6 +92,10 @@ public:
 	Vector<Sprite*>* getLaserList() { return m_playerLaserList; }				// return ship lasers
 	
 	void initLives();															// Moved to Level base class to test all levels
+
+	void PowerUpCollision(PowerUp* powerUp);
+	
+	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
 	
 protected:
 	cocos2d::Size visibleSize;													// Screen resolution changes depending on the platform
@@ -112,7 +117,7 @@ protected:
 	cocos2d::EventListenerTouchAllAtOnce* touchListener;						// Touch listener
 
 	// Time
-	//float curTimeInit;															// Current game time
+	//float curTimeInit;														// Current game time
 	float curTimeMillis;														// Current time in milliseconds
 
 	// End of Level Labels
@@ -121,7 +126,7 @@ protected:
 	cocos2d::MenuItemLabel* continueItem;										// Continue to next level button
 
 	// Power ups
-	//cocos2d::Sprite* m_powerUpLife;												// New life power up
+	//cocos2d::Sprite* m_powerUpLife;											// New life power up
 	PowerUp* m_powerUpLife;
 	PowerUp* m_powerUpWeapon;
 
@@ -131,7 +136,7 @@ protected:
 	bool spawned = false;
 
 	// Asteroids
-	int _nextAsteroid = 0;
+	int m_nextAsteroid = 0;
 	float _nextAsteroidSpawn = 0;												// time to spawn next asteroid
 
 	// Enemies

@@ -21,11 +21,7 @@ public:
 
 	void update();													// Update player movement etc.
 
-	void upgradeWeapon() {
-		weaponUpgrade();
-		canon->setVisible(true);
-		Game::Instance()->setCurrentWeapon(m_weaponStrength);
-	}
+	void upgradeWeapon();											// Upgrade the players weapon, set currently used weapon (up to level 4)
 
 	// Movement
 	void moveUp();
@@ -41,8 +37,8 @@ public:
 
 private:
 	cocos2d::Size visibleSize;										// Visible screen size
-	float scale;
-	unsigned int m_weaponStrength = 2;
+	float scale;													// Scale of the player based on the screen resolution
+	unsigned int m_weaponStrength = 2;								// Current weapon
 
 	cocos2d::Sprite* canon;											// Canon made visible 
 };

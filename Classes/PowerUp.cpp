@@ -15,20 +15,17 @@ PowerUp* PowerUp::create(cocos2d::Size res, int type) {
 		powerUp->autorelease();
 		
 		powerUp->setVisible(false);
-		powerUp->setScale(scale);									// Scale down the size for PC
+		powerUp->setScale(scale);																			// Scale down the size for PC
 
 		// Choose random spawn time
-		float curTimeInit = Game::Instance()->getTimeTick();													// Current game time // Time to finish game	
+		float curTimeInit = Game::Instance()->getTimeTick();												// Current game time // Time to finish game	
 		float lastSpawnTime = Game::Instance()->getLevelDuration() - 5000.0f;
-		powerUp->m_spawnTime = curTimeInit + Level::Instance()->randomValueBetween(2000.0f, lastSpawnTime);		// -5000 (5 secs before end Don't spawn it when the player has no chance of getting it	
-
-
+		powerUp->m_spawnTime = curTimeInit + Level::Instance()->randomValueBetween(200.0f, lastSpawnTime);	// -5000 (5 secs before end Don't spawn it when the player has no chance of getting it	
+		
 		powerUp->m_speed = Level::Instance()->randomValueBetween(powerUp->m_speedMin, powerUp->m_speedMax);
 				
-		powerUp->m_powerUpY = Level::Instance()->randomValueBetween(0.1f, 0.8f);								// Random Y position for asteroid
-		//m_powerUpLife = Sprite::Sprite::create(POWER_UP_LIFE_IMG);
-		//powerUp->setVisible(false);
-		powerUp->setPosition(res.width + powerUp->getContentSize().width, res.height * powerUp->m_powerUpY);	// Position to spawn the power up at
+		powerUp->m_randYPos = Level::Instance()->randomValueBetween(0.1f, 0.8f);							// Random Y position for asteroid
+		powerUp->setPosition(res.width + powerUp->getContentSize().width, res.height * powerUp->m_randYPos);// Position to spawn the power up at
 	}
 	else {
 		delete powerUp;

@@ -1,3 +1,12 @@
+/*
+	EnemyShip.h
+
+	Joe O'Regan
+	K00203642
+
+	Enemy Ship base class is a sub class of Sprite
+*/
+
 #ifndef __ENEMY_SHIP_H__
 #define __ENEMY_SHIP_H__
 
@@ -11,22 +20,18 @@ public:
 	~EnemyShip() {}
 	
 	static EnemyShip* create(cocos2d::Size res);
-		
+	
+	void init(cocos2d::Size res);
 	virtual void update(float dt);
 
 	unsigned int getLives() { return m_lives; }
 	void setLives(unsigned int set) { m_lives = set; }
 
-	virtual void moveCanon() {}
+	void takeLife();
 
-	//void updateBar(float pc) {
-		//bar->setPercent(1);
-		//bar->update(0.0f);
-	//	pt->setPercentage(pc);
-	//}
+	void updateBar();
 
-	//HealthBar* createHealthBar(cocos2d::Size res);	
-	//void myUpdate();
+	virtual void moveCanon() {}					// Used with third enemy type (EnemyShipWillKnot) to move its (ornamental) canon
 
 	float getNextFire() { return m_nextFire; }
 	void setNextFire(float set) { m_nextFire = set; }
@@ -34,29 +39,39 @@ public:
 	float minSpeed() { return m_speedMin; }
 	float maxSpeed() { return m_speedMax; }
 
-	//void moveTo();
-
+	float getDuration() { return m_duration; }	// Random duration on screen, used in spawnObject() for applying action sequence
+	
 protected:
-	//cocos2d::Sprite* m_enemyShip;
-
 	// health
-	unsigned int m_lives = 3;
-	HealthBar* bar;
+	unsigned int m_lives = MAX_ENEMY_SHIP1_LIVES;		// Number of lives (Defines.h)
+	float m_totalLives = MAX_ENEMY_SHIP1_LIVES;		// Total lives for this enemy to set/rest lives (Defines.h)
+	HealthBar* m_bar;									// HealthBar
+	cocos2d::Size m_winSize;							// Screen resolution
 
 	// Fire rate
-	float m_nextFire;
-	unsigned int m_fireRate = 500;
+	float m_nextFire;									// Time next laser spawned
+	unsigned int m_fireRate = ENEMY_FIRE_RATE;			// Time between lasers (Defines.h)
 
-	cocos2d::DrawNode* myDrawNode;
+	cocos2d::DrawNode* myDrawNode;						// Failed attempt at health bar
 
-	float m_dx = 0;
+	float m_dx = 0;										// Offset for spawning the laser in front of the ship
 	float m_dy = 0;
-
-	float m_speedMin = 2.0f;
-	float m_speedMax = 10.0f;
+	
+	float m_duration = 0;								// Duration the object is on screen (speed it travels to target point off screen)
+	float m_speedMin = 2.0f;							// Set the min duration to travel across screen (Speed = faster)
+	float m_speedMax = 10.0f;							// Set the max duration to travel across screen (Speed = slower)
+	float m_randYPos;									// Spawn at random position on Y access
 };
 
 
+//void updateBar(float pc) {
+//bar->setPercent(1);
+//bar->update(0.0f);
+//	pt->setPercentage(pc);
+//}
+//HealthBar* createHealthBar(cocos2d::Size res);	
+//void myUpdate();
+//void moveTo();
 /*
 //class EnemyShip : public cocos2d::Node {
 class EnemyShip {

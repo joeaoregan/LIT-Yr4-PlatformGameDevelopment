@@ -59,6 +59,16 @@ Space Shooter: Added music controls to add to menu and game scenes
 
 ---
 
+![Space Game: Asteroids and Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame11AsteroidsAndEnemies.jpg "Space Shooter: Asteroids and Enemies")
+Space Shooter: Additional Enemies, with different laser spawning/weapons firing functions, and rotating Asteroids
+
+---
+
+![Space Game: Status Bars](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame12StatusBarsEOL.jpg "Space Shooter: Status Bars")
+Space Shooter: Added status bars for enemy health bars etc.
+
+---
+
 ## Additions:
 
 * Changed backing track

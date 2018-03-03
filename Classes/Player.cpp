@@ -11,36 +11,38 @@
 #include "Level.h"
 
 /*
-	Create a player sprite, initiallising the number of lasers, 
+	Create a player sprite, Initialise the number of lasers spawned based on the game difficulty
 	and scale depending on screen resolution
+	
+
 */
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
 	player->visibleSize = Director::getInstance()->getVisibleSize();						// screen size
-	player->scale = (res.height == 720) ? 1.0f : 1.5f;
+	player->scale = (res.height == 720) ? 0.67f : 1.0f;										// This image has a higher res than the space game so is scaled down for PC, not up for mobile
 	
-	//if (player && player->initWithSpriteFrameName("SpaceFlier_sm_1.png")) { //xxxxxxxxxx
-	if (player && player->initWithFile("PlayerShip3.png")) {
-		// Set the amount of lasers to fire at the beginning
-		if (Game::Instance()->getLevel() <= 1) {
+	//if (player && player->initWithSpriteFrameName(PLAYER_OLD_IMG)) {						// Original Player on sprite sheet
+	if (player && player->initWithFile(PLAYER_IMG)) {
+		if (Game::Instance()->getLevel() <= 1) {											// Set the amount of lasers to fire starting at level 1, based on difficulty
 			if (Game::Instance()->getDifficulty() == EASY)
-				player->m_weaponStrength = 3;													// Start with 3 lasers easy, 2 medium, 1 hard
+				player->m_weaponStrength = 3;												// Start with 3 lasers easy, 2 medium, 1 hard
 			else if (Game::Instance()->getDifficulty() == HARD) {
-				player->m_weaponStrength = 1;													// Less laser beams initially
+				player->m_weaponStrength = 1;												// Less laser beams initially
 			}
 		}
 		else
 			player->m_weaponStrength = Game::Instance()->getCurrentWeapon();
 
-		player->autorelease();
+		player->autorelease();																// Clear the object automatically from memory
 		player->setPosition(res.width * 0.1, res.height * 0.5);								// Place in middle left of screen
 		player->setScale(player->scale);													// Increase scale of player for Android (My phone anyway)
 
-		player->canon = Sprite::create("PlayerShipGun.png");
-		player->canon->setVisible(false);
-		//player->canon->setPosition((player->getPosition().x / 2) + player->getContentSize().width * 0.25f, (player->getPosition().y) / 2);
-		player->canon->setPosition((player->getContentSize().width / 2) + player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
-		player->addChild(player->canon);
+		// Weapon graphic
+		player->canon = Sprite::create(PLAYER_CANON);										// The weapon on the players ship
+		player->canon->setVisible(false);													// Hide the canon to begin with
+		player->canon->setPosition((player->getContentSize().width / 2) +					// Set its position relative to the Player Sprite
+			player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
+		player->addChild(player->canon);													// Attach to player
 	}
 	else {
 		delete player;
@@ -49,27 +51,10 @@ Player* Player::create(cocos2d::Size res) {
 	return player;
 }
 
-/*(
-Player::Player(cocos2d::Layer *layer) {
-	visibleSize = Director::getInstance()->getVisibleSize();						// screen size
-	origin = Director::getInstance()->getVisibleOrigin();							// origin coorinate
-
-	player = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-	player->setPosition(visibleSize.width * 0.1, visibleSize.height * 0.5);			// Place in middle left of screen
-	player->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);					// Increase scale of player for Android (My phone anyway)
-
-	//auto playerBody = PhysicsBody::createCircle(player->getContentSize().width / 2);
-	//playerBody->setCollisionBitmask(PLAYER_COLLISION_BITMASK);
-	//playerBody->setContactTestBitmask(true);
-
-	player->setPhysicsBody(playerBody);
-
-	//layer->addChild(player, 10);	// _batchNode->addChild(player->getSprite());
-}
-*/
-
 /*
 	Get input from keyboard to update the players position
+	This is platform dependent, when running unchecked on Android the virtual keyboard pops up
+	expecting data to be input at the beginning of the level scene
 */
 void Player::update() {
 	// Move the player ship
@@ -116,24 +101,11 @@ void Player::moveRight() {
 }
 
 /*
-void Player::spawnLasers(int amount, cocos2d::Layer *layer) {
-	int i;
-	for ((amount == 2) ? i = 1 : i = 0; i < amount; i++) {
-		cocos2d::Sprite* shipLaser = Level::Instance()->getLaserList()->at(Level::Instance()->getNextShipLaser()+1);	// Next laser in the list, JOR replaced auto specifier
-		Level::Instance()->setNextShipLaser(Level::Instance()->getNextShipLaser() + 1);
-		if (Level::Instance()->getNextShipLaser() >= Level::Instance()->getLaserList()->size())
-			Level::Instance()->setNextShipLaser(0);																		// Reset laser list index to 0 (go back to start of list)
-
-		if (i == 0) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, 0));	// middle
-		if (i == 1) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, -12));	// bottom
-		if (i == 2) shipLaser->setPosition(player->getPosition() + Point(shipLaser->getContentSize().width / 2, 12));	// top
-
-		shipLaser->setVisible(true);
-		shipLaser->stopAllActions();
-
-		shipLaser->runAction(
-			Sequence::create(MoveBy::create(0.5, Point(Level::Instance()->getWinSize().width, 0)),						// change to plus 100 for up - 100 for down
-				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, layer)), NULL));
-	}
-}
+	Upgrade the players weapon, set currently used weapon (up to level 4), 
+	set the canon visible the first time the weapon is upgraded
 */
+void Player::upgradeWeapon() {
+	weaponUpgrade();
+	canon->setVisible(true);
+	Game::Instance()->setCurrentWeapon(m_weaponStrength);
+}

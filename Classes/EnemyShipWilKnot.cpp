@@ -29,6 +29,10 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->screenSize = res;
 
 		/* Different */
+		// Set the lives
+		eship->m_totalLives = MAX_ENEMY_SHIP3_LIVES;
+		eship->m_lives = eship->m_totalLives;
+
 		eship->m_fireRate = 800;
 		eship->m_dy = 0.375f * scale;
 		eship->m_dx = -0.33f * scale;
@@ -37,16 +41,16 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->m_speedMin = 17.0f;
 		eship->m_speedMax = 20.0f;
 
-		cocos2d::Color4F redBR(1, 0, 0, 1);
+		cocos2d::Color4F redBR(0.52f, 0.52f, 0.52f, 1);
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
 
-		eship->bar = HealthBar::create(
+		eship->m_bar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), 
 			eship->getPosition().y + eship->getContentSize().height,			// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,		// Dimensions
-			float(eship->getLives() / MAX_ENEMY_SHIP_LIVES),							// percentage
+			float(eship->getLives() / eship->m_totalLives),						// percentage (Max 5 lives)
 			redBR, transBR);
-		eship->addChild(eship->bar);
+		eship->addChild(eship->m_bar);
 
 		eship->canon = Sprite::create("DoubleCanon.png");
 		//eship->canon->setPosition(cocos2d::Point(eship->getPosition().x, eship->getPosition().y));
