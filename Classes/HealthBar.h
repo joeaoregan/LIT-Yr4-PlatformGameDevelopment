@@ -10,12 +10,32 @@
 
 #include "cocos2d.h"
 #include <string>
-//#include <sstream>
-//#include <iostream>
 
 #ifndef __HEALTH_BAR__
 #define __HEALTH_BAR__
 
+class HealthBar : public cocos2d::DrawNode {
+public:
+	static HealthBar* create(int x, int y, int w, int h, float pc, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor, bool showLabel = false);
+
+	void updateBar(float percent);
+
+private:
+	float percent;
+
+	float width, height;
+
+	cocos2d::Vec2 foregroundRect[4];
+
+	cocos2d::DrawNode* rectNode;
+	cocos2d::DrawNode* frontNode;
+};
+
+
+#endif // __HEALTH_BAR__
+
+
+/*
 class HealthBar : public cocos2d::DrawNode {
 public:
 	static HealthBar* create(int x, int y, int w, int h, float pc, cocos2d::Color4F FGColor, cocos2d::Color4F BGColor, bool showLabel = false) {
@@ -102,11 +122,6 @@ private:
 	//static HealthBar* hbar;
 };
 
-
-#endif // __HEALTH_BAR__
-
-
-/*
 HealthBar.h
 
 Joe O'Regan

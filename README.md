@@ -1,9 +1,24 @@
 # Year-four Platform Games Development CA 
 # Cocos2d-x Space Game
 ## Side-scrolling 2D Space Shooter
-### 23/02/2018
+### 03/03/2018
 
 Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point
+
+---
+
+## Additions:
+
+* Changed backing track
+* Added music player
+* HUD for Level, Score, and Timer
+* Added direction controls for mobile
+* Additional level and menu scenes
+* Double laser weapon
+* Lives indicated with icons
+* Additional enemies
+* Power ups
+* Added status bars
 
 ---
 
@@ -66,16 +81,6 @@ Space Shooter: Additional Enemies, with different laser spawning/weapons firing 
 
 ![Space Game: Status Bars](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame12StatusBarsEOL.jpg "Space Shooter: Status Bars")
 Space Shooter: Added status bars for enemy health bars etc.
-
----
-
-## Additions:
-
-* Changed backing track
-* HUD for Level, Score, and Timer
-* Added direction controls for mobile
-* Double laser weapon
-* Lives indicated with icons
 
 ---
 

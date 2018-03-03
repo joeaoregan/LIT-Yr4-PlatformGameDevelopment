@@ -5,7 +5,7 @@
 */
 #include "AppDelegate.h"
 #include "SplashScene.h"
-#include "Level3.h"
+#include "Level4.h"
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
@@ -23,7 +23,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	    
     director->setAnimationInterval((float) (1.0 / 60));								// set FPS. the default value is 1.0/60 if you don't call this
 
-	cocos2d::Scene* scene = Level3::createScene();								// Create the game splash screen, JOR replaced auto specifier
+	cocos2d::Scene* scene = Level4::createScene();									// Create the game splash screen, JOR replaced auto specifier
 	    
     director->runWithScene(scene);													// run
 

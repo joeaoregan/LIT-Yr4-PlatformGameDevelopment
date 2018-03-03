@@ -15,9 +15,9 @@
 
 Scene* Level3::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier   
-	s_pLayerInstance = Level3::create();			// 'layer' is an autorelease object, JOR replaced auto specifier  
+	s_pLayerInstance = Level3::create();		// 'layer' is an autorelease object, JOR replaced auto specifier  
 	//layer->setName("Level3");					// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-	scene->addChild(s_pLayerInstance);						// Add layer as a child to scene	    
+	scene->addChild(s_pLayerInstance);			// Add layer as a child to scene	    
 	return scene;								// Return the scene
 }
 
@@ -27,7 +27,7 @@ Scene* Level3::createScene() {
 bool Level3::init() {
 	Level::init();								// 20180221 Added Level base class
 
-	//Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
+	//Game::Instance()->setGameOver(false);		// Needed for starting new level, or restarting game
 
 	Game::Instance()->setLevel(3);				// Specific to level 2
 	newHUD->setLevelLabel();					// Update HUD Level text display
@@ -43,8 +43,8 @@ bool Level3::init() {
 
 
 	// ParallaxNode
-	this->addChild(m_backgroundNode, -1);		// Add the parallax background
-	m_backgroundNode->init();					// Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);									// Add the parallax background
+	m_backgroundNode->init();												// Initialise the parallax scrolling background
 
 	m_enemyLaserList3 = new Vector<Sprite*>(NUM_LASERS);					// List of lasers
 	for (int i = 0; i < NUM_LASERS; ++i) {
@@ -54,7 +54,7 @@ bool Level3::init() {
 		m_enemyLaserList3->pushBack(enemyLaser);
 	}
 	
-	this->scheduleUpdate();						// Start updating the scene
+	this->scheduleUpdate();													// Start updating the scene
 
 	return true;
 }

@@ -204,7 +204,6 @@ void Level::initLasers() {
 	Initialise the new life and weapon power ups
 */
 void Level::initPowerUps() {
-
 	m_powerUpLife = PowerUp::create(visibleSize, NEW_LIFE);
 	this->addChild(m_powerUpLife);
 	m_powerUpWeapon = PowerUp::create(visibleSize, WEAPON_UPGRADE);
@@ -253,7 +252,8 @@ void Level::spawnObjects(float curTimeMillis) {
 	if (!m_powerUpLife->isSpawned() && curTimeMillis > m_powerUpLife->getSpawnTime()) {
 		m_powerUpLife->setVisible(true);
 		auto actionpowerUp = MoveTo::create(m_powerUpDuration,
-			Point(0 - m_powerUpLife->getContentSize().width, visibleSize.height * m_powerUpLife->getRandY()));
+			Point(0 - m_powerUpLife->getContentSize().width, 
+				visibleSize.height * m_powerUpLife->getRandY()));
 		m_powerUpLife->runAction(actionpowerUp);
 
 		m_powerUpLife->runAction(repeat);
@@ -263,9 +263,10 @@ void Level::spawnObjects(float curTimeMillis) {
 	if (!m_powerUpWeapon->isSpawned() && curTimeMillis > m_powerUpWeapon->getSpawnTime()) {
 		m_powerUpWeapon->setVisible(true);
 		auto actionpowerUp2 = MoveTo::create(m_powerUpDuration,
-			Point(0 - m_powerUpWeapon->getContentSize().width, visibleSize.height * m_powerUpWeapon->getRandY()));
+			Point(0 - m_powerUpWeapon->getContentSize().width, 
+				visibleSize.height * m_powerUpWeapon->getRandY()));
 		m_powerUpWeapon->runAction(actionpowerUp2);
-		m_powerUpWeapon->runAction(repeat);																			// Reuse the same sequence for weapon power ups
+		m_powerUpWeapon->runAction(repeat);																	// Reuse the same sequence for weapon power ups
 		
 		/* powerUpLife->runAction(
 			Sequence::create(MoveBy::create(0.5f, Point(0 - powerUpLife->getContentSize().width, powerUpY)),		// change to plus 100 for up - 100 for down
@@ -280,16 +281,16 @@ void Level::spawnObjects(float curTimeMillis) {
 		_nextAsteroidSpawn = randMillisecs + curTimeMillis;
 
 		Asteroid *asteroid = m_asteroidsList->at(m_nextAsteroid);
-		m_nextAsteroid++;																							// Increment the asteroid list index
-		if (m_nextAsteroid >= m_asteroidsList->size()) m_nextAsteroid = 0;											// Loop back around to start of asteroids list
+		m_nextAsteroid++;																					// Increment the asteroid list index
+		if (m_nextAsteroid >= m_asteroidsList->size()) m_nextAsteroid = 0;									// Loop back around to start of asteroids list
 
 		Game::Instance()->incrementAsteroidCount();
 		
-		asteroid->init(visibleSize);																				// Initialise the Asteroid, stopping all active actions, set visibility, and random positoin, scale, and rotate
-		asteroid->runAction(Sequence::create(																		// Sequence of actions where the asteroid moves off screen to the left
+		asteroid->init(visibleSize);																		// Initialise the Asteroid, stopping all active actions, set visibility, and random positoin, scale, and rotate
+		asteroid->runAction(Sequence::create(																// Sequence of actions where the asteroid moves off screen to the left
 				MoveBy::create(asteroid->getDuration(), 
-					Point(-winSize.width - asteroid->getContentSize().width, 0)),									// To a position fully off screen
-				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)									// And is then destroyed, DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
+					Point(-winSize.width - asteroid->getContentSize().width, 0)),							// To a position fully off screen
+				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)							// And is then destroyed, DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 		);	
 
 		//CCLOG("Spawn Asteroid");
@@ -299,26 +300,26 @@ void Level::spawnObjects(float curTimeMillis) {
 void Level::spawnEnemyShips(float curTimeMillis) {
 	if (m_enemyLaserList1->size() > 0) {
 		if (curTimeMillis > nextEnemyShipSpawnTime) {			
-			EnemyShip *enemyShip = m_enemyShipList->at(nextEnemyShip); nextEnemyShip++;									// Moved to use min and max speed
+			EnemyShip *enemyShip = m_enemyShipList->at(nextEnemyShip); nextEnemyShip++;						// Moved to use min and max speed
 
 			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
-			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;														// Set the time to spawn the next ship							
+			nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;											// Set the time to spawn the next ship							
 
-			Game::Instance()->incrementEnemyShipCount();																// Increment the enemy ship on the list
-			if (nextEnemyShip >= (unsigned int) m_enemyShipList->size()) nextEnemyShip = 0;								// Loop back around to start of enemy ship list
+			Game::Instance()->incrementEnemyShipCount();													// Increment the enemy ship on the list
+			if (nextEnemyShip >= (unsigned int) m_enemyShipList->size()) nextEnemyShip = 0;					// Loop back around to start of enemy ship list
 
-			enemyShip->init(visibleSize);																				// Stop actions, set position, set visible, and set lives
+			enemyShip->init(visibleSize);																	// Stop actions, set position, set visible, and set lives
 
 			// Apply Actions: Move the ship to the players coordinate
 			cocos2d::MoveTo* action = MoveTo::create(enemyShip->getDuration() * 0.67f, 
-				Point(player->getPositionX(), player->getPositionY()));													// Part of time spent moving to player, the rest moving off screen
+				Point(player->getPositionX(), player->getPositionY()));										// Part of time spent moving to player, the rest moving off screen
 			enemyShip->runAction(action);
 
 			enemyShip->runAction(																						
 				Sequence::create(
 					MoveBy::create(enemyShip->getDuration(), 
-						Point(-winSize.width - enemyShip->getContentSize().width, 0)),									// move off the screen its full width
-					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)									// Then set invisible if it reaches the target - TERMINATE WITH NULL
+						Point(-winSize.width - enemyShip->getContentSize().width, 0)),						// move off the screen its full width
+					CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)						// Then set invisible if it reaches the target - TERMINATE WITH NULL
 			);
 			//CCLOG("Spawn Enemy Ship");
 		}

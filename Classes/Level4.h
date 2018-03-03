@@ -9,6 +9,7 @@
 #define __LEVEL_4_H__
 
 #include "Level.h"
+#include "EnemyShipDerpStar.h"
 
 class Level4 : public Level {
 public:
@@ -24,6 +25,8 @@ private:
 
 	virtual void update(float dt);				// Update the level
 	virtual void endScene(EndReason endReason);	// Do level complete stuff
+
+	EnemyShipDerpStar* derpStar;				// End level boss enemy
 };
 
 #endif // __LEVEL_4_H__

@@ -33,24 +33,24 @@
 #define PLAYER_IMG "PlayerShip3.png"						// New Player sprite
 #define PLAYER_CANON "PlayerShipGun.png"					// The weapon on the players ship
 
-#define POWER_UP_LIFE_IMG "powerHeart.png"
-#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"
+#define POWER_UP_LIFE_IMG "powerHeart.png"					// Life power up image
+#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"				// Weapon power up image
 
 // Dpad
-#define DPAD_BASE "BaseCircle320b.png"
-#define DPAD_ARROW "Arrow160b.png"
-#define DPAD_ARROW_ACTIVE "Arrow160bPressed.png"
+#define DPAD_BASE "BaseCircle320b.png"						// Base for Dpad
+#define DPAD_ARROW "Arrow160b.png"							// Arrow for Dpad
+#define DPAD_ARROW_ACTIVE "Arrow160bPressed.png"			// Arrow is active
 
 // Background
-#define ASTEROID_IMG "asteroid.png"
+#define ASTEROID_IMG "asteroid.png"							// Asteroid image
 
 // Weapoons
-#define LASER_BLUE_IMG "laserbeam_blue.png"
-#define LASER_ORANGE_IMG "LaserOrange.png"
-#define LASER_GREEN_IMG "LaserGreen.png"
+#define LASER_BLUE_IMG "laserbeam_blue.png"					// Blue laser image
+#define LASER_ORANGE_IMG "LaserOrange.png"					// Orange laser image
+#define LASER_GREEN_IMG "LaserGreen.png"					// Green laser image
 
 // Enemies and obstacles
-#define NUM_ENEMIES 3
+#define NUM_ENEMIES 3										// Number of enemies to add to lists etc.
 #define MAX_NUM_ASTEROIDS_L1 10								// Number of asteroids
 #define NUM_ASTEROIDS_L2 15									// Number of asteroids
 #define NUM_LASERS 8										// Number of lasers
@@ -59,27 +59,28 @@
 #define MAX_ENEMY_SHIP1_LIVES 3.0f							// EnemyShip 
 #define MAX_ENEMY_SHIP2_LIVES 4.0f							// EnemyShipKling
 #define MAX_ENEMY_SHIP3_LIVES 5.0f							// EnemyShipWilknot
+#define MAX_ENEMY_SHIP4_LIVES 10.0f							// EnemyShipDerpStar
 #define ENEMY_FIRE_RATE 500.0f								// Time between laser spawns
 
 // Player
 #define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have
-#define PLAYER_SPEED 3.0f
-#define MAX_WEAPON_LEVEL 4
+#define PLAYER_SPEED 3.0f									// Players speed
+#define MAX_WEAPON_LEVEL 4									// The current weapon the player has
 
 // Screen Resolution
 #define RES_720P 720
 #define RES_1080P 1080
 
 // Menus
-#define TRANSITION_TIME 0.5
+#define TRANSITION_TIME 0.5									// Transition time between sceness
 
-
+// Types etc.
 enum difficulty { EASY, MEDIUM, HARD };
 enum laserTypes { BLUE, ORANGE, GREEN1, GREEN2, GREEN3 };
 enum asteroidType { STATIC_ROID, DYNAMIC_ROID };
 enum powerUpTypes { NEW_LIFE, WEAPON_UPGRADE };
 
-//static unsigned int NUM_LASERS_TO_FIRE = 2;	// Moved to player class
+//static unsigned int NUM_LASERS_TO_FIRE = 2;				// Moved to player class
 
 #endif // _DEFINES_H_
 
