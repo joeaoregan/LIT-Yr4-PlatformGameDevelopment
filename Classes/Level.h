@@ -8,6 +8,7 @@
 	Base class for levels
 	Controls spawning, collisions, end of game/level conditions
 */
+
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
@@ -52,7 +53,6 @@ public:
 	
 	void getInput();															// Get input from DPad
 	
-
 	virtual void checkGameOver(float currenTime);								// 20180202 Check have game objects collided with each other
 
 	void levelProgression(cocos2d::Label* continueLbl);							// Decide what scene comes next
@@ -60,11 +60,7 @@ public:
 	// Callbacks
 	void restartTapped(cocos2d::Ref* pSender);
 	void goToStoryScreen(cocos2d::Ref* pSender);
-	/*
-	void startLevel2(Ref* pSender);												// 20180218 Progress to the next level
-	void startLevel3(Ref* pSender);
-	void startLevel4(Ref* pSender);
-	*/
+	
 	void returnToMenu(cocos2d::Ref* pSender);									// 20180218 Return to the main menu
 
 	float randomValueBetween(float low, float high);							// Select a random value from a given range
@@ -80,14 +76,10 @@ public:
 	void spawnLasers(int amount);												// 20180221
 	
 	void spawnEnemyLaser(cocos2d::Point pos, int type = BLUE);					// Spawn enemy lasers, default is blue laser
-
-	// Fire enemy lasers
-	//void enemyFireLaser(float curTimeMillis);
-
+	
 	// Get / Set methods
-	//cocos2d::Size getWinSize() { return winSize; }							// Get the window size
-	int getNextShipLaser() const { return _nextShipLaser; }						// Next laser in laser list
-	void setNextShipLaser(int set) { _nextShipLaser = set; }					// Set the next laser in the list
+	int getNextShipLaser() const { return m_nextShipLaser; }					// Next laser in laser list
+	void setNextShipLaser(int set) { m_nextShipLaser = set; }					// Set the next laser in the list
 	cocos2d::Vector<cocos2d::Sprite*>* const getLaserList() { 
 		return m_playerLaserList; }												// return ship lasers list
 	
@@ -98,10 +90,10 @@ public:
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
 	
 protected:
-	cocos2d::Size visibleSize;													// Screen resolution changes depending on the platform
-	cocos2d::Size winSize;														// Current size of the game window (constantly updated)
-	float scaleUp, scaleDown;													// Scale objects up in size for 1080p, or down for 720p
-	cocos2d::Point origin;														// Screen origin point
+	cocos2d::Size m_visibleSize;												// Screen resolution changes depending on the platform
+	cocos2d::Size m_winSize;													// Current size of the game window (constantly updated)
+	float m_scaleUp, m_scaleDown;												// Scale objects up in size for 1080p, or down for 720p
+	cocos2d::Point m_Origin;													// Screen origin point
 	
 	// Background
 	cocos2d::SpriteBatchNode *m_batchNode;										// Group nodes together for efficiency
@@ -109,43 +101,39 @@ protected:
 
 	// Objects
 	Player* player;																// Player sprite		
-	MusicPlayer* mplayer;														// Controls for playing/pausing music and skipping tracks
-	HUD* newHUD;																// Test hud
-	DPad *controller;															// Add directional pad for mobile device
+	MusicPlayer* m_pMPlayer;													// Controls for playing/pausing music and skipping tracks
+	HUD* m_pHUD;																// Test hud
+	DPad *m_pController;														// Add directional pad for mobile device
 
 	static Level* s_pLayerInstance;												// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
-	cocos2d::EventListenerTouchAllAtOnce* touchListener;						// Touch listener
+	cocos2d::EventListenerTouchAllAtOnce* m_touchListener;						// Touch listener
 
 	// Time
 	//float curTimeInit;														// Current game time
-	float curTimeMillis;														// Current time in milliseconds
+	float m_curTimeMillis;														// Current time in milliseconds
 
 	// End of Level Labels
-	cocos2d::Label* levelCompleteLbl;											// Level finished win/lose message
-	cocos2d::MenuItemLabel* restartItem;										// Restart the game button
-	cocos2d::MenuItemLabel* continueItem;										// Continue to next level button
+	cocos2d::Label* m_pLevelCompleteLbl;										// Level finished win/lose message
+	cocos2d::MenuItemLabel* m_pRestartItem;										// Restart the game button
+	cocos2d::MenuItemLabel* m_pContinueItem;									// Continue to next level button
 
 	// Power ups
-	//cocos2d::Sprite* m_powerUpLife;											// New life power up
 	PowerUp* m_pPowerUpLife;													// New life power up
 	PowerUp* m_pPowerUpWeapon;													// Weapon upgrade power up
 
-	//float m_powerUpTimeLife;
-	//float m_powerUpTimeWeapon;
-	//float powerUpY;
-	bool spawned = false;														// Is the power up spawned already
+	bool m_spawned = false;														// Is the power up spawned already
 
 	// Asteroids
 	int m_nextAsteroid = 0;														// Asteroid list index
-	float _nextAsteroidSpawn = 0;												// time to spawn next asteroid
+	float m_nextAsteroidSpawn = 0;												// time to spawn next asteroid
 
 	// Enemies
-	unsigned int nextEnemyShip = 0;												// Next in the list of enemy ships
-	float nextEnemyShipSpawnTime = 0;											// Time to spawn next enemy ship	
+	unsigned int m_nextEnemyShip = 0;											// Next in the list of enemy ships
+	float m_nextEnemyShipSpawnTime = 0;											// Time to spawn next enemy ship	
 	unsigned int m_numEnemyShips = 3;											// Number of enemy ships
 
 	// Weapons
-	int _nextShipLaser = 0;														// Ship laser list index
+	int m_nextShipLaser = 0;													// Ship laser list index
 	int m_nextEnemyLaser = 0;													// Enemy laser list index
 
 	// Object lists
@@ -160,9 +148,6 @@ protected:
 	float m_nextFire;
 	unsigned int m_fireRate = 300;												// Set the fire rate millisecond interval depending on the difficult 200: easy, 300: normal, 400: hard
 	float m_powerUpDuration = 3.5f;												// How long the power up will remain on screen in seconds (Easy: 5, Medium: 3.5, Hard: 2)
-
-private:
-
 };
 
 #endif // __LEVEL_H__

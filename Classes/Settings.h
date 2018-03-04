@@ -31,6 +31,11 @@ public:
 	CREATE_FUNC(Settings);								// Static create() method implemented manually
 
 private:
+
+	// Set label text
+	std::string playerLabelText();						// Set the text on Enable/Disable music player button label
+	std::string gameDifficulty();						// Set the game difficulty level
+
 	void setLabelProperties(MenuItemLabel* l, float y);	// Set the properties for the specified label
 
 	// Callbacks	
@@ -52,9 +57,6 @@ private:
 	// Menu buttons
 	cocos2d::Menu* m_menu;								// Create the menu options
 
-	// Set label text
-	std::string playerLabelText();						// Set the text on Enable/Disable music player button label
-	std::string gameDifficulty();						// Set the game difficulty level
 };
 
 #endif // __SETTINGS_H__

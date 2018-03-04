@@ -5,7 +5,7 @@
 	K00203642
 	18/02/2018
 
-	Added additional level
+	Added additional level 3 with differnt enemies and spawn times
 */
 #include "Level.h"
 #include "Level3.h"
@@ -25,43 +25,46 @@ Scene* Level3::createScene() {
 	Initialisation specific to Level 3
 */
 bool Level3::init() {
-	Level::init();								// 20180221 Added Level base class
+	Level::init();																	// 20180221 Added Level base class
 
-	//Game::Instance()->setGameOver(false);		// Needed for starting new level, or restarting game
+	//Game::Instance()->setGameOver(false);											// Needed for starting new level, or restarting game
 
-	Game::Instance()->setLevel(3);				// Specific to level 2
-	newHUD->setLevelLabel();					// Update HUD Level text display
+	Game::Instance()->setLevel(3);													// Specific to level 2
+	m_pHUD->setLevelLabel();														// Update HUD Level text display
 
-	if (!Layer::init()) { return false; }		// super init first
+	if (!Layer::init()) { return false; }											// super init first
 
 	CCLOG("Clear enemy ship vector");
 
-	//initEnemyShips();							// Add the new enemy with double lasers to the list of enemies
+	//initEnemyShips();																// Add the new enemy with double lasers to the list of enemies
 
-	Game::Instance()->resetAsteroidKills();		// Reset the number of asteroids destroyed
-	Game::Instance()->resetEnemyShipKIlls();	// Reset the number of enemy ships destroyed
+	Game::Instance()->resetAsteroidKills();											// Reset the number of asteroids destroyed
+	Game::Instance()->resetEnemyShipKIlls();										// Reset the number of enemy ships destroyed
 	
 	// ParallaxNode
-	this->addChild(m_backgroundNode, -1);									// Add the parallax background
-	m_backgroundNode->init();												// Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);											// Add the parallax background
+	m_backgroundNode->init();														// Initialise the parallax scrolling background
 
-	m_enemyLaserList3 = new Vector<Sprite*>(NUM_LASERS);					// List of lasers
+	m_enemyLaserList3 = new Vector<Sprite*>(NUM_LASERS);							// List of lasers
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* enemyLaser = Sprite::create(LASER_GREEN_IMG);		// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* enemyLaser = Sprite::create(LASER_GREEN_IMG);				// Laser sprite, JOR replaced auto specifier
 		enemyLaser->setVisible(false);
 		this->addChild(enemyLaser);
 		m_enemyLaserList3->pushBack(enemyLaser);
 	}
 	
-	this->scheduleUpdate();													// Start updating the scene
+	this->scheduleUpdate();															// Start updating the scene
 
 	return true;
 }
 
+/*
+	Initialise the level 3 ships, adding to the list of enemies
+*/
 void Level3::initEnemyShips() {
 	// Made function virtual not need to clear list now, as function in level not loaded
 
-	//m_enemyLaserList->clear();
+	//m_enemyLaserList->clear();													// No need to clear, now a virtual function used
 	//for (int i = 0; i <= m_enemyShipList->size()+1; ++i) {
 	//	m_enemyShipList->popBack();
 	//	CCLOG("Remove Enemy ship %d / %d from list", i, m_enemyShipList->size());
@@ -69,28 +72,28 @@ void Level3::initEnemyShips() {
 
 	// Add 2 x Enemy Ship Type 2 - These will appear first on screen
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_2; ++i) {
-		EnemyShip* enemyShip2 = EnemyShipKling::create(visibleSize);
+		EnemyShip* enemyShip2 = EnemyShipKling::create(m_visibleSize);				// Add 3 Type 2 enemies, spawns 1st
 		this->addChild(enemyShip2);
 		m_enemyShipList->pushBack(enemyShip2);
 	}
 
 	// Add 1 x Enemy Ship Type 1 - This will appear second
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_1; ++i) {
-		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
+		EnemyShip* enemyShip1 = EnemyShip::create(m_visibleSize);					// Add Type 1 enemies, spawns 2nd
 		this->addChild(enemyShip1);
 		m_enemyShipList->pushBack(enemyShip1);
 	}
 
 	// Add 3 x Enemy Ship Type 3 - Third on screen
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_3; ++i) {
-		EnemyShip* enemyShip3 = EnemyShipWilKnot::create(visibleSize);
+		EnemyShip* enemyShip3 = EnemyShipWilKnot::create(m_visibleSize);			// Add type 3 enemies spawning 3rd in the cycle
 		this->addChild(enemyShip3);
 		m_enemyShipList->pushBack(enemyShip3);
 	}
 
 	// Add 2 x Enemy Ship Type 1 - 4th
 	for (unsigned int i = 0; i < L3_NUM_ENEMY_1+1; ++i) {
-		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
+		EnemyShip* enemyShip1 = EnemyShip::create(m_visibleSize);					// Add 2 more type 1 enemies
 		this->addChild(enemyShip1);
 		m_enemyShipList->pushBack(enemyShip1);
 	}
@@ -98,12 +101,18 @@ void Level3::initEnemyShips() {
 	CCLOG("Add enemy ships");
 }
 
+/*
+	Update level 3
+*/
 void Level3::update(float dt) {
-	Level::update(dt);													// Call base class update function		
+	Level::update(dt);																// Call base class update function		
 }
 
+/*
+	check collisions with level 3 enemies and lasers NOT FULLY IMPLEMENTED FOR ENEMY LASERS ...YET
+*/
 void Level3::checkCollisions() {
-	Level::checkCollisions();											// Call base class function
+	Level::checkCollisions();														// Call base class function
 
 	// Check collisions with different objects in different levels
 
@@ -111,17 +120,20 @@ void Level3::checkCollisions() {
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
 		if (!(enemyLaser->isVisible())) continue;
 
-		if (enemyLaser->getPosition().x <= 0)							// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);								// Hide the laser
+		if (enemyLaser->getPosition().x <= 0)										// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);											// Hide the laser
 	}
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList3) {
 		if (!(enemyLaser->isVisible())) continue;
 
-		if (enemyLaser->getPosition().x <= 0)							// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);								// Hide the laser
+		if (enemyLaser->getPosition().x <= 0)										// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);											// Hide the laser
 	}
 }
 
+/*
+	End scene, nothing different needed
+*/
 void Level3::endScene(EndReason endReason) {
-	Level::endScene(endReason);					// End the scene
+	Level::endScene(endReason);														// End the scene
 }

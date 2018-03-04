@@ -1,3 +1,13 @@
+/*
+	SplashScene.cpp
+
+	Joe O'Regan
+	K00203642
+
+	Displays animated splash screen
+	With scaling background image, and fading
+*/
+
 #include "SplashScene.h"
 #include "MainMenu.h"
 #include "Audio.h"
@@ -15,7 +25,9 @@ cocos2d::Scene* SplashScene::createScene() {
     return scene;											// Return the scene
 }
 
-// on "init" you need to initialize your instance
+/*
+	Initialise the splash scene, animating and fading the background image
+*/
 bool SplashScene::init() {
     // 1. super init first
     if ( !Layer::init() ) { return false; }
@@ -41,6 +53,11 @@ bool SplashScene::init() {
     return true;
 }
 
+// Callbacks
+
+/*
+	Go to main menu when time has passed
+*/
 void SplashScene::GoToMainMenuScene( float dt ) {
     cocos2d::Scene* scene = MainMenu::createScene();																		// Create the menu scene    
 	cocos2d::Director::getInstance( )->replaceScene(cocos2d::TransitionFade::create( TRANSITION_TIME, scene ) );			// Change the scene with transition

@@ -1,3 +1,12 @@
+/*
+	main.h
+
+	Joe O'Regan
+	K00203642
+
+	Changed window title
+*/
+
 #include "main.h"
 #include "AppDelegate.h"
 #include "cocos2d.h"

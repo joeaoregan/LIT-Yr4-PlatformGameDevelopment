@@ -6,12 +6,13 @@
 	03/03/2018
 
 	Enemy Boss
+
+	Rotating canon weapons, only one is initialised to fire, when it rotates to -30, and 30 degrees
 */
 
 #include "EnemyShipDerpStar.h"
 #include "Game.h"
 #include "Level.h"
-//#include "Level4.h"
 
 EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 	EnemyShipDerpStar* derp = new EnemyShipDerpStar();
@@ -32,7 +33,6 @@ EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 		derp->setScale(scale);																			// Scale down the size for PC
 		derp->screenSize = res;
 		
-
 		/* Different */
 		// Set the lives based on the game difficulty setting
 		derp->m_totalLives = MAX_ENEMY_SHIP4_LIVES;														// Total lives set to 80 lives Defines.h
@@ -109,8 +109,8 @@ void EnemyShipDerpStar::initHealthBar(cocos2d::Size res) {
 	Add canons to the enemy ship
 */
 void EnemyShipDerpStar::addCanons() {
-	m_pCanon1 = Sprite::create("DoubleCanon.png");
-	m_pCanon1->setPosition(cocos2d::Point(getContentSize().width * 0.6f, getContentSize().height / 2));
+	m_pCanon1 = Sprite::create("DoubleCanon.png");														// Create with sprite
+	m_pCanon1->setPosition(cocos2d::Point(getContentSize().width * 0.6f, getContentSize().height / 2));	// Position
 	m_pCanon1->setRotation(-30.0f);																		// Canon1 starts at -30, then rotates 60 to +30 then -60 to -30 and loops, firing lasers in between
 
 	m_pCanon2 = Sprite::create("DoubleCanon.png");
@@ -129,16 +129,16 @@ void EnemyShipDerpStar::moveCanon() {
 	cocos2d::RotateBy* action2 = cocos2d::RotateBy::create(5.0f, -angle);
 
 	// Canon 1
-	cocos2d::RotateBy* action3 = cocos2d::RotateBy::create(5.0f, 60.0f);
-	cocos2d::RotateBy* action4 = cocos2d::RotateBy::create(5.0f, -60.0f);
+	//cocos2d::RotateBy* action3 = cocos2d::RotateBy::create(5.0f, 60.0f);				// Moved to Level class to use call backs
+	//cocos2d::RotateBy* action4 = cocos2d::RotateBy::create(5.0f, -60.0f);
 
-	cocos2d::Sequence* sequence = cocos2d::Sequence::create(action3, action4, nullptr);
-	cocos2d::RepeatForever* repeat1 = cocos2d::RepeatForever::create(sequence);
+	//cocos2d::Sequence* sequence = cocos2d::Sequence::create(action3, action4, nullptr);
+	//cocos2d::RepeatForever* repeat1 = cocos2d::RepeatForever::create(sequence);
 
 	cocos2d::RepeatForever* repeat2 = cocos2d::RepeatForever::create(action);
 	cocos2d::RepeatForever* repeat3 = cocos2d::RepeatForever::create(action2);
 
-	//canon1->runAction(repeat1);	// middle gun
+	//canon1->runAction(repeat1);	// middle gun // Set in Level now as callbacks was one of the last thing I attempted
 	m_pCanon2->runAction(repeat2);	// top
 	m_pCanon3->runAction(repeat3);	// bottom
 
@@ -153,8 +153,9 @@ void EnemyShipDerpStar::moveCanon() {
 void EnemyShipDerpStar::update(float curTimeMillis) {
 	if (isVisible() && getPosition().x < screenSize.width - getContentSize().width) {
 
-		CCLOG("Derpstar Update");
+		//CCLOG("Derpstar Update");
 
+		// Spawn 3 green lasers
 		if (curTimeMillis > m_nextFire) {
 			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y + (getContentSize().height * m_dy)), GREEN2);

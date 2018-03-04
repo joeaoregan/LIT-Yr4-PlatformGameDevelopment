@@ -2,11 +2,12 @@
 	Joe O'Regan
 	AppDelegate.cpp
 	02/02/2018
+
+	Changed window name
 */
+
 #include "AppDelegate.h"
 #include "SplashScene.h"
-//#include "StoryScene.h"		// test story works
-//#include "Level4.h"			// test level 4 finishes up after story
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor

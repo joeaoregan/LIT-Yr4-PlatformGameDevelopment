@@ -6,6 +6,7 @@
 
 	Player class is a sub class of Sprite
 */
+
 #include "Player.h"
 #include "Input.h"
 #include "Level.h"
@@ -13,8 +14,6 @@
 /*
 	Create a player sprite, Initialise the number of lasers spawned based on the game difficulty
 	and scale depending on screen resolution
-	
-
 */
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
@@ -38,9 +37,9 @@ Player* Player::create(cocos2d::Size res) {
 		player->setScale(player->scale);													// Increase scale of player for Android (My phone anyway)
 
 		// Weapon graphic
-		player->m_pCanon = Sprite::create(PLAYER_CANON);										// The weapon on the players ship
-		player->m_pCanon->setVisible(false);													// Hide the canon to begin with
-		player->m_pCanon->setPosition((player->getContentSize().width / 2) +					// Set its position relative to the Player Sprite
+		player->m_pCanon = Sprite::create(PLAYER_CANON);									// The weapon on the players ship
+		player->m_pCanon->setVisible(false);												// Hide the canon to begin with
+		player->m_pCanon->setPosition((player->getContentSize().width / 2) +				// Set its position relative to the Player Sprite
 			player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
 		player->addChild(player->m_pCanon);													// Attach to player
 	}
@@ -58,8 +57,13 @@ Player* Player::create(cocos2d::Size res) {
 */
 void Player::update() {
 	// Move the player ship
+
+	/****************************************************************************************
+	*						KEYBOARD INPUT NOT HANDLED FOR MOBILE
+	***************************************************************************************/
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||
 		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
+		// Move player on X axis
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
 			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
 			moveLeft();
@@ -69,6 +73,7 @@ void Player::update() {
 			moveRight();
 		}
 
+		// Move player on Y axis
 		if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
 			Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
 			moveUp();

@@ -28,21 +28,14 @@ public:
 	virtual void moveCanon() {}							// Used with third enemy type (EnemyShipWillKnot) to move its (ornamental) canon
 		
 	void takeLife();									// Decrement the number of lives
-
-	void updateBar();									// Update the health bar, uses ScaleTo to display an updated percentage in HealthBar class
-
+	
 	unsigned int getLives() const { return m_lives; }	// Get the lives left for the Enemy Ship
 	void setLives(unsigned int set) { m_lives = set; }
 
 	float getNextFire() const { return m_nextFire; }	// Get the current fire rate	
-	//void setNextFire(float set) { m_nextFire = set; }	// Set the fire rate
-
-	//float minSpeed() { return m_speedMin; }			// Minimum duration
-	//float maxSpeed() { return m_speedMax; }
 
 	float getDuration() { return m_duration; }			// Random duration on screen, used in spawnObject() for applying action sequence
 	
-
 	virtual void spawnLaser() { }						// Spawn a laser
 
 	cocos2d::Sprite* m_pCanon1;							// Ship canons (only used on Wilknot, and Derp Star enemies)
@@ -50,11 +43,12 @@ public:
 	cocos2d::Sprite* m_pCanon3;
 
 protected:
+	cocos2d::Size m_winSize;							// Screen resolution
+
 	// health
 	unsigned int m_lives = MAX_ENEMY_SHIP1_LIVES;		// Number of lives (Defines.h)
 	float m_totalLives = MAX_ENEMY_SHIP1_LIVES;			// Total lives for this enemy to set/rest lives (Defines.h)
 	HealthBar* m_pBar;									// HealthBar
-	cocos2d::Size m_winSize;							// Screen resolution
 
 	// Fire rate
 	float m_nextFire;									// Time next laser spawned

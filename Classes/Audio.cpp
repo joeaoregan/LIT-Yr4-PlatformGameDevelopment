@@ -5,7 +5,7 @@
 	K00203642
 
 	Game audio class, with singleton access
-	Cross-platform, plays different type of sound file, depending on the platform ot compile for
+	Cross-platform, plays different type of sound file, depending on the platform compiled for
 */
 
 #include "Audio.h"
@@ -58,6 +58,10 @@ void Audio::init() {
 	SimpleAudioEngine::getInstance()->preloadEffect(POWER_UP);
 //#endif
 }
+
+/*
+	Play the game effects
+*/
 void Audio::selectMenuOption() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 }
@@ -82,14 +86,23 @@ void Audio::powerUpFX() {
 	SimpleAudioEngine::getInstance()->playEffect(POWER_UP);									// Play power up sound effect
 }
 
+/*
+	Play the music
+*/
 void Audio::play() {
-	//SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);
 	SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
+
+/*
+	Pause the music
+*/
 void Audio::pause() {
 	SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
+/*
+	Play the previous track in the array
+*/
 void Audio::skipTrackForwards() {
 	//if (currentTrack < NUM_TRACKS - 1)
 	//	currentTrack++;
@@ -99,36 +112,56 @@ void Audio::skipTrackForwards() {
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
 }
+
+/*
+	Play the next track
+*/
 void Audio::skipTrackBackwards() {
-	//if (currentTrack > 0) currentTrack--;
-	//else currentTrack = NUM_TRACKS - 1;
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	(currentTrack == 0) ? currentTrack = NUM_TRACKS - 1 : currentTrack--;
 
 	SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[currentTrack], true);		// 20180221 skip audio track
 }
 
+/*
+	Increase the music volume
+*/
 void Audio::musicVolIncrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (m_currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(m_currentVol + 0.1f);
 }
+
+/*
+	Decrease the music volume
+*/
 void Audio::musicVolDecrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (m_currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(m_currentVol - 0.1f);
 }
+
+/*
+	Increase the SFX volume
+*/
 void Audio::sfxVolIncrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (m_currentVol < MAX_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(m_currentVol + 0.1f);
 }
+
+/*
+	Decrease the SFX volume
+*/
 void Audio::sfxVolDecrease() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 	if (m_currentVol > MIN_VOL)
 		SimpleAudioEngine::getInstance()->setEffectsVolume(m_currentVol - 0.1f);
 }
 
+/*
+	Get the name of the track from the trackNames array
+*/ 
 std::string Audio::getTrackName() {
-	return trackNames[currentTrack];
+	return trackNames[currentTrack];														// Returns the name of the track
 }

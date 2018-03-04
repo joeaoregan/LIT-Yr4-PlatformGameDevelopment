@@ -1,3 +1,13 @@
+/*
+	HUD.h
+
+	Joe O'Regan
+	K00203642
+
+	Heads up display
+	Shows level number, score, and time remaining each level
+*/
+
 #include "Game.h"
 #include "HUD.h"
 #include "MainMenu.h"
@@ -5,9 +15,12 @@
 HUD* HUD::s_pInstance;																							// Singleton for Heads Up Display
 
 void HUD::init(cocos2d::Layer *layer) {
-	m_currentTime = 0.0f;																							// Current game time, for timer, changed to float to solve Android timer issue
+	m_currentTime = 0.0f;																						// Current game time, for timer, changed to float to solve Android timer issue
 }
 
+/*
+	Create the heads up display
+*/
 HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 	s_pInstance = new HUD();
 
@@ -37,7 +50,8 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		cocos2d::Sprite* topPanel = Sprite::create("Panel.png");
 		topPanel->setScale(scaleDown);
 		topPanel->setScaleY(topPanel->getScaleY() * 0.80f);
-		topPanel->setPosition(cocos2d::Point(s_pInstance->m_visibleSize.width / 2, (res.height * 0.995f) - ((topPanel->getContentSize().height * topPanel->getScaleY()) / 2)));
+		topPanel->setPosition(cocos2d::Point(s_pInstance->m_visibleSize.width / 2, 
+			(res.height * 0.995f) - ((topPanel->getContentSize().height * topPanel->getScaleY()) / 2)));
 		s_pInstance->addChild(topPanel);
 
 		// Menu Icon
@@ -50,7 +64,8 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		s_pInstance->m_pLevelLabel->setTextColor(Color4B::RED);
 		s_pInstance->m_pLevelLabel->enableOutline(Color4B::WHITE, 3);
 		s_pInstance->m_pLevelLabel->setScale(scaleUp);																				// Scale up the image
-		s_pInstance->m_pLevelLabel->setPosition(Point((position.x + res.width * 0.1f) + s_pInstance->m_pMenuItem->getContentSize().width, position.y + res.height * 0.95));			// Then set the position
+		s_pInstance->m_pLevelLabel->setPosition(Point((position.x + res.width * 0.1f) + 
+			s_pInstance->m_pMenuItem->getContentSize().width, position.y + res.height * 0.95));			// Then set the position
 		s_pInstance->addChild(s_pInstance->m_pLevelLabel);
 
 		// Current score
@@ -66,7 +81,8 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 		s_pInstance->m_pTimeLabel->setTextColor(Color4B::RED);
 		s_pInstance->m_pTimeLabel->enableOutline(Color4B::WHITE, 3);
 		s_pInstance->m_pTimeLabel->setScale(scaleUp);
-		s_pInstance->m_pTimeLabel->setPosition(Point(((res.width * 0.925f) - s_pInstance->m_pTimeLabel->getWidth()), res.height * 0.95 + position.y));
+		s_pInstance->m_pTimeLabel->setPosition(Point(((res.width * 0.925f) - s_pInstance->m_pTimeLabel->getWidth()), 
+			res.height * 0.95 + position.y));
 		s_pInstance->addChild(s_pInstance->m_pTimeLabel);
 
 		// Player number of lives
@@ -74,7 +90,8 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 			s_pInstance->m_pPlayerLife = Sprite::create("PlayerLifeNew2.png");
 			//s_pInstance->playerLife->setPosition(visibleSize.width * 0.05 + (i * 52), visibleSize.height * 0.05);
 			s_pInstance->m_pPlayerLife->setScale(scaleDown); // 20180302 Fixed
-			s_pInstance->m_pPlayerLife->setPosition(position.x + res.width * 0.05f + (i * (s_pInstance->m_pPlayerLife->getContentSize().width * scaleDown)), res.height * 0.05f);
+			s_pInstance->m_pPlayerLife->setPosition(position.x + res.width * 0.05f + 
+				(i * (s_pInstance->m_pPlayerLife->getContentSize().width * scaleDown)), res.height * 0.05f);
 			s_pInstance->addChild(s_pInstance->m_pPlayerLife);
 			s_pInstance->m_pLivesList[i] = s_pInstance->m_pPlayerLife;																				// Add life sprite to list of lives
 		}
@@ -100,6 +117,9 @@ HUD *HUD::create(cocos2d::Point position, cocos2d::Size res) {
 	return NULL;
 }
 
+/*
+	Update the heads up display, animating a new life
+*/
 void HUD::update(float curTimeMillis) {
 	// If the players lives are less than max lives
 	if (Game::Instance()->getLives() <= MAX_PLAYER_LIVES && !Game::Instance()->isGameOver()) {				// If the players lives are less than the max num lives
@@ -128,12 +148,12 @@ void HUD::update(float curTimeMillis) {
 		}
 	}
 
-	m_pScoreLabel->setString("Score: " + StringUtils::toString(Game::Instance()->getScore()));					// Update the displayed score text
-	m_pTimeLabel->setString("Time: " + StringUtils::toString(Game::Instance()->getTimer()));					// Update the countdown timer text
+	m_pScoreLabel->setString("Score: " + StringUtils::toString(Game::Instance()->getScore()));				// Update the displayed score text
+	m_pTimeLabel->setString("Time: " + StringUtils::toString(Game::Instance()->getTimer()));				// Update the countdown timer text
 
 	updateTimer(curTimeMillis);																				// Update the timer
 
-	if (s_pInstance->m_pCloseItem->isSelected()) {																// If the close menu button is selected
+	if (s_pInstance->m_pCloseItem->isSelected()) {															// If the close menu button is selected
 		Audio::Instance()->selectMenuOption();
 		cocos2d::Director::getInstance()->end();															// Close the director
 

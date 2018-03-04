@@ -13,7 +13,7 @@
 cocos2d::Scene* AudioMenu::createScene() {
 	cocos2d::Scene* scene = cocos2d::Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
 	m_pLayer = AudioMenu::create();						// 'layer' is an autorelease object, JOR replaced auto specifier
-	scene->addChild(m_pLayer);								// Add layer as a child to scene
+	scene->addChild(m_pLayer);							// Add layer as a child to scene
 
 	return scene;										// Return the scene
 }
@@ -22,75 +22,68 @@ cocos2d::Scene* AudioMenu::createScene() {
 bool AudioMenu::init() {
 	MenuScene::init();																															// base class function
 
-	m_pTitleSprite->setTexture("AudioMenu.png");																									// Change the title image text
+	m_pTitleSprite->setTexture("AudioMenu.png");																								// Change the title image text
 	
-	// Instructions (MarkerFelt.ttf Super Mario Bros..ttf)
-	//instructionLbl = cocos2d::LabelTTF::create("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);			// Label to display current high score	
 	instructionLbl = cocos2d::Label::createWithTTF("Adjust Audio Volumes", "fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.045f);
-	instructionLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.65f + m_origin.y));						// Set its position on screen
+	instructionLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.65f + m_origin.y));				// Set its position on screen
 	instructionLbl->setColor(cocos2d::Color3B::WHITE);																							// Set the text colour
-	//instructionLbl->setScale(scale);																											// Set the scale
 	this->addChild(instructionLbl);																												// Add it to the layer
 	
 	// Music Label
 	musicLbl = cocos2d::Sprite::create("Music.png");																							// Music Vol Label
-	musicLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));								// Set position on screen
+	musicLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));						// Set position on screen
 	musicLbl->setScale(0.8f * m_scale);																											// Set the scale
 	this->addChild(musicLbl);																													// Add to layer	
 
 	// Music volume down
 	btnVolDownImg = cocos2d::MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(AudioMenu::musicVolDown, this));			// Set image for menu option
-	btnVolDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));						// Set image position
-	btnVolDownImg->setScale(m_scale);																												// Set the scale
+	btnVolDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));				// Set image position
+	btnVolDownImg->setScale(m_scale);																											// Set the scale
 
 	// Music volume up
 	btnVolUpImg = cocos2d::MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(AudioMenu::musicVolUp, this));				// Set image for menu option
-	btnVolUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));						// Set image position
+	btnVolUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.55f + m_origin.y));				// Set image position
 	btnVolUpImg->setScale(m_scale);																												// Set the scale
 	
 	// FX Label
 	sfxLbl = cocos2d::Sprite::create("SoundFX.png");																							// SFX Vol Label
-	sfxLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));								// Set position on screen
-	sfxLbl->setScale(0.8f * m_scale);																												// Set the scale
+	sfxLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));						// Set position on screen
+	sfxLbl->setScale(0.8f * m_scale);																											// Set the scale
 	this->addChild(sfxLbl);																														// Add to layer	
 
 	// FX Down
 	btnFXDownImg = cocos2d::MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(AudioMenu::sfxVolDown, this));			// Set image for menu option
-	btnFXDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));						// Set image position
-	btnFXDownImg->setScale(m_scale);																												// Set the scale
+	btnFXDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));				// Set image position
+	btnFXDownImg->setScale(m_scale);																											// Set the scale
 
 	// FX Up
 	btnFXUpImg = cocos2d::MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(AudioMenu::sfxVolUp, this));					// Set image for menu option
-	btnFXUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));						// Set image positionscreen
+	btnFXUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.45f + m_origin.y));				// Set image positionscreen
 	btnFXUpImg->setScale(m_scale);																												// Set the scale
 	
-	//instructionLbl = cocos2d::LabelTTF::create("Select Music Track", "fonts/Super Mario Bros..ttf", visibleSize.height * 0.045f);				// Label to display current high score	
 	instructionLbl = cocos2d::Label::createWithTTF("Select Music Track", "fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.045f);
-	instructionLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.35f + m_origin.y));						// Set its position on screen
+	instructionLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.35f + m_origin.y));				// Set its position on screen
 	instructionLbl->setColor(cocos2d::Color3B::WHITE);																							// Set the text colour
-	//instructionLbl->setScale(scale);																											// Set the scale
 	this->addChild(instructionLbl);																												// Add it to the layer
 	
 	// Track Label
 	trackLbl = cocos2d::Sprite::create("Track.png");																							// SFX Vol Label
-	trackLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));								// Set position on screen
+	trackLbl->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));						// Set position on screen
 	trackLbl->setScale(0.8f * m_scale);																											// Set the scale
 	this->addChild(trackLbl);																													// Add to layer	
 
 	// Track Backwards
 	btnTrackDownImg = cocos2d::MenuItemImage::create("btnMinus.png", "btnMinusSelect.png", CC_CALLBACK_1(AudioMenu::skipTrackBackwards, this));	// Set image for menu option
-	btnTrackDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));					// Set image position
-	//btnTrackDownImg->setScale(scale);																											// Set the scale
+	btnTrackDownImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.3f + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));			// Set image position
 
 	// Track Forwards
 	btnTrackUpImg = cocos2d::MenuItemImage::create("btnPlus.png", "btnPlusSelect.png", CC_CALLBACK_1(AudioMenu::skipTrackForwards, this));		// Set image for menu option
-	btnTrackUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));						// Set image position
-	//btnTrackUpImg->setScale(scale);																											// Set the scale
+	btnTrackUpImg->setPosition(cocos2d::Point(m_visibleSize.width * 0.7f + m_origin.x, m_visibleSize.height * 0.25f + m_origin.y));				// Set image position
 	
 	// Current Track
 	currentTrackLbl = cocos2d::Label::createWithTTF(Audio::Instance()->getTrackName(),															// Label to display current high score	
 		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.045f);
-	currentTrackLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.15f + m_origin.y));					// Set its position on screen
+	currentTrackLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5 + m_origin.x, m_visibleSize.height * 0.15f + m_origin.y));			// Set its position on screen
 	currentTrackLbl->setColor(cocos2d::Color3B::WHITE);																							// Set the text colour
 	//currentTrackLbl->setScale(scale);																											// Set the scale
 	this->addChild(currentTrackLbl);																											// Add it to the layer

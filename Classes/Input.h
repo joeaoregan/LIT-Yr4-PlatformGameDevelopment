@@ -19,10 +19,10 @@ public:
 		return s_pInstance;
 	}
 
-	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);
+	bool isKeyPressed(cocos2d::EventKeyboard::KeyCode code);					// Is the key passed as a parameter pressed
 	bool isKeyPressedMenu(cocos2d::EventKeyboard::KeyCode code);
 
-	double keyPressedDuration(cocos2d::EventKeyboard::KeyCode code);
+	double keyPressedDuration(cocos2d::EventKeyboard::KeyCode code);			// How long has the key been pressed for
 
 	void init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatcher);
 

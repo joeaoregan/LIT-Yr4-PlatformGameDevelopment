@@ -20,18 +20,18 @@ Scene* Level1::createScene() {
     return scene;											// Return the scene
 }
 
-// on "init" you need to initialize your instance
+/* 
+	Initialise level 1 making additions to level base class
+*/
 bool Level1::init() {
-	//Game::Instance()->setLevel(1);							// For parallax node init
+	//Game::Instance()->setLevel(1);						// For parallax node init
 
 	Level::init();											// 20180221 Added Level base class
 
-	newHUD->setLevelLabel();								// Update HUD Level text display
+	m_pHUD->setLevelLabel();								// Update HUD Level text display
 
 	if ( !Layer::init() ) { return false; }					// super init first
-	
-	//initLives();											// Choose the number of lives based on the game difficult
-	
+		
 	Game::Instance()->resetAsteroidKills();					// Reset the number of asteroids destroyed
 	Game::Instance()->resetEnemyShipKIlls();				// Reset the number of enemy ships destroyed
 		
@@ -45,29 +45,23 @@ bool Level1::init() {
 }
 
 /*
-	Choose the number of lives based on the game difficulty
-	// MOVED TO LEVEL
-void Level1::initLives() {
-	// Set the starting lives based on the difficulty
-	if (Game::Instance()->getDifficulty() == EASY)
-		Game::Instance()->setLives(5);						// Set the number of lives for the player
-	else if (Game::Instance()->getDifficulty() == MEDIUM)
-		Game::Instance()->setLives(3);						// Set the number of lives for the player
-	else
-		Game::Instance()->setLives(2);						// Set the number of lives for the player
-
-	CCLOG("Level 2 - Init Lives: %d", Game::Instance()->getLives());
-}
+	Update Level 1
 */
 void Level1::update(float dt) {
 	Level::update(dt);										// Call base class update function	
 }
 
+/*
+	Check collisions
+*/
 void Level1::checkCollisions() {
 	Level::checkCollisions();								// Call base class function
 	// Check collisions with different objects in different levels
 }
 
+/*
+	End the level
+*/
 void Level1::endScene(EndReason endReason) {
 	Level::endScene(endReason);								// End the scene
 }

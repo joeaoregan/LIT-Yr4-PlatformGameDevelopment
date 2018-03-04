@@ -1,8 +1,8 @@
 /*
+	HUD.h
+
 	Joe O'Regan
 	K00203642
-
-	HUD.h
 
 	Heads up display
 	Shows level number, score, and time remaining each level

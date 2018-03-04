@@ -31,8 +31,8 @@ public:
 
     static DPad *create(std::string base, std::string buttonImage, std::string pressedButtonImage, cocos2d::Point position);
 
-    DPad();											// Constructor
-    ~DPad();										// Destructor
+	DPad() {};										// Constructor
+	~DPad() {};										// Destructor
 
 	bool init(cocos2d::Layer *layer);				// JOR 13/12/2018 initialise the directional pad
 	cocos2d::MenuItemImage *getButton(int button);

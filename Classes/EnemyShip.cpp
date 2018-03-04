@@ -19,8 +19,8 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	float scale = (res.height == 720) ? 0.67f : 1.0f;
 	
 	if (eship && eship->initWithFile("EnemyShip.png")) {
-		eship->m_winSize = res;
-		eship->autorelease();
+		eship->m_winSize = res;												// Store the screen resolution
+		eship->autorelease();												// Auto release it when done
 		eship->setVisible(false);											// Initially invisible
 		eship->setScale(scale);												// Scale down the size for PC
 
@@ -36,8 +36,6 @@ EnemyShip* EnemyShip::create(cocos2d::Size res) {
 			float(eship->getLives() / eship->m_totalLives),					// percentage  (Max 4 lives)
 			redBR, transBR);
 		eship->addChild(eship->m_pBar);		
-		//eship->updateBar();
-		//eship->m_bar->setVisible(false);
 	}
 	else {
 		delete eship;
@@ -55,38 +53,8 @@ void EnemyShip::takeLife() {
 	if (m_lives < 1) {
 		if (isVisible()) Game::Instance()->incrementEnemyShipKills();			// increment the enemies killed if visible (stop repeating)
 		setVisible(false);														// The set visible
-		//Game::Instance()->incrementEnemyShipKills();								// Add to enemies killed total
-		//m_bar->setVisible(false);												// Hide the bar
-		//m_bar->clear();
 	}
-	//if (isVisible()) m_bar->updateBar(m_lives / MAX_ENEMY_SHIP_LIVES);
 	if (isVisible()) m_pBar->updateBar(m_lives / m_totalLives);					// The health bar percentage is lives / max lives
-	//if (isVisible() && m_bar->isVisible()) updateBar();
-	//else m_bar->clear();
-}
-
-/*
-	Re-draw the health bar
-*/
-void EnemyShip::updateBar() {
-	if (isVisible()) {
-
-		/*
-		// Update the health bar
-		//m_bar->clear();
-
-		CCLOG("Update Enemy Health Bar");
-
-		m_bar = HealthBar::create(
-			getPosition().x + (getContentSize().width / 2), getPosition().y + getContentSize().height,		// Position
-			(m_winSize.height == 720) ? 80 : 120, (m_winSize.height == 720) ? 10 : 15,						// Dimensions
-			float(m_lives / MAX_ENEMY_SHIP_LIVES),															// percentage
-			cocos2d::Color4F(1, 0, 0, 1), cocos2d::Color4F(1, 0, 0, 0.5f));
-		m_bar->setVisible(true);
-		this->addChild(m_bar);
-		*/
-		//m_bar->updateBar(m_lives / MAX_ENEMY_SHIP_LIVES);
-	}
 }
 
 /*
@@ -101,10 +69,7 @@ void EnemyShip::init(cocos2d::Size res) {
 	setPosition(res.width + getContentSize().width / 2, m_randYPos);			// Set the postion off screen to the right, at random Y value
 	setVisible(true);															// Set visible
 	setLives(m_totalLives);														// Reset the number of lives available
-	//updateBar();
-	//m_bar->setVisible(true);
 	m_pBar->updateBar(m_lives / m_totalLives);									// Update the health bar
-	//m_bar->updateBar(0.67f);
 }
 
 /*
@@ -247,4 +212,4 @@ EnemyShip::EnemyShip(cocos2d::Layer *layer) {
 void EnemyShip::update() {
 	// Move the Enemy Ship
 	}
-	*/
+*/

@@ -33,19 +33,20 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 		eship->m_totalLives = MAX_ENEMY_SHIP2_LIVES;
 		eship->m_lives = eship->m_totalLives;
 
-		eship->m_fireRate = 750;
-		eship->m_dy = 0.375f * scale;
+		// Laser fire rate and spawn offsets
+		eship->m_fireRate = 750;												// Time between firing lasers
+		eship->m_dy = 0.375f * scale;											// Offset to spawn lasers
 		eship->m_dx = -0.33f * scale;
 
-		cocos2d::Color4F redBR(0.39f, 0.65f, 0.7f, 1);
-		cocos2d::Color4F transBR(1, 0, 0, 0.5f);
+		cocos2d::Color4F greenBar(0.39f, 0.65f, 0.7f, 1);						// Foregrond colour
+		cocos2d::Color4F transBR(1, 0, 0, 0.5f);								// Background Colour
 
 		eship->m_pBar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), 
 			eship->getPosition().y + eship->getContentSize().height,			// Position
 			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,		// Dimensions
 			float(eship->getLives() / eship->m_totalLives),						// percentage (Max 4 lives)
-			redBR, transBR);
+			greenBar, transBR);													// Set colours
 		eship->addChild(eship->m_pBar);
 	}
 	else {
@@ -55,8 +56,11 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 	return eship;
 }
 
+/*
+	Update the ship spawning 2 x lasers based on the fire rate
+*/
 void EnemyShipKling::update(float curTimeMillis) {
-	if (isVisible() && getPosition().x) {						// Don't shot until visibility set
+	if (isVisible() && getPosition().x) {										// Don't shot until visibility set
 		if (curTimeMillis > m_nextFire) {
 			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), 
 				getPosition().y - (getContentSize().width * m_dy)), ORANGE);
@@ -67,5 +71,4 @@ void EnemyShipKling::update(float curTimeMillis) {
 			m_nextFire = curTimeMillis + m_fireRate;
 		}
 	}
-	//EnemyShip::update(curTimeMillis);											// Next fire time set here, not need to set twice, will cancel second laser
 }

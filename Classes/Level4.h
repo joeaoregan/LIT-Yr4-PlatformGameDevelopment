@@ -21,7 +21,7 @@ public:
 
 	void checkCollisions();								// 20180202 Check is the game over or not
 	
-	void spawnDerpLaser();								// Hide the node/sprite
+	void spawnDerpLaser();								// Spawn lasers for the Enemy Boss (Separate to canon weapon)
 
 	void spawnCanonLaser1();							// Spawn laser upwards at 30 degree angle
 	void spawnCanonLaser2();							// Spawn laser in downwards direction

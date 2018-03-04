@@ -1,7 +1,11 @@
 /*
-	Joe O'Regan
 	ParallaxNodeExtras.cpp
+
+	Joe O'Regan
+	K00203642
 	02/02/2018
+
+	Added scaling, and different backgrounds for levels
 */
 #include "Game.h"
 //#include "ParallaxNodeExtras.h"

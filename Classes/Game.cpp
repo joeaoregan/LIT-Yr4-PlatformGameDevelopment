@@ -51,33 +51,47 @@ bool Game::init() {
 	return true;
 }
 
+/*
+	Increment the number of player lives
+*/
 void Game::addLife() { 
 	if (m_lives <= MAX_PLAYER_LIVES) 				// Increment the number of lives (Max 5)
 		m_lives++; 
 	CCLOG("Player Lives Incremented: %d", m_lives);
 }
 
+/*
+	Check is the score value the layer achieved a high score
+	Use User Defaults to get the current high score
+	and compare to players score
+*/
 bool Game::checkHighScore() {
 	// Save Score
 	UserDefault* def = UserDefault::getInstance();
-	unsigned int highScore = def->getIntegerForKey("Score1", 0);
+	unsigned int highScore = def->getIntegerForKey("Score1", 0);	// Get current saved high score
 
-	if (getScore() > highScore) {
+	if (getScore() > highScore) {									// Compare to players score
 		return true;
 	}
 
 	return false;
 }
 
+/*
+	Update the countdown timer
+*/
 void Game::updateTimer(float curTimeMillis) {
 	if (curTimeMillis > m_currentTime) {
 		m_currentTime = curTimeMillis + 1000.0f;
-		m_time--;
-
+		m_time--;													// Decrement the number of seconds
+		
 		CCLOG("Countdown Timer: %d", m_time);
 	}
 }
 
+/*
+	Get the time since game started
+*/
 float Game::getTimeTick() {
 	timeval time;
 	gettimeofday(&time, NULL);

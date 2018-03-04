@@ -18,20 +18,17 @@
 */
 AsteroidOriginal* AsteroidOriginal::create(cocos2d::Size res) {
 	AsteroidOriginal* asteroid = new AsteroidOriginal();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;
+	float scale = (res.height == 720) ? 0.67f : 1.0f;					// Scale objects to suit screen resolution
 	
 	if (asteroid && asteroid->initWithSpriteFrameName(ASTEROID_IMG)) {
 		asteroid->autorelease();
-
 		asteroid->m_winSize = res;										// Store the screen size (future use)
-		//asteroid->m_type = DYNAMIC_ROID;								// Set the asteroid type
 		asteroid->setVisible(false);									// Set invisible to begin with
 		asteroid->setScale(scale);										// Scale down the size for PC
-		//asteroid->m_duration = Level::Instance()->randomValueBetween(asteroid->m_speedMin, asteroid->m_speedMax);
 	}
 	else {	
 		delete asteroid;
 	}
 	
-	return asteroid;
+	return asteroid;													// Return Asteroid Original object
 }

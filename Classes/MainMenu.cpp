@@ -23,8 +23,8 @@
 
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
-	m_pLayer = MainMenu::create();					// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
-	scene->addChild(m_pLayer);						// Add layer as a child to scene
+	m_pLayer = MainMenu::create();				// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
+	scene->addChild(m_pLayer);					// Add layer as a child to scene
 		
 	return scene;								// Return the scene
 }

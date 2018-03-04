@@ -19,10 +19,10 @@
 
 EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	EnemyShipWilKnot* eship = new EnemyShipWilKnot();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;
+	float scale = (res.height == 720) ? 0.67f : 1.0f;										// Set the scale
 
 	if (eship && eship->initWithFile("ShipGrey.png")) {
-		eship->autorelease();
+		eship->autorelease();																// Clear when done
 
 		eship->setVisible(false);															// Initially invisible until spawned
 		eship->setScale(scale);																// Scale down the size for PC

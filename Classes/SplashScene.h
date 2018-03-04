@@ -12,7 +12,7 @@ public:
     CREATE_FUNC(SplashScene);				// implement the "static create()" method manually
     
 private:
-    void GoToMainMenuScene( float dt );    
+    void GoToMainMenuScene( float dt );		// Go to main menu call back
 };
 
 #endif // __SPLASH_SCENE_H__
