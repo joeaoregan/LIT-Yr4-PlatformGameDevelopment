@@ -149,7 +149,7 @@ void MenuScene::setYPosAndScale(cocos2d::MenuItemImage* sprite, float y) {
 	The player can enter and store their name from this scene
 */
 void MenuScene::GoToEnterName(cocos2d::Ref *sender) {
-	Audio::Instance()->selectMenuOption();																					// Play button sound effect
+	Audio::Instance()->playFX(BUTTON_FX);																					// Play button sound effect
 	cocos2d::Scene* scene = EnterName::createScene();																		// Create the enter name scene
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFadeDown::create(TRANSITION_TIME, scene));			// Load the enter name screen with transition
 }
@@ -158,7 +158,7 @@ void MenuScene::GoToEnterName(cocos2d::Ref *sender) {
 	Change to the main menu scene
 */
 void MenuScene::returnToMenu(cocos2d::Ref *sender) {
-	Audio::Instance()->selectMenuOption();
+	Audio::Instance()->playFX(BUTTON_FX);
 	cocos2d::Scene* scene = MainMenu::createScene();																		// Return to the main menu
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFade::create(TRANSITION_TIME, scene));				// Switch scenes with animated transition
 }

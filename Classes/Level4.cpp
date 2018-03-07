@@ -115,7 +115,7 @@ void Level4::spawnCanonLaser1() {
 	m_nextEnemyLaser++;																			// The next sprite
 	if (m_nextEnemyLaser >= m_enemyLaserList3->size()) m_nextEnemyLaser = 0;					// Loop index back to start if at end
 	if (enemyLaser->isVisible()) return;														// If the laser is already visible skip it
-	Audio::Instance()->laserFXEnemy();															// Play audio
+	Audio::Instance()->playFX(LASER_ENEMY4);															// Play audio
 
 	//enemyLaser->setPosition(derpStar->getPosition().x + derpStar->getContentSize().width * 0.6f, 
 	//	(derpStar->getPosition().y/2) + derpStar->getContentSize().height / 2);					// Set the postion relevant to the ships coordinates
@@ -150,7 +150,7 @@ void Level4::spawnCanonLaser2() {
 	m_nextEnemyLaser++;
 	if (m_nextEnemyLaser >= m_enemyLaserList3->size()) m_nextEnemyLaser = 0;
 	if (enemyLaser->isVisible()) return;														// If the laser is already visible skip it
-	Audio::Instance()->laserFXEnemy();															// Play audio
+	Audio::Instance()->playFX(LASER_ENEMY4);														// Play audio
 
 	//enemyLaser->setPosition(derpStar->getPosition().x + getContentSize().width * 0.6f, 
 	//	derpStar->getPosition().y + getContentSize().height / 2);
@@ -295,10 +295,38 @@ void Level4::checkCollisions() {
 		if (!(shipLaser->isVisible())) continue;
 
 		if (shipLaser->getBoundingBox().intersectsRect(m_pDerpStar->getBoundingBox())) {
-			Audio::Instance()->explodeFX();														// Play explosion effect
+			Audio::Instance()->playFX(EXPLOSION_LARGE);											// Play explosion effect
 			shipLaser->setVisible(false);														// Hide the player laser
 			Game::Instance()->updateScore(20);													// Award 20 points for destroying an enemy ship
 			m_pDerpStar->takeLife();
+		}
+	}
+
+	// Check collisions laser type 2 (Orange)
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x <= 0)											// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);												// Hide the laser
+
+																						// Check collisions between the player ship and Laser type 2 (Orange)
+		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
+			enemyLaser->setVisible(false);												// Destroy the asteroid
+			player->damageHit();
+		}
+	}
+
+	// Check collisions for laser type 3 (Green)
+	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList3) {
+		if (!(enemyLaser->isVisible())) continue;
+
+		if (enemyLaser->getPosition().x <= 0)											// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);												// Hide the laser
+
+																						// Check collisions between the player ship and Laser type 3 (Green)
+		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
+			enemyLaser->setVisible(false);												// Destroy the asteroid
+			player->damageHit();
 		}
 	}
 }
@@ -316,6 +344,9 @@ void Level4::endScene(EndReason endReason) {
 	this->addChild(derpMessage);
 
 	Level::endScene(endReason);																	// End the scene
+
+	restartLbl->setVisible(false);
+
 }
 
 /*
@@ -327,6 +358,7 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 		m_pDerpStar->stopAllActions();
 		m_pDerpStar->m_pCanon1->stopAllActions();
 		m_messageEOL = "DerpStar Has Been Destroyed";
+		Game::Instance()->setWon(true);
 		endScene(KENDREASONWIN);
 	}
 	
@@ -345,6 +377,7 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 		}
 		else {
 			m_messageEOL = "You Win";
+			Game::Instance()->setWon(true);
 			endScene(KENDREASONWIN);															// Player stays playing for the length of time
 		}
 	}

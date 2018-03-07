@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "Game.h"
+#include "HealthBar.h"
 
 class Player : public cocos2d::Sprite {
 public:
@@ -29,6 +30,9 @@ public:
 	void moveLeft();
 	void moveRight();
 
+	void damageHit();
+	void initHealthBar(cocos2d::Size res, cocos2d::Color4F fg);
+
 	unsigned int getWeaponStrength() { return m_weaponStrength; }	// Current player weapon grade or level
 	void weaponUpgrade() { 
 		if (m_weaponStrength < MAX_WEAPON_LEVEL)					// If the weapons level isn't maxed out already
@@ -36,8 +40,14 @@ public:
 	}	
 
 private:
-	cocos2d::Size visibleSize;										// Visible screen size
-	float scale;													// Scale of the player based on the screen resolution
+	HealthBar * m_pBar;												// HealthBar
+
+	float m_maxHealth = 10.0f;
+	int m_health = 10;
+	int m_lives = 3;
+
+	cocos2d::Size m_visibleSize;									// Visible screen size
+	float m_scale;													// Scale of the player based on the screen resolution
 	unsigned int m_weaponStrength = 2;								// Current weapon
 
 	cocos2d::Sprite* m_pCanon;										// Canon made visible 

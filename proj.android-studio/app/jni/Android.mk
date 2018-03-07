@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AsteroidOriginal.cpp \
                    $(LOCAL_PATH)/../../../Classes/Audio.cpp \
                    $(LOCAL_PATH)/../../../Classes/AudioMenu.cpp \
+                   $(LOCAL_PATH)/../../../Classes/CreditsScene.cpp \
                    $(LOCAL_PATH)/../../../Classes/DPad.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnemyShip.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnemyShipDerpStar.cpp \
@@ -24,6 +25,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnemyShipWilknot.cpp \
                    $(LOCAL_PATH)/../../../Classes/EnterName.cpp \
                    $(LOCAL_PATH)/../../../Classes/Game.cpp\
+                   $(LOCAL_PATH)/../../../Classes/GameOverScene.cpp\
                    $(LOCAL_PATH)/../../../Classes/HighScores.cpp \
                    $(LOCAL_PATH)/../../../Classes/HealthBar.cpp \
                    $(LOCAL_PATH)/../../../Classes/HUD.cpp \

@@ -17,31 +17,38 @@
 EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	EnemyShip* eship = new EnemyShip();
 	float scale = (res.height == 720) ? 0.67f : 1.0f;
-	
-	if (eship && eship->initWithFile("EnemyShip.png")) {
-		eship->m_winSize = res;												// Store the screen resolution
-		eship->autorelease();												// Auto release it when done
-		eship->setVisible(false);											// Initially invisible
-		eship->setScale(scale);												// Scale down the size for PC
 
-		eship->m_dx = -0.65f * scale;										// Offset for spawning the laser at the front of the ship
+	//if (eship && eship->initWithFile("EnemyShip.png")) {
+	if (eship && eship->initWithSpriteFrameName("EnemyShip.png")) {				// Create sprite from sprite sheet
+		eship->m_winSize = res;													// Store the screen resolution
+		eship->autorelease();													// Auto release it when done
+		eship->setVisible(false);												// Initially invisible
+		eship->setScale(scale);													// Scale down the size for PC
 
-		cocos2d::Color4F redBR(1, 0, 0, 1);									// Foreground colour
-		cocos2d::Color4F transBR(1, 0, 0, 0.5f);							// Background colour
-		
-		eship->m_pBar = HealthBar::create(
-			eship->getPosition().x + (eship->getContentSize().width / 2),
-			eship->getPosition().y + eship->getContentSize().height,		// Position
-			(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,	// Dimensions
-			float(eship->getLives() / eship->m_totalLives),					// percentage  (Max 4 lives)
-			redBR, transBR);
-		eship->addChild(eship->m_pBar);		
+		eship->m_dx = -0.65f * scale;											// Offset for spawning the laser at the front of the ship
+		eship->initHealthBar(res, cocos2d::Color4F(1, 0, 0, 1));				// Create the healthbar
 	}
 	else {
 		delete eship;
 	}
 
 	return eship;
+}
+
+/*
+	Initialise the healthbar (different for each enemy ship)
+*/
+void EnemyShip::initHealthBar(cocos2d::Size res, cocos2d::Color4F fg) {
+	//cocos2d::Color4F fgColour(1, 0, 0, 1);									// Foreground colour (Red)
+	cocos2d::Color4F bgColour(1, 0, 0, 0.5f);									// Background colour (Transparent red)
+
+	m_pBar = HealthBar::create(
+		getPosition().x + (getContentSize().width / 2),
+		getPosition().y + getContentSize().height,								// Position
+		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,			// Dimensions
+		float(getLives() / m_totalLives),										// percentage  (Max 4 lives)
+		fg, bgColour);															// Set the bar colours
+	addChild(m_pBar);
 }
 
 /*
@@ -54,6 +61,7 @@ void EnemyShip::takeLife() {
 		if (isVisible()) Game::Instance()->incrementEnemyShipKills();			// increment the enemies killed if visible (stop repeating)
 		setVisible(false);														// The set visible
 	}
+
 	if (isVisible()) m_pBar->updateBar(m_lives / m_totalLives);					// The health bar percentage is lives / max lives
 }
 
@@ -78,10 +86,11 @@ void EnemyShip::init(cocos2d::Size res) {
 void EnemyShip::update(float curTimeMillis) {
 	if (isVisible()) {
 		if (curTimeMillis > m_nextFire) {
-			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + (getContentSize().width * m_dx), 
+			Level::Instance()->spawnEnemyLaser(Point(getPosition().x + 
+				(getContentSize().width * m_dx), 
 				getPosition().y + (getContentSize().width * m_dy)));
 
-			m_nextFire = curTimeMillis + m_fireRate;														// Time to spawn next laser
+			m_nextFire = curTimeMillis + m_fireRate;							// Time to spawn next laser
 		}
 	}
 }
@@ -90,7 +99,8 @@ void EnemyShip::update(float curTimeMillis) {
 /*
 void EnemyShip::moveTo() {
 // Move the ship to the players coordinate
-auto action = MoveTo::create(3, Point(player->getPositionX(), player->getPositionY()));
+auto action = MoveTo::create(3, Point(player->getPositionX(), 
+player->getPositionY()));
 enemyShip->runAction(action);
 }
 */
@@ -109,9 +119,10 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 	cocos2d::Color4F transBR(1, 0, 0, 0.5f);
 
 	HealthBar * bar = HealthBar::create(
-		getPosition().x + (getContentSize().width / 2), getPosition().y + getContentSize().height,		// Position
-		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,						// Dimensions
-																							//float(eship->getLives() / MAX_SHIP_LIVES),			// percentage
+		getPosition().x + (getContentSize().width / 2), getPosition().y + 
+		getContentSize().height,		// Position
+		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,			// Dimensions
+																				//float(eship->getLives() / MAX_SHIP_LIVES),			// percentage
 		float(2 / MAX_SHIP_LIVES),			// percentage
 		redBR, transBR);
 	addChild(eship->bar);
@@ -119,7 +130,7 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 }
 */
 
-	//if (eship && eship->initWithFile("ShipGrey.png")) {								// Test new ship sprite image
+	//if (eship && eship->initWithFile("ShipGrey.png")) {						// Test new ship sprite image
 		/*
 		// Don't know how to update????????????
 		ProgressTimer* pt = ProgressTimer::create(Sprite::create("btnMinus.png"));
@@ -138,10 +149,11 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 		cocos2d::DrawNode* healthBar = createStatusBar(
 		
 		HealthBar* healthBar = HealthBar::create(
-			res.width * 0.5f, res.height - ((res.height / TOTAL_LIST_ELEMENTS) * 4.5f),					// Position
-			(res.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,							// Dimensions
-			(float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(),			// percentage
-			red, trans);																							// Colours
+			res.width * 0.5f, res.height - ((res.height / TOTAL_LIST_ELEMENTS) * 4.5f),	// Position
+			(res.height == 720) ? 200 : 300, (visibleSize.height == 720) ? 20 : 30,		// Dimensions
+			(float)Game::Instance()->getEnemyShipKills() / 
+			(float)Game::Instance()->getEnemyShipCount(),								// percentage
+			red, trans);																// Colours
 	*/
 	/*
 	Sprite *eShip = new EnemyShip();
@@ -151,7 +163,7 @@ HealthBar* createHealthBar(cocos2d::Size res) {
 		eShip->autorelease();
 
 		// Attempt to assign image to sprite
-		//eShip = cocos2d::Sprite::create("EnemyShip.png");											// Asteroid sprite, JOR replaced auto specifier
+		//eShip = cocos2d::Sprite::create("EnemyShip.png");								// Asteroid sprite, JOR replaced auto specifier
 		//eShip->initWithFile("EnemyShip.png");
 		j*/
 			/*

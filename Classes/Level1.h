@@ -19,6 +19,7 @@ public:
     virtual bool init();							// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 
 	//virtual void endScene(EndReason endReason) {};// Do level complete stuff
+	virtual void initEnemyShips();					// Initialise the enemy ships
 
 	virtual void endScene(EndReason endReason);		// End the scene
                 

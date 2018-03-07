@@ -22,7 +22,8 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 	float scale = (res.height == 720) ? 0.67f : 1.0f;
 	eship->m_winSize = res;
 
-	if (eship && eship->initWithFile("ShipGreen.png")) {
+	//if (eship && eship->initWithFile("ShipGreen.png")) {
+	if (eship && eship->initWithSpriteFrameName("ShipGreen.png")) {				// Create sprite from sprite sheet
 		eship->autorelease();
 
 		eship->setVisible(false);
@@ -39,6 +40,7 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 		eship->m_dx = -0.33f * scale;
 
 		cocos2d::Color4F greenBar(0.39f, 0.65f, 0.7f, 1);						// Foregrond colour
+		/*
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);								// Background Colour
 
 		eship->m_pBar = HealthBar::create(
@@ -48,6 +50,8 @@ EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 			float(eship->getLives() / eship->m_totalLives),						// percentage (Max 4 lives)
 			greenBar, transBR);													// Set colours
 		eship->addChild(eship->m_pBar);
+		*/
+		eship->initHealthBar(res, greenBar);									// Initialise the healthbar
 	}
 	else {
 		delete eship;

@@ -77,18 +77,23 @@ void Level2::update(float dt) {
 	Check collisions for level 2 ships and lasers NOT FULLY IMPLEMENTED - TESTING
 */
 void Level2::checkCollisions() {
-	Level::checkCollisions();											// Call base class function
-	// Check collisions with different objects in different levels
+	Level::checkCollisions();															// Call base class function, checks blue lasers, asteroids, and player
 
-	// Check collisions for new type of laser
+	// Check collisions for laser type 2 (Orange)
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList2) {
 		if (!(enemyLaser->isVisible())) continue;
 
-		if (enemyLaser->getPosition().x <= 0)							// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);								// Hide the laser
+		if (enemyLaser->getPosition().x <= 0)											// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);												// Hide the laser
+
+		// Check collisions between the player ship and Laser type 2 (Orange)
+		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
+			enemyLaser->setVisible(false);												// Destroy the asteroid
+			player->damageHit();
+		}
 	}
 }
 
 void Level2::endScene(EndReason endReason) {
-	Level::endScene(endReason);											// End the scene
+	Level::endScene(endReason);															// End the scene
 }

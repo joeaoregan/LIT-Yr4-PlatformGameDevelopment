@@ -13,26 +13,6 @@
 
 Audio* Audio::s_pInstance;																	// Singleton so only one instance of Audio exists in the game, for easy access
 
-// IOS
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)	// WAV audio format
-//#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)	// WAV audio format
-// Windows / Android
-#define JOE_RIFF1 "joe_riff1.wav"
-#define JOE_RIFF2 "joe_riff2.wav"
-#define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
-
-// Remember to preload!!!!
-#define BUTTON_FX "buttonClick.wav"
-#define EXPLOSION_LARGE "explosion_large.wav"
-#define EXPLOSION_PLAYER "explosion.wav"
-#define LASER_SHIP "laser_ship.wav"
-#define LASER_ENEMY "laserEnemy.wav"
-#define POWER_UP "powerup.wav"
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)												// CAF: Core audio format
-#define SPACE_GAME "SpaceGame.caf"
-#define EXPLOSION_LARGE "explosion_large.caf"
-#define LASER_SHIP "laser_ship.caf"
-#endif
 
 #define MAX_VOL 1.0f
 #define MIN_VOL 0.0f
@@ -53,7 +33,9 @@ void Audio::init() {
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_PLAYER);
 	SimpleAudioEngine::getInstance()->preloadEffect(LASER_SHIP);
-	SimpleAudioEngine::getInstance()->preloadEffect(LASER_ENEMY);
+	SimpleAudioEngine::getInstance()->preloadEffect(LASER_ENEMY1);
+	SimpleAudioEngine::getInstance()->preloadEffect(LASER_ENEMY2);
+	SimpleAudioEngine::getInstance()->preloadEffect(LASER_ENEMY4);
 	SimpleAudioEngine::getInstance()->preloadEffect(BUTTON_FX);
 	SimpleAudioEngine::getInstance()->preloadEffect(POWER_UP);
 //#endif
@@ -62,9 +44,14 @@ void Audio::init() {
 /*
 	Play the game effects
 */
+void Audio::playFX(const char* effect) {
+	SimpleAudioEngine::getInstance()->playEffect(effect);								// Play an effect
+}
+/*
 void Audio::selectMenuOption() {
 	SimpleAudioEngine::getInstance()->playEffect(BUTTON_FX);								// Play button sfx
 }
+
 bool Audio::isPaused() {
 	return SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
 }
@@ -76,6 +63,10 @@ void Audio::explodeFX() {
 void Audio::explodePlayerFX() {
 	SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_PLAYER);							// Play explosion sound effect
 }
+void Audio::damagePlayerFX() {
+	SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_PLAYER, false, 0.5f);		// Raise pitch
+	//SimpleAudioEngine::getInstance()->playEffect(EXPLOSION_PLAYER);							// Play explosion sound effect
+}
 void Audio::laserFX() {
 	SimpleAudioEngine::getInstance()->playEffect(LASER_SHIP);								// Play laser sound effect
 }
@@ -85,6 +76,7 @@ void Audio::laserFXEnemy() {
 void Audio::powerUpFX() {
 	SimpleAudioEngine::getInstance()->playEffect(POWER_UP);									// Play power up sound effect
 }
+*/
 
 /*
 	Play the music

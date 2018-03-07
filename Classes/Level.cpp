@@ -22,6 +22,7 @@
 #include "EnemyShipWilKnot.h"
 #include "AsteroidOriginal.h"
 #include "StoryScene.h"
+#include "GameOverScene.h"
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -40,6 +41,7 @@ bool Level::init() {
     if ( !Layer::init() ) { return false; }																	// super init first
 
 	Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
+	Game::Instance()->setWon(false);																		// Has the boss been defeated
 
 	// Screen size and position
     m_visibleSize = cocos2d::Director::getInstance()->getVisibleSize();										// Store the screen resolution
@@ -52,10 +54,13 @@ bool Level::init() {
 	m_batchNode = cocos2d::SpriteBatchNode::create("Sprites.pvr.ccz");										// Player sprite is added here
 	this->addChild(m_batchNode);
 
+	m_batchNodeJOE = cocos2d::SpriteBatchNode::create("JoeSprites.png");
+	this->addChild(m_batchNodeJOE);
+
 	cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");						// Add collection of SpaceGame sprites to be accessed
+	cocos2d::SpriteFrameCache::getInstance()->addSpriteFramesWithFile("JoeSprites.plist");
 	
 	player = Player::create(m_visibleSize);
-	//_batchNode->addChild(player, 1);
 	this->addChild(player);																					// Add the Player to the current layer
 
 	// 1) Create the ParallaxNode
@@ -71,13 +76,13 @@ bool Level::init() {
 	initLives();																							// Initialise the number of lives, set or carry over from previous level
 	initPowerUps();																							// Initialise the power ups
 	initAsteroids();
-	m_enemyShipList = new cocos2d::Vector<EnemyShip*>(3);															// initEnemyShips now virtual function so Vector must be outside function
+	m_enemyShipList = new cocos2d::Vector<EnemyShip*>(3);													// initEnemyShips now virtual function so Vector must be outside function
 	initEnemyShips();
 	initLasers();
 	initDifficulty();																						// Initialise fire rate, weapons state, and power up duration on screen
 
 	// Touch screen / Mouse press
-	m_touchListener = cocos2d::EventListenerTouchAllAtOnce::create();													// JOR replaced auto specifier
+	m_touchListener = cocos2d::EventListenerTouchAllAtOnce::create();										// JOR replaced auto specifier
 	m_touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_touchListener, this);
 		
@@ -85,17 +90,17 @@ bool Level::init() {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {				// If the target platform is a mobile device
 		m_pController = DPad::create(DPAD_BASE, DPAD_ARROW, DPAD_ARROW_ACTIVE,
 			(m_visibleSize.height == 1080) ? cocos2d::Point(375, 375) : Point(250, 250));
-		//controller->setScale((visibleSize.height == 1080) ? 1.0f : 0.67f);
 
 		this->addChild(m_pController);
 	}
 
-	m_pHUD = HUD::create(m_Origin, m_visibleSize);																// Create the HUD at the origin point (0,0), and passing in the screen resolution
+	m_pHUD = HUD::create(m_Origin, m_visibleSize);															// Create the HUD at the origin point (0,0), and passing in the screen resolution
 	this->addChild(m_pHUD);
 
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
-		m_pMPlayer = MusicPlayer::create(cocos2d::Point((m_visibleSize.width / 2), m_visibleSize.height * 0.065f));			// Position: scale in MusicPlayer class throws off measurement (undo first)
+		m_pMPlayer = MusicPlayer::create(cocos2d::Point((m_visibleSize.width / 2),
+			m_visibleSize.height * 0.065f));																// Position: scale in MusicPlayer class throws off measurement (undo first)
 		this->addChild(m_pMPlayer);
 	}
 
@@ -111,15 +116,19 @@ void Level::initLives() {
 	if (!Game::Instance()->getLivesCarried()) {
 		// Set the starting lives based on the difficulty
 		if (Game::Instance()->getDifficulty() == EASY)
-			Game::Instance()->setLives(5);						// Set the number of lives for the player
+			Game::Instance()->setLives(5);																	// Set the number of lives for the player
 		else if (Game::Instance()->getDifficulty() == MEDIUM)
-			Game::Instance()->setLives(3);						// Set the number of lives for the player
+			Game::Instance()->setLives(3);																	// Set the number of lives for the player
 		else
-			Game::Instance()->setLives(2);						// Set the number of lives for the player
+			Game::Instance()->setLives(2);																	// Set the number of lives for the player
 
-		CCLOG("Level %d - Init Lives - Lives NOT Carried Over - Start With: %d", Game::Instance()->getLevel(), Game::Instance()->getLives());
+		CCLOG("Level %d - Init Lives - Lives NOT Carried Over - Start With: %d",
+			Game::Instance()->getLevel(), Game::Instance()->getLives());
+
+		Game::Instance()->setHealth(10);																	// Reset health to 10 if not carrying over
 	} else {
-		CCLOG("Level %d - Init Lives - Lives ARE Carried Over: %d", Game::Instance()->getLevel(), Game::Instance()->getLives());
+		CCLOG("Level %d - Init Lives - Lives ARE Carried Over: %d", 
+			Game::Instance()->getLevel(), Game::Instance()->getLives());
 	}
 }
 /*
@@ -140,28 +149,30 @@ void Level::initDifficulty() {
 
 void Level::initEnemyShips() {
 	CCLOG("LEVEL initEnemyShips() - Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
+	/*
 	for (int i = 0; i < NUM_ENEMIES; ++i) {
 		EnemyShip* enemyShip1 = EnemyShip::create(m_visibleSize);
-		//EnemyShipWilKnot* enemyShip1 = EnemyShipWilKnot::create(visibleSize);								// Test New Enemies
 		this->addChild(enemyShip1);
 		m_enemyShipList->pushBack(enemyShip1);
 		//CCLOG("LEVEL - Add Enemy ship at array index %d", i);
 	}
+	*/
 }
 
+/*
+	Same number of asteroid obstacles in every level
+*/
 void Level::initAsteroids() {
 	// Asteroids
-	m_asteroidsList = new cocos2d::Vector<Asteroid*>(MAX_NUM_ASTEROIDS_L1);											// List of asteroids
+	m_asteroidsList = new cocos2d::Vector<Asteroid*>(MAX_NUM_ASTEROIDS_L1);									// List of asteroids
+
 	for (int i = 0; i < MAX_NUM_ASTEROIDS_L1; ++i) {
-		//cocos2d::Sprite* asteroid = Sprite::createWithSpriteFrameName(ASTEROID_IMG);						// Asteroid sprite, JOR replaced auto specifier
-		Asteroid* asteroid = AsteroidOriginal::create(m_visibleSize);						// Asteroid sprite, JOR replaced auto specifier
-		//asteroid->setVisible(false);
-		//asteroid->setScale((visibleSize.height == 720) ? 1.0f : 1.5f);										// Increase scale of Asteroid for Android (My phone anyway)
+		Asteroid* asteroid = AsteroidOriginal::create(m_visibleSize);										// Add one of 1st type of asteroid
 		m_batchNode->addChild(asteroid);
 		m_asteroidsList->pushBack(asteroid);
 
 		// Add base class asteroid
-		Asteroid* asteroid2 = Asteroid::create(m_visibleSize);
+		Asteroid* asteroid2 = Asteroid::create(m_visibleSize);												// Add one of 2nd type of asteroid
 		this->addChild(asteroid2);
 		m_asteroidsList->pushBack(asteroid2);
 	}
@@ -170,9 +181,10 @@ void Level::initAsteroids() {
 
 void Level::initLasers() {
 	// Player Ship Lasers:
-	m_playerLaserList = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);													// List of lasers
+	m_playerLaserList = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);									// List of lasers
+
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* shipLaser = cocos2d::Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);						// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* shipLaser = cocos2d::Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);			// Laser sprite, JOR replaced auto specifier
 		shipLaser->setVisible(false);
 		m_batchNode->addChild(shipLaser);
 		m_playerLaserList->pushBack(shipLaser);
@@ -180,20 +192,22 @@ void Level::initLasers() {
 	//CCLOG("TEST Level::initLasers() Ship Lasers: %d", m_playerLaserList->size());
 
 	// Enemy Lasers
-	m_enemyLaserList1 = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);														// List of lasers
+	m_enemyLaserList1 = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);									// List of lasers for enemy 1
 
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* enemyLaser = cocos2d::Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);					// Laser sprite, JOR replaced auto specifier
+		cocos2d::Sprite* enemyLaser = cocos2d::Sprite::createWithSpriteFrameName(LASER_BLUE_IMG);			// Laser sprite, JOR replaced auto specifier
 		enemyLaser->setVisible(false);
 		m_batchNode->addChild(enemyLaser);
 		m_enemyLaserList1->pushBack(enemyLaser);
 	}
 	//CCLOG("Level %d: Enemy Ships Initialised", Game::Instance()->getLevel());
 
-	// eNEMY 2 LASERS
-	m_enemyLaserList2 = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);					// List of lasers
+	// Enemy 2 Lasers
+	m_enemyLaserList2 = new cocos2d::Vector<cocos2d::Sprite*>(NUM_LASERS);									// List of lasers for enemy 2
+
 	for (int i = 0; i < NUM_LASERS; ++i) {
-		cocos2d::Sprite* enemyLaser = cocos2d::Sprite::create(LASER_ORANGE_IMG);		// Laser sprite, JOR replaced auto specifier
+		//cocos2d::Sprite* enemyLaser = cocos2d::Sprite::create(LASER_ORANGE_IMG);							// Laser sprite, JOR replaced auto specifier 
+		cocos2d::Sprite* enemyLaser = cocos2d::Sprite::createWithSpriteFrameName(LASER_ORANGE_IMG);			// Laser sprite, JOR replaced auto specifier 
 		enemyLaser->setVisible(false);
 		this->addChild(enemyLaser);
 		m_enemyLaserList2->pushBack(enemyLaser);
@@ -206,9 +220,10 @@ void Level::initLasers() {
 void Level::initPowerUps() {
 	m_pPowerUpLife = PowerUp::create(m_visibleSize, NEW_LIFE);
 	this->addChild(m_pPowerUpLife);
+
 	m_pPowerUpWeapon = PowerUp::create(m_visibleSize, WEAPON_UPGRADE);
 	this->addChild(m_pPowerUpWeapon);
-	CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
+	//CCLOG("Level %d: New Life Power Up Initialised", Game::Instance()->getLevel());
 }
 
 void Level::update(float dt) {
@@ -223,7 +238,7 @@ void Level::update(float dt) {
 	m_backgroundNode->update(dt);																			// Scroll the background objects
 
 	spawnObjects(m_curTimeMillis);																			// Spawn asteroids
-	spawnEnemyShips(m_curTimeMillis);																			// Spawn asteroids
+	spawnEnemyShips(m_curTimeMillis);																		// Spawn asteroids
 	
 	checkCollisions();																						// Check have game objects collided with each other
 
@@ -267,11 +282,7 @@ void Level::spawnObjects(float curTimeMillis) {
 				m_visibleSize.height * m_pPowerUpWeapon->getRandY()));
 		m_pPowerUpWeapon->runAction(actionpowerUp2);
 		m_pPowerUpWeapon->runAction(repeat);																	// Reuse the same sequence for weapon power ups
-		
-		/* powerUpLife->runAction(
-			Sequence::create(MoveBy::create(0.5f, Point(0 - powerUpLife->getContentSize().width, powerUpY)),		// change to plus 100 for up - 100 for down
-				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)
-		); */
+	
 		CCLOG("Spawn Weapon Power Up");
 		m_pPowerUpWeapon->setSpawned();
 	}
@@ -287,47 +298,48 @@ void Level::spawnObjects(float curTimeMillis) {
 		Game::Instance()->incrementAsteroidCount();
 		
 		asteroid->init(m_visibleSize);																		// Initialise the Asteroid, stopping all active actions, set visibility, and random positoin, scale, and rotate
-		asteroid->runAction(cocos2d::Sequence::create(																// Sequence of actions where the asteroid moves off screen to the left
+		asteroid->runAction(cocos2d::Sequence::create(														// Sequence of actions where the asteroid moves off screen to the left
 			cocos2d::MoveBy::create(asteroid->getDuration(),
-				cocos2d::Point(-m_winSize.width - asteroid->getContentSize().width, 0)),							// To a position fully off screen
-			cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)							// And is then destroyed, DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
+				cocos2d::Point(-m_winSize.width - asteroid->getContentSize().width, 0)),					// To a position fully off screen
+			cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)						// And is then destroyed, DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 		);	
 
 		//CCLOG("Spawn Asteroid");
 	}
 }
 
+/*
+	Spawn the Enemy Ships
+*/
 void Level::spawnEnemyShips(float curTimeMillis) {
 	if (m_enemyLaserList1->size() > 0) {
 		CCLOG("Spawn Enemy Ship - size > 0");
 		if (curTimeMillis > m_nextEnemyShipSpawnTime) {
 			float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
-			m_nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;											// Set the time to spawn the next ship			
+			m_nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;										// Set the time to spawn the next ship			
 
 			EnemyShip *enemyShip = m_enemyShipList->at(m_nextEnemyShip); 
 			m_nextEnemyShip++;																				// Moved to use min and max speed
-			if (m_nextEnemyShip >= (unsigned int)m_enemyShipList->size()) m_nextEnemyShip = 0;					// Loop back around to start of enemy ship list
+			if (m_nextEnemyShip >= (unsigned int)m_enemyShipList->size()) m_nextEnemyShip = 0;				// Loop back around to start of enemy ship list
 										
-			//if (enemyShip->isVisible()) return;
-
 			Game::Instance()->incrementEnemyShipCount();													// Increment the enemy ship on the list
 			
 			enemyShip->init(m_visibleSize);																	// Stop actions, set position, set visible, and set lives
 
-			CCLOG("Spawn Enemy Ship init enemy ship");
+			//CCLOG("Spawn Enemy Ship init enemy ship");
 			// Apply Actions: Move the ship to the players coordinate
 			cocos2d::MoveTo* action = cocos2d::MoveTo::create(enemyShip->getDuration() * 0.67f,
-				cocos2d::Point(player->getPositionX(), player->getPositionY()));										// Part of time spent moving to player, the rest moving off screen
+				cocos2d::Point(player->getPositionX(), player->getPositionY()));							// Part of time spent moving to player, the rest moving off screen
 			enemyShip->runAction(action);
 
-			CCLOG("Spawn Enemy Ship - MoveTo");
+			//CCLOG("Spawn Enemy Ship - MoveTo");
 			enemyShip->runAction(																						
 				cocos2d::Sequence::create(
 					cocos2d::MoveBy::create(enemyShip->getDuration(),
-						cocos2d::Point(-m_winSize.width - enemyShip->getContentSize().width, 0)),						// move off the screen its full width
-					cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)						// Then set invisible if it reaches the target - TERMINATE WITH NULL
+						cocos2d::Point(-m_winSize.width - enemyShip->getContentSize().width, 0)),			// move off the screen its full width
+					cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)				// Then set invisible if it reaches the target - TERMINATE WITH NULL
 			);
-			CCLOG("Spawn Enemy Ship - END");
+			//CCLOG("Spawn Enemy Ship - END");
 		}
 	}
 }
@@ -343,64 +355,47 @@ void Level::spawnEnemyLaser(cocos2d::Point pos, int type) {
 	cocos2d::Sprite* enemyLaser;
 	cocos2d::Vector<cocos2d::Sprite*> *tempList;
 
-	if (type == BLUE)
-		tempList = m_enemyLaserList1;														// Specific list for each colour laser, as different sprites used
-	else 
-		if (type == ORANGE)
+	if (type == BLUE) {
+		tempList = m_enemyLaserList1;																		// Specific list for each colour laser, as different sprites used
+		Audio::Instance()->playFX(LASER_ENEMY1);															// Play enemy 1 laser audio
+	}
+	else if (type == ORANGE) {
 		tempList = m_enemyLaserList2;
-	else if (type == GREEN1 || type == GREEN2 || type == GREEN3)
+		Audio::Instance()->playFX(LASER_ENEMY2);															// Play enemy 2 laser audio
+	}
+	else if (type == GREEN1 || type == GREEN2 || type == GREEN3) {
 		tempList = m_enemyLaserList3;
+		Audio::Instance()->playFX(LASER_ENEMY3);															// Play enemy 2 laser audio
+	}
 	
-	enemyLaser = tempList->at(m_nextEnemyLaser);											// Use the laser off the correct list
+	enemyLaser = tempList->at(m_nextEnemyLaser);															// Use the laser off the correct list
 	
-	m_nextEnemyLaser++;																		// Increment the lasers
-	if (m_nextEnemyLaser >= tempList->size()) m_nextEnemyLaser = 0;							// Loop back to start of laser list
+	m_nextEnemyLaser++;																						// Increment the lasers
+	if (m_nextEnemyLaser >= tempList->size()) m_nextEnemyLaser = 0;											// Loop back to start of laser list
 
-	if (enemyLaser->isVisible()) return;													// If the laser is already visible skip it
-	Audio::Instance()->laserFXEnemy();														// Play audio
+	if (enemyLaser->isVisible()) return;																	// If the laser is already visible skip it
 
 	enemyLaser->setRotation(0);
-	enemyLaser->setPosition(pos.x, pos.y);													// Set the postion relevant to the ships coordinates
-	enemyLaser->setVisible(true);															// Set visible on screen
-	enemyLaser->stopAllActions();															// Stop actions for the laser
+	enemyLaser->setPosition(pos.x, pos.y);																	// Set the postion relevant to the ships coordinates
+	enemyLaser->setVisible(true);																			// Set visible on screen
+	enemyLaser->stopAllActions();																			// Stop actions for the laser
 
-	cocos2d::MoveTo *action;																// Declare the action
-	//cocos2d::MoveBy *action2;
+	cocos2d::MoveTo *action;																				// Declare the action
 	
 	if (type == GREEN2)
-/*
-		enemyLaser->runAction(
-			Sequence::create(MoveBy::create(0.525f, Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
-				getContentSize().width, pos.y + visibleSize.height * 0.33f)),								// change to plus 100 for up - 100 for down
-				CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
-*/
-
-	//enemyLaser->runAction(
-	action = cocos2d::MoveTo::create(0.525f,															// This is where Euclidean distance would be handy
-		cocos2d::Point(pos.x - m_visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
+	action = cocos2d::MoveTo::create(0.525f,																// This is where Euclidean distance would be handy
+		cocos2d::Point(pos.x - m_visibleSize.width - enemyLaser->getContentSize().width -					// Laser 2 travels up
 				getContentSize().width, pos.y + m_visibleSize.height * 0.33f));
 	else if (type == GREEN3)
-		/*
-		enemyLaser->runAction(
-		Sequence::create(MoveBy::create(0.525f, 
-			Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
-			getContentSize().width, pos.y - visibleSize.height * 0.33f)),								// change to plus 100 for up - 100 for down
-			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
-		*/
 		action = cocos2d::MoveTo::create(0.525f,
-			cocos2d::Point(pos.x - m_visibleSize.width - enemyLaser->getContentSize().width -			// Laser 3 travels down
+			cocos2d::Point(pos.x - m_visibleSize.width - enemyLaser->getContentSize().width -				// Laser 3 travels down
 				getContentSize().width, pos.y - m_visibleSize.height * 0.33f));
-	else		
-		//enemyLaser->runAction(
-		//	Sequence::create(MoveBy::create(0.5f, 
-		//		Point(pos.x - visibleSize.width - enemyLaser->getContentSize().width -			// Laser 2 travels up
-		//		getContentSize().width, pos.y)),								// change to plus 100 for up - 100 for down
-		//		CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
-		action = cocos2d::MoveTo::create(0.5f,														// Laser 1 travels centrally
+	else	
+		action = cocos2d::MoveTo::create(0.5f,																// Laser 1 travels centrally
 			cocos2d::Point(pos.x - m_visibleSize.width - enemyLaser->getContentSize().width -
-				getContentSize().width, pos.y));											// set to off screen the width of the laser + the screen width
+				getContentSize().width, pos.y));															// set to off screen the width of the laser + the screen width
 
-	enemyLaser->runAction(action);															// Start moving the laser sprite
+	enemyLaser->runAction(action);																			// Start moving the laser sprite
 }
 
 /* 
@@ -408,17 +403,17 @@ void Level::spawnEnemyLaser(cocos2d::Point pos, int type) {
 */
 void Level::spawnLasers(int amount) {
 	if (m_curTimeMillis > m_nextFire) {
-		Audio::Instance()->laserFX();																			// Play the laser fire effect
+		Audio::Instance()->playFX(LASER_SHIP);																	// Play the Player ship laser fire effect
 
 		int yVal = 0, yPos = 0, rot = 0;																		// y value for point to aim for, y position of laser spawn point, rotation of laser	
 
 		for (int i = 0; i < amount; i++) {
 			cocos2d::Sprite* shipLaser = m_playerLaserList->at(m_nextShipLaser++);								// Next laser in the list, JOR replaced auto specifier
 			if (m_nextShipLaser >= m_playerLaserList->size())
-				m_nextShipLaser = 0;																				// Reset laser list index to 0 (go back to start of list)
+				m_nextShipLaser = 0;																			// Reset laser list index to 0 (go back to start of list)
 
 			// Set laser spawn points
-			if (amount < 4)	(i == 0) ? yPos = 0 : (i == 1) ? yPos = -12 : yPos = 12;								// 0 = midd
+			if (amount < 4)	(i == 0) ? yPos = 0 : (i == 1) ? yPos = -12 : yPos = 12;							// 0 = midd
 			else (i == 0) ? yPos = 8 : (i == 1) ? yPos = -12 : (i == 2) ? yPos = 12 : yPos = -8;				// 0. = 5, 1. = 12, 2. = 12, 3. = -5
 
 			// Set the initial rotation of the lasers
@@ -437,7 +432,7 @@ void Level::spawnLasers(int amount) {
 			if (amount == 4) (i == 1) ? yVal = -120 : (i == 2) ? yVal = 120 : (i == 3) ? yVal = -40 : yVal = 40;// if 3 lasers, first goes straight, second goes down, third goes up
 
 			shipLaser->runAction(
-				cocos2d::Sequence::create(cocos2d::MoveBy::create(0.5, Point(m_winSize.width, yVal)),								// change to plus 100 for up - 100 for down
+				cocos2d::Sequence::create(cocos2d::MoveBy::create(0.5, Point(m_winSize.width, yVal)),			// change to plus 100 for up - 100 for down
 					cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL));
 		}
 
@@ -447,39 +442,63 @@ void Level::spawnLasers(int amount) {
 
 void Level::getInput() {
 	// Android DPad (maybe change to returning a point (0,0)(1,0)(0,1),(-1,0),(0,-1)
-	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {			// If the platform is mobile
-		if (m_pController->getButton(8)->isSelected()) {													// Up arrow pressed
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {					// If the platform is mobile
+		if (m_pController->getButton(8)->isSelected()) {														// Up arrow pressed
 			player->moveUp();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (m_pController->getButton(2)->isSelected()) {												// Down arrow pressed
+		else if (m_pController->getButton(2)->isSelected()) {													// Down arrow pressed
 			player->moveDown();
 			//CCLOG("Down button is pressed!");
 		}
-		if (m_pController->getButton(4)->isSelected()) {													// Left arrow pressed
+		if (m_pController->getButton(4)->isSelected()) {														// Left arrow pressed
 			player->moveLeft();
 			//CCLOG("Down button is pressed!");
 		}
-		else if (m_pController->getButton(6)->isSelected()) {												// Right arrow pressed
+		else if (m_pController->getButton(6)->isSelected()) {													// Right arrow pressed
 			player->moveRight();
 			//CCLOG("Down button is pressed!");
 		}
 
-		if (m_pController->getButton(10)->isSelected()) {													// Up arrow pressed
-			//spawnLasers(NUM_LASERS_TO_FIRE);
+		if (m_pController->getButton(10)->isSelected()) {														// Up arrow pressed
 			spawnLasers(player->getWeaponStrength());
 			//CCLOG("Button A is pressed!");
 		}
-		else if (m_pController->getButton(11)->isSelected()) {												// Down arrow pressed
-			//spawnLasers(NUM_LASERS_TO_FIRE);
+		else if (m_pController->getButton(11)->isSelected()) {													// Down arrow pressed
 			spawnLasers(player->getWeaponStrength());
 			//CCLOG("Button B is pressed!");
 		}
 	}
 
 	if (Input::Instance()->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
-		spawnLasers(player->getWeaponStrength());														// Spawn lasers, depending on level of weapon	
+		spawnLasers(player->getWeaponStrength());																// Spawn lasers, depending on level of weapon	
 	}
+
+	/*
+	// Highlight DPAD buttons with keyboard press (For trailer)
+	if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
+	Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
+		m_pController->getButton(8)->selected();
+	}
+	else m_pController->getButton(8)->unselected();
+	if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
+	Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
+		m_pController->getButton(2)->selected();
+	}
+	else m_pController->getButton(2)->unselected();
+	// Shows the button as active in Windows / Linux / Mac
+	if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
+	Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
+		m_pController->getButton(4)->selected();
+	}
+	else m_pController->getButton(4)->unselected();
+
+	if (Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
+	Input::Instance()->isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
+		m_pController->getButton(6)->selected();
+	}
+	else m_pController->getButton(6)->unselected();
+	*/
 }
 
 /*
@@ -491,62 +510,67 @@ float Level::randomValueBetween(float low, float high) {
 }
 
 void Level::setInvisible(cocos2d::Node * node) {
-	node->setVisible(false);																			// Set the node invisible
+	node->setVisible(false);																					// Set the node invisible
 }
 
 void Level::PowerUpCollision(PowerUp* powerUp) {
-	if (player->getBoundingBox().intersectsRect(powerUp->getBoundingBox())) {							// If the ship collides with an asteroid
+	if (player->getBoundingBox().intersectsRect(powerUp->getBoundingBox())) {									// If the ship collides with an asteroid
 		player->runAction(cocos2d::Blink::create(1.0F, 9));														// Flash the Player ship
-		powerUp->setVisible(false);																		// Hide the power up
-		Audio::Instance()->powerUpFX();																	// Play the power up sound effect
-		Game::Instance()->updateScore(50);																// Award 50 points for collecting a power up
+		powerUp->setVisible(false);																				// Hide the power up
+		Audio::Instance()->playFX(POWER_UP);																	// Play the power up sound effect
+		Game::Instance()->updateScore(50);																		// Award 50 points for collecting a power up
 	}
 }
 
 void Level::checkCollisions() {
-	// Enemy laser move off screen
+	// Blue Enemy laser collisions
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList1) {
 		if (!(enemyLaser->isVisible())) continue;
-		if (enemyLaser->getPosition().x <= -enemyLaser->getContentSize().width)							// If the laser moves off screen it's own width
-			enemyLaser->setVisible(false);																// Hide the laser
+		if (enemyLaser->getPosition().x <= -enemyLaser->getContentSize().width)									// If the laser moves off screen it's own width
+			enemyLaser->setVisible(false);																		// Hide the laser
+
+		// Check collisions between the player ship and Laser type 1 (blue)
+		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {							// If the ship collides with an asteroid
+			enemyLaser->setVisible(false);																		// Destroy the asteroid
+			player->damageHit();
+		}
 	}
 
 	// Check player has picked up a power up
 	if (m_pPowerUpLife->isVisible()) {
-		if (player->getBoundingBox().intersectsRect(m_pPowerUpLife->getBoundingBox())) {					// If the ship collides with an asteroid
+		if (player->getBoundingBox().intersectsRect(m_pPowerUpLife->getBoundingBox())) {						// If the ship collides with an asteroid
 			PowerUpCollision(m_pPowerUpLife);
-			Game::Instance()->addLife();																// Add a life (up to 5 lives for a player)
+			Game::Instance()->addLife();																		// Add a life (up to 5 lives for a player)
 		}
 	}
 	if (m_pPowerUpWeapon->isVisible()) {
-		if (player->getBoundingBox().intersectsRect(m_pPowerUpWeapon->getBoundingBox())) {				// If the ship collides with an asteroid
+		if (player->getBoundingBox().intersectsRect(m_pPowerUpWeapon->getBoundingBox())) {						// If the ship collides with an asteroid
 			PowerUpCollision(m_pPowerUpWeapon);
-			player->upgradeWeapon();																	// Updgrade the players weapon
+			player->upgradeWeapon();																			// Updgrade the players weapon
 		}
 	}
 
 	// Asteroids Collisions
-	for (cocos2d::Sprite* asteroid : *m_asteroidsList) {												// JOR replaced auto specifier
+	for (cocos2d::Sprite* asteroid : *m_asteroidsList) {														// JOR replaced auto specifier
 		if (!(asteroid->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {											// JOR replaced auto specifier
-			if (!(shipLaser->isVisible())) continue;													// If the ship is not visible
+		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {													// JOR replaced auto specifier
+			if (!(shipLaser->isVisible())) continue;															// If the ship is not visible
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
-				Audio::Instance()->explodeFX();															// Play the explosion effect
-				shipLaser->setVisible(false);															// Hide the laser
-				Game::Instance()->updateScore(10);														// Award 10 points for destroying an asteroid
-				if (asteroid->isVisible()) Game::Instance()->incrementAsteroidKills();					// Increment the number of asteroids destroyed
-				asteroid->setVisible(false);															// Hide the asteroid
+				Audio::Instance()->playFX(EXPLOSION_LARGE);														// Play the explosion effect
+				shipLaser->setVisible(false);																	// Hide the laser
+				Game::Instance()->updateScore(10);																// Award 10 points for destroying an asteroid
+				if (asteroid->isVisible()) Game::Instance()->incrementAsteroidKills();							// Increment the number of asteroids destroyed
+				asteroid->setVisible(false);																	// Hide the asteroid
 			}
 		}
 
 		// Check collisions between the player ship and asteroids
-		if (player->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {						// If the ship collides with an asteroid
-			asteroid->setVisible(false);																// Destroy the asteroid
-			player->runAction(cocos2d::Blink::create(1.0F, 9));													// Flash the Player ship
-			Game::Instance()->takeLife();																// Decrement the number of lives
-			Audio::Instance()->explodePlayerFX();														// Play the explosion effect
+		if (player->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {								// If the ship collides with an asteroid
+			asteroid->setVisible(false);																		// Destroy the asteroid
+			//player->runAction(cocos2d::Blink::create(1.0F, 9));												// Flash the Player ship (moved to player::damageHit())
+			player->damageHit();
 		}
 	}
 	
@@ -554,40 +578,44 @@ void Level::checkCollisions() {
 	for (EnemyShip* enemyShip : *m_enemyShipList) {														
 		if (!(enemyShip->isVisible())) continue;
 
-		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {											// JOR replaced auto specifier
+		// Collisions with player laser
+		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {													// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
-				Audio::Instance()->explodeFX();															// Play explosion effect
-				shipLaser->setVisible(false);															// Hide the player laser
-				Game::Instance()->updateScore(20);														// Award 20 points for destroying an enemy ship
-				//if (enemyShip->isVisible()) Game::Instance()->incrementEnemyShipKills();				// Increment the total number of enemy ships destroyed
-				//enemyShip->setLives(enemyShip->getLives() - 1);		// DECREMENT LIVES
+				Audio::Instance()->playFX(EXPLOSION_LARGE);														// Play explosion effect
+				shipLaser->setVisible(false);																	// Hide the player laser
+				Game::Instance()->updateScore(20);																// Award 20 points for destroying an enemy ship
 				enemyShip->takeLife();
-				//enemyShip->updateBar( (enemyShip->getLives() * 100 )/ 3.0f);			
-				//if (enemyShip->getLives() < 1) enemyShip->setVisible(false);
 			}
+		}
+
+		// Collisions with Player Ship
+		if (player->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {								// If the ship collides with an asteroid
+			enemyShip->setVisible(false);																		// Destroy the asteroid
+			player->runAction(cocos2d::Blink::create(1.0F, 9));													// Flash the Player ship
+			player->damageHit();
 		}
 	}
 }
 
-void Level::checkGameOver(float currenTime) {															// If the player has run out of lives
-	if (Game::Instance()->getLives() <= 0) {															// If the player has run out of lives
-		player->stopAllActions();																		// CCNode.cpp
-		player->setVisible(false);																		// Destroy the ship
-		endScene(KENDREASONLOSE);																		// Player has died
+void Level::checkGameOver(float currenTime) {																	// Check is the game over
+	if (Game::Instance()->getLives() <= 0) {																	// If the player has run out of lives
+		player->stopAllActions();																				// CCNode.cpp
+		player->setVisible(false);																				// Destroy the ship
+		endScene(KENDREASONLOSE);																				// Player has died
 	}
 	else if (currenTime >= Game::Instance()->getEndTime()) {
-		endScene(KENDREASONWIN);																		// Player stays playing for the length of time
+		endScene(KENDREASONWIN);																				// Player stays playing for the length of time
 	}
 }
 
 void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event  *event){
-	//if (Game::Instance()->isGameOver()) return;														// If the ship is not visible
+	//if (Game::Instance()->isGameOver()) return;																// If the ship is not visible
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX 
 		|| CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
-		if (!Game::Instance()->isGameOver())															// If the ship is visible/alive
-			spawnLasers(player->getWeaponStrength());													// Fire a laser, amount of lasers depends on weapon level		
+		if (!Game::Instance()->isGameOver())																	// If the ship is visible/alive
+			spawnLasers(player->getWeaponStrength());															// Fire a laser, amount of lasers depends on weapon level		
 	}
 	CCLOG("Screen Touched");
 }
@@ -627,7 +655,7 @@ void Level::endScene(EndReason endReason) {
 	// 3. Total Enemy Ships Destroyed
 	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + 
 		cocos2d::StringUtils::toString(Game::Instance()->getEnemyShipKills()),
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);										// JOR replaced auto specifier
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);													// JOR replaced auto specifier
 	enemyShipsLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5f + m_Origin.x,
 		m_visibleSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 4)));
 	enemyShipsLbl->setColor(cocos2d::Color3B::RED);
@@ -635,8 +663,8 @@ void Level::endScene(EndReason endReason) {
 
 	// 4. Restart Level
 	message = "Restart Game";
-	cocos2d::Label* restartLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);							// JOR replaced auto specifier
-	m_pRestartItem = cocos2d::MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));			// JOR replaced auto specifier
+	restartLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);												// JOR replaced auto specifier
+	m_pRestartItem = cocos2d::MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));				// JOR replaced auto specifier
 	m_pRestartItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 6));
 	
@@ -646,16 +674,20 @@ void Level::endScene(EndReason endReason) {
 	if (endReason != KENDREASONLOSE && level < 4)
 		message = "Start Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()+1);
 	if (level == 4 || endReason == KENDREASONLOSE)
-		message = "Main Menu";
+		message = "Continue";
 
-	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);						// JOR replaced auto specifier
+	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);								// JOR replaced auto specifier
 	// Level Progression
 	if (endReason != KENDREASONLOSE) {
 		levelProgression(continueLbl);
 	}
 	else {
-		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));	// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-		Game::Instance()->setLevel(1);																	// Start again
+		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+		//Game::Instance()->setLevel(1);																					// Start again
+
+
 	}
 	m_pContinueItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 7));
@@ -665,11 +697,11 @@ void Level::endScene(EndReason endReason) {
 	m_pRestartItem->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the restart button label
 	m_pLevelCompleteLbl->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));	// Scale the level complete message label
 
-	cocos2d::Menu* menu = cocos2d::Menu::create(m_pRestartItem, m_pContinueItem, NULL);								// JOR replaced auto specifier
+	cocos2d::Menu* menu = cocos2d::Menu::create(m_pRestartItem, m_pContinueItem, NULL);									// JOR replaced auto specifier
 	menu->setPosition(cocos2d::Point::ZERO);
 	this->addChild(menu);
 
-	this->unscheduleUpdate();																			// Terminate update callback
+	this->unscheduleUpdate();																							// Terminate update callback
 }
 
 /*
@@ -678,67 +710,44 @@ void Level::endScene(EndReason endReason) {
 void Level::statBarEOL(float percent, int elements, float y) {
 	if (Game::Instance()->getEnemyShipCount() > 0) {
 		HealthBar* healthBar2 = HealthBar::create(
-			m_winSize.width * 0.5f, m_winSize.height - ((m_winSize.height / elements) * y),					// Position
-			(m_visibleSize.height == 720) ? 200 : 300, (m_visibleSize.height == 720) ? 20 : 30,				// Dimensions
-			percent,																					// percentage
-			cocos2d::Color4F(1, 0, 0, 1), cocos2d::Color4F(1, 0, 0, 0.5f), true);						// Colours & show label
+			m_winSize.width * 0.5f, m_winSize.height - ((m_winSize.height / elements) * y),						// Position
+			(m_visibleSize.height == 720) ? 200 : 300, (m_visibleSize.height == 720) ? 20 : 30,					// Dimensions
+			percent,																							// percentage
+			cocos2d::Color4F(1, 0, 0, 1), cocos2d::Color4F(1, 0, 0, 0.5f), true);								// Colours & show label
 		this->addChild(healthBar2);
 	}
 }
 
 void Level::levelProgression(cocos2d::Label* continueLbl) {
 	unsigned int level = Game::Instance()->getLevel();
+	//Game::Instance()->setNextLevel();																			// for parallax node init
 
-	Game::Instance()->setNextLevel();																	// for parallax node init
-
-	if (level == 4) 
+	if (level == 4)
 		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));
 	else
 		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::goToStoryScreen, this));
-
-	/*
-	if (level == 1)
-		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel2, this));
-	else if (level == 2)
-		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel3, this));
-	else if (level == 3)
-		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::startLevel4, this));
-	else if (level == 4)
-		continueItem = MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));
-	*/
 }
 
 // Callbacks
 void Level::restartTapped(cocos2d::Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
+	Audio::Instance()->playFX(BUTTON_FX);
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionZoomFlipX::create(0.5, Level1::createScene()));		// Restart the current scene	
-	this->scheduleUpdate();																				// reschedule
+	this->scheduleUpdate();																									// reschedule
 }
-
 void Level::goToStoryScreen(cocos2d::Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
+	Game::Instance()->setNextLevel();																						// for parallax node init
+
+	Audio::Instance()->playFX(BUTTON_FX);
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionZoomFlipY::create(0.5, StoryScene::createScene()));	// Change scene, progressing to Level 2
 }
-/*
-void Level::startLevel2(Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level2::createScene()));		// Change scene, progressing to Level 2
-}
-void Level::startLevel3(Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level3::createScene()));		// Load level 3
-}
-void Level::startLevel4(Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
-	Director::getInstance()->replaceScene(TransitionZoomFlipY::create(0.5, Level4::createScene()));		// Load level 4
-}
-*/
 void Level::returnToMenu(cocos2d::Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
-	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
+	Audio::Instance()->playFX(BUTTON_FX);
+	//cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionRotoZoom::create(0.5, MainMenu::createScene()));	// Return to the main menu
+	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionRotoZoom::create(0.5, 
+		GameOverScene::createScene()));															// Go to game over scene
 }
 void Level::menuCloseCallback(cocos2d::Ref* pSender) {
-	Audio::Instance()->selectMenuOption();
+	Audio::Instance()->playFX(BUTTON_FX);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
     return;

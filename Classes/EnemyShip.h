@@ -43,6 +43,8 @@ public:
 	cocos2d::Sprite* m_pCanon3;
 
 protected:
+	virtual void initHealthBar(cocos2d::Size res, cocos2d::Color4F fg);		// Initialise the healthbar
+
 	cocos2d::Size m_winSize;							// Screen resolution
 
 	// health

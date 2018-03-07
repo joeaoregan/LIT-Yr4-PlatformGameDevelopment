@@ -211,7 +211,7 @@ void MainMenu::highlightButton(unsigned int btn) {
 void MainMenu::StartGame(cocos2d::Ref *sender) {
 	if (!m_selected) {
 		CCLOG("Start Game Selected");
-		Audio::Instance()->selectMenuOption();
+		Audio::Instance()->playFX(BUTTON_FX);
 		cocos2d::Scene* scene = StoryScene::createScene();																					// Create the game scene, JOR replaced auto specifier
 		Director::getInstance()->replaceScene(TransitionSlideInB::create(TRANSITION_TIME, scene));										// Create scene and transition
 	}
@@ -223,7 +223,7 @@ void MainMenu::StartGame(cocos2d::Ref *sender) {
 void MainMenu::GoToScores(cocos2d::Ref *sender) {
 	if (!m_selected) {
 		CCLOG("High Scores Selected");
-		Audio::Instance()->selectMenuOption();
+		Audio::Instance()->playFX(BUTTON_FX);
 		cocos2d::Scene* scene = HighScores::createScene();																				// Create the high scores scene
 		Director::getInstance()->replaceScene(TransitionFadeUp::create(TRANSITION_TIME, scene));										// Load the high scores screen with transition
 	}
@@ -235,7 +235,7 @@ void MainMenu::GoToScores(cocos2d::Ref *sender) {
 void MainMenu::GoToSettings(cocos2d::Ref *sender) {
 	if (!m_selected) {
 		CCLOG("Settings Selected");
-		Audio::Instance()->selectMenuOption();
+		Audio::Instance()->playFX(BUTTON_FX);
 		cocos2d::Scene* scene = Settings::createScene();																				// Create the enter name scene
 		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));											// Load the enter name screen with transition
 	}
@@ -247,7 +247,7 @@ void MainMenu::GoToSettings(cocos2d::Ref *sender) {
 void MainMenu::GoToEnterName(cocos2d::Ref *sender) {
 	if (!m_selected) {
 		CCLOG("Enter Name Selected");
-		Audio::Instance()->selectMenuOption();
+		Audio::Instance()->playFX(BUTTON_FX);
 		cocos2d::Scene* scene = EnterName::createScene();																				// Create the enter name scene
 		Director::getInstance()->replaceScene(TransitionFadeDown::create(TRANSITION_TIME, scene));										// Load the enter name screen with transition
 	}

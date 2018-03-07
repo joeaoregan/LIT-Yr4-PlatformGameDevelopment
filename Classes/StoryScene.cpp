@@ -15,7 +15,7 @@
 #include "Level2.h"
 #include "Level3.h"
 #include "Level4.h"
-#include "Audio.h"
+//#include "Audio.h"
 #include "Game.h"
 #include "Defines.h"
 
@@ -39,7 +39,7 @@ bool StoryScene::init() {
     // 1. super init first
     if ( !Layer::init() ) { return false; }
 	
-	Audio::Instance()->init();														// Initialise the game audio
+	//Audio::Instance()->init();													// Initialise the game audio
     
 	m_pVisibleSize = cocos2d::Director::getInstance()->getVisibleSize();			// Get screen resolution
 	cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();	// Get screen origin

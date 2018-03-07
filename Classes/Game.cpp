@@ -56,7 +56,10 @@ bool Game::init() {
 */
 void Game::addLife() { 
 	if (m_lives <= MAX_PLAYER_LIVES) 				// Increment the number of lives (Max 5)
-		m_lives++; 
+		m_lives++;
+	else if (m_health < 10)							// If the player has the max number of lives
+		m_health = 10;								// Increase health
+
 	CCLOG("Player Lives Incremented: %d", m_lives);
 }
 

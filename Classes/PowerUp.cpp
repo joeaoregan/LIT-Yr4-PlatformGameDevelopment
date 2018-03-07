@@ -21,11 +21,14 @@ PowerUp* PowerUp::create(cocos2d::Size res, int type) {
 
 	std::string image;
 	if (type == NEW_LIFE)
-		image = POWER_UP_LIFE_IMG;
+		//image = POWER_UP_LIFE_IMG;
+		image = POWER_UP_LIFE_IMG2;
 	else if (type == WEAPON_UPGRADE)
-		image = POWER_UP_WEAPON_IMG;
-
-	if (powerUp && powerUp->initWithFile(image)) {
+		//image = POWER_UP_WEAPON_IMG;
+		image = POWER_UP_WEAPON_IMG2;
+	
+	//if (powerUp && powerUp->initWithFile(image)) {
+	if (powerUp && powerUp->initWithSpriteFrameName(image)) {												// Create from sprite sheet
 		powerUp->autorelease();																				// Clear up automatically when done
 		
 		powerUp->setVisible(false);																			// Hidden initially

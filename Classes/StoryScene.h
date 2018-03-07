@@ -22,7 +22,7 @@ public:
         
     CREATE_FUNC(StoryScene);					// implement the "static create()" method manually
     
-private:
+protected:										// Game Over Scene is a child of Story Scene
 
 	//void sceneActions();						// Scale objects, not noticeable, could be transition overrides
 

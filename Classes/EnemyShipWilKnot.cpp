@@ -21,12 +21,13 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	EnemyShipWilKnot* eship = new EnemyShipWilKnot();
 	float scale = (res.height == 720) ? 0.67f : 1.0f;										// Set the scale
 
-	if (eship && eship->initWithFile("ShipGrey.png")) {
+	//if (eship && eship->initWithFile("ShipGrey.png")) {
+	if (eship && eship->initWithSpriteFrameName("ShipGrey.png")) {							// Create sprite from sprite sheet
 		eship->autorelease();																// Clear when done
 
 		eship->setVisible(false);															// Initially invisible until spawned
 		eship->setScale(scale);																// Scale down the size for PC
-		eship->m_screenSize = res;															// Store the screen size
+		eship->m_winSize = res;																// Store the screen size
 
 		/* Different */
 		// Set the lives
@@ -45,9 +46,10 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->m_speedMin = 17.0f;															// Duration to travel across screen
 		eship->m_speedMax = 20.0f;
 
-		cocos2d::Color4F redBR(0.52f, 0.52f, 0.52f, 1);										// Healthbar foreground colour
+		cocos2d::Color4F fgBar(0.52f, 0.52f, 0.52f, 1);										// Healthbar foreground colour
+		/*
 		cocos2d::Color4F transBR(1, 0, 0, 0.5f);											//  Background colour
-
+		
 		eship->m_pBar = HealthBar::create(
 			eship->getPosition().x + (eship->getContentSize().width / 2), 
 			eship->getPosition().y + eship->getContentSize().height,						// Position
@@ -55,6 +57,8 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 			float(eship->getLives() / eship->m_totalLives),									// percentage (Max 5 lives)
 			redBR, transBR);
 		eship->addChild(eship->m_pBar);
+		*/
+		eship->initHealthBar(res, fgBar);
 
 		// Create the ships canon
 		eship->m_pCanon1 = Sprite::create("DoubleCanon.png");
@@ -86,7 +90,7 @@ void EnemyShipWilKnot::moveCanon() {
 	Update the enemy ship
 */
 void EnemyShipWilKnot::update(float curTimeMillis) {
-	if (isVisible() && getPosition().x < m_screenSize.width - getContentSize().width) {
+	if (isVisible() && getPosition().x < m_winSize.width - getContentSize().width) {
 		if (curTimeMillis > m_nextFire) {
 			Level::Instance()->spawnEnemyLaser(cocos2d::Point(getPosition().x + (getContentSize().width * m_dx),
 				getPosition().y + (getContentSize().height * m_dy)), GREEN2);

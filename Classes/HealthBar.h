@@ -276,7 +276,7 @@ foregroundRect = { x, py, w, ph };
 }
 
 //SDL_RenderFillRect(Game::Instance()->getRenderer(), &foregroundRect);
-//SDL_SetRenderDrawColor(Game::Instance()->getRenderer(), old.r, old.g, old.b, old.a);
+// _SetRenderDrawColor(Game::Instance()->getRenderer(), old.r, old.g, old.b, old.a);
 
 //}
 */

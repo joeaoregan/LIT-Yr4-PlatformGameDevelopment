@@ -34,16 +34,19 @@
 #define PLAYER_IMG "PlayerShip3.png"						// New Player sprite
 #define PLAYER_CANON "PlayerShipGun.png"					// The weapon on the players ship
 
-#define POWER_UP_LIFE_IMG "powerHeart.png"					// Life power up image
-#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"				// Weapon power up image
+//#define POWER_UP_LIFE_IMG "powerHeart.png"					// Life power up image
+//#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"				// Weapon power up image
+#define POWER_UP_LIFE_IMG2 "PowerUpLife.png"				// Life power up image on sprite sheet
+#define POWER_UP_WEAPON_IMG2 "PowerUpWeapon.png"			// Weapon power up image on sprite sheet
 
 // Dpad
 #define DPAD_BASE "BaseCircle320b.png"						// Base for Dpad
 #define DPAD_ARROW "Arrow160b.png"							// Arrow for Dpad
-#define DPAD_ARROW_ACTIVE "Arrow160bPressed.png"			// Arrow is active
+#define DPAD_ARROW_ACTIVE "Arrow160Pressedb.png"			// Arrow is active
 
 // Background
 #define ASTEROID_IMG "asteroid.png"							// Asteroid image
+#define ASTEROID2_IMG "Asteroid.png"						// Asteroid image
 
 // Weapoons
 #define LASER_BLUE_IMG "laserbeam_blue.png"					// Blue laser image

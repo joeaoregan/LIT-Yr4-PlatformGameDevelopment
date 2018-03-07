@@ -42,6 +42,7 @@ public:
 	unsigned int getLevel() const { return m_levelNum; }				// 20180218 Return the current level
 	unsigned int getScore() const { return m_score; }					// 20180214 Return the current score
 	unsigned int getLives() const { return m_lives; }					// 20180218 Return the players number of lives
+	unsigned int getHealth() const { return m_health; }					// Return the players health
 	std::string getPlayerName() const { return m_playerName; }			// 20180221 Return the name of the player
 	unsigned int getTimer() const { return m_time; }					// Get the time on the countdown timer
 	bool isGameOver() const { return m_gameOver; }						// Check is the game over or not
@@ -56,6 +57,7 @@ public:
 	bool getLivesCarried() const { return m_carryLives; }				// Are the lives carried over to the next level or not
 	float getCurrentWeapon() const { return m_currentWeapon; }			// Get the stored weapon level
 	float getButtonTimer() const { return m_nextTime; }					// Time between button presses
+	bool getWon() const { return m_won;	}								// Has the game been won
 
 	// Set
 	void setLevel(unsigned int set) { m_levelNum = set; }				// Set the level number
@@ -64,8 +66,10 @@ public:
 		else m_levelNum = 1;											// Loop back around to level 1
 	}	
 	void updateScore(unsigned int set) { m_score += set; }				// Add the value passed as a parameter to the current score
-	void setLives(unsigned int set) { m_lives = set; }					// Set the number of livess
+	void setLives(unsigned int set) { m_lives = set; }					// Set the number of lives
+	void setHealth(unsigned int set) { m_health = set; }				// Set the Players Health
 	void takeLife() { m_lives--; };										// Decrement the number of lives
+	void takeHealth() { m_health--; }
 	void addLife();														// Increment the number of lives (Max 5)
 	void setPlayerName(std::string set) { m_playerName = set; }			// Set the player name
 	void setTimer(unsigned int set) { m_time = set; }					// Set the countdown timer
@@ -85,7 +89,7 @@ public:
 	void setLivesCarried(bool set) { m_carryLives = set; }				// Carry over lives to next level
 	void setCurrentWeapon(float set) { m_currentWeapon = set; }			// Save the players current weapon
 	void setButtonTimer(float set) { m_nextTime = set; }				// Set the time between button presses
-
+	void setWon(bool set) { m_won = set; }								// The game has been won/lost
 
 private:
 	float m_nextTime;													// Used for menu button rate
@@ -96,6 +100,7 @@ private:
 
 	// HUD
 	unsigned int m_lives = 0;											// Player lives
+	unsigned int m_health = 10;											// Player health
 	unsigned int m_score = 0;											// Current score
 	unsigned int m_levelNum = 1;										// Current level
 
@@ -121,6 +126,8 @@ private:
 	unsigned int m_difficulty = MEDIUM;									// The game difficulty level, default value of MEDIUM
 
 	bool m_carryLives = false;											// Carry over lives to next level (For testing)
+
+	bool m_won = false;													// Destroyed enemy boss winning the game.
 };
 
 #endif // __GAME_SCENE_H__

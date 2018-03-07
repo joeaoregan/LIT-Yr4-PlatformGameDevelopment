@@ -88,6 +88,11 @@ public:
 	void PowerUpCollision(PowerUp* powerUp);									// Check collision with power ups
 	
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
+
+	cocos2d::Vec2 getAnimation(const char* name)
+	{
+		
+	}
 	
 protected:
 	cocos2d::Size m_visibleSize;												// Screen resolution changes depending on the platform
@@ -97,6 +102,7 @@ protected:
 	
 	// Background
 	cocos2d::SpriteBatchNode *m_batchNode;										// Group nodes together for efficiency
+	cocos2d::SpriteBatchNode *m_batchNodeJOE;									// Group nodes together for efficiency
 	ParallaxNodeExtras *m_backgroundNode;										// Scrolling background
 
 	// Objects
@@ -114,6 +120,9 @@ protected:
 
 	// End of Level Labels
 	cocos2d::Label* m_pLevelCompleteLbl;										// Level finished win/lose message
+
+	cocos2d::Label* restartLbl;
+
 	cocos2d::MenuItemLabel* m_pRestartItem;										// Restart the game button
 	cocos2d::MenuItemLabel* m_pContinueItem;									// Continue to next level button
 

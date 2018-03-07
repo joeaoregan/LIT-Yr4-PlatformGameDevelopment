@@ -18,7 +18,8 @@ EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 	EnemyShipDerpStar* derp = new EnemyShipDerpStar();
 	float scale = (res.height == 720) ? 0.67f : 1.0f;													// Scale for PC / Mobile depending on resolution
 
-	if (derp && derp->initWithFile("DerpStar.png")) {
+	//if (derp && derp->initWithFile("DerpStar.png")) {
+	if (derp && derp->initWithSpriteFrameName("DerpStar.png")) {										// Create sprite from sprite sheet
 		derp->autorelease();
 
 		// Use to set spawn duration this gives slower time to travel across screen
@@ -31,7 +32,7 @@ EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 		///derp->setPosition(res.width + derp->getContentSize().width / 2, 0);							// Set the postion off screen to the right, at random Y value
 		derp->setPosition(res.width + derp->getContentSize().width, res.height/2);						// Set the postion off screen to the right, at random Y value
 		derp->setScale(scale);																			// Scale down the size for PC
-		derp->screenSize = res;
+		derp->m_winSize = res;
 		
 		/* Different */
 		// Set the lives based on the game difficulty setting
@@ -151,7 +152,7 @@ void EnemyShipDerpStar::moveCanon() {
 	Update the Enemy Ship
 */
 void EnemyShipDerpStar::update(float curTimeMillis) {
-	if (isVisible() && getPosition().x < screenSize.width - getContentSize().width) {
+	if (isVisible() && getPosition().x < m_winSize.width - getContentSize().width) {
 
 		//CCLOG("Derpstar Update");
 

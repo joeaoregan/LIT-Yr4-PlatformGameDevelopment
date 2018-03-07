@@ -45,6 +45,17 @@ bool Level1::init() {
 }
 
 /*
+	Initialise the enemy ships (Different each level)
+*/
+void Level1::initEnemyShips() {
+	for (int i = 0; i < NUM_ENEMIES; ++i) {					// 3 of enemy ship type 1
+		EnemyShip* enemyShip1 = EnemyShip::create(m_visibleSize);
+		this->addChild(enemyShip1);
+		m_enemyShipList->pushBack(enemyShip1);
+	}
+}
+
+/*
 	Update Level 1
 */
 void Level1::update(float dt) {

@@ -26,10 +26,6 @@ public:
 	virtual void update(float dt);
 
 	virtual void moveCanon();
-	
-private:
-
-	cocos2d::Size m_screenSize;
 };
 
 #endif // __ENEMY_SHIP_WK_H__
