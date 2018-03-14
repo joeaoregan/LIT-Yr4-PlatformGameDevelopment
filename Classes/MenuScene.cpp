@@ -61,7 +61,10 @@ bool MenuScene::init() {
 	this->addChild(m_pBackgroundSprite);																					// Add to layer
 	
 	// 2. Game Title
-	m_pGameTitleSprite = cocos2d::Sprite::create("GameTitle.png");															// Game Title image
+	m_pGameTitleSprite = cocos2d::Sprite::create("GameTitle.png");														// Game Title image
+	//m_pGameTitleSprite->initWithSpriteFrameName("GameTitle.png");
+	//m_pGameTitleSprite = cocos2d::Sprite::createWithSpriteFrameName("GameTitle.png");
+
 	m_pGameTitleSprite->setPosition(cocos2d::Point(m_visibleSize.width * 0.1f, m_visibleSize.height / 2 + m_origin.y));		// Set position on screen
 	m_pGameTitleSprite->setPosition(cocos2d::Point(m_visibleSize.width / 2 + m_origin.x, 
 		m_visibleSize.height * 0.9f + m_origin.y));																			// Set position on screen
@@ -70,6 +73,8 @@ bool MenuScene::init() {
 		
 	// 3. Scene Title
 	m_pTitleSprite = cocos2d::Sprite::create("MainMenu.png");																// Scene Title image
+	//m_pTitleSprite->initWithSpriteFrameName("MainMenu.png");
+
 	setYPosAndScale(m_pTitleSprite, 0.75f);
 	this->addChild(m_pTitleSprite);																							// Add to layer							
 

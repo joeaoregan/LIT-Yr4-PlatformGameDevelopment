@@ -12,10 +12,18 @@
 #include "Level2.h"
 #include "CreditsScene.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
+#endif
+
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
 
 bool AppDelegate::applicationDidFinishLaunching() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
+#endif
+
     // initialize director
 	cocos2d::Director* director = cocos2d::Director::getInstance();					// JOR replaced auto specifier
 	cocos2d::GLView* glview = director->getOpenGLView();							// JOR replaced auto specifier

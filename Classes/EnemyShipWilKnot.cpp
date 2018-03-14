@@ -61,7 +61,8 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->initHealthBar(res, fgBar);
 
 		// Create the ships canon
-		eship->m_pCanon1 = Sprite::create("DoubleCanon.png");
+		//eship->m_pCanon1 = Sprite::create("DoubleCanon.png");
+		eship->m_pCanon1->initWithSpriteFrameName("PlayerShipGun.png");
 		eship->m_pCanon1->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, 
 			eship->getContentSize().height / 2));
 

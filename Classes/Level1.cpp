@@ -12,6 +12,10 @@
 */
 #include "Level1.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
+#endif
+
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();				// 'scene' is an autorelease object, JOR replaced auto specifier   
 	s_pLayerInstance = Level1::create();					// 'layer' is an autorelease object, JOR replaced auto specifier  
@@ -24,6 +28,10 @@ Scene* Level1::createScene() {
 	Initialise level 1 making additions to level base class
 */
 bool Level1::init() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Level 1 Started", 5);	// Google Analytics
+#endif
+
 	//Game::Instance()->setLevel(1);						// For parallax node init
 
 	Level::init();											// 20180221 Added Level base class

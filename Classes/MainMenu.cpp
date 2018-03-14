@@ -37,7 +37,7 @@ bool MainMenu::init() {
 	/*		1. Make changes to base class		*/
 	/********************************************/
 	m_pTitleSprite->setTexture("MainMenu.png");	// Change the title image text
-	m_pBtnBackImg->setVisible(false);				// Hide back to main menu button, not needed
+	m_pBtnBackImg->setVisible(false);			// Hide back to main menu button, not needed
 	MenuScene::m_pCloseItem->setVisible(false);	// Hide close button
 
 	/********************************************/

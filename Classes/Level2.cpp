@@ -9,6 +9,10 @@
 #include "Level2.h"
 #include "EnemyShipKling.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
+#endif
+
 Scene* Level2::createScene() {  
 	cocos2d::Scene* scene = Scene::create();						// 'scene' is an autorelease object, JOR replaced auto specifier   
 	s_pLayerInstance = Level2::create();							// 'layer' is an autorelease object, JOR replaced auto specifier  
@@ -21,6 +25,11 @@ Scene* Level2::createScene() {
 	Initialisation specific to Level 2
 */
 bool Level2::init() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
+		"Unlocked", "Level 2 Started", 5);							// Google Analytics
+#endif
+
 	Level::init();													// 20180221 Added Level base class
 
 	Game::Instance()->setLevel(2);									// for parallax node init

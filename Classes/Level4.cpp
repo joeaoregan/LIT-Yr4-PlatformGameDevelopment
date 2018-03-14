@@ -13,6 +13,10 @@
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"										// 20180307 Google Analytics
+#endif
+
 /*
 	Create level 4 scene
 */
@@ -28,6 +32,11 @@ Scene* Level4::createScene() {
 	Initialisation specific to Level 4
 */
 bool Level4::init() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+		"Unlocked", "Level 4 Started", 5);														// Google Analytics
+#endif
+
 	Level::init();																				// 20180221 Added Level base class
 
 	Game::Instance()->setLevel(4);																// Specific to level 2
@@ -359,6 +368,12 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 		m_pDerpStar->m_pCanon1->stopAllActions();
 		m_messageEOL = "DerpStar Has Been Destroyed";
 		Game::Instance()->setWon(true);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+			"Unlocked", "Game Finished", 5);													// Google Analytics
+#endif
+
 		endScene(KENDREASONWIN);
 	}
 	
