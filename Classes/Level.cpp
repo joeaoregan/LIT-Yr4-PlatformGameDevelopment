@@ -516,9 +516,10 @@ void Level::setInvisible(cocos2d::Node * node) {
 void Level::PowerUpCollision(PowerUp* powerUp) {
 	if (player->getBoundingBox().intersectsRect(powerUp->getBoundingBox())) {									// If the ship collides with an asteroid
 		player->runAction(cocos2d::Blink::create(1.0F, 9));														// Flash the Player ship
-		powerUp->setVisible(false);																				// Hide the power up
-		Audio::Instance()->playFX(POWER_UP);																	// Play the power up sound effect
-		Game::Instance()->updateScore(50);																		// Award 50 points for collecting a power up
+		powerUp->collected();																					// Set not visible, update the score (+50), and play pickup sound
+		//powerUp->setVisible(false);																			// Hide the power up (Moved to PowerUp::collected())
+		//Audio::Instance()->playFX(POWER_UP);																	// Play the power up sound effect (Moved to PowerUp::collected())
+		//Game::Instance()->updateScore(50);																	// Award 50 points for collecting a power up (Moved to PowerUp::collected())
 	}
 }
 
@@ -532,7 +533,7 @@ void Level::checkCollisions() {
 		// Check collisions between the player ship and Laser type 1 (blue)
 		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {							// If the ship collides with an asteroid
 			enemyLaser->setVisible(false);																		// Destroy the asteroid
-			player->damageHit();
+			player->damage();
 		}
 	}
 
@@ -551,18 +552,19 @@ void Level::checkCollisions() {
 	}
 
 	// Asteroids Collisions
-	for (cocos2d::Sprite* asteroid : *m_asteroidsList) {														// JOR replaced auto specifier
+	for (Asteroid* asteroid : *m_asteroidsList) {																// JOR replaced auto specifier
 		if (!(asteroid->isVisible())) continue;
 
 		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {													// JOR replaced auto specifier
 			if (!(shipLaser->isVisible())) continue;															// If the ship is not visible
 
 			if (shipLaser->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {
-				Audio::Instance()->playFX(EXPLOSION_LARGE);														// Play the explosion effect
+				//Audio::Instance()->playFX(EXPLOSION_LARGE);													// Play the explosion effect
 				shipLaser->setVisible(false);																	// Hide the laser
-				Game::Instance()->updateScore(10);																// Award 10 points for destroying an asteroid
-				if (asteroid->isVisible()) Game::Instance()->incrementAsteroidKills();							// Increment the number of asteroids destroyed
-				asteroid->setVisible(false);																	// Hide the asteroid
+				//Game::Instance()->updateScore(10);															// Award 10 points for destroying an asteroid
+				//if (asteroid->isVisible()) Game::Instance()->incrementAsteroidKills();						// Increment the number of asteroids destroyed
+				//asteroid->setVisible(false);																	// Hide the asteroid
+				asteroid->damage();																				// Destroy asteroid, update score, play sound effect, increment count of asteroids destroyed
 			}
 		}
 
@@ -570,31 +572,31 @@ void Level::checkCollisions() {
 		if (player->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {								// If the ship collides with an asteroid
 			asteroid->setVisible(false);																		// Destroy the asteroid
 			//player->runAction(cocos2d::Blink::create(1.0F, 9));												// Flash the Player ship (moved to player::damageHit())
-			player->damageHit();
+			player->damage();																					// Flash hte player, decrease health/take life, play explosion/damage sound
 		}
 	}
 	
 	// Enemy ship collisions
 	for (EnemyShip* enemyShip : *m_enemyShipList) {														
-		if (!(enemyShip->isVisible())) continue;
+		if (!(enemyShip->isVisible())) continue;																// Skip if the enemy ship is not visible
 
 		// Collisions with player laser
 		for (cocos2d::Sprite* shipLaser : *m_playerLaserList) {													// JOR replaced auto specifier
-			if (!(shipLaser->isVisible())) continue;
+			if (!(shipLaser->isVisible())) continue;															// If the laser is not visible skip the rest
 
 			if (shipLaser->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {
-				Audio::Instance()->playFX(EXPLOSION_LARGE);														// Play explosion effect
+				//Audio::Instance()->playFX(EXPLOSION_LARGE);													// Play explosion effect (Moved to EnemyShip::takeLife())
 				shipLaser->setVisible(false);																	// Hide the player laser
-				Game::Instance()->updateScore(20);																// Award 20 points for destroying an enemy ship
-				enemyShip->takeLife();
+				//Game::Instance()->updateScore(20);															// Award 20 points for destroying an enemy ship (Moved to EnemyShip::takeLife())
+				enemyShip->damage();																			// Decrease health, update score, play sound effect, update health bar
 			}
 		}
 
 		// Collisions with Player Ship
 		if (player->getBoundingBox().intersectsRect(enemyShip->getBoundingBox())) {								// If the ship collides with an asteroid
 			enemyShip->setVisible(false);																		// Destroy the asteroid
-			player->runAction(cocos2d::Blink::create(1.0F, 9));													// Flash the Player ship
-			player->damageHit();
+			//player->runAction(cocos2d::Blink::create(1.0F, 9));												// Flash the Player ship (moved to Player::damageHit())
+			player->damage();
 		}
 	}
 }
@@ -621,14 +623,14 @@ void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d:
 }
 
 void Level::endScene(EndReason endReason) {
-	if (Game::Instance()->isGameOver()) return;															// If already game over, skip this function
-	Game::Instance()->setGameOver(true);																// Set game over
-	Game::Instance()->setLivesCarried(true);															// Carry over lives to next level
+	if (Game::Instance()->isGameOver()) return;																	// If already game over, skip this function
+	Game::Instance()->setGameOver(true);																		// Set game over
+	Game::Instance()->setLivesCarried(true);																	// Carry over lives to next level
 	
-	const int TOTAL_LIST_ELEMENTS = 9;																	// Used to vertically space menu items
+	const int TOTAL_LIST_ELEMENTS = 9;																			// Used to vertically space menu items
 	
 	// Win / Lose Message
-	std::string message = "Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";	// Win 
+	std::string message = "Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";// Win 
 	if (endReason == KENDREASONLOSE) message = "You Lose";
 
 	// 1. Level Over Message
@@ -641,7 +643,7 @@ void Level::endScene(EndReason endReason) {
 	// 2. Total Asteroids Destroyed
 	cocos2d::Label* asteroidsLbl = cocos2d::Label::createWithTTF("Total Asteroids Destroyed: " + 
 		cocos2d::StringUtils::toString(Game::Instance()->getAsteroidKills()),
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);										// JOR replaced auto specifier
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);											// JOR replaced auto specifier
 	asteroidsLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5f + m_Origin.x,
 		m_visibleSize.height - (m_visibleSize.height / TOTAL_LIST_ELEMENTS * 3)));
 	asteroidsLbl->setColor(cocos2d::Color3B::RED);
@@ -649,8 +651,10 @@ void Level::endScene(EndReason endReason) {
 	this->addChild(asteroidsLbl);
 		
 	// Display end of level stats
-	statBarEOL((float)Game::Instance()->getAsteroidKills() / (float)Game::Instance()->getAsteroidCount(), TOTAL_LIST_ELEMENTS, 3.5f);
-	statBarEOL((float)Game::Instance()->getEnemyShipKills() / (float)Game::Instance()->getEnemyShipCount(), TOTAL_LIST_ELEMENTS, 4.5f);
+	statBarEOL((float)Game::Instance()->getAsteroidKills() / 
+		(float)Game::Instance()->getAsteroidCount(), TOTAL_LIST_ELEMENTS, 3.5f);
+	statBarEOL((float)Game::Instance()->getEnemyShipKills() / 
+		(float)Game::Instance()->getEnemyShipCount(), TOTAL_LIST_ELEMENTS, 4.5f);
 			
 	// 3. Total Enemy Ships Destroyed
 	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + 
@@ -668,27 +672,24 @@ void Level::endScene(EndReason endReason) {
 	m_pRestartItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 6));
 	
-	unsigned int level = Game::Instance()->getLevel();
+	unsigned int level = Game::Instance()->getLevel();																	// Get the current level number
 
 	// 5. Continue To Next Level
 	if (endReason != KENDREASONLOSE && level < 4)
-		message = "Start Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()+1);
+		message = "Start Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()+1);						// Add the level number to the continue button text
 	if (level == 4 || endReason == KENDREASONLOSE)
 		message = "Continue";
 
-	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);								// JOR replaced auto specifier
+	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);								// Set the continue label txt to Start Level x/Continue
+
 	// Level Progression
 	if (endReason != KENDREASONLOSE) {
 		levelProgression(continueLbl);
 	}
 	else {
-		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// JOR replaced auto specifier XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-		//Game::Instance()->setLevel(1);																					// Start again
-
-
+		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// If the game is lost set the continue option to return to main menu
 	}
+
 	m_pContinueItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 7));
 

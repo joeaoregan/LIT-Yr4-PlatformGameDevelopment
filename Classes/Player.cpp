@@ -144,7 +144,7 @@ void Player::upgradeWeapon() {
 	Play damage effect if health > 0
 	other wise play explode effect if losing a life
 */
-void Player::damageHit() {
+void Player::damage() {
 	bool playDamageSound = true;
 	auto blink = cocos2d::Blink::create(1.0f, 9);
 	blink->setTag(99);

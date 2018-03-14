@@ -307,7 +307,7 @@ void Level4::checkCollisions() {
 			Audio::Instance()->playFX(EXPLOSION_LARGE);											// Play explosion effect
 			shipLaser->setVisible(false);														// Hide the player laser
 			Game::Instance()->updateScore(20);													// Award 20 points for destroying an enemy ship
-			m_pDerpStar->takeLife();
+			m_pDerpStar->damage();
 		}
 	}
 
@@ -321,7 +321,7 @@ void Level4::checkCollisions() {
 																						// Check collisions between the player ship and Laser type 2 (Orange)
 		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
 			enemyLaser->setVisible(false);												// Destroy the asteroid
-			player->damageHit();
+			player->damage();
 		}
 	}
 
@@ -335,7 +335,7 @@ void Level4::checkCollisions() {
 																						// Check collisions between the player ship and Laser type 3 (Green)
 		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
 			enemyLaser->setVisible(false);												// Destroy the asteroid
-			player->damageHit();
+			player->damage();
 		}
 	}
 }

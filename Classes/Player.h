@@ -30,7 +30,7 @@ public:
 	void moveLeft();
 	void moveRight();
 
-	void damageHit();
+	void damage();
 	void initHealthBar(cocos2d::Size res, cocos2d::Color4F fg);
 
 	unsigned int getWeaponStrength() { return m_weaponStrength; }	// Current player weapon grade or level

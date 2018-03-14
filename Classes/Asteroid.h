@@ -34,6 +34,8 @@ public:
 
 	float getDuration() const { return m_duration; }	// Random duration on screen, used in spawnObject() for applying action sequence
 
+	void damage();										// Destroy asteroid, update score, play sound effect 
+
 protected:
 	cocos2d::Size m_winSize;							// Size of the window
 	float m_duration = 0;								// Speed of the asteroid

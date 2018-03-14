@@ -27,7 +27,7 @@ public:
 
 	virtual void moveCanon() {}							// Used with third enemy type (EnemyShipWillKnot) to move its (ornamental) canon
 		
-	void takeLife();									// Decrement the number of lives
+	void damage();									// Decrement the number of lives
 	
 	unsigned int getLives() const { return m_lives; }	// Get the lives left for the Enemy Ship
 	void setLives(unsigned int set) { m_lives = set; }

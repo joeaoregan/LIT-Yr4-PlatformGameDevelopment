@@ -10,6 +10,8 @@
 
 #include "PowerUp.h"
 #include "Level.h"		// Use random value functions
+#include "Audio.h"		// Play the pickup sound when the power up is collected
+#include "Game.h"		// Update the score when the power up is collected
 
 /*
 	Create the power up depending on the type parameter specified
@@ -79,4 +81,10 @@ void PowerUp::initialise(cocos2d::Size res, float duration, float y) {
 	setScale(((res.height == 720) ? 1.0f : 1.5f) * (duration / 10.0f) * 1.25f);								// Set scale
 
 	rotate();																								// Set the rotate action
-};
+}
+
+void PowerUp::collected() {
+	setVisible(false);																						// Hide the power up
+	Audio::Instance()->playFX(POWER_UP);																	// Play the power up sound effect
+	Game::Instance()->updateScore(50);																		// Award 50 points for collecting a power up
+}

@@ -98,7 +98,7 @@ void Level2::checkCollisions() {
 		// Check collisions between the player ship and Laser type 2 (Orange)
 		if (player->getBoundingBox().intersectsRect(enemyLaser->getBoundingBox())) {	// If the ship collides with an asteroid
 			enemyLaser->setVisible(false);												// Destroy the asteroid
-			player->damageHit();
+			player->damage();
 		}
 	}
 }

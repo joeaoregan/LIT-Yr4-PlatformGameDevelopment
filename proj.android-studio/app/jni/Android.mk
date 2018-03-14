@@ -56,6 +56,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginGoogleAnalytics
 LOCAL_WHOLE_STATIC_LIBRARIES += sdkbox
+LOCAL_WHOLE_STATIC_LIBRARIES += PluginSdkboxPlay
 
 LOCAL_STATIC_LIBRARIES := cocos2dx_static
 
@@ -74,6 +75,7 @@ $(call import-module,extensions)
 $(call import-module,ui)
 $(call import-module, ./sdkbox)
 $(call import-module, ./plugingoogleanalytics)
+$(call import-module, ./pluginsdkboxplay)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

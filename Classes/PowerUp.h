@@ -26,6 +26,7 @@ public:
 	void initialise(cocos2d::Size res, float duration, float y);// Reset the power up before moving
 		
 	void rotate();												// Rotate the power up
+	void collected();											// Things to do when the Power Up is picked up, update score, and play sound
 
 	float getSpeed() const { return m_duration; }				// Get the duration
 	bool isSpawned() const { return m_spawned; }				// Is the power up spawned already (only spawn once)

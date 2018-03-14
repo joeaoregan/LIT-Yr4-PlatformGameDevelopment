@@ -12,6 +12,9 @@
 
 #include "Asteroid.h"
 #include "Level.h"
+#include "Game.h"
+#include "Audio.h"
+
 /*
 	Create the asteroid, using the screen dimensions for positioning and scale
 */
@@ -66,4 +69,17 @@ void Asteroid::rotateAsteroid() {
 	auto rotate = cocos2d::RotateBy::create(m_duration, angle * rotateDirection);	// Rotate the asteroid 360 degrees forwards/backwards
 	auto repeat = cocos2d::RepeatForever::create(rotate);							// Set the action to loop
 	this->runAction(repeat);														// Then run it
+}
+
+/*
+	Destroy asteroid, update score, play sound effect, increment count of asteroids destroyed
+*/
+void Asteroid::damage() {
+	if (isVisible()) {
+		Game::Instance()->incrementAsteroidKills();									// Increment the number of asteroids destroyed
+		Audio::Instance()->playFX(EXPLOSION_LARGE);									// Play the explosion effect
+		Game::Instance()->updateScore(10);											// Award 10 points for destroying an asteroid
+	}
+
+	setVisible(false);																// Hide the asteroid
 }

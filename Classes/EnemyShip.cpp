@@ -10,6 +10,7 @@
 #include "EnemyShip.h"
 #include "Game.h"
 #include "Level.h"
+#include "Audio.h"
 
 /*
 	Create an enemy ship with child health bar DrawNode object (not working)
@@ -54,8 +55,12 @@ void EnemyShip::initHealthBar(cocos2d::Size res, cocos2d::Color4F fg) {
 /*
 	Take a life, and check if still alive, setting visibility for ship and bar
 */
-void EnemyShip::takeLife() {
+void EnemyShip::damage() {
 	m_lives--;
+	
+	Game::Instance()->updateScore(20);											// Award 20 points for destroying an enemy ship
+
+	Audio::Instance()->playFX(EXPLOSION_LARGE);									// Play explosion effect
 
 	if (m_lives < 1) {
 		if (isVisible()) Game::Instance()->incrementEnemyShipKills();			// increment the enemies killed if visible (stop repeating)
