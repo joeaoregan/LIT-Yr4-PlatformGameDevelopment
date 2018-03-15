@@ -21,7 +21,11 @@ bool DPad::init(cocos2d::Layer *layer) {
 */
 DPad *DPad::create(std::string base, std::string buttonImage, std::string pressedButtonImage, Point position){
 
+	cocos2d::Size winSize = cocos2d::Director::getInstance()->getVisibleSize();
+	float scale = ((winSize.height == 1080) ? 1.0f : (winSize.height == 720) ? 0.67f : winSize.height / 1080);
+
     DPad *controller = new DPad();
+
 
     if (true) {
 		cocos2d::Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -36,24 +40,34 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
 		controller->m_pLeftItem = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create left arrow menu item
 		controller->m_pRightItem = MenuItemImage::create(buttonImage, pressedButtonImage);	// Create right arrow menu item
 
-		controller->m_pABtnItem = MenuItemImage::create("btnA.png", "btnASelect.png");		// Create A button menu item
-		controller->m_pBBtnItem = MenuItemImage::create("btnB.png", "btnBSelect.png");		// Create B button menu item
+		controller->m_pBGSprite->setScale(scale);
 
 		// Set positions and rotations
         controller->m_pUpItem->setPosition(Point(controller->m_pBGSprite->getPosition().x, 
-			controller->m_pBGSprite->getPosition().y + controller->m_pBGSprite->getContentSize().height * 0.6f - controller->m_pUpItem->getContentSize().height/2));
+			controller->m_pBGSprite->getPosition().y + (controller->m_pBGSprite->getContentSize().height * scale) * 0.6f - (controller->m_pUpItem->getContentSize().height * scale) / 2));
         controller->m_pDownItem->setPosition(Point(controller->m_pBGSprite->getPosition().x,
-			controller->m_pBGSprite->getPosition().y - controller->m_pBGSprite->getContentSize().height * 0.6f + controller->m_pDownItem->getContentSize().height/2));
-		controller->m_pRightItem->setPosition(Point(controller->m_pBGSprite->getPosition().x + controller->m_pBGSprite->getContentSize().width * 0.6f - controller->m_pDownItem->getContentSize().height / 2, 
+			controller->m_pBGSprite->getPosition().y - (controller->m_pBGSprite->getContentSize().height * scale) * 0.6f + (controller->m_pDownItem->getContentSize().height * scale) / 2));
+		controller->m_pRightItem->setPosition(Point(controller->m_pBGSprite->getPosition().x + (controller->m_pBGSprite->getContentSize().width * scale) * 0.6f  - (controller->m_pDownItem->getContentSize().height * scale) / 2,
 			controller->m_pBGSprite->getPosition().y));
-		controller->m_pLeftItem->setPosition(Point(controller->m_pBGSprite->getPosition().x - controller->m_pBGSprite->getContentSize().width * 0.6f + controller->m_pDownItem->getContentSize().height / 2, 
+		controller->m_pLeftItem->setPosition(Point(controller->m_pBGSprite->getPosition().x - (controller->m_pBGSprite->getContentSize().width * scale) * 0.6f  + (controller->m_pDownItem->getContentSize().height * scale) / 2,
 			controller->m_pBGSprite->getPosition().y));
+		
+		controller->m_pUpItem->setScale(scale);
+		controller->m_pDownItem->setScale(scale);
+		controller->m_pLeftItem->setScale(scale);
+		controller->m_pRightItem->setScale(scale);
+
+		controller->m_pABtnItem = MenuItemImage::create("btnA.png", "btnASelect.png");		// Create A button menu item
+		controller->m_pBBtnItem = MenuItemImage::create("btnB.png", "btnBSelect.png");		// Create B button menu item
 
 		// Position the A and B buttons
 		controller->m_pABtnItem->setPosition(Point(visibleSize.width * 0.8f, position.y - 
 			(controller->m_pBBtnItem->getContentSize().height / 2)));
 		controller->m_pBBtnItem->setPosition(Point(visibleSize.width * 0.9f, position.y + 
 			(controller->m_pBBtnItem->getContentSize().height / 2)));
+
+		controller->m_pABtnItem->setScale(scale);
+		controller->m_pBBtnItem->setScale(scale);
 
 		// Set the rotation of the arrows
         controller->m_pRightItem->setRotation(90);

@@ -89,6 +89,8 @@ public:
 	
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
 
+	void updateLeaderboard();													// SDKBox leaderboard
+
 	cocos2d::Vec2 getAnimation(const char* name)
 	{
 		

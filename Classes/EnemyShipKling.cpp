@@ -19,7 +19,10 @@
 
 EnemyShipKling* EnemyShipKling::create(cocos2d::Size res) {
 	EnemyShipKling* eship = new EnemyShipKling();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;
+	float scale = (res.height == 1080) ? 1.0f :
+		(res.height == 720) ? 0.67f : res.height / 1080;						// Kindle resolution is different
+
 	eship->m_winSize = res;
 
 	//if (eship && eship->initWithFile("ShipGreen.png")) {

@@ -42,8 +42,8 @@ public:
 private:
 	HealthBar * m_pBar;												// HealthBar
 
-	float m_maxHealth = 10.0f;
-	int m_health = 10;
+	float m_maxHealth = 5.0f;										// The max health for healthbars etc
+	int m_health = m_maxHealth;
 	int m_lives = 3;
 
 	cocos2d::Size m_visibleSize;									// Visible screen size

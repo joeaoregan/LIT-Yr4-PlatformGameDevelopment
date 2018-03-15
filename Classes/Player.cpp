@@ -18,23 +18,34 @@
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
 	player->m_visibleSize = Director::getInstance()->getVisibleSize();						// screen size
-	player->m_scale = (res.height == 720) ? 0.67f : 1.0f;									// This image has a higher res than the space game so is scaled down for PC, not up for mobile
+	//player->m_scale = (res.height == 720) ? 0.67f : 1.0f;									// This image has a higher res than the space game so is scaled down for PC, not up for mobile
+	player->m_scale = (res.height == 1080) ? 1.0f : (res.height == 720) ? 0.67f : res.height / 1080;	// Kindle resolution is different
 	
 	if (player && player->initWithSpriteFrameName("PlayerShip3.png")) {						// Original Player on sprite sheet
 	//if (player && player->initWithFile(PLAYER_IMG)) {
 		if (Game::Instance()->getLevel() <= 1) {											// Set the amount of lasers to fire starting at level 1, based on difficulty
-			if (Game::Instance()->getDifficulty() == EASY)
+			if (Game::Instance()->getDifficulty() == EASY) {
 				player->m_weaponStrength = 3;												// Start with 3 lasers easy, 2 medium, 1 hard
+				player->m_maxHealth = 10.0f;												// Set max health (number of times player can be hit before losing a life)
+				player->m_lives = 4;
+			}
 			else if (Game::Instance()->getDifficulty() == HARD) {
 				player->m_weaponStrength = 1;												// Less laser beams initially
+				player->m_maxHealth = 3.0f;
+				player->m_lives = 2;
 			}
+
+			Game::Instance()->setHealth((unsigned int) player->m_maxHealth);				// Store the max health for the player
+			Game::Instance()->setLives(player->m_lives);									// Init the number of lives
 		}
 		else
 			player->m_weaponStrength = Game::Instance()->getCurrentWeapon();
 
 		player->m_lives = Game::Instance()->getLives();
+		//if (Game::Instance()->getLevel() == 1)
+		//	Game::Instance()->setHealth(player->m_maxHealth);								// Initialise the player health
 		player->m_health = Game::Instance()->getHealth();
-		if (player->m_health <= 0) player->m_health = 10;									// Had the health carry over as 0 in one test
+		if (player->m_health <= 0) player->m_health = player->m_maxHealth;					// Had the health carry over as 0 in one test
 
 		cocos2d::Color4F fgColour(0.6f, 0.77f, 0.96f, 1);
 		player->initHealthBar(res, fgColour);												// Initialise the healthbar
@@ -69,7 +80,7 @@ void Player::initHealthBar(cocos2d::Size res, cocos2d::Color4F fg) {
 		getPosition().y + getContentSize().height * 1.1f,						// Position
 		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,			// Dimensions
 		float(m_health / m_maxHealth),											// percentage  (Max 10 health)
-		fg, bgColour);													// Set the bar colours
+		fg, bgColour);															// Set the bar colours
 	addChild(m_pBar);
 }
 

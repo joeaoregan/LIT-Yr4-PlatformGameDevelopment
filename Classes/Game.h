@@ -58,6 +58,7 @@ public:
 	float getCurrentWeapon() const { return m_currentWeapon; }			// Get the stored weapon level
 	float getButtonTimer() const { return m_nextTime; }					// Time between button presses
 	bool getWon() const { return m_won;	}								// Has the game been won
+	bool getSignedIn() const { return m_signedIn; }						// Is the player signed in or not
 
 	// Set
 	void setLevel(unsigned int set) { m_levelNum = set; }				// Set the level number
@@ -90,6 +91,7 @@ public:
 	void setCurrentWeapon(float set) { m_currentWeapon = set; }			// Save the players current weapon
 	void setButtonTimer(float set) { m_nextTime = set; }				// Set the time between button presses
 	void setWon(bool set) { m_won = set; }								// The game has been won/lost
+	void setSignedIn(bool set) { m_signedIn = set; }					// SDKBox signed in (So it only does it once)
 
 private:
 	float m_nextTime;													// Used for menu button rate
@@ -100,7 +102,7 @@ private:
 
 	// HUD
 	unsigned int m_lives = 0;											// Player lives
-	unsigned int m_health = 10;											// Player health
+	unsigned int m_health = 5;											// Player health
 	unsigned int m_score = 0;											// Current score
 	unsigned int m_levelNum = 1;										// Current level
 
@@ -128,6 +130,8 @@ private:
 	bool m_carryLives = false;											// Carry over lives to next level (For testing)
 
 	bool m_won = false;													// Destroyed enemy boss winning the game.
+
+	bool m_signedIn = false;											// SDKBox Leaderboard sign in
 };
 
 #endif // __GAME_SCENE_H__

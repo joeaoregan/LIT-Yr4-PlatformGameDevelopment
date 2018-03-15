@@ -68,6 +68,7 @@
 
 // Player
 #define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have
+#define MAX_PLAYER_HEALTH 10.0f								// The maximum health for the player
 #define PLAYER_SPEED 3.0f									// Players speed
 #define MAX_WEAPON_LEVEL 4									// The current weapon the player has
 

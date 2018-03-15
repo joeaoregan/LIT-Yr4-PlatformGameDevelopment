@@ -55,7 +55,7 @@ bool CreditsScene::init() {
 	this->addChild(m_pLevelLbl);
 
 	// Story lable text
-	creditLbl = cocos2d::Label::createWithTTF(message, "fonts/Super Mario Bros..ttf",								// Display story decided by level number				
+	creditLbl = cocos2d::Label::createWithTTF(message, "fonts/Super Mario Bros..ttf",									// Display story decided by level number				
 		m_pVisibleSize.height * 0.05);
 	creditLbl->setPosition(m_pVisibleSize.width / 2, m_pVisibleSize.height / 2);
 	creditLbl->setColor(cocos2d::Color3B::GRAY);																		// Use gray text
@@ -82,11 +82,11 @@ bool CreditsScene::init() {
 		"fonts/Super Mario Bros..ttf", m_pVisibleSize.height * 0.05);
 	m_pReturnToMenuLbl->setColor(cocos2d::Color3B::RED);
 
-	m_pReturnToMenuItem = MenuItemLabel::create(m_pReturnToMenuLbl, CC_CALLBACK_1(CreditsScene::backToMenu, this));	// Go Back To Main Menu menu option
+	m_pReturnToMenuItem = MenuItemLabel::create(m_pReturnToMenuLbl, CC_CALLBACK_1(CreditsScene::backToMenu, this));		// Go Back To Main Menu menu option
 	m_pReturnToMenuItem->setPosition(m_pVisibleSize.width * 0.5f, m_pVisibleSize.height * 0.1f);
 	
 	// Menu items
-	m_menu = Menu::create(m_pReturnToMenuItem, NULL);													// Create the menu options
+	m_menu = Menu::create(m_pReturnToMenuItem, NULL);																	// Create the menu options
 	m_menu->setPosition(Point::ZERO);
 	this->addChild(m_menu);
 			

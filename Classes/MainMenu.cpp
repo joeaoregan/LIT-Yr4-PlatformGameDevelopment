@@ -21,6 +21,10 @@
 #include "AudioMenu.h"							// Menu Item
 #include "Input.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
+#endif
+
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
 	m_pLayer = MainMenu::create();				// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
@@ -32,7 +36,16 @@ Scene* MainMenu::createScene() {
 // on "init" you need to initialize your instance
 bool MainMenu::init() {
 	MenuScene::init();							// Initialise base class
-	
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (!Game::Instance()->getSignedIn()) {		// If not already signed in
+		sdkbox::PluginSdkboxPlay::signin();		// Sign in for leaderboard
+		Game::Instance()->setSignedIn(true);	// Make sure it only does this once																
+	}
+#endif
+
+
 	/********************************************/
 	/*		1. Make changes to base class		*/
 	/********************************************/

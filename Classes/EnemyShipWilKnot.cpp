@@ -19,7 +19,9 @@
 
 EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 	EnemyShipWilKnot* eship = new EnemyShipWilKnot();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;										// Set the scale
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;										// Set the scale
+	float scale = (res.height == 1080) ? 1.0f :
+		(res.height == 720) ? 0.67f : res.height / 1080;						// Kindle resolution is different
 
 	//if (eship && eship->initWithFile("ShipGrey.png")) {
 	if (eship && eship->initWithSpriteFrameName("ShipGrey.png")) {							// Create sprite from sprite sheet
@@ -61,8 +63,7 @@ EnemyShipWilKnot* EnemyShipWilKnot::create(cocos2d::Size res) {
 		eship->initHealthBar(res, fgBar);
 
 		// Create the ships canon
-		//eship->m_pCanon1 = Sprite::create("DoubleCanon.png");
-		eship->m_pCanon1->initWithSpriteFrameName("PlayerShipGun.png");
+		eship->m_pCanon1 = Sprite::create("DoubleCanon.png");								// initWithSpriteFrameName() not working here (nullptr)
 		eship->m_pCanon1->setPosition(cocos2d::Point(eship->getContentSize().width * 0.6f, 
 			eship->getContentSize().height / 2));
 

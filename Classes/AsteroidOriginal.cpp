@@ -18,7 +18,9 @@
 */
 AsteroidOriginal* AsteroidOriginal::create(cocos2d::Size res) {
 	AsteroidOriginal* asteroid = new AsteroidOriginal();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;					// Scale objects to suit screen resolution
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;					// Scale objects to suit screen resolution
+	float scale = (res.height == 1080) ? 1.0f :
+		(res.height == 720) ? 0.67f : res.height / 1080;							// Kindle resolution is different
 	
 	if (asteroid && asteroid->initWithSpriteFrameName(ASTEROID_IMG)) {
 		asteroid->autorelease();

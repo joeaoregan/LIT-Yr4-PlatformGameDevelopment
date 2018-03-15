@@ -17,7 +17,9 @@
 */
 EnemyShip* EnemyShip::create(cocos2d::Size res) {
 	EnemyShip* eship = new EnemyShip();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;
+	float scale = (res.height == 1080) ? 1.0f : 
+		(res.height == 720) ? 0.67f : res.height / 1080;						// Kindle resolution is different
 
 	//if (eship && eship->initWithFile("EnemyShip.png")) {
 	if (eship && eship->initWithSpriteFrameName("EnemyShip.png")) {				// Create sprite from sprite sheet
@@ -72,7 +74,7 @@ void EnemyShip::damage() {
 
 /*
 	Initialise the asteroid
-	Stop all actions, set the position, set visible, and scale accoring to speed
+	Stop all actions, set the position, set visible, and scale according to speed
 */
 void EnemyShip::init(cocos2d::Size res) {
 	m_duration = Level::Instance()->randomValueBetween(m_speedMin, m_speedMax);	// Set a random speed

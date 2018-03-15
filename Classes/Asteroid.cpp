@@ -20,7 +20,9 @@
 */
 Asteroid* Asteroid::create(cocos2d::Size res) {
 	Asteroid* asteroid = new Asteroid();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;								// Choose scale based on the screen resolution
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;								// Choose scale based on the screen resolution
+	float scale = (res.height == 1080) ? 1.0f :
+		(res.height == 720) ? 0.67f : res.height / 1080;							// Kindle resolution is different
 
 	//if (asteroid && asteroid->initWithFile("Asteroid.png")) {						// Create asteroid from .png in resources
 	if (asteroid && asteroid->initWithSpriteFrameName(ASTEROID2_IMG)) {				// Create asteroid from sprite sheet

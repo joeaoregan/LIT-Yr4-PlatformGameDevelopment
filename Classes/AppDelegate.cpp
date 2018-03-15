@@ -14,6 +14,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"
 #endif
 
 AppDelegate::AppDelegate() {}	// Constructor
@@ -22,6 +23,7 @@ AppDelegate::~AppDelegate() {}	// Destructor
 bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
+	sdkbox::PluginSdkboxPlay::init();												// 20180314 SDKBox Play
 #endif
 
     // initialize director

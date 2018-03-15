@@ -16,7 +16,9 @@
 
 EnemyShipDerpStar* EnemyShipDerpStar::create(cocos2d::Size res) {
 	EnemyShipDerpStar* derp = new EnemyShipDerpStar();
-	float scale = (res.height == 720) ? 0.67f : 1.0f;													// Scale for PC / Mobile depending on resolution
+	//float scale = (res.height == 720) ? 0.67f : 1.0f;													// Scale for PC / Mobile depending on resolution
+	float scale = (res.height == 1080) ? 1.0f :
+		(res.height == 720) ? 0.67f : res.height / 1080;												// Kindle resolution is different
 
 	//if (derp && derp->initWithFile("DerpStar.png")) {
 	if (derp && derp->initWithSpriteFrameName("DerpStar.png")) {										// Create sprite from sprite sheet
