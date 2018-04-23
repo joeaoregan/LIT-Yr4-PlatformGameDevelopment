@@ -58,8 +58,14 @@ public:
 	float getCurrentWeapon() const { return m_currentWeapon; }			// Get the stored weapon level
 	float getButtonTimer() const { return m_nextTime; }					// Time between button presses
 	bool getWon() const { return m_won;	}								// Has the game been won
+
+	/*
+		Analytics
+	*/
 	bool getSignedIn() const { return m_signedIn; }						// Is the player signed in or not
-	bool getAchievedLife() const { return m_lifeAchievment; }			// Get the life achievment unlocked status
+	bool getAchievedLife() const { return m_lifeAchievment; }			// Achievement: Get the life achievment unlocked status
+	bool getAchievedKills() const { return m_killRateAchievement; }		// Achievement: Has the player killed 75% of enemy ships or asteroids
+	bool getAchievedKamikaze() const { return m_kamikazeAchievement; }	// Achievement: Player completes level / dies and destroys nothing
 
 	// Set
 	void setLevel(unsigned int set) { m_levelNum = set; }				// Set the level number
@@ -92,8 +98,14 @@ public:
 	void setCurrentWeapon(float set) { m_currentWeapon = set; }			// Save the players current weapon
 	void setButtonTimer(float set) { m_nextTime = set; }				// Set the time between button presses
 	void setWon(bool set) { m_won = set; }								// The game has been won/lost
-	void setSignedIn(bool set) { m_signedIn = set; }					// SDKBox signed in (So it only does it once)
-	void setAchievedLife(bool set) { m_lifeAchievment = set; }			// SDKBox set the life achievement true or false
+		
+	/*
+		Analytics
+	*/
+	void setSignedIn(bool set) { m_signedIn = set; }					// Achievement: signed in (So it only does it once)
+	void setAchievedLife(bool set) { m_lifeAchievment = set; }			// Achievement: set the life achievement true or false
+	void setAchievedKills(bool set) { m_killRateAchievement = set; }	// Achievement: set player killed over 50% kill rate
+	void setAchievedKamikaze(bool set) { m_kamikazeAchievement = set; }	// Achievement: set the player has completed a level and destroyed nothing
 
 private:
 	float m_nextTime;													// Used for menu button rate
@@ -132,9 +144,14 @@ private:
 	bool m_carryLives = false;											// Carry over lives to next level (For testing)
 
 	bool m_won = false;													// Destroyed enemy boss winning the game.
-
+	
+	/*
+		Analytics
+	*/
 	bool m_signedIn = false;											// SDKBox Leaderboard sign in
 	bool m_lifeAchievment = false;										// SDKBox player has collected new life power up
+	bool m_killRateAchievement = false;									// Player gets over 75% kill rate
+	bool m_kamikazeAchievement = false;									// Player completes level / dies and destroys nothing
 };
 
 #endif // __GAME_SCENE_H__

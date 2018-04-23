@@ -52,6 +52,8 @@ private:
 	unsigned int m_weaponStrength = 2;								// Current weapon
 
 	cocos2d::Sprite* m_pCanon;										// Canon made visible 
+
+	float m_speedMultiplier;											// Player too slow on android ...speed up
 };
 
 #endif // __PLAYER_H__

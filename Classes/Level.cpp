@@ -44,7 +44,11 @@ cocos2d::Scene* Level::createScene() {
 // on "init" you need to initialize your instance
 bool Level::init() {
     if ( !Layer::init() ) { return false; }																	// super init first
-	
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0,
+		"Test Time", "Level init");																		// Google Analytics: Register game exit time for menu button
+#endif
 	/*
 	// Moved to main menu, as shows up every level
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -675,6 +679,13 @@ void Level::updateLeaderboard() {
 void Level::endScene(EndReason endReason) {
 	updateLeaderboard();																						// Update the score on the leaderboard
 
+	if (endReason == KENDREASONLOSE) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int)m_time,
+			"Exit Time", "Player died");																		// Google Analytics: Register game exit time for menu button
+#endif
+	}
+
 	if (Game::Instance()->isGameOver()) return;																	// If already game over, skip this function
 	Game::Instance()->setGameOver(true);																		// Set game over
 	Game::Instance()->setLivesCarried(true);																	// Carry over lives to next level
@@ -706,6 +717,8 @@ void Level::endScene(EndReason endReason) {
 		(float)Game::Instance()->getAsteroidCount(), TOTAL_LIST_ELEMENTS, 3.5f);
 	statBarEOL((float)Game::Instance()->getEnemyShipKills() / 
 		(float)Game::Instance()->getEnemyShipCount(), TOTAL_LIST_ELEMENTS, 4.5f);
+
+	killAchievement();
 			
 	// 3. Total Enemy Ships Destroyed
 	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + 
@@ -806,4 +819,67 @@ void Level::menuCloseCallback(cocos2d::Ref* pSender) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+/*
+	Unlock asteroid / enemy kills achievement
+	If the kill rate is better than 50% for either Enemy Ships or Asteroids
+	Or it the player completes the level / dies and destroys no objects with lasers
+*/
+void Level::killAchievement() {
+	//CCLOG("Kill Rate Achievement");
+	
+	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
+		if (Game::Instance()->getAsteroidKills() / 
+			(float) Game::Instance()->getAsteroidCount() >= 0.5f ||											// Player gets a kill percentage of 50% or more for
+			Game::Instance()->getEnemyShipKills() / 
+			(float) Game::Instance()->getEnemyShipCount() >= 0.5f) {										// Asteroids or enemy ships
+			CCLOG("Destroyed 50 Percent Or More Asteroids Or Enemy Ships");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+				"Unlocked", "Expert Marksman", 5);															// Google Analytics: Register the Expert Marksman achievement
+#endif
+			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
+		}
+	}
+	
+/*
+// Test win
+	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
+		if (Game::Instance()->getAsteroidKills() / (float) Game::Instance()->getAsteroidCount() >= 0.5f) {	// Player gets a kill percentage of 50% or more
+			CCLOG("Destroyed 50 Or More Asteroids %.2f", Game::Instance()->getAsteroidKills() / (float) Game::Instance()->getAsteroidCount());
+			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
+		}
+	}
+
+	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
+		if (Game::Instance()->getEnemyShipKills() / (float) Game::Instance()->getEnemyShipCount() >= 0.5f) {
+			CCLOG("Destroyed 50 Or More Enemy Ships %.2f", Game::Instance()->getEnemyShipKills() / (float) Game::Instance()->getEnemyShipCount());
+			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
+		}
+	}
+*/
+
+	/*
+		Kamikaze Achievement
+
+		Player has completed the level / died
+		without getting a laser on target
+	*/
+	if (!Game::Instance()->getAchievedKamikaze()) {										// If the achievement isn't complete
+		if (Game::Instance()->getAsteroidKills() / (
+			float) Game::Instance()->getAsteroidCount() == 0.0f &&						// Player didn't destroy any asteroids
+			Game::Instance()->getEnemyShipKills() /										// and didn't destroy any enemy ships 
+			(float) Game::Instance()->getEnemyShipCount() == 0.0f) {
+			CCLOG("Destroyed Nothing %.2f %.2f", Game::Instance()->getAsteroidKills() /	// Display the percentages in output
+				(float) Game::Instance()->getAsteroidCount(),
+				Game::Instance()->getEnemyShipKills() / 
+				(float) Game::Instance()->getEnemyShipCount() == 0.0f);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+				"Unlocked", "Kamikaze", 5);												// Google Analytics: Register the Kamikaze achievement
+#endif
+			Game::Instance()->setAchievedKamikaze(true);								// Mark the achievement as achieved
+		}
+	}
 }

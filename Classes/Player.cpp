@@ -20,6 +20,12 @@ Player* Player::create(cocos2d::Size res) {
 	player->m_visibleSize = Director::getInstance()->getVisibleSize();						// screen size
 	//player->m_scale = (res.height == 720) ? 0.67f : 1.0f;									// This image has a higher res than the space game so is scaled down for PC, not up for mobile
 	player->m_scale = (res.height == 1080) ? 1.0f : (res.height == 720) ? 0.67f : res.height / 1080;	// Kindle resolution is different
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	player->m_speedMultiplier = 1.5f;															// Speed up the player on mobile device
+#else
+	player->m_speedMultiplier = 1.0f;
+#endif
 	
 	if (player && player->initWithSpriteFrameName("PlayerShip3.png")) {						// Original Player on sprite sheet
 	//if (player && player->initWithFile(PLAYER_IMG)) {
@@ -121,22 +127,23 @@ void Player::update() {
 
 /*
 	Move the player
+	Assignment 3: Added speed multiplier for mobile
 */
 void Player::moveUp() {
 	if (getPosition().y < m_visibleSize.height * 0.895f)
-		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * m_scale);				// Need to cover more distance on larger screen
+		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * m_scale * m_speedMultiplier);				// Need to cover more distance on larger screen
 }
 void Player::moveDown() {
 	if (getPosition().y > m_visibleSize.height * 0.125f)
-		setPosition(getPosition().x, getPosition().y - PLAYER_SPEED * m_scale);
+		setPosition(getPosition().x, getPosition().y - PLAYER_SPEED * m_scale * m_speedMultiplier);
 }
 void Player::moveLeft() {
 	if (getPosition().x > getContentSize().width / 4)
-		setPosition(getPosition().x - PLAYER_SPEED * m_scale, getPosition().y);
+		setPosition(getPosition().x - PLAYER_SPEED * m_scale * m_speedMultiplier, getPosition().y);
 }
 void Player::moveRight() {
 	if (getPosition().x < m_visibleSize.width - (getContentSize().width / 2))
-		setPosition(getPosition().x + PLAYER_SPEED * m_scale, getPosition().y);
+		setPosition(getPosition().x + PLAYER_SPEED * m_scale * m_speedMultiplier, getPosition().y);
 }
 
 /*

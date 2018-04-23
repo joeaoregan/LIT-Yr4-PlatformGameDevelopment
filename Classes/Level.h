@@ -95,6 +95,8 @@ public:
 	{
 		
 	}
+
+	void killAchievement();														// Achievement for reaching a certain percentage of kills
 	
 protected:
 	cocos2d::Size m_visibleSize;												// Screen resolution changes depending on the platform

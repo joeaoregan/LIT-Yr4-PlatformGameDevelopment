@@ -11,7 +11,7 @@ Cross-platform C++ game for Win32/Android created using Cocos2d-x created for th
 ## Additions:
 
 * Changed backing track
-* Added music player (Image 8)
+* Added music player (Image 11, 12)
 * HUD for Level, Score, and Timer (Image 3)
 * Additional level and menu scenes (Image 3)
 * Added direction controls for mobile (Image 4)
@@ -22,7 +22,7 @@ Cross-platform C++ game for Win32/Android created using Cocos2d-x created for th
 * Power ups
 * Added status bars (Image 13)
 * Boss Enemy (Image 14)
-* Connect to Google Play 
+* Connect to Google Play (Image 15)
 * Analytics (Image 16)
 
 ---
@@ -99,7 +99,7 @@ Space Quest 14: Enemy Boss - DerpStar - with rotating laser canons
 
 ---
 
-![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame15GooglePlay.png "Space Shooter: Google Play)
+![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame15GooglePlay.jpg "Space Shooter: Google Play)
 Space Quest 15: Sign into Google Play functionality added using SDKBox
 
 ---
