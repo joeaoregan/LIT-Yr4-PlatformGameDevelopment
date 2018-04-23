@@ -158,5 +158,5 @@ void Level3::checkCollisions() {
 	End scene, nothing different needed
 */
 void Level3::endScene(EndReason endReason) {
-	Level::endScene(endReason);														// End the scene
+	Level::endScene(endReason);															// End the scene
 }

@@ -44,7 +44,8 @@ $(LOCAL_PATH)/../../../Classes/Player.cpp \
 $(LOCAL_PATH)/../../../Classes/PowerUp.cpp \
 $(LOCAL_PATH)/../../../Classes/Settings.cpp \
 $(LOCAL_PATH)/../../../Classes/SplashScene.cpp \
-$(LOCAL_PATH)/../../../Classes/StoryScene.cpp
+$(LOCAL_PATH)/../../../Classes/StoryScene.cpp \
+$(LOCAL_PATH)/../../../Classes/SignInScene.cpp
 
 LOCAL_CPPFLAGS := -DSDKBOX_ENABLED
 LOCAL_LDLIBS := -landroid \

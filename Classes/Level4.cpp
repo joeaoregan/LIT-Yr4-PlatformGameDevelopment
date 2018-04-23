@@ -345,23 +345,22 @@ void Level4::checkCollisions() {
 */
 void Level4::endScene(EndReason endReason) {
 	cocos2d::Label* derpMessage = cocos2d::Label::createWithTTF(m_messageEOL,
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);							// JOR replaced auto specifier
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);					// JOR replaced auto specifier
 	derpMessage->setPosition(Point(m_visibleSize.width * 0.5f + m_Origin.x,
 		m_visibleSize.height - (m_winSize.height / 9 * 5.25f)));
 	derpMessage->setColor(Color3B::WHITE);
 
 	this->addChild(derpMessage);
 
-	Level::endScene(endReason);																	// End the scene
+	Level::endScene(endReason);															// End the scene
 
 	restartLbl->setVisible(false);
-
 }
 
 /*
 	Check game over for level 4, taking the enemy boss being alive into account
 */
-void Level4::checkGameOver(float currenTime) {													// If the player has run out of lives
+void Level4::checkGameOver(float currenTime) {											// If the player has run out of lives
 	// DerpStar destroyed
 	if (!m_pDerpStar->isVisible()) {
 		m_pDerpStar->stopAllActions();
@@ -371,29 +370,28 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-			"Unlocked", "Game Finished", 5);													// Google Analytics
+			"Unlocked", "Game Finished", 5);											// Google Analytics
 #endif
 
 		endScene(KENDREASONWIN);
 	}
 	
 	// Player Lost
-	if (Game::Instance()->getLives() <= 0) {													// If the player has run out of lives
-		player->stopAllActions();																// CCNode.cpp
-		player->setVisible(false);																// Destroy the ship
-		endScene(KENDREASONLOSE);																// Player has died
+	if (Game::Instance()->getLives() <= 0) {											// If the player has run out of lives
+		player->stopAllActions();														// CCNode.cpp
+		player->setVisible(false);														// Destroy the ship
+		endScene(KENDREASONLOSE);														// Player has died
 	}
 
 	// Time ran out
 	else if (currenTime >= Game::Instance()->getEndTime()) {
 		if (m_pDerpStar->isVisible()) {
 			m_messageEOL = "Failed To Destroy The DerpStar";
-			endScene(KENDREASONLOSE);															// Player has lost if derpstar is still alive when time runs out
-		}
-		else {
+			endScene(KENDREASONLOSE);													// Player has lost if derpstar is still alive when time runs out
+		} else {
 			m_messageEOL = "You Win";
 			Game::Instance()->setWon(true);
-			endScene(KENDREASONWIN);															// Player stays playing for the length of time
+			endScene(KENDREASONWIN);													// Player stays playing for the length of time
 		}
 	}
 }

@@ -59,6 +59,7 @@ public:
 	float getButtonTimer() const { return m_nextTime; }					// Time between button presses
 	bool getWon() const { return m_won;	}								// Has the game been won
 	bool getSignedIn() const { return m_signedIn; }						// Is the player signed in or not
+	bool getAchievedLife() const { return m_lifeAchievment; }			// Get the life achievment unlocked status
 
 	// Set
 	void setLevel(unsigned int set) { m_levelNum = set; }				// Set the level number
@@ -92,6 +93,7 @@ public:
 	void setButtonTimer(float set) { m_nextTime = set; }				// Set the time between button presses
 	void setWon(bool set) { m_won = set; }								// The game has been won/lost
 	void setSignedIn(bool set) { m_signedIn = set; }					// SDKBox signed in (So it only does it once)
+	void setAchievedLife(bool set) { m_lifeAchievment = set; }			// SDKBox set the life achievement true or false
 
 private:
 	float m_nextTime;													// Used for menu button rate
@@ -132,6 +134,7 @@ private:
 	bool m_won = false;													// Destroyed enemy boss winning the game.
 
 	bool m_signedIn = false;											// SDKBox Leaderboard sign in
+	bool m_lifeAchievment = false;										// SDKBox player has collected new life power up
 };
 
 #endif // __GAME_SCENE_H__

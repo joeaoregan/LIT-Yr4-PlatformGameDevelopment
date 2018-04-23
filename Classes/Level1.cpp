@@ -13,15 +13,15 @@
 #include "Level1.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
 #endif
 
 Scene* Level1::createScene() {
-	cocos2d::Scene* scene = Scene::create();				// 'scene' is an autorelease object, JOR replaced auto specifier   
-	s_pLayerInstance = Level1::create();					// 'layer' is an autorelease object, JOR replaced auto specifier  
-	//Level1->setName("Level1");							// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-    scene->addChild(s_pLayerInstance);						// Add layer as a child to scene	    
-    return scene;											// Return the scene
+	cocos2d::Scene* scene = Scene::create();						// 'scene' is an autorelease object, JOR replaced auto specifier   
+	s_pLayerInstance = Level1::create();							// 'layer' is an autorelease object, JOR replaced auto specifier  
+	//Level1->setName("Level1");									// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
+    scene->addChild(s_pLayerInstance);								// Add layer as a child to scene	    
+    return scene;													// Return the scene
 }
 
 /* 
@@ -29,23 +29,24 @@ Scene* Level1::createScene() {
 */
 bool Level1::init() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Level 1 Started", 5);	// Google Analytics
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
+		"Unlocked", "Level 1 Started", 5);							// Google Analytics
 #endif
 
-	//Game::Instance()->setLevel(1);						// For parallax node init
+	//Game::Instance()->setLevel(1);								// For parallax node init
 
-	Level::init();											// 20180221 Added Level base class
+	Level::init();													// 20180221 Added Level base class
 
-	m_pHUD->setLevelLabel();								// Update HUD Level text display
+	m_pHUD->setLevelLabel();										// Update HUD Level text display
 
-	if ( !Layer::init() ) { return false; }					// super init first
+	if ( !Layer::init() ) { return false; }							// super init first
 		
-	Game::Instance()->resetAsteroidKills();					// Reset the number of asteroids destroyed
-	Game::Instance()->resetEnemyShipKIlls();				// Reset the number of enemy ships destroyed
+	Game::Instance()->resetAsteroidKills();							// Reset the number of asteroids destroyed
+	Game::Instance()->resetEnemyShipKIlls();						// Reset the number of enemy ships destroyed
 		
 	// ParallaxNode
-	this->addChild(m_backgroundNode, -1);					// Add the parallax background
-	m_backgroundNode->init();								// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);							// Add the parallax background
+	m_backgroundNode->init();										// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
 	
 	this->scheduleUpdate();
 	
@@ -56,7 +57,7 @@ bool Level1::init() {
 	Initialise the enemy ships (Different each level)
 */
 void Level1::initEnemyShips() {
-	for (int i = 0; i < NUM_ENEMIES; ++i) {					// 3 of enemy ship type 1
+	for (int i = 0; i < NUM_ENEMIES; ++i) {							// 3 of enemy ship type 1
 		EnemyShip* enemyShip1 = EnemyShip::create(m_visibleSize);
 		this->addChild(enemyShip1);
 		m_enemyShipList->pushBack(enemyShip1);
@@ -67,14 +68,14 @@ void Level1::initEnemyShips() {
 	Update Level 1
 */
 void Level1::update(float dt) {
-	Level::update(dt);										// Call base class update function	
+	Level::update(dt);												// Call base class update function	
 }
 
 /*
 	Check collisions
 */
 void Level1::checkCollisions() {
-	Level::checkCollisions();								// Call base class function
+	Level::checkCollisions();										// Call base class function
 	// Check collisions with different objects in different levels
 }
 
@@ -82,5 +83,5 @@ void Level1::checkCollisions() {
 	End the level
 */
 void Level1::endScene(EndReason endReason) {
-	Level::endScene(endReason);								// End the scene
+	Level::endScene(endReason);										// End the scene
 }

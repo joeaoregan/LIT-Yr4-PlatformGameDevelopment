@@ -26,6 +26,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
 #endif
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -528,6 +529,9 @@ void Level::setInvisible(cocos2d::Node * node) {
 	node->setVisible(false);																					// Set the node invisible
 }
 
+/*
+	Check for collisions with different power ups
+*/
 void Level::PowerUpCollision(PowerUp* powerUp) {
 	if (player->getBoundingBox().intersectsRect(powerUp->getBoundingBox())) {									// If the ship collides with an asteroid
 		player->runAction(cocos2d::Blink::create(1.0F, 9));														// Flash the Player ship
@@ -535,7 +539,13 @@ void Level::PowerUpCollision(PowerUp* powerUp) {
 	}
 }
 
+/*
+	Check collisions between the player and different objects
+*/
 void Level::checkCollisions() {
+	int currentWeaponGrade = player->getWeaponStrength();
+	std::stringstream upgrade;
+
 	// Blue Enemy laser collisions
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList1) {
 		if (!(enemyLaser->isVisible())) continue;
@@ -554,12 +564,41 @@ void Level::checkCollisions() {
 		if (player->getBoundingBox().intersectsRect(m_pPowerUpLife->getBoundingBox())) {						// If the ship collides with an asteroid
 			PowerUpCollision(m_pPowerUpLife);
 			Game::Instance()->addLife();																		// Add a life (up to 5 lives for a player)
+
+			if (!Game::Instance()->getAchievedLife()) {
+				CCLOG("***************************** NEW LIFE POWER UP ***************************");
+				CCLOG("Player has picked up a new life power up");												// Indicate achievement unlocked
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+				sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+					"Unlocked", "Collect Power Up", 5);															// Google Analytics (18 characters max?)
+#endif
+				Game::Instance()->setAchievedLife(true);														// Mark the achievement as completed
+			}
 		}
 	}
+
+	/*
+		Added achievement for collecting weapon powerup
+	*/
 	if (m_pPowerUpWeapon->isVisible()) {
 		if (player->getBoundingBox().intersectsRect(m_pPowerUpWeapon->getBoundingBox())) {						// If the ship collides with an asteroid
-			PowerUpCollision(m_pPowerUpWeapon);
+			PowerUpCollision(m_pPowerUpWeapon);																	// Check has player collided with a powerup
 			player->upgradeWeapon();																			// Updgrade the players weapon
+
+			if (currentWeaponGrade != player->getWeaponStrength()) {											// If the current weapon level has changed
+				CCLOG("***************************** WEAPON UPGRADED ***************************");
+				CCLOG("Weapon Upgrade Level: %d", player->getWeaponStrength());									// Show the upgrade level in the Output pane
+
+				upgrade << "Laser Upgrade " << player->getWeaponStrength();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+				sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+					//"Upgrade", "Weapon Upgrade Level: " + player->getWeaponStrength(), 5);					// Google Analytics
+					//"Upgrade", "Laser Upgrade: " + player->getWeaponStrength(), 5);							// Google Analytics (16 characters max?)
+					"Upgrade", upgrade.str(), 5);																// const char 17
+#endif
+			}
 		}
 	}
 

@@ -11,9 +11,7 @@
 #include "SplashScene.h"
 #include "MainMenu.h"
 #include "Audio.h"
-
-#define DISPLAY_TIME_SPLASH_SCENE 2
-#define TRANSITION_TIME 0.5
+#include "Defines.h"
 
 cocos2d::Scene* SplashScene::createScene() {
     cocos2d::Scene* scene = cocos2d::Scene::create();		// Create the scene. 'scene' is an autorelease object

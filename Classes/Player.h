@@ -34,6 +34,7 @@ public:
 	void initHealthBar(cocos2d::Size res, cocos2d::Color4F fg);
 
 	unsigned int getWeaponStrength() { return m_weaponStrength; }	// Current player weapon grade or level
+
 	void weaponUpgrade() { 
 		if (m_weaponStrength < MAX_WEAPON_LEVEL)					// If the weapons level isn't maxed out already
 			m_weaponStrength++; 									// Increment the weapon

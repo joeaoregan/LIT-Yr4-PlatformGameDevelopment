@@ -11,14 +11,18 @@
 #include "GameOverScene.h"
 #include "Level2.h"
 #include "CreditsScene.h"
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"
-#endif
+#include "SignInScene.h"		// Sign into Google Play
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
+
+/*
+	Include SDKBox and Google Analytics for Android only
+*/
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"										// 20180307 SDKBox
+#endif
 
 bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -38,9 +42,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	    
     director->setAnimationInterval((float) (1.0 / 60));								// set FPS. the default value is 1.0/60 if you don't call this
 
-	//cocos2d::Scene* scene = GameOverScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
+	//cocos2d::Scene* scene = GameOverScene::createScene();							// Create the game over screen, JOR replaced auto specifier
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)										// If the platform is Android
+	cocos2d::Scene* scene = SignInScene::createScene();								// Create the game sign in screen, JOR replaced auto specifier
+#else
 	cocos2d::Scene* scene = SplashScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
-	    
+#endif   
     director->runWithScene(scene);													// run
 
     return true;
