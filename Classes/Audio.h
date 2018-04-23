@@ -14,9 +14,12 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)	// WAV audio format
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)	// WAV audio format
 // Windows / Android
-#define JOE_RIFF1 "joe_riff1.wav"
-#define JOE_RIFF2 "joe_riff2.wav"
-#define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
+//#define JOE_RIFF1 "joe_riff1.wav"
+#define JOE_RIFF1 "joe_riff1.ogg"
+//#define JOE_RIFF2 "joe_riff2.wav"
+#define JOE_RIFF2 "joe_riff2.ogg"					// Large file size google
+//#define JOE_RIFF3 "BloodLevel-JOR-NEW.wav"
+#define JOE_RIFF3 "BloodLevel-JOR-NEW.ogg"
 
 // Remember to preload!!!!
 #define BUTTON_FX "buttonClick.wav"

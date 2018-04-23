@@ -172,8 +172,8 @@ void HUD::update(float curTimeMillis) {
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) m_time,
-			"Exit Time", "Close Button");																		// Google Analytics: Register game exit time for close button
+		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) m_time,				// Log the time on the countdown timer
+			"Exit Time", "Close Button Time");																	// Google Analytics: Register game exit time for close button
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -187,7 +187,7 @@ void HUD::update(float curTimeMillis) {
 	if (s_pInstance->m_pMenuItem->isSelected()) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int)m_time,
-			"Exit Time", "Menu Button");																		// Google Analytics: Register game exit time for menu button
+			"Exit Time", "Menu Button Time");																	// Google Analytics: Register game exit time for menu button
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

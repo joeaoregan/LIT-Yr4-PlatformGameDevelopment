@@ -16,6 +16,10 @@
 #include "Defines.h"
 #include "Audio.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
+#endif
+
 /*
 	Create the scene
 */
@@ -93,8 +97,8 @@ bool GameOverScene::init() {
 	std::string scoreTxt = "Your Score: " + cocos2d::StringUtils::toString(Game::Instance()->getScore()) +
 		"\nTop Score: " + cocos2d::StringUtils::toString(highScore);
 
-	if (Game::Instance()->getScore() > highScore) scoreTxt = "New High Score: " + 
-		cocos2d::StringUtils::toString(Game::Instance()->getScore());
+
+	scoreTxt = scoreAchievement(highScore);																						// Check has the player set a new high score
 
 	Label* scoreLbl = cocos2d::Label::createWithTTF(scoreTxt,
 		"fonts/Super Mario Bros..ttf", m_pVisibleSize.height * 0.075);
@@ -158,4 +162,21 @@ void GameOverScene::showCredits(cocos2d::Ref* pSender) {
 	Audio::Instance()->playFX(BUTTON_FX);
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionZoomFlipY::create(0.5, CreditsScene::createScene()));		// Restart the current scene	
 	this->scheduleUpdate();																										// reschedule
+}
+
+/*
+	Achievement: Player has achieved a new high score
+*/
+std::string GameOverScene::scoreAchievement(int highScore) {
+	std::string scoreTxt = "";
+
+	if (Game::Instance()->getScore() > highScore) {
+		scoreTxt = "New High Score: " + cocos2d::StringUtils::toString(Game::Instance()->getScore());
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Scores", "New High Score", 5);									// Google Analytics
+#endif
+	}
+
+	return scoreTxt;
 }

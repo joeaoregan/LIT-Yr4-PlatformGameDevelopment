@@ -12,6 +12,8 @@
 
 #include "cocos2d.h"
 
+#define MPLAYER_PRESS 250.0f								// Time between music player button presses
+
 // Level length
 #define MAX_LEVELS 4
 

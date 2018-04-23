@@ -681,8 +681,8 @@ void Level::endScene(EndReason endReason) {
 
 	if (endReason == KENDREASONLOSE) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int)m_time,
-			"Exit Time", "Player died");																		// Google Analytics: Register game exit time for menu button
+		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) Game::Instance()->getTimer(),
+			"Exit Time", "Player Dead Time");																		// Google Analytics: Register game exit time for menu button
 #endif
 	}
 

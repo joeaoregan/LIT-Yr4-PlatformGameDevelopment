@@ -49,5 +49,8 @@ private:
 	cocos2d::Label* m_currentTrackLbl;						// Label to display current background music track
 	
 	static MusicPlayer* s_pInstance;						// Single instance of Game used as singleton, so only one instance exists thoughout the game
+
+
+	float nextTime = 0.0f;									// Time for next button press
 };
 #endif /* __M_PLAYER_H */

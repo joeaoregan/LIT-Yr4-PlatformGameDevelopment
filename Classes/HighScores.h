@@ -29,6 +29,8 @@ private:
 	// High Score
 	std::string m_scoresStr;					// Text to display	
 	cocos2d::Label* m_allScoresLbl;				// Label to display current high score
+
+	void scoreAchievement();					// Player has achieved a place on the high scores table
 };
 
 #endif // __HIGH_SCORES_H__

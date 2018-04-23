@@ -10,6 +10,7 @@
 
 #include "Audio.h"
 //#include "string.h"
+#include "cocos2d.h"
 
 Audio* Audio::s_pInstance;																	// Singleton so only one instance of Audio exists in the game, for easy access
 
@@ -19,15 +20,22 @@ Audio* Audio::s_pInstance;																	// Singleton so only one instance of 
 #define NUM_TRACKS 3
 
 int currentTrack = 0;
-const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.wav" };
+//const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.wav" };
+//const char* tracks[] = { "joe_riff1.ogg" , "joe_riff2.ogg", "BloodLevel-JOR-NEW.ogg" };
+const char* tracks[] = { "joe_riff1.mp3" , "joe_riff2.mp3", "BloodLevel-JOR-NEW.mp3" };
 std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, guitar solo by Jimmy" };
 
 void Audio::init() {
 	m_currentVol = 1.0f;
 
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-	if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())						// If the background music isn't already playing
-		SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[0], true);				// 20180202 Change background music
+
+	int selectedTrack = cocos2d::RandomHelper::random_int(0, NUM_TRACKS-1);
+
+	if (!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()) {						// If the background music isn't already playing
+		SimpleAudioEngine::getInstance()->playBackgroundMusic(tracks[selectedTrack], true);	// 20180202 Change background music
+		//CCLOG("\n\n\n\n\nTrack: %s\n\n\n\n\n\n", trackNames[selectedTrack]);
+	}
 
 	// Preload the sound effects
 	SimpleAudioEngine::getInstance()->preloadEffect(EXPLOSION_LARGE);

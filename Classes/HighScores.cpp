@@ -12,6 +12,10 @@
 #include "HighScores.h"
 #include "MainMenu.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"										// 20180307 Google Analytics
+#endif
+
 #define MAX_SCORES_DISPLAYED 10
 
 // Arrays to store player names and scores
@@ -71,6 +75,8 @@ std::string HighScores::sortScores() {
 	// Set the current players name and score as the last element in each list
 	arrScores[MAX_SCORES_DISPLAYED] = Game::Instance()->getScore();				// Get players score
 	arrNames[MAX_SCORES_DISPLAYED] = Game::Instance()->getPlayerName();			// Get the players name
+	
+	scoreAchievement();															// Achievement: Player places on high score table
 
 	// Set scores table heading, indicating no scores saved, or new high score
 	if (Game::Instance()->getScore() > arrScores[0])							// If the current score is greater than the high score
@@ -137,4 +143,15 @@ void HighScores::resetScores() {
 	}
 
 	saveScores();
+}
+
+/*
+	Achievement: Player has achieved a place on the high scores table
+*/
+void HighScores::scoreAchievement() {
+	if (Game::Instance()->getScore() < arrScores[0] && Game::Instance()->getScore() > arrScores[MAX_SCORES_DISPLAYED - 1]) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Scores", "Score Table Position", 5);	// Google Analytics
+#endif
+	}
 }

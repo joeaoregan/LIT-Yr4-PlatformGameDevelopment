@@ -10,6 +10,8 @@
 
 #include "MusicPlayer.h"
 #include "Audio.h"
+#include "Game.h"			// Timing for button presses
+#include "Defines.h"	
 
 MusicPlayer* MusicPlayer::s_pInstance;																// MusicPlayer Singleton
 
@@ -77,17 +79,21 @@ MusicPlayer *MusicPlayer::create(cocos2d::Point position) {
 	Call functions depending on the button pressed
 */
 void MusicPlayer::update() {
-	if (getButton(1)->isSelected()) {
-		playTrack();												// Swap play & pause button sprites
+	if (getButton(1)->isSelected() && Game::Instance()->getTimeTick() >= nextTime) {
+		playTrack();																		// Swap play & pause button sprites
+		nextTime = Game::Instance()->getTimeTick() + MPLAYER_PRESS;
 	}
-	else if (getButton(2)->isSelected()) {
-		pauseTrack();												// Swap play & pause button sprites
+	else if (getButton(2)->isSelected() && Game::Instance()->getTimeTick() >= nextTime) {
+		pauseTrack();																		// Swap play & pause button sprites
+		nextTime = Game::Instance()->getTimeTick() + MPLAYER_PRESS;
 	}
-	else if (getButton(3)->isSelected()) {
-		nextTrack();												// Skip track forwards
+	else if (getButton(3)->isSelected() && Game::Instance()->getTimeTick() >= nextTime) {
+		nextTrack();																		// Skip track forwards
+		nextTime = Game::Instance()->getTimeTick() + MPLAYER_PRESS;
 	}
-	else if (getButton(4)->isSelected()) {
-		previousTrack();											// Skip track backwards
+	else if (getButton(4)->isSelected() && Game::Instance()->getTimeTick() >= nextTime) {
+		previousTrack();																	// Skip track backwards
+		nextTime = Game::Instance()->getTimeTick() + MPLAYER_PRESS;
 	}
 }
 

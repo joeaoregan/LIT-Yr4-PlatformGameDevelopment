@@ -99,12 +99,12 @@ Space Quest 14: Enemy Boss - DerpStar - with rotating laser canons
 
 ---
 
-![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame15GooglePlay.jpg "Space Shooter: Google Play)
+![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame15GooglePlay.jpg "Space Shooter: Google Play")
 Space Quest 15: Sign into Google Play functionality added using SDKBox
 
 ---
 
-![Space Game: Google Analytics](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame16Analytics.png "Space Shooter: Google Analytics)
+![Space Game: Google Analytics](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame16Analytics.png "Space Shooter: Google Analytics")
 Space Quest 16: Google Analytics achievements recorded as events (SDKBox support added)
 
 ---
