@@ -12,6 +12,7 @@
 #include "Level2.h"
 #include "CreditsScene.h"
 #include "SignInScene.h"		// Sign into Google Play
+#include "Level4.h"		// Sign into Google Play
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
@@ -47,7 +48,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)										// If the platform is Android
 	cocos2d::Scene* scene = SignInScene::createScene();								// Create the game sign in screen, JOR replaced auto specifier
 #else
-	cocos2d::Scene* scene = SplashScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
+	//cocos2d::Scene* scene = SplashScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
+	cocos2d::Scene* scene = Level4::createScene();								// Create the game splash screen, JOR replaced auto specifier
 #endif   
     director->runWithScene(scene);													// run
 
