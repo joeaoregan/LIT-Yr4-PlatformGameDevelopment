@@ -12,6 +12,7 @@
 #include "SignInScene.h"
 #include "SplashScene.h"
 #include "Defines.h"										// Include definitions
+//#include "XML.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"				// For leaderboard, and analytics

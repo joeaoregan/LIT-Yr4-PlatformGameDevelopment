@@ -378,7 +378,7 @@ void Level4::checkGameOver(float currenTime) {											// If the player has ru
 	
 	// Player Lost
 	if (Game::Instance()->getLives() <= 0) {											// If the player has run out of lives
-		player->stopAllActions();														// CCNode.cpp
+		player->stopAllActions();														// CCNode.SpaceQuest
 		player->setVisible(false);														// Destroy the ship
 		endScene(KENDREASONLOSE);														// Player has died
 	}

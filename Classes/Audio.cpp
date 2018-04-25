@@ -11,6 +11,7 @@
 #include "Audio.h"
 //#include "string.h"
 #include "cocos2d.h"
+#include "XML.h"
 
 Audio* Audio::s_pInstance;																	// Singleton so only one instance of Audio exists in the game, for easy access
 
@@ -23,9 +24,18 @@ int currentTrack = 0;
 //const char* tracks[] = { "joe_riff1.wav" , "joe_riff2.wav", "BloodLevel-JOR-NEW.wav" };
 //const char* tracks[] = { "joe_riff1.ogg" , "joe_riff2.ogg", "BloodLevel-JOR-NEW.ogg" };
 const char* tracks[] = { "joe_riff1.mp3" , "joe_riff2.mp3", "BloodLevel-JOR-NEW.mp3" };
+//const char** tracks;
 std::string trackNames[] = { "Track 1: A song by Joe", "Track 2: Another song by Joe", "Track 3: Mostly Joe, guitar solo by Jimmy" };
 
 void Audio::init() {
+	XML audioXML;
+	//tracks = audioXML.parseAudioXML();
+
+	//CCLOG("**********************************************track[0]: %s", tracks[0]);
+	//tracks[0] = audioXML.track1;
+	//tracks[1] = audioXML.track2;
+	//tracks[2] = audioXML.track3;
+
 	m_currentVol = 1.0f;
 
 //#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)

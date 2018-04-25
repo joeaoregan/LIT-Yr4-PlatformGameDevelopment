@@ -46,7 +46,7 @@ bool Level1::init() {
 		
 	// ParallaxNode
 	this->addChild(m_backgroundNode, -1);							// Add the parallax background
-	m_backgroundNode->init();										// ParallaxNodeExtras.cpp: Initialise the parallax scrolling background
+	m_backgroundNode->init();										// ParallaxNodeExtras.SpaceQuest: Initialise the parallax scrolling background
 	
 	this->scheduleUpdate();
 	

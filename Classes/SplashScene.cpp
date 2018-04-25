@@ -12,6 +12,7 @@
 #include "MainMenu.h"
 #include "Audio.h"
 #include "Defines.h"
+//#include "XML.h"
 
 cocos2d::Scene* SplashScene::createScene() {
     cocos2d::Scene* scene = cocos2d::Scene::create();		// Create the scene. 'scene' is an autorelease object
@@ -27,6 +28,9 @@ cocos2d::Scene* SplashScene::createScene() {
 	Initialise the splash scene, animating and fading the background image
 */
 bool SplashScene::init() {
+	//XML blah;
+	//blah.parseXML();
+
     // 1. super init first
     if ( !Layer::init() ) { return false; }
 	

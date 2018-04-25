@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<heroes>
+  <hero key="my_hero" shape="circle" hp="1" impulse="(250000.0, 300000.0)" gravity="(0.0, -1500.0)"
+  speed="3" isLocked="false" virtualItemKey="hero.fish.orange">
+    <body sprite="fish-body.png"/>
+    <dead-body sprite="fish-dead.png"/>
+  </hero>
+</heroes>

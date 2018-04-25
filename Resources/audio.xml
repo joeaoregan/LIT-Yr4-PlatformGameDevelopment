@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<audio>
+  <music key="audio_files" 
+	audio1="joe_riff1.mp3"
+	audio2="joe_riff2.mp3"
+	audio3="BloodLevel-JOR-NEW.mp3">
+  </music>
+  
+</audio>

@@ -36,7 +36,7 @@ public:
 		return s_pLayerInstance;
 	}
 
-    static cocos2d::Scene* createScene();										// there's no 'id' in cpp, so we recommend returning the class instance pointer
+    static cocos2d::Scene* createScene();										// there's no 'id' in SpaceQuest, so we recommend returning the class instance pointer
 	
     virtual bool init();														// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	void initLasers();															// Create lists of bullets for player and enemies

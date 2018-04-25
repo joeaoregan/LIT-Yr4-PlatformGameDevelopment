@@ -46,8 +46,7 @@ bool Level::init() {
     if ( !Layer::init() ) { return false; }																	// super init first
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0,
-		"Test Time", "Level init");																		// Google Analytics: Register game exit time for menu button
+	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0, "Test Time", "Level init");					// Google Analytics: Register game exit time for menu button
 #endif
 	/*
 	// Moved to main menu, as shows up every level
@@ -650,7 +649,7 @@ void Level::checkCollisions() {
 
 void Level::checkGameOver(float currenTime) {																	// Check is the game over
 	if (Game::Instance()->getLives() <= 0) {																	// If the player has run out of lives
-		player->stopAllActions();																				// CCNode.cpp
+		player->stopAllActions();																				// CCNode.SpaceQuest
 		player->setVisible(false);																				// Destroy the ship
 		endScene(KENDREASONLOSE);																				// Player has died
 	}
