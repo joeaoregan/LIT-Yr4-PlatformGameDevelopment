@@ -49,9 +49,13 @@ bool Level::init() {
 	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0, "Test Time", "Level init");					// Google Analytics: Register game exit time for menu button
 #endif
 	/*
+	// Not registering with leaderboard
+
 	// Moved to main menu, as shows up every level
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginSdkboxPlay::signin();																		// Sign in for leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 999);													// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("spacequest_leaderboard", 999);														// Add the score to the leaderboard
 #endif
 */
 

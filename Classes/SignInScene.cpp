@@ -53,6 +53,12 @@ bool SignInScene::init() {
 		sdkbox::PluginSdkboxPlay::signin();																						// Sign in for leaderboard
 		Game::Instance()->setSignedIn(true);																					// Make sure it only does this once																
 	}
+
+	//sdkbox::PluginSdkboxPlay::signin();																						// Sign in for leaderboard
+
+	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 999);													// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("spacequest_leaderboard", 999);														// Add the score to the leaderboard
+
 #endif
 
     return true;
