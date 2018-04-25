@@ -25,8 +25,8 @@
 #include "GameOverScene.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
 #endif
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -577,8 +577,7 @@ void Level::checkCollisions() {
 				CCLOG("Player has picked up a new life power up");												// Indicate achievement unlocked
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-					"Unlocked", "Collect Power Up", 5);															// Google Analytics (18 characters max?)
+				sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Collect Power Up", 5);		// Google Analytics (18 characters max?)
 #endif
 				Game::Instance()->setAchievedLife(true);														// Mark the achievement as completed
 			}
@@ -676,6 +675,7 @@ void Level::updateLeaderboard() {
 	CCLOG("Update Leaderboard");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());			// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);			// Add the score to the leaderboard
 #endif
 }
 
@@ -839,8 +839,7 @@ void Level::killAchievement() {
 			(float) Game::Instance()->getEnemyShipCount() >= 0.5f) {										// Asteroids or enemy ships
 			CCLOG("Destroyed 50 Percent Or More Asteroids Or Enemy Ships");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-				"Unlocked", "Expert Marksman", 5);															// Google Analytics: Register the Expert Marksman achievement
+			sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Expert Marksman", 5);		// Google Analytics: Register the Expert Marksman achievement
 #endif
 			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
 		}
@@ -869,20 +868,19 @@ void Level::killAchievement() {
 		Player has completed the level / died
 		without getting a laser on target
 	*/
-	if (!Game::Instance()->getAchievedKamikaze()) {										// If the achievement isn't complete
+	if (!Game::Instance()->getAchievedKamikaze()) {															// If the achievement isn't complete
 		if (Game::Instance()->getAsteroidKills() / (
-			float) Game::Instance()->getAsteroidCount() == 0.0f &&						// Player didn't destroy any asteroids
-			Game::Instance()->getEnemyShipKills() /										// and didn't destroy any enemy ships 
+			float) Game::Instance()->getAsteroidCount() == 0.0f &&											// Player didn't destroy any asteroids
+			Game::Instance()->getEnemyShipKills() /															// and didn't destroy any enemy ships 
 			(float) Game::Instance()->getEnemyShipCount() == 0.0f) {
-			CCLOG("Destroyed Nothing %.2f %.2f", Game::Instance()->getAsteroidKills() /	// Display the percentages in output
-				(float) Game::Instance()->getAsteroidCount(),
-				Game::Instance()->getEnemyShipKills() / 
-				(float) Game::Instance()->getEnemyShipCount() == 0.0f);
+			CCLOG("Destroyed Nothing %.2f %.2f", (float) (Game::Instance()->getAsteroidKills() /			// Display the percentages in output
+				Game::Instance()->getAsteroidCount()),
+				(float) (Game::Instance()->getEnemyShipKills() / 
+				Game::Instance()->getEnemyShipCount() == 0.0f));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-				"Unlocked", "Kamikaze", 5);												// Google Analytics: Register the Kamikaze achievement
+			sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Kamikaze", 5);				// Google Analytics: Register the Kamikaze achievement
 #endif
-			Game::Instance()->setAchievedKamikaze(true);								// Mark the achievement as achieved
+			Game::Instance()->setAchievedKamikaze(true);													// Mark the achievement as achieved
 		}
 	}
 }

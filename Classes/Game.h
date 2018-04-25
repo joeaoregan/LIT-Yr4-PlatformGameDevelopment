@@ -73,7 +73,7 @@ public:
 		if (m_levelNum < MAX_LEVELS) m_levelNum++; 						// Set the next level number
 		else m_levelNum = 1;											// Loop back around to level 1
 	}	
-	void updateScore(unsigned int set) { m_score += set; }				// Add the value passed as a parameter to the current score
+	void updateScore(unsigned int set);									// Add the value passed as a parameter to the current score
 	void setLives(unsigned int set) { m_lives = set; }					// Set the number of lives
 	void setHealth(unsigned int set) { m_health = set; }				// Set the Players Health
 	void takeLife() { m_lives--; };										// Decrement the number of lives
@@ -152,6 +152,16 @@ private:
 	bool m_lifeAchievment = false;										// SDKBox player has collected new life power up
 	bool m_killRateAchievement = false;									// Player gets over 75% kill rate
 	bool m_kamikazeAchievement = false;									// Player completes level / dies and destroys nothing
+
+	/*
+		Achievements
+	*/
+	bool m_score100 = false;
+	bool m_score250 = false;
+	bool m_score500 = false;
+	bool m_score1000 = false;
+	bool m_score5000 = false;
+	bool m_score10000 = false;
 };
 
 #endif // __GAME_SCENE_H__

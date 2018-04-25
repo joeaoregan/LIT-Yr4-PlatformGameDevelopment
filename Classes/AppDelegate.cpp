@@ -12,6 +12,7 @@
 #include "Level2.h"
 #include "CreditsScene.h"
 #include "SignInScene.h"		// Sign into Google Play
+#include "HighScores.h"
 
 AppDelegate::AppDelegate() {}	// Constructor
 AppDelegate::~AppDelegate() {}	// Destructor
@@ -26,8 +27,15 @@ AppDelegate::~AppDelegate() {}	// Destructor
 
 bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginSdkboxPlay::signout();											// Sign out for Leaderboard and Achievements
+	sdkbox::PluginSdkboxPlay::signin();												// Sign in for Leaderboard and Achievements
+	sdkbox::PluginSdkboxPlay::init();												// 20180314 SDKBox Play - Leaderboards and achievements
 	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
-	sdkbox::PluginSdkboxPlay::init();												// 20180314 SDKBox Play
+
+	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);						// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 1000);		// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("spacequest_leaderboard", 1000);		// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("Score Leaderboard", 1000);				// Add the score to the leaderboard
 #endif
 
     // initialize director
@@ -49,6 +57,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #else
 	cocos2d::Scene* scene = SplashScene::createScene();								// Create the game splash screen, JOR replaced auto specifier
 #endif   
+
+	//cocos2d::Scene* scene = HighScores::createScene();
+
     director->runWithScene(scene);													// run
 
     return true;

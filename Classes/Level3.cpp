@@ -14,6 +14,7 @@
 #include "EnemyShipWilKnot.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"				// For leaderboard and achievements
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"	// 20180307 Google Analytics
 #endif
 
@@ -157,6 +158,16 @@ void Level3::checkCollisions() {
 /*
 	End scene, nothing different needed
 */
-void Level3::endScene(EndReason endReason) {
+void Level3::endScene(EndReason endReason) {	
+	/*
+		If the player has successfully completed the level
+		Unlock the level complete achievement
+	*/
+	if (endReason == KENDREASONWIN) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 3 Complete");				// Achievement
+#endif
+	}			
+
 	Level::endScene(endReason);															// End the scene
 }

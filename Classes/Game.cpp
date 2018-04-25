@@ -11,7 +11,46 @@
 
 #include "Game.h"
 
-Game* Game::s_pInstance;							// Game Singleton
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"						// For leaderboard and achievements
+#endif
+
+Game* Game::s_pInstance;											// Game Singleton
+
+/*
+	Update the score of the game
+	Register score achievements as score increases
+*/
+void Game::updateScore(unsigned int set) { 
+	m_score += set;													// Add the value passed as a parameter to the current score
+	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (m_score >= 100 && !m_score100) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score100");	// Achievement for scoring 100 points
+		m_score100 = true;
+	}
+	else if (m_score >= 250 && !m_score250) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score250");	// Achievement for scoring 250 points
+		m_score250 = true;
+	}
+	else if (m_score >= 500 && !m_score500) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score500");	// Achievement for scoring 500 points
+		m_score500 = true;
+	}
+	else if (m_score >= 1000 && !m_score1000) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score1000");	// Achievement for scoring 1,000 points
+		m_score1000 = true;
+	}
+	else if (m_score >= 5000 && !m_score5000) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score5000");	// Achievement for scoring 5,000 pointss
+		m_score5000 = true;
+	}
+	else if (m_score >= 10000 && !m_score10000) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("score10000");	// Achievement for scoring 10,000 points
+		m_score10000 = true;
+	}
+#endif
+}				
 
 bool Game::init() {
 	// Set timer

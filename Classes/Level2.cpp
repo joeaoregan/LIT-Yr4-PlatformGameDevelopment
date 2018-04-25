@@ -10,6 +10,7 @@
 #include "EnemyShipKling.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"								// For leaderboard and achievements
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
 #endif
 
@@ -103,6 +104,16 @@ void Level2::checkCollisions() {
 	}
 }
 
-void Level2::endScene(EndReason endReason) {
+void Level2::endScene(EndReason endReason) {	
+	/*
+		If the player has successfully completed the level
+		Unlock the level complete achievement
+	*/
+	if (endReason == KENDREASONWIN) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 2 Complete");				// Achievement
+#endif
+	}	
+
 	Level::endScene(endReason);															// End the scene
 }
