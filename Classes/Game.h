@@ -162,6 +162,7 @@ private:
 	bool m_score1000 = false;
 	bool m_score5000 = false;
 	bool m_score10000 = false;
+	bool m_highScore = false;											// Has a high score been set
 };
 
 #endif // __GAME_SCENE_H__

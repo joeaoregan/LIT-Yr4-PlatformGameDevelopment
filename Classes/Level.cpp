@@ -25,8 +25,8 @@
 #include "GameOverScene.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
 #endif
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
@@ -675,7 +675,9 @@ void Level::updateLeaderboard() {
 	CCLOG("Update Leaderboard");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());			// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);			// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("Score Leaderboard", 1000);											// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);													// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", Game::Instance()->getScore());	// Add the score to the leaderboard
 #endif
 }
 
@@ -685,7 +687,7 @@ void Level::endScene(EndReason endReason) {
 	if (endReason == KENDREASONLOSE) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) Game::Instance()->getTimer(),
-			"Exit Time", "Player Dead Time");																		// Google Analytics: Register game exit time for menu button
+			"Exit Time", "Player Dead Time");																	// Google Analytics: Register game exit time for menu button
 #endif
 	}
 

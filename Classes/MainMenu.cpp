@@ -21,9 +21,9 @@
 #include "AudioMenu.h"							// Menu Item
 #include "Input.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
-//#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
+#endif
 
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
@@ -79,6 +79,15 @@ bool MainMenu::init() {
 	highScore = m_def->getIntegerForKey("Score1", 0);																							// Load the high score
 	std::string playerName = m_def->getStringForKey("Name1");																					// and the name of the player who got the score
 	
+	/*
+		Set the player name/identifier
+	*/
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	if (sdkbox::SdkboxPlay::getPlayerId() != "" || sdkbox::SdkboxPlay::getPlayerId() != NULL) {
+//		playerName = sdkbox::SdkboxPlay::getPlayerId();
+//	}
+//#endif
+
 	m_pTempScore = __String::createWithFormat("Top Score: %s %d", playerName.c_str(), highScore);												// String to display the top score & player	
 
 	float scorePosition;

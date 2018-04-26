@@ -25,6 +25,10 @@ void Game::updateScore(unsigned int set) {
 	m_score += set;													// Add the value passed as a parameter to the current score
 	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (checkHighScore() && !m_highScore) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement("High_Score");	// Achievement for setting a new high score
+		m_highScore = true;
+	}
 	if (m_score >= 100 && !m_score100) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score100");	// Achievement for scoring 100 points
 		m_score100 = true;
@@ -60,29 +64,29 @@ bool Game::init() {
 		m_levelDuration = LEVEL_TIME_EASY;
 	}
 	else if (m_difficulty == HARD) {
-		m_levelDuration = LEVEL_TIME_HARD;			// Level start time
+		m_levelDuration = LEVEL_TIME_HARD;							// Level start time
 	}
 
 	//CCLOG("Game: Level Duration =  %f", 
 	//	m_levelDuration);
 
-	m_endTime = getTimeTick() + m_levelDuration;	// Set the level finish time
+	m_endTime = getTimeTick() + m_levelDuration;					// Set the level finish time
 
 	//CCLOG("Game Endtime: %f", m_endTime);
 
-	m_time = m_levelDuration / 1000;				// Set the time for the countdown timer
+	m_time = m_levelDuration / 1000;								// Set the time for the countdown timer
 	m_currentTime = 0;
 
 	// Initial level values
-	if (m_levelNum == 1) m_score = 0;				// Initialise the score value		xxxx resets the score each level
-	//m_levelNum = 1;								// Initialise the level value
+	if (m_levelNum == 1) m_score = 0;								// Initialise the score value		xxxx resets the score each level
+	//m_levelNum = 1;												// Initialise the level value
 	m_gameOver = false;
 
 	// Reset totals
-	m_asteroidKills = 0;							// Number of asteroids destroyed
-	m_enemyShipKills = 0;							// Number of enemy ships destroyed
-	m_asteroidCount = 0;							// Number of asteroids spawned
-	m_enemyShipCount = 0;							// Number of enemy ships spawnedawned
+	m_asteroidKills = 0;											// Number of asteroids destroyed
+	m_enemyShipKills = 0;											// Number of enemy ships destroyed
+	m_asteroidCount = 0;											// Number of asteroids spawned
+	m_enemyShipCount = 0;											// Number of enemy ships spawnedawned
 
 	//CCLOG("Level %d: Countdown Timer Initialised", 
 	//	Game::Instance()->getLevel());
@@ -94,10 +98,10 @@ bool Game::init() {
 	Increment the number of player lives
 */
 void Game::addLife() { 
-	if (m_lives <= MAX_PLAYER_LIVES) 				// Increment the number of lives (Max 5)
+	if (m_lives <= MAX_PLAYER_LIVES) 								// Increment the number of lives (Max 5)
 		m_lives++;
-	else if (m_health < 10)							// If the player has the max number of lives
-		m_health = 10;								// Increase health
+	else if (m_health < 10)											// If the player has the max number of lives
+		m_health = 10;												// Increase health
 
 	CCLOG("Player Lives Incremented: %d", m_lives);
 }
@@ -137,7 +141,8 @@ void Game::updateTimer(float curTimeMillis) {
 float Game::getTimeTick() {
 	timeval time;
 	gettimeofday(&time, NULL);
-	unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	unsigned long millisecs = (time.tv_sec * 1000) 
+		+ (time.tv_usec / 1000);
 	return (float)millisecs;
 }
 
