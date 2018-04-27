@@ -47,10 +47,14 @@ public:
 	void nextButton();												// Go to next button
 	void prevButton();												// Go to previous button
 	
+	// Social Media & Analytics
+	void GoToLeaderboards(cocos2d::Ref *sender);					// Go to the Google Play Leaderboards
+	void GoToAchievements(cocos2d::Ref *sender);					// Go to the Google Play Achievements
+
 protected:
 
 	static MenuScene* m_pLayer;										// Statpic pointer to the Layer
-
+	
 	// Screen size
 	cocos2d::Size m_visibleSize;									// Visible screen size for the current platform
 	cocos2d::Vec2 m_origin;											// Screen origin point

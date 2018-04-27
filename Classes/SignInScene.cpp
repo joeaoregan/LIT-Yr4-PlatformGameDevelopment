@@ -57,18 +57,15 @@ bool SignInScene::init() {
 //	}
 	
 	sdkbox::PluginSdkboxPlay::showAchievements();
+	//sdkbox::PluginSdkboxPlay::showAllLeaderboards();
 
-	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);																	// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("Score Leaderboard", 1000);															// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 999);													// Add the score to the leaderboard
-
-
+	//sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);																	// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("Score_Leaderboard", 1000);															// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 999);													// Add the score to the leaderboard	
 	//sdkbox::SdkboxPlay::getPlayerId();
-	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", 500);			// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::showLeaderboard("leaderboard_spacequestleaderboard");			// Show the leaderboard
-	//sdkbox::PluginSdkboxPlay::showAllLeaderboards();			// Show the leaderboard
-
-
+	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", 500);											// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::showLeaderboard("leaderboard_spacequestleaderboard");											// Show the leaderboard
+	//sdkbox::PluginSdkboxPlay::showAllLeaderboards();																			// Show the leaderboard
 #endif
 
     return true;

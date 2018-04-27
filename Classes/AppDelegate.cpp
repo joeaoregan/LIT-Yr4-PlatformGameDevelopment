@@ -30,16 +30,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginSdkboxPlay::signout();											// Sign out for Leaderboard and Achievements
 	sdkbox::PluginSdkboxPlay::init();												// 20180314 SDKBox Play - Leaderboards and achievements
+	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
 
-	//sdkbox::PluginSdkboxPlay::signin();												// Sign in for Leaderboard and Achievements
-
+	//sdkbox::PluginSdkboxPlay::signin();											// Sign in for Leaderboard and Achievements
 	//CCLOG("SCORES");
 	//sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);						// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 1000);		// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::submitScore("Score Leaderboard", 1000);				// Add the score to the leaderboard
-
-	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
-	
+	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 1000);	// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("Score_Leaderboard", 1000);				// Add the score to the leaderboard	
 	//sdkbox::PluginSdkboxPlay::submitScore("spacequest_leaderboard", 1000);		// Add the score to the leaderboard
 	//sdkbox::PluginLeaderboard::init();											// Init the leaderboard
 	//sdkbox::IAP::init();

@@ -88,11 +88,16 @@ void Level1::endScene(EndReason endReason) {
 		If the player has successfully completed the level
 		Unlock the level complete achievement
 	*/
-	if (endReason == KENDREASONWIN) {
+	/*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (endReason == KENDREASONWIN) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 1 Complete");	// Achievement
-#endif
 	}
+		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
+			"Unlocked", "Level 1 Finished", 5);								// Google Analytics
+#endif
+*/
+	endLevelAchievement(endReason);											// Generic complete level achievements for console and analytics
 
 	Level::endScene(endReason);												// End the scene
 }

@@ -14,23 +14,28 @@
 
 class HighScores : public MenuScene {
 public:	
-	static cocos2d::Scene* createScene();		// Returns class instance pointer
+	static cocos2d::Scene* createScene();			// Returns class instance pointer
 		
-	virtual bool init();						// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
+	virtual bool init();							// init() returns bool in cocos2d-x, instead of returning 'id' in cocos2d-iphone
 		
-	CREATE_FUNC(HighScores);					// Static create() method implemented manually
+	CREATE_FUNC(HighScores);						// Static create() method implemented manually
 	
-	std::string sortScores();					// Sort the high scores
-	void resetScores();							// Reset the scores
-	void saveScores();							// Save the names and scores to UserDefaults
+	std::string sortScores();						// Sort the high scores
+	void resetScores();								// Reset the scores
+	void saveScores();								// Save the names and scores to UserDefaults
+
+	
+	// Social Media & Analytics
+	cocos2d::MenuItemImage* m_pAchievmentItem;		// Show Achievements
+	cocos2d::MenuItemImage* m_pLeaderboardsItem;	// Show Leaderboards
 
 private:
 
 	// High Score
-	std::string m_scoresStr;					// Text to display	
-	cocos2d::Label* m_allScoresLbl;				// Label to display current high score
+	std::string m_scoresStr;						// Text to display	
+	cocos2d::Label* m_allScoresLbl;					// Label to display current high score
 
-	void scoreAchievement();					// Player has achieved a place on the high scores table
+	void scoreAchievement();						// Player has achieved a place on the high scores table
 };
 
 #endif // __HIGH_SCORES_H__

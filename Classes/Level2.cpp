@@ -104,16 +104,22 @@ void Level2::checkCollisions() {
 	}
 }
 
-void Level2::endScene(EndReason endReason) {	
+void Level2::endScene(EndReason endReason) {
 	/*
 		If the player has successfully completed the level
 		Unlock the level complete achievement
 	*/
-	if (endReason == KENDREASONWIN) {
+	/*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (endReason == KENDREASONWIN) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 2 Complete");				// Achievement
+	}
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+		"Unlocked", "Level 2 Finished", 5);												// Google Analytics
 #endif
-	}	
+*/
+
+	endLevelAchievement(endReason);														// Generic complete level achievements for console and analytics
 
 	Level::endScene(endReason);															// End the scene
 }

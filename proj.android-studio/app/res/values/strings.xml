@@ -3,7 +3,8 @@
     <string name="app_name">Space Quest</string>
     <string name="app_id">1062335588153</string><!--Game Services-->
     <string name="package_name">jor.pgd.SpaceQuest</string>
-    <string name="leaderboard_my_leaderboard">CgkIuc6KwfUeEAIQBw</string>
-    <string name="spacequest_leaderboard">CgkIuc6KwfUeEAIQCg</string>
+    <string name="Score_Leaderboard">CgkIuc6KwfUeEAIQGw</string>
+    <string name="Asteroid_Board">CgkIuc6KwfUeEAIQGQ</string>
+    <string name="Top_Kills">CgkIuc6KwfUeEAIQBw</string>
     <string name="google_app_id">1062335588153</string>
 </resources>

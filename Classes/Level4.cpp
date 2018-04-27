@@ -371,9 +371,11 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Game Finished", 5);	// Google Analytics
-		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 4 Complete");						// Achievement
+		//sdkbox::PluginSdkboxPlay::unlockAchievement("Level 4 Complete");						// Achievement
 		sdkbox::PluginSdkboxPlay::unlockAchievement("Game Complete");							// Achievement
 #endif
+
+		endLevelAchievement(KENDREASONWIN);														// Generic complete level achievements for console and analytics
 
 		endScene(KENDREASONWIN);
 	}

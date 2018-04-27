@@ -16,7 +16,9 @@
 #include "Game.h"
 #include "Input.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"			// For leaderboard
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 //#include <SDL.h>										// For gamepad support on desktop
 #endif
 //#include "HealthBar.h"
@@ -215,6 +217,29 @@ void MenuScene::prevButton() {
 		m_nextBtnTime = Game::Instance()->getTimeTick() + m_buttonRate;														// Set next time to press a button
 		//CCLOG("PREV BUTTON: highlight m_currentBtn: %d", m_currentBtn);
 	}
+}
+
+
+/*
+	Callback: Show console leaderboards
+*/
+void MenuScene::GoToLeaderboards(cocos2d::Ref *sender) {
+	CCLOG("Show Leaderboards");
+	Audio::Instance()->playFX(BUTTON_FX);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginSdkboxPlay::showAllLeaderboards();
+#endif
+}
+
+/*
+	Callback: Show console leaderboards
+*/
+void MenuScene::GoToAchievements(cocos2d::Ref *sender) {
+	CCLOG("Show Achievements");
+	Audio::Instance()->playFX(BUTTON_FX);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginSdkboxPlay::showAchievements();
+#endif
 }
 
 /*

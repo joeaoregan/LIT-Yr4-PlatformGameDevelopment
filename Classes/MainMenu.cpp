@@ -22,7 +22,7 @@
 #include "Input.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"	// For leaderboard
 #endif
 
 Scene* MainMenu::createScene() {
@@ -75,6 +75,17 @@ bool MainMenu::init() {
 	m_pExitItem = MenuItemImage::create("btnExit.png", "btnExitSelect.png", CC_CALLBACK_1(MenuScene::menuCloseCallback, this));					// Set image for menu option
 	setYPosAndScale(m_pExitItem, 0.3f);
 
+	/*
+		Additional buttons for social media and analytics
+	*/
+	m_pAchievmentItem = MenuItemImage::create("Achievements.png", "AchievementsSelected.png", CC_CALLBACK_1(MenuScene::GoToAchievements, this));	// Set button graphics and callback
+	m_pAchievmentItem->setPosition(cocos2d::Point(m_visibleSize.width * 0.15f + m_origin.x, m_visibleSize.height * 0.45f));						// Set achievement button position
+	m_pAchievmentItem->setScale(m_visibleSize.height / 1080.0f);																				// Set scale factor
+
+	m_pLeaderboardsItem = MenuItemImage::create("Leaderboards.png", "LeaderboardsSelected.png", CC_CALLBACK_1(MenuScene::GoToLeaderboards, this));	// Set button graphics and callback
+	m_pLeaderboardsItem->setPosition(cocos2d::Point(m_visibleSize.width * 0.85f + m_origin.x, m_visibleSize.height * 0.45f));					// Set leaderboard button position
+	m_pLeaderboardsItem->setScale(m_visibleSize.height / 1080.0f);																				// Set scale factor
+
 	// Show current high score
 	highScore = m_def->getIntegerForKey("Score1", 0);																							// Load the high score
 	std::string playerName = m_def->getStringForKey("Name1");																					// and the name of the player who got the score
@@ -98,8 +109,8 @@ bool MainMenu::init() {
 	m_pHighScoreLbl->setScale((m_visibleSize.height == 1080) ? 0.5f : 0.4f);
 	this->addChild(m_pHighScoreLbl);
 	
-	// Menu Items
-	menu = Menu::create(m_pPlayItem, m_pScoreItem, m_pOptionsItem, m_pExitItem, NULL);															// Handles menu item touches (Can do more than one at a time)
+	// Menu Items - added achievements and leaderboard buttons
+	menu = Menu::create(m_pPlayItem, m_pScoreItem, m_pOptionsItem, m_pExitItem, m_pAchievmentItem, m_pLeaderboardsItem, NULL);					// Handles menu item touches (Can do more than one at a time)
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
 
@@ -114,7 +125,7 @@ bool MainMenu::init() {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||													// Mobile platform doesn't need to handle keyboard input
 		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		m_nextBtnTime = Game::Instance()->getTimeTick() + m_buttonRate;
-		m_totalButtons = 4;
+		m_totalButtons = MAIN_MENU_BUTTONS;
 		m_currentBtn = 4;
 	}
 
@@ -169,25 +180,29 @@ void MainMenu::update(float dt) {
 				Game::Instance()->setButtonTimer(Game::Instance()->getTimeTick() + m_buttonRate);												// Stored in game, think there was an issue between scenes
 
 				if (m_currentBtn == 1 && !m_selected) {
-					//CCLOG("exitItem Activated ********************************************");	// test
 					if (!m_selected) m_pExitItem->activate();
 					m_selected = true;
 					//exitItem->
 				}
 				else if (m_currentBtn == 2) {
-					//CCLOG("optionsItem Activated ********************************************");
 					m_pOptionsItem->activate();
 					m_selected = true;
 				}
 				else if (m_currentBtn == 3) {
-					//CCLOG("scoreItem Activated ********************************************");
 					m_pScoreItem->activate();
 					m_selected = true;
 				}
 				else if (m_currentBtn == 4) {
-					//CCLOG("playItem Activated ********************************************");
 					m_pPlayItem->activate();
 					m_selected = true;
+				}
+				else if (m_currentBtn == 5) {
+					m_pLeaderboardsItem->activate();
+					//m_selected = true;
+				}
+				else if (m_currentBtn == 6) {
+					m_pAchievmentItem->activate();
+					//m_selected = true;
 				}
 			}
 		}
@@ -207,22 +222,11 @@ void MainMenu::highlightButton(unsigned int btn) {
 		if (btn == 4) m_pPlayItem->selected();
 		else m_pPlayItem->unselected();
 
-		//CCLOG("highlight m_currentBtn: %d", m_currentBtn);
-	//}
-	/*
-	if (m_currentBtn == 1) getButton(1)->selected();
-	else getButton(1)->unselected();
+		if (btn == 5) m_pLeaderboardsItem->selected();
+		else m_pLeaderboardsItem->unselected();
 
-	if (m_currentBtn == 2) getButton(2)->selected();
-	else getButton(2)->unselected();
-
-	if (m_currentBtn == 3) getButton(3)->selected();
-	else getButton(3)->unselected();
-
-	if (m_currentBtn == 4) getButton(4)->selected();
-	else getButton(4)->unselected();
-	*/
-
+		if (btn == 6) m_pAchievmentItem->selected();
+		else m_pAchievmentItem->unselected();
 };
 
 /* 

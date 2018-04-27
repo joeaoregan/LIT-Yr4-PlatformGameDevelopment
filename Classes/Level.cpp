@@ -674,10 +674,12 @@ void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d:
 void Level::updateLeaderboard() {
 	CCLOG("Update Leaderboard");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());			// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("Score Leaderboard", 1000);											// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);													// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());		// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("Score_Leaderboard", 1000);											// Add the score to the leaderboard
+	//sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);													// Add the score to the leaderboard
 	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", Game::Instance()->getScore());	// Add the score to the leaderboard
+
+	sdkbox::PluginSdkboxPlay::submitScore("Global High Scores", Game::Instance()->getScore());					// Add the score to the leaderboard at the end of each level win or lose
 #endif
 }
 
@@ -833,7 +835,21 @@ void Level::menuCloseCallback(cocos2d::Ref* pSender) {
 */
 void Level::killAchievement() {
 	//CCLOG("Kill Rate Achievement");
-	
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	sdkbox::PluginSdkboxPlay::submitScore("Asteroid Count", Game::Instance()->getAsteroidKills());			// Add the asteroid kill count to the leaderboard
+
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Asteroids Level " +				// Asteroid kill statistic
+		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
+		cocos2d::StringUtils::toString(Game::Instance()->getAsteroidKills()), 5);							// Google Analytics: Register the number of asteroids destroyed
+
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Enemies Level " +					// Enemy kill statistic
+		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
+		cocos2d::StringUtils::toString(Game::Instance()->getEnemyShipKills()), 5);							// Google Analytics: Register the number of enemies destroyed
+
+	sdkbox::PluginSdkboxPlay::submitScore("Enemies Destroyed", Game::Instance()->getEnemyShipKills());		// Add the enemy kill count to the leaderboard
+#endif
+
 	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
 		if (Game::Instance()->getAsteroidKills() / 
 			(float) Game::Instance()->getAsteroidCount() >= 0.5f ||											// Player gets a kill percentage of 50% or more for
@@ -885,4 +901,22 @@ void Level::killAchievement() {
 			Game::Instance()->setAchievedKamikaze(true);													// Mark the achievement as achieved
 		}
 	}
+}
+
+/*
+	Achievements for end of each level for console and analytics
+*/
+void Level::endLevelAchievement(EndReason endReason) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string achievementStr = "Level " + 
+		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";							// Generic Level achievement
+
+	if (endReason == KENDREASONWIN) {
+		sdkbox::PluginSdkboxPlay::unlockAchievement(achievementStr);										// Console Achievement
+
+		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Level " +
+			cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Finished", 5);					// Google Analytics
+	}
+
+#endif
 }

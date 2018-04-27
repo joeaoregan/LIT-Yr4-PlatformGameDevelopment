@@ -84,6 +84,8 @@
 #define DISPLAY_TIME_SPLASH_SCENE 2							// Time to display the spash scene for
 #define DISPLAY_TIME_SPLASH_STORY 10						// Time to display the story between levels
 
+#define MAIN_MENU_BUTTONS 6									// Number of buttons displayed on main menu
+
 // Types etc.
 enum difficulty { EASY, MEDIUM, HARD };
 enum laserTypes { BLUE, ORANGE, GREEN1, GREEN2, GREEN3 };
