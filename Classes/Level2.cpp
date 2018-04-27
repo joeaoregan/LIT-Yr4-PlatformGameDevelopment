@@ -9,17 +9,17 @@
 #include "Level2.h"
 #include "EnemyShipKling.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"								// For leaderboard and achievements
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"											// For leaderboard and achievements
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
+//#endif
 
 Scene* Level2::createScene() {  
-	cocos2d::Scene* scene = Scene::create();						// 'scene' is an autorelease object, JOR replaced auto specifier   
-	s_pLayerInstance = Level2::create();							// 'layer' is an autorelease object, JOR replaced auto specifier  
-	//layer->setName("Level2");										// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
-    scene->addChild(s_pLayerInstance);								// Add layer as a child to scene	    
-    return scene;													// Return the scene
+	cocos2d::Scene* scene = Scene::create();											// 'scene' is an autorelease object, JOR replaced auto specifier   
+	s_pLayerInstance = Level2::create();												// 'layer' is an autorelease object, JOR replaced auto specifier  
+	//layer->setName("Level2");															// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
+    scene->addChild(s_pLayerInstance);													// Add layer as a child to scene	    
+    return scene;																		// Return the scene
 }
 
 /*
@@ -28,27 +28,27 @@ Scene* Level2::createScene() {
 bool Level2::init() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-		"Unlocked", "Level 2 Started", 5);							// Google Analytics
+		"Unlocked", "Level 2 Started", 5);												// Google Analytics
 #endif
 
-	Level::init();													// 20180221 Added Level base class
+	Level::init();																		// 20180221 Added Level base class
 
-	Game::Instance()->setLevel(2);									// for parallax node init
-	m_pHUD->setLevelLabel();										// Update HUD Level text display
+	Game::Instance()->setLevel(2);														// for parallax node init
+	m_pHUD->setLevelLabel();															// Update HUD Level text display
 
-	if (!Layer::init()) { return false; }							// super init first
+	if (!Layer::init()) { return false; }												// super init first
 
 	// 1) Create the ParallaxNode
-	this->addChild(m_backgroundNode, -1);							// Add the parallax background
-	m_backgroundNode->init();										// Initialise the parallax scrolling background
+	this->addChild(m_backgroundNode, -1);												// Add the parallax background
+	m_backgroundNode->init();															// Initialise the parallax scrolling background
 	
-	Game::Instance()->resetAsteroidKills();							// Reset the number of asteroids destroyed
-	Game::Instance()->resetEnemyShipKIlls();						// Reset the number of enemy ships destroyed
+	Game::Instance()->resetAsteroidKills();												// Reset the number of asteroids destroyed
+	Game::Instance()->resetEnemyShipKIlls();											// Reset the number of enemy ships destroyed
 	
 	CCLOG("Level %d: Background Initialised", 
 		Game::Instance()->getLevel());
 	
-	this->scheduleUpdate();											// Start updating the scene
+	this->scheduleUpdate();																// Start updating the scene
 
 	CCLOG("Level %d: Initialised", 
 		Game::Instance()->getLevel());

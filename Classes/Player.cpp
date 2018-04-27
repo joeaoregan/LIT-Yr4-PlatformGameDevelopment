@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Input.h"
 #include "Level.h"
+#include "Defines.h"
 
 /*
 	Create a player sprite, Initialise the number of lasers spawned based on the game difficulty
@@ -17,9 +18,10 @@
 */
 Player* Player::create(cocos2d::Size res) {
 	Player* player = new Player();
-	player->m_visibleSize = Director::getInstance()->getVisibleSize();						// screen size
-	//player->m_scale = (res.height == 720) ? 0.67f : 1.0f;									// This image has a higher res than the space game so is scaled down for PC, not up for mobile
-	player->m_scale = (res.height == 1080) ? 1.0f : (res.height == 720) ? 0.67f : res.height / 1080;	// Kindle resolution is different
+	player->m_visibleSize = Director::getInstance()->getVisibleSize();							// screen size
+	//player->m_scale = (res.height == 720) ? 0.67f : 1.0f;										// This image has a higher res than the space game so is scaled down for PC, not up for mobile
+	//player->m_scale = (res.height == 1080) ? 1.0f : (res.height == 720) ? 0.67f : res.height / 1080;	// Kindle resolution is different
+	player->m_scale = (res.height == 1080) ? 1.0f : res.height / 1080;							// Kindle resolution is different
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	player->m_speedMultiplier = 1.5f;															// Speed up the player on mobile device
@@ -27,45 +29,49 @@ Player* Player::create(cocos2d::Size res) {
 	player->m_speedMultiplier = 1.0f;
 #endif
 	
-	if (player && player->initWithSpriteFrameName("PlayerShip3.png")) {						// Original Player on sprite sheet
+	if (player && player->initWithSpriteFrameName("PlayerShip3.png")) {							// Original Player on sprite sheet
 	//if (player && player->initWithFile(PLAYER_IMG)) {
-		if (Game::Instance()->getLevel() <= 1) {											// Set the amount of lasers to fire starting at level 1, based on difficulty
+		if (Game::Instance()->getLevel() <= 1) {												// Set the amount of lasers to fire starting at level 1, based on difficulty
 			if (Game::Instance()->getDifficulty() == EASY) {
-				player->m_weaponStrength = 3;												// Start with 3 lasers easy, 2 medium, 1 hard
-				player->m_maxHealth = 10.0f;												// Set max health (number of times player can be hit before losing a life)
+				player->m_weaponStrength = 3;													// Start with 3 lasers easy, 2 medium, 1 hard
+				Game::Instance()->setCurrentWeapon(3);
+				player->m_maxHealth = 10.0f;													// Set max health (number of times player can be hit before losing a life)
 				player->m_lives = 4;
 			}
 			else if (Game::Instance()->getDifficulty() == HARD) {
-				player->m_weaponStrength = 1;												// Less laser beams initially
+				player->m_weaponStrength = 1;													// Less laser beams initially
+				Game::Instance()->setCurrentWeapon(1);
 				player->m_maxHealth = 3.0f;
 				player->m_lives = 2;
 			}
+			
+			player->setVisible(true);
 
-			Game::Instance()->setHealth((unsigned int) player->m_maxHealth);				// Store the max health for the player
-			Game::Instance()->setLives(player->m_lives);									// Init the number of lives
+			Game::Instance()->setHealth((unsigned int) player->m_maxHealth);					// Store the max health for the player
+			Game::Instance()->setLives(player->m_lives);										// Init the number of lives
 		}
-		else
-			player->m_weaponStrength = Game::Instance()->getCurrentWeapon();
-
+		
+		player->m_weaponStrength = Game::Instance()->getCurrentWeapon();
 		player->m_lives = Game::Instance()->getLives();
+
 		//if (Game::Instance()->getLevel() == 1)
-		//	Game::Instance()->setHealth(player->m_maxHealth);								// Initialise the player health
+		//	Game::Instance()->setHealth(player->m_maxHealth);									// Initialise the player health
 		player->m_health = Game::Instance()->getHealth();
-		if (player->m_health <= 0) player->m_health = player->m_maxHealth;					// Had the health carry over as 0 in one test
+		if (player->m_health <= 0) player->m_health = player->m_maxHealth;						// Had the health carry over as 0 in one test
 
 		cocos2d::Color4F fgColour(0.6f, 0.77f, 0.96f, 1);
-		player->initHealthBar(res, fgColour);												// Initialise the healthbar
+		player->initHealthBar(res, fgColour);													// Initialise the healthbar
 
-		player->autorelease();																// Clear the object automatically from memory
-		player->setPosition(res.width * 0.1, res.height * 0.5);								// Place in middle left of screen
-		player->setScale(player->m_scale);													// Increase scale of player for Android (My phone anyway)
+		player->autorelease();																	// Clear the object automatically from memory
+		player->setPosition(res.width * 0.1, res.height * 0.5);									// Place in middle left of screen
+		player->setScale(player->m_scale);														// Increase scale of player for Android (My phone anyway)
 
 		// Weapon graphic
-		player->m_pCanon = Sprite::create(PLAYER_CANON);									// The weapon on the players ship
-		player->m_pCanon->setVisible(false);												// Hide the canon to begin with
-		player->m_pCanon->setPosition((player->getContentSize().width / 2) +				// Set its position relative to the Player Sprite
+		player->m_pCanon = Sprite::create(PLAYER_CANON);										// The weapon on the players ship
+		player->m_pCanon->setVisible(false);													// Hide the canon to begin with
+		player->m_pCanon->setPosition((player->getContentSize().width / 2) +					// Set its position relative to the Player Sprite
 			player->getContentSize().width * 0.4f, player->getContentSize().height / 2);
-		player->addChild(player->m_pCanon);													// Attach to player
+		player->addChild(player->m_pCanon);														// Attach to player
 
 	}
 	else {
@@ -79,14 +85,14 @@ Player* Player::create(cocos2d::Size res) {
 	Initialise the Player healthbar
 */
 void Player::initHealthBar(cocos2d::Size res, cocos2d::Color4F fg) {
-	cocos2d::Color4F bgColour(1, 0, 0, 0.5f);									// Background colour (Transparent red)
+	cocos2d::Color4F bgColour(1, 0, 0, 0.5f);													// Background colour (Transparent red)
 		
 	m_pBar = HealthBar::create(
 		getPosition().x + (getContentSize().width / 2),
-		getPosition().y + getContentSize().height * 1.1f,						// Position
-		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,			// Dimensions
-		float(m_health / m_maxHealth),											// percentage  (Max 10 health)
-		fg, bgColour);															// Set the bar colours
+		getPosition().y + getContentSize().height * 1.1f,										// Position
+		(res.height == 720) ? 80 : 120, (res.height == 720) ? 10 : 15,							// Dimensions
+		float(m_health / m_maxHealth),															// percentage  (Max 10 health)
+		fg, bgColour);																			// Set the bar colours
 	addChild(m_pBar);
 }
 
@@ -97,6 +103,8 @@ void Player::initHealthBar(cocos2d::Size res, cocos2d::Color4F fg) {
 */
 void Player::update() {
 	// Move the player ship
+
+	if (Game::Instance()->getTimeTick() > m_flash) setVisible(true);
 
 	/****************************************************************************************
 	*						KEYBOARD INPUT NOT HANDLED FOR MOBILE
@@ -131,7 +139,7 @@ void Player::update() {
 */
 void Player::moveUp() {
 	if (getPosition().y < m_visibleSize.height * 0.895f)
-		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * m_scale * m_speedMultiplier);				// Need to cover more distance on larger screen
+		setPosition(getPosition().x, getPosition().y + PLAYER_SPEED * m_scale * m_speedMultiplier);	// Need to cover more distance on larger screen
 }
 void Player::moveDown() {
 	if (getPosition().y > m_visibleSize.height * 0.125f)
@@ -166,6 +174,9 @@ void Player::damage() {
 	bool playDamageSound = true;
 	auto blink = cocos2d::Blink::create(1.0f, 9);
 	blink->setTag(99);
+
+	m_flash = Game::Instance()->getTimeTick() + CHECK_VISIBLE_TIME;											// Set the time to check player visibility
+
 	m_lives = Game::Instance()->getLives();
 
 	if (getActionByTag(99) == nullptr) {																	// Only take health if not flashing

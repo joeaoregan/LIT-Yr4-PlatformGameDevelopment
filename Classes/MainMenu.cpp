@@ -21,10 +21,9 @@
 #include "AudioMenu.h"							// Menu Item
 #include "Input.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"	// For leaderboard
-#endif
-
+/*
+	Create the scene
+*/
 Scene* MainMenu::createScene() {
 	cocos2d::Scene* scene = Scene::create();	// 'scene' is an autorelease object, JOR replaced auto specifier
 	m_pLayer = MainMenu::create();				// 'layer' is an autorelease object, JOR replaced auto specifier, CHANGED TO SINGLETON IN MenuScene CLASS FOR ACCESS		
@@ -33,7 +32,10 @@ Scene* MainMenu::createScene() {
 	return scene;								// Return the scene
 }
 
-// on "init" you need to initialize your instance
+/*
+	Initialise the Main Menu scene
+	on "init" you need to initialize your instance
+*/
 bool MainMenu::init() {
 	MenuScene::init();							// Initialise base class
 	
@@ -78,7 +80,7 @@ bool MainMenu::init() {
 	/*
 		Additional buttons for social media and analytics
 	*/
-	m_pAchievmentItem = MenuItemImage::create("Achievements.png", "AchievementsSelected.png", CC_CALLBACK_1(MenuScene::GoToAchievements, this));	// Set button graphics and callback
+	m_pAchievmentItem = MenuItemImage::create("Achievements.png", "AchievementsSelected.png", CC_CALLBACK_1(MenuScene::GoToAchievements, this));// Set button graphics and callback
 	m_pAchievmentItem->setPosition(cocos2d::Point(m_visibleSize.width * 0.15f + m_origin.x, m_visibleSize.height * 0.45f));						// Set achievement button position
 	m_pAchievmentItem->setScale(m_visibleSize.height / 1080.0f);																				// Set scale factor
 
@@ -128,8 +130,7 @@ bool MainMenu::init() {
 		m_totalButtons = MAIN_MENU_BUTTONS;
 		m_currentBtn = 4;
 	}
-
-		
+			
 	/*
 	//playItem->selected();
 	//CCLOG("MainMenu: init");
@@ -138,12 +139,8 @@ bool MainMenu::init() {
 	optionsItem->pause();
 	scoreItem->pause();
 	playItem->pause();
-	
-
 	//CCLOG("MainMenu Init Complete");
-
 	//SELECTED = false;
-
 	//CCLOG("Main Menu Init Completed");
 	*/
 

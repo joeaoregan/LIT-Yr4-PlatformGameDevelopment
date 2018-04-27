@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Space Quest</string>
     <string name="app_id">1062335588153</string><!--Game Services-->
-    <string name="package_name">jor.pgd.SpaceQuest</string>
-    <string name="Score_Leaderboard">CgkIuc6KwfUeEAIQGw</string>
-    <string name="Asteroid_Board">CgkIuc6KwfUeEAIQGQ</string>
+    <string name="package_name">jor.pgd.SpaceQuest</string><!--Newer Version, working with leaderboards and achievements-->
+    <string name="Score_Leaderboard">CgkIuc6KwfUeEAIQGw</string><!-- Leaderboard for high scores -->
+    <string name="Asteroid_Board">CgkIuc6KwfUeEAIQGQ</string><!-- Leaderboard for Asteroids destroyed -->
     <string name="Top_Kills">CgkIuc6KwfUeEAIQBw</string>
     <string name="google_app_id">1062335588153</string>
 </resources>

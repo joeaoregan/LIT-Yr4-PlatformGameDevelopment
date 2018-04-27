@@ -71,8 +71,9 @@
 // Player
 #define MAX_PLAYER_LIVES 5									// The maximum number of lives a player can have
 #define MAX_PLAYER_HEALTH 10.0f								// The maximum health for the player
-#define PLAYER_SPEED 3.0f									// Players speed
+#define PLAYER_SPEED 4.0f									// Players speed
 #define MAX_WEAPON_LEVEL 4									// The current weapon the player has
+#define CHECK_VISIBLE_TIME 500.0f							// Check the player is visible every half a second
 
 // Screen Resolution
 #define RES_720P 720

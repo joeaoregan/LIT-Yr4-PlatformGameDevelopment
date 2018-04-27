@@ -13,10 +13,10 @@
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"													// For leaderboard and achievements
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"										// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"												// For leaderboard and achievements
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"										// 20180307 Google Analytics
+//#endif
 
 /*
 	Create level 4 scene

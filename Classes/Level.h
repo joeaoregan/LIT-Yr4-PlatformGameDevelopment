@@ -20,6 +20,11 @@
 #include "Asteroid.h"
 #include "PowerUp.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "PluginSdkboxPlay/PluginSdkboxPlay.h"											// For leaderboard and achievements
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
+#endif
+
 class Level : public Layer {
 public:
 	enum EndReason {

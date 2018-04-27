@@ -40,35 +40,38 @@ bool HighScores::init() {
 	MenuScene::init();																	// Base class function
 	
 	m_pTitleSprite->setTexture("HighScores.png");										// Change the title image text
-		
-	m_scoresStr = sortScores();															// set value for tempScore
-		
-	m_allScoresLbl = cocos2d::Label::createWithTTF(m_scoresStr ,
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.06f);					// Label to display current high score (Label replaces LabelTTF causing warnings)
-	m_allScoresLbl->setPosition(Point(m_visibleSize.width * 0.5 + m_origin.x, 
-		m_visibleSize.height * 0.4f + m_origin.y));										// Set its position on screen
-	m_allScoresLbl->setColor(Color3B::WHITE);											// Set the text colour
+
+	m_scoresStr = sortScores();															// Set value for tempScore
+
+	m_visibleSize = cocos2d::Director::getInstance()->getVisibleSize();					// Get visible screen size
 	
 	/*
 		Additional buttons for social media and analytics
 	*/
-	m_pAchievmentItem = MenuItemImage::create("Achievements.png", 
+	m_pAchievmentItem2 = MenuItemImage::create("Achievements.png",
 		"AchievementsSelected.png", CC_CALLBACK_1(MenuScene::GoToAchievements, this));	// Set button graphics and callback
-	m_pAchievmentItem->setPosition(cocos2d::Point(m_visibleSize.width * 0.15f + m_origin.x, 
-		m_visibleSize.height * 0.45f));		// Set achievement button position
-	m_pAchievmentItem->setScale(m_visibleSize.height / 1080.0f);						// Set scale factor
+	m_pAchievmentItem2->setPosition(cocos2d::Point((float) m_visibleSize.width * 0.15f, 
+		(float) m_visibleSize.height * 0.45f));											// Set achievement button position
+	m_pAchievmentItem2->setScale(m_visibleSize.height / 1080.0f);						// Set scale factor
 
-	m_pLeaderboardsItem = MenuItemImage::create("Leaderboards.png", 
+	m_pLeaderboardsItem2 = MenuItemImage::create("Leaderboards.png",
 		"LeaderboardsSelected.png", CC_CALLBACK_1(MenuScene::GoToLeaderboards, this));	// Set button graphics and callback
-	m_pLeaderboardsItem->setPosition(cocos2d::Point(m_visibleSize.width * 0.85f
-		+ m_origin.x, m_visibleSize.height * 0.45f));									// Set leaderboard button position
-	m_pLeaderboardsItem->setScale(m_visibleSize.height / 1080.0f);						// Set scale factor
+	m_pLeaderboardsItem2->setPosition(cocos2d::Point(m_visibleSize.width * 0.85f, 
+		m_visibleSize.height * 0.45f));													// Set leaderboard button position
+	m_pLeaderboardsItem2->setScale(m_visibleSize.height / 1080.0f);						// Set scale factor
+			
+	m_allScoresLbl = cocos2d::Label::createWithTTF(m_scoresStr ,
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.06f);					// Label to display current high score (Label replaces LabelTTF causing warnings)
+	m_allScoresLbl->setPosition(Point(m_visibleSize.width * 0.5, 
+		m_visibleSize.height * 0.4f));													// Set its position on screen
+	m_allScoresLbl->setColor(Color3B::WHITE);											// Set the text colour
 	
-
+	
 	this->addChild(m_allScoresLbl);														// Add it to the layer
 
-	menu = Menu::create(m_pBtnBackImg, m_pAchievmentItem, m_pLeaderboardsItem, NULL);	// Handles menu item touches (Can do more than one at a time)
+	menu = Menu::create(m_pAchievmentItem2, m_pLeaderboardsItem2, NULL);				// Handles menu item touches (Can do more than one at a time)
 	menu->setPosition(Point::ZERO);
+
 	this->addChild(menu);
 
 	return true;

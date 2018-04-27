@@ -40,8 +40,12 @@ public:
 			m_weaponStrength++; 									// Increment the weapon
 	}	
 
+	void stopFlashing(float time) { m_flash = time; }				// Set the time to stop flashing the player --> make sure player is visible
+
 private:
 	HealthBar * m_pBar;												// HealthBar
+
+	float m_flash = 0.0f;											// Time to flash player
 
 	float m_maxHealth = 5.0f;										// The max health for healthbars etc
 	int m_health = m_maxHealth;
@@ -53,7 +57,7 @@ private:
 
 	cocos2d::Sprite* m_pCanon;										// Canon made visible 
 
-	float m_speedMultiplier;											// Player too slow on android ...speed up
+	float m_speedMultiplier;										// Player too slow on android ...speed up
 };
 
 #endif // __PLAYER_H__

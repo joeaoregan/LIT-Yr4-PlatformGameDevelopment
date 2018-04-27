@@ -62,7 +62,7 @@ public:
 	/*
 		Analytics
 	*/
-	bool getSignedIn() const { return m_signedIn; }						// Is the player signed in or not
+	//bool getSignedIn() const { return m_signedIn; }					// Is the player signed in or not
 	bool getAchievedLife() const { return m_lifeAchievment; }			// Achievement: Get the life achievment unlocked status
 	bool getAchievedKills() const { return m_killRateAchievement; }		// Achievement: Has the player killed 75% of enemy ships or asteroids
 	bool getAchievedKamikaze() const { return m_kamikazeAchievement; }	// Achievement: Player completes level / dies and destroys nothing
@@ -102,7 +102,7 @@ public:
 	/*
 		Analytics
 	*/
-	void setSignedIn(bool set) { m_signedIn = set; }					// Achievement: signed in (So it only does it once)
+	//void setSignedIn(bool set) { m_signedIn = set; }					// Achievement: signed in (So it only does it once)
 	void setAchievedLife(bool set) { m_lifeAchievment = set; }			// Achievement: set the life achievement true or false
 	void setAchievedKills(bool set) { m_killRateAchievement = set; }	// Achievement: set player killed over 50% kill rate
 	void setAchievedKamikaze(bool set) { m_kamikazeAchievement = set; }	// Achievement: set the player has completed a level and destroyed nothing
@@ -112,7 +112,7 @@ private:
 
 	// Player
 	std::string m_playerName;											// Current player name
-	unsigned int m_currentWeapon;										// Store weapons grade between levels
+	unsigned int m_currentWeapon = 2;									// Store weapons grade between levels
 
 	// HUD
 	unsigned int m_lives = 0;											// Player lives
@@ -148,7 +148,7 @@ private:
 	/*
 		Analytics
 	*/
-	bool m_signedIn = false;											// SDKBox Leaderboard sign in
+	//bool m_signedIn = false;											// SDKBox Leaderboard sign in
 	bool m_lifeAchievment = false;										// SDKBox player has collected new life power up
 	bool m_killRateAchievement = false;									// Player gets over 75% kill rate
 	bool m_kamikazeAchievement = false;									// Player completes level / dies and destroys nothing

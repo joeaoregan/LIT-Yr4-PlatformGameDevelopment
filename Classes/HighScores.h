@@ -26,8 +26,8 @@ public:
 
 	
 	// Social Media & Analytics
-	cocos2d::MenuItemImage* m_pAchievmentItem;		// Show Achievements
-	cocos2d::MenuItemImage* m_pLeaderboardsItem;	// Show Leaderboards
+	cocos2d::MenuItemImage* m_pAchievmentItem2;		// Show Achievements
+	cocos2d::MenuItemImage* m_pLeaderboardsItem2;	// Show Leaderboards
 
 private:
 

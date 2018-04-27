@@ -24,10 +24,10 @@
 #include "StoryScene.h"
 #include "GameOverScene.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"																// For leaderboard
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"															// For leaderboard
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
+//#endif
 
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
@@ -48,16 +48,6 @@ bool Level::init() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0, "Test Time", "Level init");					// Google Analytics: Register game exit time for menu button
 #endif
-	/*
-	// Not registering with leaderboard
-
-	// Moved to main menu, as shows up every level
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginSdkboxPlay::signin();																		// Sign in for leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", 999);													// Add the score to the leaderboard
-	sdkbox::PluginSdkboxPlay::submitScore("spacequest_leaderboard", 999);														// Add the score to the leaderboard
-#endif
-*/
 
 	Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
 	Game::Instance()->setWon(false);																		// Has the boss been defeated
@@ -542,6 +532,7 @@ void Level::setInvisible(cocos2d::Node * node) {
 void Level::PowerUpCollision(PowerUp* powerUp) {
 	if (player->getBoundingBox().intersectsRect(powerUp->getBoundingBox())) {									// If the ship collides with an asteroid
 		player->runAction(cocos2d::Blink::create(1.0F, 9));														// Flash the Player ship
+		player->stopFlashing(Game::Instance()->getTimeTick() + CHECK_VISIBLE_TIME);								// Time to stop flashing the player
 		powerUp->collected();																					// Set not visible, update the score (+50), and play pickup sound
 	}
 }
@@ -624,7 +615,7 @@ void Level::checkCollisions() {
 		// Check collisions between the player ship and asteroids
 		if (player->getBoundingBox().intersectsRect(asteroid->getBoundingBox())) {								// If the ship collides with an asteroid
 			asteroid->setVisible(false);																		// Destroy the asteroid
-			player->damage();																					// Flash hte player, decrease health/take life, play explosion/damage sound
+			player->damage();																					// Flash the player, decrease health/take life, play explosion/damage sound
 		}
 	}
 	
@@ -671,14 +662,13 @@ void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d:
 	CCLOG("Screen Touched");
 }
 
+/*
+	Social Media and Analytics
+	Update the high scores leaderboards
+*/
 void Level::updateLeaderboard() {
 	CCLOG("Update Leaderboard");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());		// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::submitScore("Score_Leaderboard", 1000);											// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::submitScore("joe_board", 1000);													// Add the score to the leaderboard
-	//sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", Game::Instance()->getScore());	// Add the score to the leaderboard
-
 	sdkbox::PluginSdkboxPlay::submitScore("Global High Scores", Game::Instance()->getScore());					// Add the score to the leaderboard at the end of each level win or lose
 #endif
 }
@@ -829,6 +819,7 @@ void Level::menuCloseCallback(cocos2d::Ref* pSender) {
 }
 
 /*
+	Social Media and Analytics
 	Unlock asteroid / enemy kills achievement
 	If the kill rate is better than 50% for either Enemy Ships or Asteroids
 	Or it the player completes the level / dies and destroys no objects with lasers

@@ -12,10 +12,10 @@
 */
 #include "Level1.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"								// For leaderboard and achievements
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"					// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"							// For leaderboard and achievements
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"					// 20180307 Google Analytics
+//#endif
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();								// 'scene' is an autorelease object, JOR replaced auto specifier   

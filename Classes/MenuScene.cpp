@@ -63,7 +63,7 @@ bool MenuScene::init() {
 	this->addChild(m_pBackgroundSprite);																					// Add to layer
 	
 	// 2. Game Title
-	m_pGameTitleSprite = cocos2d::Sprite::create("GameTitle.png");														// Game Title image
+	m_pGameTitleSprite = cocos2d::Sprite::create("GameTitle.png");															// Game Title image
 	//m_pGameTitleSprite->initWithSpriteFrameName("GameTitle.png");
 	//m_pGameTitleSprite = cocos2d::Sprite::createWithSpriteFrameName("GameTitle.png");
 
