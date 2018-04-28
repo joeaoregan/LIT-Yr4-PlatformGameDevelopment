@@ -24,11 +24,6 @@
 #include "StoryScene.h"
 #include "GameOverScene.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"															// For leaderboard
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"													// 20180422 Google Analytics
-//#endif
-
 // Because cocos2d-x requres createScene to be static, we need to make other non-pointer members static
 std::map<cocos2d::EventKeyboard::KeyCode, std::chrono::high_resolution_clock::time_point> Input::keys;
 
@@ -95,16 +90,11 @@ bool Level::init() {
 	m_touchListener = cocos2d::EventListenerTouchAllAtOnce::create();										// JOR replaced auto specifier
 	m_touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_touchListener, this);						// Add the event listener
-		
-	//float dpadPos = 375.0f;
-	//(m_visibleSize.height == 1080) ? dpadPos = 375.0f : (m_visibleSize.height == 720) ? dpadPos = 250.0f : dpadPos * (m_visibleSize.height / 1080);
 
 	// D-pad (Display on mobile device)
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {				// If the target platform is a mobile device
 		m_pController = DPad::create(DPAD_BASE, DPAD_ARROW, DPAD_ARROW_ACTIVE,
 			(m_visibleSize.height == 1080) ? cocos2d::Point(375, 375) : (m_visibleSize.height == 720) ? Point(250, 250) : Point(375 * (m_visibleSize.height / 1080), 375 * (m_visibleSize.height / 1080)));
-
-		//m_pController->setScale((m_visibleSize.height == 1080) ? 1.0f : (m_visibleSize.height == 720) ? 0.67f : m_visibleSize.height / 1080); // puts buttons out of position
 
 		this->addChild(m_pController);
 	}
@@ -319,7 +309,6 @@ void Level::spawnObjects(float curTimeMillis) {
 				cocos2d::Point(-m_winSize.width - asteroid->getContentSize().width, 0)),					// To a position fully off screen
 			cocos2d::CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)						// And is then destroyed, DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 		);	
-
 		//CCLOG("Spawn Asteroid");
 	}
 }
@@ -568,10 +557,7 @@ void Level::checkCollisions() {
 				CCLOG("***************************** NEW LIFE POWER UP ***************************");
 				CCLOG("Player has picked up a new life power up");												// Indicate achievement unlocked
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//				sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Collect Power Up", 5);		// Google Analytics
-//#endif
-				Achievement::Instance()->analyticPowerUp();
+				Achievement::Instance()->analyticPowerUp();														// Analytics: Inicate player collected a power up
 
 				Game::Instance()->setAchievedLife(true);														// Mark the achievement as completed
 			}
@@ -585,22 +571,8 @@ void Level::checkCollisions() {
 		if (player->getBoundingBox().intersectsRect(m_pPowerUpWeapon->getBoundingBox())) {						// If the ship collides with an asteroid
 			PowerUpCollision(m_pPowerUpWeapon);																	// Check has player collided with a powerup
 			player->upgradeWeapon();																			// Updgrade the players weapon
-/*
-			if (currentWeaponGrade != player->getWeaponStrength()) {											// If the current weapon level has changed
-				CCLOG("***************************** WEAPON UPGRADED ***************************");
-				CCLOG("Weapon Upgrade Level: %d", player->getWeaponStrength());									// Show the upgrade level in the Output pane
 
-				upgrade << "Laser Upgrade " << player->getWeaponStrength();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-					//"Upgrade", "Weapon Upgrade Level: " + player->getWeaponStrength(), 5);					// Google Analytics
-					//"Upgrade", "Laser Upgrade: " + player->getWeaponStrength(), 5);							// Google Analytics (16 characters max?)
-					"Upgrade", upgrade.str(), 5);																// const char 17
-#endif
-			}
-*/
-			Achievement::Instance()->analyticWeaponGrade(player->getWeaponStrength());
+			Achievement::Instance()->analyticWeaponGrade(player->getWeaponStrength());							// Analytics: Indicate player upgraded the weapon, and what level it is at now
 		}
 	}
 
@@ -657,47 +629,25 @@ void Level::checkGameOver(float currenTime) {																	// Check is the ga
 	}
 }
 
-
 void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event  *event){
 	//if (Game::Instance()->isGameOver()) return;																// If the ship is not visible
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX 
 		|| CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		if (!Game::Instance()->isGameOver())																	// If the ship is visible/alive
 			spawnLasers(player->getWeaponStrength());															// Fire a laser, amount of lasers depends on weapon level	
-	}
-	
-	////for (auto &item : touches)																				// Needs more work, do something for each screen touch
-	//{
-	//	getInput();
-	//}
-
-
-	//CCLOG("Screen Touched");
+	}	
 }
 
 /*
-	Social Media and Analytics
-	Update the high scores leaderboards
+	If Win / Lose the scene ends with different outcomes
 */
-//void Level::updateLeaderboard() {
-//	CCLOG("Update Leaderboard");
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	sdkbox::PluginSdkboxPlay::submitScore("Global High Scores", Game::Instance()->getScore());								// Add the score to the leaderboard at the end of each level win or lose
-//#endif
-//}
-
 void Level::endScene(EndReason endReason) {
 	//updateLeaderboard();		
 	Achievement::Instance()->updateHighScores();																			// Update the score on the leaderboard
 
 	if (endReason == KENDREASONWIN) Achievement::Instance()->achievementEndLevel();
-	else if (endReason == KENDREASONLOSE) Achievement::Instance()->updateLoserBoard();
-
-	if (endReason == KENDREASONLOSE) {
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) Game::Instance()->getTimer(),
-//			"Exit Time", "Player Dead Time");																				// Google Analytics: Register game exit time for menu button
-//#endif
+	else if (endReason == KENDREASONLOSE) {
+		Achievement::Instance()->updateLoserBoard();
 		Achievement::Instance()->analyticExitTime();																		// Time Player rexited the game
 	}
 
@@ -733,8 +683,7 @@ void Level::endScene(EndReason endReason) {
 	statBarEOL((float)Game::Instance()->getEnemyShipKills() / 
 		(float)Game::Instance()->getEnemyShipCount(), TOTAL_LIST_ELEMENTS, 4.5f);
 
-	//killAchievement();
-	Achievement::Instance()->achievementKill();
+	Achievement::Instance()->achievementKill();																				// Achievement: Number of asteroids and enemys ships destroyed each level
 			
 	// 3. Total Enemy Ships Destroyed
 	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + 
@@ -837,97 +786,3 @@ void Level::menuCloseCallback(cocos2d::Ref* pSender) {
 #endif
 }
 
-/*
-	Social Media and Analytics
-	Unlock asteroid / enemy kills achievement
-	If the kill rate is better than 50% for either Enemy Ships or Asteroids
-	Or it the player completes the level / dies and destroys no objects with lasers
-
-void Level::killAchievement() {
-	//CCLOG("Kill Rate Achievement");
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginSdkboxPlay::submitScore("Asteroid Count", Game::Instance()->getAsteroidKills());			// Add the asteroid kill count to the leaderboard
-
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Asteroids Destroyed Level " +		// Asteroid kill statistic
-		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
-		cocos2d::StringUtils::toString(Game::Instance()->getAsteroidKills()), 5);							// Google Analytics: Register the number of asteroids destroyed
-
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Enemies Killed Level " +			// Enemy kill statistic
-		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
-		cocos2d::StringUtils::toString(Game::Instance()->getEnemyShipKills()), 5);							// Google Analytics: Register the number of enemies destroyed
-
-	sdkbox::PluginSdkboxPlay::submitScore("Enemies Destroyed", Game::Instance()->getEnemyShipKills());		// Add the enemy kill count to the leaderboard
-#endif
-
-	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
-		if (Game::Instance()->getAsteroidKills() / 
-			(float) Game::Instance()->getAsteroidCount() >= 0.5f ||											// Player gets a kill percentage of 50% or more for
-			Game::Instance()->getEnemyShipKills() / 
-			(float) Game::Instance()->getEnemyShipCount() >= 0.5f) {										// Asteroids or enemy ships
-			CCLOG("Destroyed 50 Percent Or More Asteroids Or Enemy Ships");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Expert Marksman", 5);		// Google Analytics: Register the Expert Marksman achievement
-#endif
-			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
-		}
-	}
-	
-
-// Test win
-	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
-		if (Game::Instance()->getAsteroidKills() / (float) Game::Instance()->getAsteroidCount() >= 0.5f) {	// Player gets a kill percentage of 50% or more
-			CCLOG("Destroyed 50 Or More Asteroids %.2f", Game::Instance()->getAsteroidKills() / (float) Game::Instance()->getAsteroidCount());
-			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
-		}
-	}
-
-	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
-		if (Game::Instance()->getEnemyShipKills() / (float) Game::Instance()->getEnemyShipCount() >= 0.5f) {
-			CCLOG("Destroyed 50 Or More Enemy Ships %.2f", Game::Instance()->getEnemyShipKills() / (float) Game::Instance()->getEnemyShipCount());
-			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
-		}
-	}
-
-
-
-	//	Kamikaze Achievement
-
-	//	Player has completed the level / died
-	//	without getting a laser on target
-	
-	if (!Game::Instance()->getAchievedKamikaze()) {															// If the achievement isn't complete
-		if (Game::Instance()->getAsteroidKills() / (
-			float) Game::Instance()->getAsteroidCount() == 0.0f &&											// Player didn't destroy any asteroids
-			Game::Instance()->getEnemyShipKills() /															// and didn't destroy any enemy ships 
-			(float) Game::Instance()->getEnemyShipCount() == 0.0f) {
-			CCLOG("Destroyed Nothing %.2f %.2f", (float) (Game::Instance()->getAsteroidKills() /			// Display the percentages in output
-				Game::Instance()->getAsteroidCount()),
-				(float) (Game::Instance()->getEnemyShipKills() / 
-				Game::Instance()->getEnemyShipCount() == 0.0f));
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Kamikaze", 5);				// Google Analytics: Register the Kamikaze achievement
-#endif
-			Game::Instance()->setAchievedKamikaze(true);													// Mark the achievement as achieved
-		}
-	}
-}
-*/
-/*
-	Achievements for end of each level for console and analytics
-
-void Level::endLevelAchievement(EndReason endReason) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    std::string achievementStr = "Level " + 
-		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";							// Generic Level achievement
-
-	if (endReason == KENDREASONWIN) {
-		sdkbox::PluginSdkboxPlay::unlockAchievement(achievementStr);										// Console Achievement
-
-		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Level " +
-			cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Finished", 5);					// Google Analytics
-	}
-
-#endif
-}
-*/

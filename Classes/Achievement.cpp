@@ -36,7 +36,6 @@ int timeInGame() {
 */
 void Achievement::updateLoserBoard() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	//sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Loser", "Player Died", 5);							// Google Analytics
 	sdkbox::PluginSdkboxPlay::submitScore("Loser Board (Quckest Deaths)", timeInGame());							// Submit the time the player lasted in the game
 	analyticLoser();
 #endif
@@ -80,11 +79,8 @@ void Achievement::analyticPowerUp() {
 	Analytics: Display level of weapon upgrade after collecting power up
 */
 void Achievement::analyticWeaponGrade(int grade) {
-	//std::stringstream upgrade;
 	//CCLOG("***************************** WEAPON UPGRADED ***************************");
 	//CCLOG("Weapon Upgrade Level: %d", grade);																		// Show the upgrade level in the Output pane
-	//upgrade << "Laser Upgrade " << grade;
-
 	std::string upgradeStr = "Laser Upgrade Level: " + cocos2d::StringUtils::toString(grade);						// Create string to sent to Analytics
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -240,7 +236,6 @@ void Achievement::updateHighScores() {
 void Achievement::achievementGameComplete() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Game Finished", 5);							// Google Analytics
-	//sdkbox::PluginSdkboxPlay::unlockAchievement("Level 4 Complete");												// Achievement
 	sdkbox::PluginSdkboxPlay::unlockAchievement("Game Complete");													// Achievement
 #endif
 }

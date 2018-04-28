@@ -20,8 +20,7 @@
 
 #include "Defines.h"
 
-class MenuScene : public cocos2d::Layer
-{
+class MenuScene : public cocos2d::Layer {
 public:
 	static MenuScene* Layer() {
 		if (m_pLayer == 0) {

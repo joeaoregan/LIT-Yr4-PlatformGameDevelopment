@@ -48,8 +48,6 @@ private:
 	void GoToEnterName(cocos2d::Ref *sender);			// Go to the enter name scene
 
 	// Social Media & Analytics
-	//void GoToLeaderboards(cocos2d::Ref *sender);		// Go to the Google Play Leaderboards
-	//void GoToAchievements(cocos2d::Ref *sender);		// Go to the Google Play Achievements
 	cocos2d::MenuItemImage* m_pAchievmentItem;			// Show Achievements
 	cocos2d::MenuItemImage* m_pLeaderboardsItem;		// Show Leaderboards
 	

@@ -23,8 +23,7 @@ public:
 	std::string sortScores();						// Sort the high scores
 	void resetScores();								// Reset the scores
 	void saveScores();								// Save the names and scores to UserDefaults
-
-	
+		
 	// Social Media & Analytics
 	cocos2d::MenuItemImage* m_pAchievmentItem2;		// Show Achievements
 	cocos2d::MenuItemImage* m_pLeaderboardsItem2;	// Show Leaderboards
@@ -34,8 +33,6 @@ private:
 	// High Score
 	std::string m_scoresStr;						// Text to display	
 	cocos2d::Label* m_allScoresLbl;					// Label to display current high score
-
-	//void scoreAchievement();						// Player has achieved a place on the high scores table
 };
 
 #endif // __HIGH_SCORES_H__

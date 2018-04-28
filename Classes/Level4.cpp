@@ -13,11 +13,6 @@
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"												// For leaderboard and achievements
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"										// 20180307 Google Analytics
-//#endif
-
 /*
 	Create level 4 scene
 */
@@ -33,11 +28,6 @@ Scene* Level4::createScene() {
 	Initialisation specific to Level 4
 */
 bool Level4::init() {
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-//		"Unlocked", "Level 4 Started", 5);														// Google Analytics
-//#endif
-
 	Level::init();																				// 20180221 Added Level base class
 
 	Game::Instance()->setLevel(4);																// Specific to level 2
@@ -61,14 +51,6 @@ bool Level4::init() {
 		Point(m_visibleSize.width + m_pDerpStar->getContentSize().width, 
 			player->getPositionY()));
 	
-	//derpStar->runAction(actionDerp);
-	//auto func = CallFuncN::create([](Ref* sender) {
-	//	//spawnDerpLaser();
-	//	CCLOG("test");
-	//	//derpStar->init(0);
-	//	cocos2d::Sprite* sprite = dyanamic_cast<cocos2d::Sprite*>(sender);
-	//});
-
 	auto func = CallFunc::create(CC_CALLBACK_0(Level4::spawnDerpLaser, this));					// Spawn lasers as part of the movement action sequence
 	auto func1 = CallFunc::create(CC_CALLBACK_0(Level4::spawnShips, this));						// Spawn ships when boss moves off screen
 
@@ -162,8 +144,6 @@ void Level4::spawnCanonLaser2() {
 	if (enemyLaser->isVisible()) return;														// If the laser is already visible skip it
 	Audio::Instance()->playFX(LASER_ENEMY4);														// Play audio
 
-	//enemyLaser->setPosition(derpStar->getPosition().x + getContentSize().width * 0.6f, 
-	//	derpStar->getPosition().y + getContentSize().height / 2);
 	enemyLaser->setPosition(m_pDerpStar->getPosition().x, m_pDerpStar->getPosition().y * 0.95f);// Position of the canon on the boss sprite
 	enemyLaser->setRotation(-30.0f);															// Set the postion relevant to the ships coordinates
 	enemyLaser->setVisible(true);																// Set visible on screen
@@ -219,33 +199,6 @@ void Level4::spawnShips() {
 }
 
 /*
-	Spawn the enemy ships for level 4
-	Previous funtion used, no spawn time required
-*/
-void Level4::spawnEnemyShips(float curTimeMillis) {
-	/*
-	float randMillisecs = randomValueBetween(0.20F, 1.0F) * 2500;
-	nextEnemyShipSpawnTime = randMillisecs + curTimeMillis;
-
-	Game::Instance()->incrementEnemyShipCount();
-
-	derpStar->init(visibleSize);
-
-	cocos2d::MoveTo* action = MoveTo::create(derpStar->getDuration() * 0.67f,
-		Point(player->getPositionX(), player->getPositionY()));									// Part of time spent moving to player, the rest moving off screen
-	//derpStar->runAction(action);
-
-	CCLOG("Spawn Enemy Ship - MoveTo");
-	derpStar->runAction(
-		Sequence::create(action,
-			MoveBy::create(derpStar->getDuration(),
-				Point(-winSize.width - derpStar->getContentSize().width, 0)),					// move off the screen its full width
-			CallFuncN::create(CC_CALLBACK_1(Level::setInvisible, this)), NULL)					// Then set invisible if it reaches the target - TERMINATE WITH NULL
-	);
-	*/
-}
-
-/*
 	Add the enemies to appear in this level in the order required
 	Made function virtual not need to clear list now, as function in level not loaded
 */
@@ -256,17 +209,6 @@ void Level4::initEnemyShips() {
 		this->addChild(enemyShip2);
 		m_enemyShipList->pushBack(enemyShip2);
 	}
-	
-	//derpStar = DerpStar::create(visibleSize);													// Create boss enemy
-	//m_enemyShipList->pushBack(derpStar);														// Add to list of enemies
-	//this->addChild(derpStar);																	// Add to scene
-	/*
-	// Add 1 x Enemy Ship Type 1 - This will appear second
-	for (unsigned int i = 0; i < L3_NUM_ENEMY_1; ++i) {
-		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
-		this->addChild(enemyShip1);
-		m_enemyShipList->pushBack(enemyShip1);
-	} */
 
 	// Add 2 x Enemy Ship Type 3 - Third on screen
 	for (unsigned int i = 0; i < 2; ++i) {
@@ -274,14 +216,7 @@ void Level4::initEnemyShips() {
 		this->addChild(enemyShip3);
 		m_enemyShipList->pushBack(enemyShip3);
 	}	
-	/*
-	// Add 2 x Enemy Ship Type 1 - 4th
-	for (unsigned int i = 0; i < L3_NUM_ENEMY_1 + 1; ++i) {
-		EnemyShip* enemyShip1 = EnemyShip::create(visibleSize);
-		this->addChild(enemyShip1);
-		m_enemyShipList->pushBack(enemyShip1);
-	}
-	*/
+
 	CCLOG("Add enemy ships");
 }
 
@@ -368,15 +303,7 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 		m_pDerpStar->m_pCanon1->stopAllActions();
 		m_messageEOL = "DerpStar Has Been Destroyed";
 		Game::Instance()->setWon(true);
-/*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Game Finished", 5);	// Google Analytics
-		//sdkbox::PluginSdkboxPlay::unlockAchievement("Level 4 Complete");						// Achievement
-		sdkbox::PluginSdkboxPlay::unlockAchievement("Game Complete");							// Achievement
-#endif
 
-		//endLevelAchievement(KENDREASONWIN);													// Generic complete level achievements for console and analytics
-*/
 		Achievement::Instance()->achievementGameComplete();										// Log event for game being completed
 
 		endScene(KENDREASONWIN);

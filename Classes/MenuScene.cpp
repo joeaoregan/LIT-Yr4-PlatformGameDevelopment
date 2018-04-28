@@ -219,7 +219,6 @@ void MenuScene::prevButton() {
 	}
 }
 
-
 /*
 	Callback: Show console leaderboards
 */

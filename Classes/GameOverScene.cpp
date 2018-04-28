@@ -16,10 +16,6 @@
 #include "Defines.h"
 #include "Audio.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
-//#endif
-
 /*
 	Create the scene
 */
@@ -172,10 +168,7 @@ std::string GameOverScene::scoreAchievement(int highScore) {
 	if (Game::Instance()->getScore() > highScore) {
 		scoreTxt = "New High Score: " + cocos2d::StringUtils::toString(Game::Instance()->getScore());
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Scores", "New High Score", 5);									// Google Analytics
-//#endif
-		Achievement::Instance()->analyticNewHighScore();
+		Achievement::Instance()->analyticNewHighScore();																		// Achievement: New high score set
 	}
 
 	return scoreTxt;

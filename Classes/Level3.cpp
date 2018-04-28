@@ -13,11 +13,6 @@
 #include "EnemyShipKling.h"
 #include "EnemyShipWilKnot.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"				// For leaderboard and achievements
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"	// 20180307 Google Analytics
-//#endif
-
 Scene* Level3::createScene() {
 	cocos2d::Scene* scene = Scene::create();				// 'scene' is an autorelease object, JOR replaced auto specifier   
 	s_pLayerInstance = Level3::create();					// 'layer' is an autorelease object, JOR replaced auto specifier  
@@ -30,14 +25,7 @@ Scene* Level3::createScene() {
 	Initialisation specific to Level 3
 */
 bool Level3::init() {
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-//		"Unlocked", "Level 3 Started", 5);												// Google Analytics
-//#endif
-
 	Level::init();																		// 20180221 Added Level base class
-
-	//Game::Instance()->setGameOver(false);												// Needed for starting new level, or restarting game
 
 	Game::Instance()->setLevel(3);														// Specific to level 2
 	m_pHUD->setLevelLabel();															// Update HUD Level text display
@@ -159,21 +147,5 @@ void Level3::checkCollisions() {
 	End scene, nothing different needed
 */
 void Level3::endScene(EndReason endReason) {	
-	/*
-		If the player has successfully completed the level
-		Unlock the level complete achievement
-	*/
-	/*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (endReason == KENDREASONWIN) {
-		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 3 Complete");				// Achievement
-	}
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-		"Unlocked", "Level 3 Finished", 5);												// Google Analytics
-#endif
-*/
-
-	//endLevelAchievement(endReason);														// Generic complete level achievements for console and analytics
-
 	Level::endScene(endReason);															// End the scene
 }

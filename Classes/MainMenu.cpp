@@ -96,7 +96,7 @@ bool MainMenu::init() {
 		Set the player name/identifier
 	*/
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	if (sdkbox::SdkboxPlay::getPlayerId() != "" || sdkbox::SdkboxPlay::getPlayerId() != NULL) {
+//	if (sdkbox::SdkboxPlay::getPlayerId() != "" || sdkbox::SdkboxPlay::getPlayerId() != NULL) {													
 //		playerName = sdkbox::SdkboxPlay::getPlayerId();
 //	}
 //#endif
@@ -118,9 +118,7 @@ bool MainMenu::init() {
 
 	// Music Player
 	if (Game::Instance()->musicPlayerVisible()) {
-		//mplayer = MusicPlayer::create(Point((visibleSize.width * 1.33) / 2, visibleSize.height * 0.15f));										// Create the music control buttons
 		m_pPlayer = MusicPlayer::create(Point(m_visibleSize.width / 2, m_visibleSize.height * 0.125f));											// Create the music control buttons
-		//mplayer->setscale(mplayer->getScale() * 1.2f);
 		this->addChild(m_pPlayer);																												// Add the music player to the layer
 	}																																			// Start updating the scene
 	
@@ -206,6 +204,9 @@ void MainMenu::update(float dt) {
 	}
 }
 
+/*
+	Highlight the selected menu option
+*/
 void MainMenu::highlightButton(unsigned int btn) {
 		if (btn == 1) m_pExitItem->selected();
 		else m_pExitItem->unselected();

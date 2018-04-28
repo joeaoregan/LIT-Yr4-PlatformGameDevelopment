@@ -13,10 +13,6 @@
 #include "MainMenu.h"
 #include "Achievement.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
-//#endif
-
 #define MAX_SCORES_DISPLAYED 10
 
 // Arrays to store player names and scores
@@ -172,17 +168,3 @@ void HighScores::resetScores() {
 
 	saveScores();
 }
-
-/*
-	Achievement: Player has achieved a place on the high scores table
-
-void HighScores::scoreAchievement() {
-	if (Game::Instance()->getScore() < arrScores[0] && 
-		Game::Instance()->getScore() > arrScores[MAX_SCORES_DISPLAYED - 1]) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-			"Scores", "Score Table Position", 5);										// Google Analytics
-#endif
-	}
-}
-*/

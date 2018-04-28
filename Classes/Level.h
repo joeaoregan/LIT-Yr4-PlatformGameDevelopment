@@ -94,15 +94,7 @@ public:
 	void PowerUpCollision(PowerUp* powerUp);									// Check collision with power ups
 	
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
-
-	//void updateLeaderboard();													// SDKBox leaderboard MOVED TO ACHIEVEMENT.CPP
-
-	//cocos2d::Vec2 getAnimation(const char* name) { }
-
-	//void killAchievement();													// Achievement for reaching a certain percentage of kills MOVED TO ACHIEVEMENT.CPP
-
-	//void endLevelAchievement(EndReason endReason);
-	
+		
 protected:
 	cocos2d::Size m_visibleSize;												// Screen resolution changes depending on the platform
 	cocos2d::Size m_winSize;													// Current size of the game window (constantly updated)
@@ -125,7 +117,6 @@ protected:
 	cocos2d::EventListenerTouchAllAtOnce* m_touchListener;						// Touch listener
 
 	// Time
-	//float curTimeInit;														// Current game time
 	float m_curTimeMillis;														// Current time in milliseconds
 
 	// End of Level Labels

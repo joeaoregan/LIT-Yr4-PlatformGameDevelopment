@@ -12,12 +12,6 @@
 */
 
 #include "Level1.h"
-//#include "Achievement.h"
-
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"							// For leaderboard and achievements
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"					// 20180307 Google Analytics
-//#endif
 
 Scene* Level1::createScene() {
 	cocos2d::Scene* scene = Scene::create();								// 'scene' is an autorelease object, JOR replaced auto specifier   
@@ -31,13 +25,6 @@ Scene* Level1::createScene() {
 	Initialise level 1 making additions to level base class
 */
 bool Level1::init() {
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-//		"Unlocked", "Level 1 Started", 5);									// Google Analytics
-//#endif
-
-	//Game::Instance()->setLevel(1);										// For parallax node init
-
 	Level::init();															// 20180221 Added Level base class
 
 	m_pHUD->setLevelLabel();												// Update HUD Level text display
@@ -86,23 +73,5 @@ void Level1::checkCollisions() {
 	End the level
 */
 void Level1::endScene(EndReason endReason) {
-	/*
-		If the player has successfully completed the level
-		Unlock the level complete achievement
-	*/
-	/*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (endReason == KENDREASONWIN) {
-		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 1 Complete");	// Achievement
-	}
-		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-			"Unlocked", "Level 1 Finished", 5);								// Google Analytics
-#endif
-*/
-	//endLevelAchievement(endReason);											// Generic complete level achievements for console and analytics
-
-	//if (endReason == KENDREASONWIN) Achievement::Instance()->endLevelAchievement();
-	//else if (endReason == KENDREASONLOSE) Achievement::Instance()->updateLoserBoard();
-
 	Level::endScene(endReason);												// End the scene
 }

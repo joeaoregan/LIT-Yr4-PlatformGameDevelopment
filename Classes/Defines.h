@@ -29,15 +29,12 @@
 #define L3_NUM_ENEMY_2 2
 #define L3_NUM_ENEMY_3 2									// Two of the larger ship on screen at once
 
-
 /* Images */
 
 #define PLAYER_OLD_IMG "SpaceFlier_sm_1.png"				// Old player sprite on sprite sheet using _drawNode
 #define PLAYER_IMG "PlayerShip3.png"						// New Player sprite
 #define PLAYER_CANON "PlayerShipGun.png"					// The weapon on the players ship
 
-//#define POWER_UP_LIFE_IMG "powerHeart.png"					// Life power up image
-//#define POWER_UP_WEAPON_IMG "WeaponPowerUp.png"				// Weapon power up image
 #define POWER_UP_LIFE_IMG2 "PowerUpLife.png"				// Life power up image on sprite sheet
 #define POWER_UP_WEAPON_IMG2 "PowerUpWeapon.png"			// Weapon power up image on sprite sheet
 

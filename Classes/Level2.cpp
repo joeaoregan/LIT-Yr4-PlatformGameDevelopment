@@ -9,15 +9,9 @@
 #include "Level2.h"
 #include "EnemyShipKling.h"
 
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"											// For leaderboard and achievements
-//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
-//#endif
-
 Scene* Level2::createScene() {  
 	cocos2d::Scene* scene = Scene::create();											// 'scene' is an autorelease object, JOR replaced auto specifier   
 	s_pLayerInstance = Level2::create();												// 'layer' is an autorelease object, JOR replaced auto specifier  
-	//layer->setName("Level2");															// Set name for layer to access (//Director::getInstance()->getRunningScene()->getChildByName("Level1")->addChild();)
     scene->addChild(s_pLayerInstance);													// Add layer as a child to scene	    
     return scene;																		// Return the scene
 }
@@ -26,11 +20,6 @@ Scene* Level2::createScene() {
 	Initialisation specific to Level 2
 */
 bool Level2::init() {
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-//		"Unlocked", "Level 2 Started", 5);												// Google Analytics
-//#endif
-
 	Level::init();																		// 20180221 Added Level base class
 
 	Game::Instance()->setLevel(2);														// for parallax node init
@@ -105,21 +94,5 @@ void Level2::checkCollisions() {
 }
 
 void Level2::endScene(EndReason endReason) {
-	/*
-		If the player has successfully completed the level
-		Unlock the level complete achievement
-	*/
-	/*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (endReason == KENDREASONWIN) {
-		sdkbox::PluginSdkboxPlay::unlockAchievement("Level 2 Complete");				// Achievement
-	}
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-		"Unlocked", "Level 2 Finished", 5);												// Google Analytics
-#endif
-*/
-
-	//endLevelAchievement(endReason);														// Generic complete level achievements for console and analytics
-
 	Level::endScene(endReason);															// End the scene
 }

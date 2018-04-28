@@ -2,9 +2,11 @@
 # Cocos2d-x Space Game
 ## Side-scrolling 2D Space Shooter
 ## Using SDKBox and Google Analytics
-### 23/04/2018
+### 2804/2018
 
-Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point
+Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point.
+
+The game includes Google Analytics and Google Play Services Leaderboards and Achievements.
 
 ---
 
@@ -24,6 +26,9 @@ Cross-platform C++ game for Win32/Android created using Cocos2d-x created for th
 * Boss Enemy (Image 14)
 * Connect to Google Play (Image 15)
 * Analytics (Image 16)
+* Leaderboards (Image 17)
+* Achievements (Image 18, 19)
+* Improved Menu (Image 20)
 
 ---
 
@@ -106,6 +111,26 @@ Space Quest 15: Sign into Google Play functionality added using SDKBox
 
 ![Space Game: Google Analytics](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame16Analytics.png "Space Shooter: Google Analytics")
 Space Quest 16: Google Analytics achievements recorded as events (SDKBox support added)
+
+---
+
+![Space Game: Leaderboards](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame17Leaderboards.png "Space Shooter: Leaderboards")
+Space Quest 17: Leaderboards
+
+---
+
+![Space Game: Pop up achievements](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame18Achievement.png "Space Shooter: Pop up achievements")
+Space Quest 18: Pop up achievements
+
+---
+
+![Space Game: Achievements](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame19Achievements.png "Space Shooter: Achievements")
+Space Quest 19: Achievements
+
+---
+
+![Space Game: Main Menu](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame20FinalMenu.png "Space Shooter: Main Menu")
+Space Quest 20: Leaderboards and Achievements accessed from Main Menu
 
 ---
 

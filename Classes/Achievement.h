@@ -5,6 +5,7 @@
 	K00203642
 
 	Log achievements in the game
+	And update leaderboards
 */
 
 #ifndef __ACHIEVEMENTS_H__
