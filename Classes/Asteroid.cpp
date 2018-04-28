@@ -1,5 +1,5 @@
 /*
-	Asteroid.h
+	Asteroid.cpp
 
 	Joe O'Regan
 	K00203642
@@ -7,7 +7,6 @@
 
 	Create asteroid at random position, scaled to suit screen resolution
 	Pic a movement speed based on a random range
-
 */
 
 #include "Asteroid.h"

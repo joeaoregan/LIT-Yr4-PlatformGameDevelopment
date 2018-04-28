@@ -10,7 +10,9 @@
 
 	20180202	Added Audio class with singleton access
 */
+
 #include "Level1.h"
+//#include "Achievement.h"
 
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 //#include "PluginSdkboxPlay/PluginSdkboxPlay.h"							// For leaderboard and achievements
@@ -29,10 +31,10 @@ Scene* Level1::createScene() {
 	Initialise level 1 making additions to level base class
 */
 bool Level1::init() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
-		"Unlocked", "Level 1 Started", 5);									// Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", 
+//		"Unlocked", "Level 1 Started", 5);									// Google Analytics
+//#endif
 
 	//Game::Instance()->setLevel(1);										// For parallax node init
 
@@ -97,7 +99,10 @@ void Level1::endScene(EndReason endReason) {
 			"Unlocked", "Level 1 Finished", 5);								// Google Analytics
 #endif
 */
-	endLevelAchievement(endReason);											// Generic complete level achievements for console and analytics
+	//endLevelAchievement(endReason);											// Generic complete level achievements for console and analytics
+
+	//if (endReason == KENDREASONWIN) Achievement::Instance()->endLevelAchievement();
+	//else if (endReason == KENDREASONLOSE) Achievement::Instance()->updateLoserBoard();
 
 	Level::endScene(endReason);												// End the scene
 }

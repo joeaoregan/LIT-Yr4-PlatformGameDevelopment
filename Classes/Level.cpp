@@ -45,9 +45,10 @@ cocos2d::Scene* Level::createScene() {
 bool Level::init() {
     if ( !Layer::init() ) { return false; }																	// super init first
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0, "Test Time", "Level init");					// Google Analytics: Register game exit time for menu button
-#endif
+// NOT SURE IF WORKING
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	sdkbox::PluginGoogleAnalytics::logTiming("StartGame", 0, "Test Time", "Level init");					// Google Analytics: Register game exit time for menu button 
+//#endif
 
 	Game::Instance()->setGameOver(false);																	// Needed for starting new level, or restarting game
 	Game::Instance()->setWon(false);																		// Has the boss been defeated
@@ -119,6 +120,8 @@ bool Level::init() {
 	}
 
 	CCLOG("Level %d: Initialised", Game::Instance()->getLevel());
+
+	Achievement::Instance()->analyticLevelStart();															// Analytics indicate the player has started a level
 
     return true;
 }
@@ -540,7 +543,7 @@ void Level::PowerUpCollision(PowerUp* powerUp) {
 */
 void Level::checkCollisions() {
 	int currentWeaponGrade = player->getWeaponStrength();
-	std::stringstream upgrade;
+	//std::stringstream upgrade;
 
 	// Blue Enemy laser collisions
 	for (cocos2d::Sprite* enemyLaser : *m_enemyLaserList1) {
@@ -565,9 +568,11 @@ void Level::checkCollisions() {
 				CCLOG("***************************** NEW LIFE POWER UP ***************************");
 				CCLOG("Player has picked up a new life power up");												// Indicate achievement unlocked
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Collect Power Up", 5);		// Google Analytics (18 characters max?)
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//				sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Collect Power Up", 5);		// Google Analytics
+//#endif
+				Achievement::Instance()->analyticPowerUp();
+
 				Game::Instance()->setAchievedLife(true);														// Mark the achievement as completed
 			}
 		}
@@ -580,7 +585,7 @@ void Level::checkCollisions() {
 		if (player->getBoundingBox().intersectsRect(m_pPowerUpWeapon->getBoundingBox())) {						// If the ship collides with an asteroid
 			PowerUpCollision(m_pPowerUpWeapon);																	// Check has player collided with a powerup
 			player->upgradeWeapon();																			// Updgrade the players weapon
-
+/*
 			if (currentWeaponGrade != player->getWeaponStrength()) {											// If the current weapon level has changed
 				CCLOG("***************************** WEAPON UPGRADED ***************************");
 				CCLOG("Weapon Upgrade Level: %d", player->getWeaponStrength());									// Show the upgrade level in the Output pane
@@ -594,6 +599,8 @@ void Level::checkCollisions() {
 					"Upgrade", upgrade.str(), 5);																// const char 17
 #endif
 			}
+*/
+			Achievement::Instance()->analyticWeaponGrade(player->getWeaponStrength());
 		}
 	}
 
@@ -672,31 +679,36 @@ void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d:
 	Social Media and Analytics
 	Update the high scores leaderboards
 */
-void Level::updateLeaderboard() {
-	CCLOG("Update Leaderboard");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginSdkboxPlay::submitScore("Global High Scores", Game::Instance()->getScore());					// Add the score to the leaderboard at the end of each level win or lose
-#endif
-}
+//void Level::updateLeaderboard() {
+//	CCLOG("Update Leaderboard");
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	sdkbox::PluginSdkboxPlay::submitScore("Global High Scores", Game::Instance()->getScore());								// Add the score to the leaderboard at the end of each level win or lose
+//#endif
+//}
 
 void Level::endScene(EndReason endReason) {
-	updateLeaderboard();																						// Update the score on the leaderboard
+	//updateLeaderboard();		
+	Achievement::Instance()->updateHighScores();																			// Update the score on the leaderboard
+
+	if (endReason == KENDREASONWIN) Achievement::Instance()->achievementEndLevel();
+	else if (endReason == KENDREASONLOSE) Achievement::Instance()->updateLoserBoard();
 
 	if (endReason == KENDREASONLOSE) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) Game::Instance()->getTimer(),
-			"Exit Time", "Player Dead Time");																	// Google Analytics: Register game exit time for menu button
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//		sdkbox::PluginGoogleAnalytics::logTiming("Exit Game", (int) Game::Instance()->getTimer(),
+//			"Exit Time", "Player Dead Time");																				// Google Analytics: Register game exit time for menu button
+//#endif
+		Achievement::Instance()->analyticExitTime();																		// Time Player rexited the game
 	}
 
-	if (Game::Instance()->isGameOver()) return;																	// If already game over, skip this function
-	Game::Instance()->setGameOver(true);																		// Set game over
-	Game::Instance()->setLivesCarried(true);																	// Carry over lives to next level
+	if (Game::Instance()->isGameOver()) return;																				// If already game over, skip this function
+	Game::Instance()->setGameOver(true);																					// Set game over
+	Game::Instance()->setLivesCarried(true);																				// Carry over lives to next level
 	
-	const int TOTAL_LIST_ELEMENTS = 9;																			// Used to vertically space menu items
+	const int TOTAL_LIST_ELEMENTS = 9;																						// Used to vertically space menu items
 	
 	// Win / Lose Message
-	std::string message = "Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";// Win 
+	std::string message = "Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + " Complete";			// Win 
 	if (endReason == KENDREASONLOSE) message = "You Lose";
 
 	// 1. Level Over Message
@@ -709,7 +721,7 @@ void Level::endScene(EndReason endReason) {
 	// 2. Total Asteroids Destroyed
 	cocos2d::Label* asteroidsLbl = cocos2d::Label::createWithTTF("Total Asteroids Destroyed: " + 
 		cocos2d::StringUtils::toString(Game::Instance()->getAsteroidKills()),
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);											// JOR replaced auto specifier
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);														// JOR replaced auto specifier
 	asteroidsLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5f + m_Origin.x,
 		m_visibleSize.height - (m_visibleSize.height / TOTAL_LIST_ELEMENTS * 3)));
 	asteroidsLbl->setColor(cocos2d::Color3B::RED);
@@ -721,12 +733,13 @@ void Level::endScene(EndReason endReason) {
 	statBarEOL((float)Game::Instance()->getEnemyShipKills() / 
 		(float)Game::Instance()->getEnemyShipCount(), TOTAL_LIST_ELEMENTS, 4.5f);
 
-	killAchievement();
+	//killAchievement();
+	Achievement::Instance()->achievementKill();
 			
 	// 3. Total Enemy Ships Destroyed
 	cocos2d::Label* enemyShipsLbl = cocos2d::Label::createWithTTF("Total Enemy Ships Destroyed: " + 
 		cocos2d::StringUtils::toString(Game::Instance()->getEnemyShipKills()),
-		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);													// JOR replaced auto specifier
+		"fonts/Super Mario Bros..ttf", m_visibleSize.height * 0.05);														// JOR replaced auto specifier
 	enemyShipsLbl->setPosition(cocos2d::Point(m_visibleSize.width * 0.5f + m_Origin.x,
 		m_visibleSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 4)));
 	enemyShipsLbl->setColor(cocos2d::Color3B::RED);
@@ -734,42 +747,42 @@ void Level::endScene(EndReason endReason) {
 
 	// 4. Restart Level
 	message = "Restart Game";
-	restartLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);												// JOR replaced auto specifier
-	m_pRestartItem = cocos2d::MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));				// JOR replaced auto specifier
+	restartLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);													// JOR replaced auto specifier
+	m_pRestartItem = cocos2d::MenuItemLabel::create(restartLbl,CC_CALLBACK_1(Level::restartTapped,this));					// JOR replaced auto specifier
 	m_pRestartItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 6));
 	
-	unsigned int level = Game::Instance()->getLevel();																	// Get the current level number
+	unsigned int level = Game::Instance()->getLevel();																		// Get the current level number
 
 	// 5. Continue To Next Level
 	if (endReason != KENDREASONLOSE && level < 4)
-		message = "Start Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()+1);						// Add the level number to the continue button text
+		message = "Start Level " + cocos2d::StringUtils::toString(Game::Instance()->getLevel()+1);							// Add the level number to the continue button text
 	if (level == 4 || endReason == KENDREASONLOSE)
 		message = "Continue";
 
-	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);								// Set the continue label txt to Start Level x/Continue
+	cocos2d::Label* continueLbl = cocos2d::Label::createWithBMFont("Arial.fnt", message);									// Set the continue label txt to Start Level x/Continue
 
 	// Level Progression
 	if (endReason != KENDREASONLOSE) {
 		levelProgression(continueLbl);
 	}
 	else {
-		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));		// If the game is lost set the continue option to return to main menu
+		m_pContinueItem = cocos2d::MenuItemLabel::create(continueLbl, CC_CALLBACK_1(Level::returnToMenu, this));			// If the game is lost set the continue option to return to main menu
 	}
 
 	m_pContinueItem->setPosition(m_winSize.width / 2, 
 		m_winSize.height - (m_winSize.height / TOTAL_LIST_ELEMENTS * 7));
 
 	// Animate the men items
-	m_pContinueItem->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the continue to next level label	
-	m_pRestartItem->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the restart button label
-	m_pLevelCompleteLbl->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));	// Scale the level complete message label
+	m_pContinueItem->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));			// Scale the continue to next level label	
+	m_pRestartItem->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));			// Scale the restart button label
+	m_pLevelCompleteLbl->runAction(cocos2d::ScaleTo::create(0.5F, (m_visibleSize.height == RES_720P) ? 1.0f : 1.5f));		// Scale the level complete message label
 
-	cocos2d::Menu* menu = cocos2d::Menu::create(m_pRestartItem, m_pContinueItem, NULL);									// JOR replaced auto specifier
+	cocos2d::Menu* menu = cocos2d::Menu::create(m_pRestartItem, m_pContinueItem, NULL);										// JOR replaced auto specifier
 	menu->setPosition(cocos2d::Point::ZERO);
 	this->addChild(menu);
 
-	this->unscheduleUpdate();																							// Terminate update callback
+	this->unscheduleUpdate();																								// Terminate update callback
 }
 
 /*
@@ -778,10 +791,10 @@ void Level::endScene(EndReason endReason) {
 void Level::statBarEOL(float percent, int elements, float y) {
 	if (Game::Instance()->getEnemyShipCount() > 0) {
 		HealthBar* healthBar2 = HealthBar::create(
-			m_winSize.width * 0.5f, m_winSize.height - ((m_winSize.height / elements) * y),								// Position
-			(m_visibleSize.height == 720) ? 200 : 300, (m_visibleSize.height == 720) ? 20 : 30,							// Dimensions
-			percent,																									// percentage
-			cocos2d::Color4F(1, 0, 0, 1), cocos2d::Color4F(1, 0, 0, 0.5f), true);										// Colours & show label
+			m_winSize.width * 0.5f, m_winSize.height - ((m_winSize.height / elements) * y),									// Position
+			(m_visibleSize.height == 720) ? 200 : 300, (m_visibleSize.height == 720) ? 20 : 30,								// Dimensions
+			percent,																										// percentage
+			cocos2d::Color4F(1, 0, 0, 1), cocos2d::Color4F(1, 0, 0, 0.5f), true);											// Colours & show label
 		this->addChild(healthBar2);
 	}
 }
@@ -829,7 +842,7 @@ void Level::menuCloseCallback(cocos2d::Ref* pSender) {
 	Unlock asteroid / enemy kills achievement
 	If the kill rate is better than 50% for either Enemy Ships or Asteroids
 	Or it the player completes the level / dies and destroys no objects with lasers
-*/
+
 void Level::killAchievement() {
 	//CCLOG("Kill Rate Achievement");
 
@@ -860,7 +873,7 @@ void Level::killAchievement() {
 		}
 	}
 	
-/*
+
 // Test win
 	if (!Game::Instance()->getAchievedKills()) {															// If the achievement isn't complete
 		if (Game::Instance()->getAsteroidKills() / (float) Game::Instance()->getAsteroidCount() >= 0.5f) {	// Player gets a kill percentage of 50% or more
@@ -875,14 +888,14 @@ void Level::killAchievement() {
 			Game::Instance()->setAchievedKills(true);														// Mark the achievement as true
 		}
 	}
-*/
 
-	/*
-		Kamikaze Achievement
 
-		Player has completed the level / died
-		without getting a laser on target
-	*/
+
+	//	Kamikaze Achievement
+
+	//	Player has completed the level / died
+	//	without getting a laser on target
+	
 	if (!Game::Instance()->getAchievedKamikaze()) {															// If the achievement isn't complete
 		if (Game::Instance()->getAsteroidKills() / (
 			float) Game::Instance()->getAsteroidCount() == 0.0f &&											// Player didn't destroy any asteroids
@@ -899,10 +912,10 @@ void Level::killAchievement() {
 		}
 	}
 }
-
+*/
 /*
 	Achievements for end of each level for console and analytics
-*/
+
 void Level::endLevelAchievement(EndReason endReason) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string achievementStr = "Level " + 
@@ -917,3 +930,4 @@ void Level::endLevelAchievement(EndReason endReason) {
 
 #endif
 }
+*/

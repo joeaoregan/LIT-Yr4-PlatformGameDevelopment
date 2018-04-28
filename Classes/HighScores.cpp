@@ -11,10 +11,11 @@
 #include "Game.h"
 #include "HighScores.h"
 #include "MainMenu.h"
+#include "Achievement.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
+//#endif
 
 #define MAX_SCORES_DISPLAYED 10
 
@@ -99,9 +100,12 @@ std::string HighScores::sortScores() {
 	// Set the current players name and score as the last element in each list
 	arrScores[MAX_SCORES_DISPLAYED] = Game::Instance()->getScore();						// Get players score
 	arrNames[MAX_SCORES_DISPLAYED] = Game::Instance()->getPlayerName();					// Get the players name
-	
-	scoreAchievement();																	// Achievement: Player places on high score table
 
+	//scoreAchievement();
+	if (Game::Instance()->getScore() < arrScores[0] &&									// If the current score has is between the lowest
+		Game::Instance()->getScore() > arrScores[MAX_SCORES_DISPLAYED - 1]) {			// and highest local high score table positions
+		Achievement::Instance()->achievementScore();									// Achievement: Player places on high score table
+	}
 	// Set scores table heading, indicating no scores saved, or new high score
 	if (Game::Instance()->getScore() > arrScores[0])									// If the current score is greater than the high score
 		scoreLabelText = "New High Score:";
@@ -171,7 +175,7 @@ void HighScores::resetScores() {
 
 /*
 	Achievement: Player has achieved a place on the high scores table
-*/
+
 void HighScores::scoreAchievement() {
 	if (Game::Instance()->getScore() < arrScores[0] && 
 		Game::Instance()->getScore() > arrScores[MAX_SCORES_DISPLAYED - 1]) {
@@ -181,3 +185,4 @@ void HighScores::scoreAchievement() {
 #endif
 	}
 }
+*/

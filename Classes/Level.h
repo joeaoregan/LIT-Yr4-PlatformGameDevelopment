@@ -19,11 +19,12 @@
 #include "MusicPlayer.h"
 #include "Asteroid.h"
 #include "PowerUp.h"
+#include "Achievement.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginSdkboxPlay/PluginSdkboxPlay.h"											// For leaderboard and achievements
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"								// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginSdkboxPlay/PluginSdkboxPlay.h"									// For leaderboard and achievements
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"						// 20180307 Google Analytics
+//#endif
 
 class Level : public Layer {
 public:
@@ -94,16 +95,13 @@ public:
 	
 	void statBarEOL(float pc, int elements, float y);							// End of level stat bar, percentage, number of elements on screen, y position
 
-	void updateLeaderboard();													// SDKBox leaderboard
+	//void updateLeaderboard();													// SDKBox leaderboard MOVED TO ACHIEVEMENT.CPP
 
-	cocos2d::Vec2 getAnimation(const char* name)
-	{
-		
-	}
+	//cocos2d::Vec2 getAnimation(const char* name) { }
 
-	void killAchievement();														// Achievement for reaching a certain percentage of kills
+	//void killAchievement();													// Achievement for reaching a certain percentage of kills MOVED TO ACHIEVEMENT.CPP
 
-	void endLevelAchievement(EndReason endReason);
+	//void endLevelAchievement(EndReason endReason);
 	
 protected:
 	cocos2d::Size m_visibleSize;												// Screen resolution changes depending on the platform

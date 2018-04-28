@@ -33,10 +33,10 @@ Scene* Level4::createScene() {
 	Initialisation specific to Level 4
 */
 bool Level4::init() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-		"Unlocked", "Level 4 Started", 5);														// Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+//		"Unlocked", "Level 4 Started", 5);														// Google Analytics
+//#endif
 
 	Level::init();																				// 20180221 Added Level base class
 
@@ -352,7 +352,7 @@ void Level4::endScene(EndReason endReason) {
 	derpMessage->setColor(Color3B::WHITE);
 
 	this->addChild(derpMessage);
-
+	
 	Level::endScene(endReason);																	// End the scene
 
 	restartLbl->setVisible(false);
@@ -368,14 +368,16 @@ void Level4::checkGameOver(float currenTime) {													// If the player has 
 		m_pDerpStar->m_pCanon1->stopAllActions();
 		m_messageEOL = "DerpStar Has Been Destroyed";
 		Game::Instance()->setWon(true);
-
+/*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Unlocked", "Game Finished", 5);	// Google Analytics
 		//sdkbox::PluginSdkboxPlay::unlockAchievement("Level 4 Complete");						// Achievement
 		sdkbox::PluginSdkboxPlay::unlockAchievement("Game Complete");							// Achievement
 #endif
 
-		endLevelAchievement(KENDREASONWIN);														// Generic complete level achievements for console and analytics
+		//endLevelAchievement(KENDREASONWIN);													// Generic complete level achievements for console and analytics
+*/
+		Achievement::Instance()->achievementGameComplete();										// Log event for game being completed
 
 		endScene(KENDREASONWIN);
 	}

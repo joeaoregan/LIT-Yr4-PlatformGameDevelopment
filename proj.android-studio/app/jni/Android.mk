@@ -13,6 +13,7 @@ LOCAL_MODULE := MyGame_shared
 LOCAL_MODULE_FILENAME := libMyGame
 
 LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
+$(LOCAL_PATH)/../../../Classes/Achievement.cpp \
 $(LOCAL_PATH)/../../../Classes/AppDelegate.cpp \
 $(LOCAL_PATH)/../../../Classes/Asteroid.cpp \
 $(LOCAL_PATH)/../../../Classes/AsteroidOriginal.cpp \

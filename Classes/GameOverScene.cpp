@@ -16,9 +16,9 @@
 #include "Defines.h"
 #include "Audio.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"			// 20180307 Google Analytics
+//#endif
 
 /*
 	Create the scene
@@ -100,8 +100,7 @@ bool GameOverScene::init() {
 
 	scoreTxt = scoreAchievement(highScore);																						// Check has the player set a new high score
 
-	Label* scoreLbl = cocos2d::Label::createWithTTF(scoreTxt,
-		"fonts/Super Mario Bros..ttf", m_pVisibleSize.height * 0.075);
+	Label* scoreLbl = cocos2d::Label::createWithTTF(scoreTxt, "fonts/Super Mario Bros..ttf", m_pVisibleSize.height * 0.075);
 	scoreLbl->setPosition(m_pVisibleSize.width / 2, m_pVisibleSize.height * 0.25f);
 	scoreLbl->setColor(cocos2d::Color3B::WHITE);
 	this->addChild(scoreLbl);
@@ -173,9 +172,10 @@ std::string GameOverScene::scoreAchievement(int highScore) {
 	if (Game::Instance()->getScore() > highScore) {
 		scoreTxt = "New High Score: " + cocos2d::StringUtils::toString(Game::Instance()->getScore());
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Scores", "New High Score", 5);									// Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//		sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Scores", "New High Score", 5);									// Google Analytics
+//#endif
+		Achievement::Instance()->analyticNewHighScore();
 	}
 
 	return scoreTxt;

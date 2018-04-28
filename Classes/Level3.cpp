@@ -30,10 +30,10 @@ Scene* Level3::createScene() {
 	Initialisation specific to Level 3
 */
 bool Level3::init() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
-		"Unlocked", "Level 3 Started", 5);												// Google Analytics
-#endif
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//	sdkbox::PluginGoogleAnalytics::logEvent("Achievement",
+//		"Unlocked", "Level 3 Started", 5);												// Google Analytics
+//#endif
 
 	Level::init();																		// 20180221 Added Level base class
 
@@ -173,7 +173,7 @@ void Level3::endScene(EndReason endReason) {
 #endif
 */
 
-	endLevelAchievement(endReason);														// Generic complete level achievements for console and analytics
+	//endLevelAchievement(endReason);														// Generic complete level achievements for console and analytics
 
 	Level::endScene(endReason);															// End the scene
 }
