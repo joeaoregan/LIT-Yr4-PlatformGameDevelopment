@@ -1,8 +1,17 @@
 /*
-	Joe O'Regan
-	K00203642
+	DPad.cpp
+
+	A multi touch compatible directional pad with 2 fire buttons
+	Tested and working on Android
+
+	Modified by:	Joe O'Regan
+					K00203642
+					
+	28/04/2018	JOR Made multitouch compatible placing each axis and the fire buttons
+				on separate menus, as only one button can be active per menu
 
 	Original Version:
+
 	DPad.cpp 
 	RPGCollab
 	Created by Jordan Brown on 9/1/14.
@@ -74,10 +83,28 @@ DPad *DPad::create(std::string base, std::string buttonImage, std::string presse
         controller->m_pDownItem->setRotation(180);
         controller->m_pLeftItem->setRotation(-90);
 
-        Menu *menu = Menu::create(controller->m_pUpItem,controller->m_pDownItem,controller->m_pLeftItem, 
-			controller->m_pRightItem, controller->m_pABtnItem, controller->m_pBBtnItem, NULL);
-        menu->setPosition(Point(0,0));
-        controller->addChild(menu, 120);
+		//Menu *menu = Menu::create(controller->m_pUpItem, controller->m_pDownItem, controller->m_pLeftItem,
+		//	controller->m_pRightItem, controller->m_pABtnItem, controller->m_pBBtnItem, NULL);
+		//menu->setPosition(Point(0, 0));
+
+		/*
+			To solve only being able to press one button at a time
+			Need separate menus as only item can be active per menu
+			created x axis menu, y axis menu, and fire button menu
+			can create separate fire button menus if combo buttons needed
+		*/
+		Menu *menuYAxis = Menu::create(controller->m_pUpItem, controller->m_pDownItem, NULL);
+		menuYAxis->setPosition(Point(0, 0));
+
+		Menu *menuXAxis = Menu::create(controller->m_pLeftItem, controller->m_pRightItem, NULL);
+		menuXAxis->setPosition(Point(0, 0));
+
+		Menu *menuFireBtns = Menu::create(controller->m_pABtnItem, controller->m_pBBtnItem, NULL);
+		menuFireBtns->setPosition(Point(0, 0));
+
+		controller->addChild(menuYAxis, 120);
+		controller->addChild(menuXAxis, 120);
+		controller->addChild(menuFireBtns, 120);
 
 		CCLOG("Controller Created");
         
@@ -98,12 +125,25 @@ MenuItemImage *DPad::getButton(int button){
         case 2: result = DPad::m_pDownItem; break;		// Move down
         case 6: result = DPad::m_pRightItem; break;		// Move left
 		case 4: result = DPad::m_pLeftItem; break;		// Move right
-		case 10: result = DPad::m_pABtnItem; break;		// Move button A
-		case 11: result = DPad::m_pBBtnItem; break;		// Move button B
+		//case 10: result = DPad::m_pABtnItem; break;		// Move button A
+		//case 11: result = DPad::m_pBBtnItem; break;		// Move button B
         default: break;
     }
 
     return result;
+}
+
+MenuItemImage *DPad::getFireButton(int button) {
+	MenuItemImage *result;
+
+	switch (button) {
+	case 10: result = DPad::m_pABtnItem; break;		// Move button A
+	case 11: result = DPad::m_pBBtnItem; break;		// Move button B
+	default: break;
+	}
+
+
+	return result;
 }
 
 /*

@@ -93,7 +93,7 @@ bool Level::init() {
 	// Touch screen / Mouse press
 	m_touchListener = cocos2d::EventListenerTouchAllAtOnce::create();										// JOR replaced auto specifier
 	m_touchListener->onTouchesBegan = CC_CALLBACK_2(Level::onTouchesBegan, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_touchListener, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_touchListener, this);						// Add the event listener
 		
 	//float dpadPos = 375.0f;
 	//(m_visibleSize.height == 1080) ? dpadPos = 375.0f : (m_visibleSize.height == 720) ? dpadPos = 250.0f : dpadPos * (m_visibleSize.height / 1080);
@@ -458,28 +458,26 @@ void Level::getInput() {
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) {					// If the platform is mobile
 		if (m_pController->getButton(8)->isSelected()) {														// Up arrow pressed
 			player->moveUp();
-			//CCLOG("Down button is pressed!");
-		}
-		else if (m_pController->getButton(2)->isSelected()) {													// Down arrow pressed
+			CCLOG("Down button is pressed!");
+		} else if (m_pController->getButton(2)->isSelected()) {													// Down arrow pressed
 			player->moveDown();
-			//CCLOG("Down button is pressed!");
-		}
-		if (m_pController->getButton(4)->isSelected()) {														// Left arrow pressed
-			player->moveLeft();
-			//CCLOG("Down button is pressed!");
-		}
-		else if (m_pController->getButton(6)->isSelected()) {													// Right arrow pressed
-			player->moveRight();
-			//CCLOG("Down button is pressed!");
+			CCLOG("Down button is pressed!");
 		}
 
-		if (m_pController->getButton(10)->isSelected()) {														// Up arrow pressed
-			spawnLasers(player->getWeaponStrength());
-			//CCLOG("Button A is pressed!");
+		if (m_pController->getButton(4)->isSelected()) {														// Left arrow pressed
+			player->moveLeft();
+			CCLOG("Down button is pressed!");
+		} else if (m_pController->getButton(6)->isSelected()) {													// Right arrow pressed
+			player->moveRight();
+			CCLOG("Down button is pressed!");
 		}
-		else if (m_pController->getButton(11)->isSelected()) {													// Down arrow pressed
+
+		if (m_pController->getFireButton(10)->isSelected()) {													// Fire Button A
 			spawnLasers(player->getWeaponStrength());
-			//CCLOG("Button B is pressed!");
+			CCLOG("Button A is pressed!");
+		} else if (m_pController->getFireButton(11)->isSelected()) {											// Fire Button B
+			spawnLasers(player->getWeaponStrength());
+			CCLOG("Button B is pressed!");
 		}
 	}
 
@@ -652,14 +650,22 @@ void Level::checkGameOver(float currenTime) {																	// Check is the ga
 	}
 }
 
+
 void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event  *event){
 	//if (Game::Instance()->isGameOver()) return;																// If the ship is not visible
 	if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX 
 		|| CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		if (!Game::Instance()->isGameOver())																	// If the ship is visible/alive
-			spawnLasers(player->getWeaponStrength());															// Fire a laser, amount of lasers depends on weapon level		
+			spawnLasers(player->getWeaponStrength());															// Fire a laser, amount of lasers depends on weapon level	
 	}
-	CCLOG("Screen Touched");
+	
+	////for (auto &item : touches)																				// Needs more work, do something for each screen touch
+	//{
+	//	getInput();
+	//}
+
+
+	//CCLOG("Screen Touched");
 }
 
 /*
@@ -830,11 +836,11 @@ void Level::killAchievement() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginSdkboxPlay::submitScore("Asteroid Count", Game::Instance()->getAsteroidKills());			// Add the asteroid kill count to the leaderboard
 
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Asteroids Level " +				// Asteroid kill statistic
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Asteroids Destroyed Level " +		// Asteroid kill statistic
 		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
 		cocos2d::StringUtils::toString(Game::Instance()->getAsteroidKills()), 5);							// Google Analytics: Register the number of asteroids destroyed
 
-	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Enemies Level " +					// Enemy kill statistic
+	sdkbox::PluginGoogleAnalytics::logEvent("Achievement", "Statistic", "Enemies Killed Level " +			// Enemy kill statistic
 		cocos2d::StringUtils::toString(Game::Instance()->getLevel()) + ": " +								// Add the level number
 		cocos2d::StringUtils::toString(Game::Instance()->getEnemyShipKills()), 5);							// Google Analytics: Register the number of enemies destroyed
 

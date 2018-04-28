@@ -29,27 +29,23 @@ void Game::updateScore(unsigned int set) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("High_Score");	// Achievement for setting a new high score
 		m_highScore = true;
 	}
+
 	if (m_score >= 100 && !m_score100) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score100");	// Achievement for scoring 100 points
 		m_score100 = true;
-	}
-	else if (m_score >= 250 && !m_score250) {
+	} else if (m_score >= 250 && !m_score250) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score250");	// Achievement for scoring 250 points
 		m_score250 = true;
-	}
-	else if (m_score >= 500 && !m_score500) {
+	} else if (m_score >= 500 && !m_score500) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score500");	// Achievement for scoring 500 points
 		m_score500 = true;
-	}
-	else if (m_score >= 1000 && !m_score1000) {
+	} else if (m_score >= 1000 && !m_score1000) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score1000");	// Achievement for scoring 1,000 points
 		m_score1000 = true;
-	}
-	else if (m_score >= 5000 && !m_score5000) {
+	} else if (m_score >= 5000 && !m_score5000) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score5000");	// Achievement for scoring 5,000 pointss
 		m_score5000 = true;
-	}
-	else if (m_score >= 10000 && !m_score10000) {
+	} else if (m_score >= 10000 && !m_score10000) {
 		sdkbox::PluginSdkboxPlay::unlockAchievement("score10000");	// Achievement for scoring 10,000 points
 		m_score10000 = true;
 	}

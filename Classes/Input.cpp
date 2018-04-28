@@ -68,6 +68,7 @@ void Input::init(cocos2d::Layer *layer, cocos2d::EventDispatcher *eventDispatche
 		CC_TARGET_PLATFORM == CC_PLATFORM_MAC) {
 		cocos2d::EventListenerKeyboard* eventListener = cocos2d::EventListenerKeyboard::create();	// JOR replaced auto specifier
 		cocos2d::Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
+
 		eventListener->onKeyPressed = [=](cocos2d::EventKeyboard::KeyCode keyCode, 
 			cocos2d::Event* event) {
 			// If a key already exists, do nothing as it will already have a time stamp

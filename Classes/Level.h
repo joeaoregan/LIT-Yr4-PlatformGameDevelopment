@@ -122,6 +122,7 @@ protected:
 	HUD* m_pHUD;																// Test hud
 	DPad *m_pController;														// Add directional pad for mobile device
 
+	//auto listener = EventListenerTouchAllAtOnce::create();
 	static Level* s_pLayerInstance;												// Single instance of GameScene used as singleton, so only one instance exists thoughout the game
 	cocos2d::EventListenerTouchAllAtOnce* m_touchListener;						// Touch listener
 
