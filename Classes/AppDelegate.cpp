@@ -22,12 +22,16 @@ AppDelegate::~AppDelegate() {}	// Destructor
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"							// 20180307 Google Analytics
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"										// 20180307 SDKBox
+//#include "PluginLeaderboard/PluginLeaderboard.h"
 #endif
 
 bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	sdkbox::PluginGoogleAnalytics::init();											// 20180307 Google Analytics
 	sdkbox::PluginSdkboxPlay::init();												// 20180314 SDKBox Play
+
+	//sdkbox::PluginLeaderboard::init();												// Init the leaderboard
+	//sdkbox::IAP::init();
 #endif
 
     // initialize director

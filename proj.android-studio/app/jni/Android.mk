@@ -55,7 +55,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
 
-LOCAL_WHOLE_STATIC_LIBRARIES += PluginGoogleAnalytics
+LOCAL_WHOLE_STATIC_LIBRARIES += PluginGoogleAnalytics PluginIAP
 LOCAL_WHOLE_STATIC_LIBRARIES += sdkbox
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginSdkboxPlay
 
@@ -77,6 +77,7 @@ $(call import-module,ui)
 $(call import-module, ./sdkbox)
 $(call import-module, ./plugingoogleanalytics)
 $(call import-module, ./pluginsdkboxplay)
+$(call import-module, ./pluginiap)
 
 # _COCOS_LIB_IMPORT_ANDROID_BEGIN
 # _COCOS_LIB_IMPORT_ANDROID_END

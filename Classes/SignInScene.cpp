@@ -15,6 +15,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "PluginSdkboxPlay/PluginSdkboxPlay.h"				// For leaderboard, and analytics
+//#include "PluginLeaderboard/PluginLeaderboard.h"
 #endif
 
 cocos2d::Scene* SignInScene::createScene() {
@@ -48,10 +49,18 @@ bool SignInScene::init() {
     this->addChild( backgroundSprite );																							// Add background sprite as a child of the layer
 	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (!Game::Instance()->getSignedIn()) {																						// If not already signed in
+	//if (!Game::Instance()->getSignedIn()) {																						// If not already signed in
 		sdkbox::PluginSdkboxPlay::signin();																						// Sign in for leaderboard
-		Game::Instance()->setSignedIn(true);																					// Make sure it only does this once																
-	}
+		//Game::Instance()->setSignedIn(true);																					// Make sure it only does this once
+	//}
+
+   // sdkbox::SdkboxPlay::getPlayerId();
+	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", 500);			// Add the score to the leaderboard
+
+
+
+	//sdkbox::PluginSdkboxPlay::showLeaderboard("leaderboard_spacequestleaderboard");			// Show the leaderboard
+	sdkbox::PluginSdkboxPlay::showAllLeaderboards();			// Show the leaderboard
 #endif
 
     return true;

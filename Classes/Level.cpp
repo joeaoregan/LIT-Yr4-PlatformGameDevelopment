@@ -672,7 +672,7 @@ void Level::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d:
 void Level::updateLeaderboard() {
 	CCLOG("Update Leaderboard");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_my_leaderboard", Game::Instance()->getScore());			// Add the score to the leaderboard
+	sdkbox::PluginSdkboxPlay::submitScore("leaderboard_spacequestleaderboard", Game::Instance()->getScore());			// Add the score to the leaderboard
 #endif
 }
 
