@@ -34,102 +34,102 @@ The game includes Google Analytics and Google Play Services Leaderboards and Ach
 
 ## Screenshots:
 
-![Space Game](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame1SplashScreenNEW.png "Space Shooter: Splash Screen")
+![Space Game](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame1SplashScreenNEW.png "Space Shooter: Splash Screen")
 Space Quest 1: Splash Screen
 
 ---
 
-![Space Game](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame2.jpg "Space Shooter: Original raywenderlich.com tutorial")
+![Space Game](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame2.jpg "Space Shooter: Original raywenderlich.com tutorial")
 Space Shooter 2: Original raywenderlich.com tutorial
 
 ---
 
-![Space Game: Added Level Number, Score, and Timer](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame3.jpg "Space Shooter: Added Level Number, Score, and Timer")
+![Space Game: Added Level Number, Score, and Timer](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame3.jpg "Space Shooter: Added Level Number, Score, and Timer")
 Space Quest 3: Added Level Number, Score, Timer, and keyboard movement
 
 ---
 
-![Space Game: Dpad](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame4Dpad.jpg "Space Shooter: Dpad")
+![Space Game: Dpad](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame4Dpad.jpg "Space Shooter: Dpad")
 Space Quest 4: Mobile control pad (Dpad ([EasyArrowsx-3.0, Jordon Brown](https://github.com/jbrown215/EasyArrowsx-3.0)), changes made)
 
 ---
 
-![Space Game: Double Lasers](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame5DoubleLaser.jpg "Space Shooter: Double Lasers")
+![Space Game: Double Lasers](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame5DoubleLaser.jpg "Space Shooter: Double Lasers")
 Space Quest 5: Double Lasers
 
 ---
 
-![Space Game: Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame6Enemies.jpg "Space Shooter: Enemies")
+![Space Game: Enemies](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame6Enemies.jpg "Space Shooter: Enemies")
 Space Quest 6: Enemies
 
 ---
 
-![Space Game: Level 2](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame7Level2.jpg "Space Shooter: Level 2")
+![Space Game: Level 2](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame7Level2.jpg "Space Shooter: Level 2")
 Space Quest 7: Level 2, score and lives carry over from previous level, and background changes
 
 ---
 
-![Space Game: High Scores Table](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame8HighScoreScene.jpg "Space Shooter: High Scores Table")
+![Space Game: High Scores Table](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame8HighScoreScene.jpg "Space Shooter: High Scores Table")
 Space Quest 8: High Scores Table, displays up to ten scores, and indicates when a new high score is a achieved
 
 ---
 
-![Space Game: Menu High Scores](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame9MenuHighScore.jpg "Space Shooter: Menu High Scores")
+![Space Game: Menu High Scores](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame9MenuHighScore.jpg "Space Shooter: Menu High Scores")
 Space Quest 9: The high score is displayed in the menu
 
 ---
 
-![Space Game: Multiple Laser Weapon](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame10Lasers.jpg "Space Shooter: Multiple Laser Weapon")
+![Space Game: Multiple Laser Weapon](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame10Lasers.jpg "Space Shooter: Multiple Laser Weapon")
 Space Quest 10: Multiple Laser Weapon allows from 1 to 4 beams to be fired
 
 ---
 
-![Space Game: Music Controls](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame11MusicControls.jpg "Space Shooter: Music Controls")
+![Space Game: Music Controls](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame11MusicControls.jpg "Space Shooter: Music Controls")
 Space Quest 11: Added music controls to add to menu and game scenes
 
 ---
 
-![Space Game: Asteroids and Enemies](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame12AsteroidsAndEnemies.jpg "Space Shooter: Asteroids and Enemies")
+![Space Game: Asteroids and Enemies](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame12AsteroidsAndEnemies.jpg "Space Shooter: Asteroids and Enemies")
 Space Quest 12: Additional Enemies, with different laser spawning/weapons firing functions, and rotating Asteroids
 
 ---
 
-![Space Game: Status Bars](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame13StatusBarsEOL.jpg "Space Shooter: Status Bars")
+![Space Game: Status Bars](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame13StatusBarsEOL.jpg "Space Shooter: Status Bars")
 Space Quest 13: Added status bars for enemy health bars etc.
 
 ---
 
-![Space Game: Enemy Boss](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame14DerpStar.jpg "Space Shooter: Enemy Boss")
+![Space Game: Enemy Boss](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame14DerpStar.jpg "Space Shooter: Enemy Boss")
 Space Quest 14: Enemy Boss - DerpStar - with rotating laser canons
 
 ---
 
-![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame15GooglePlay.jpg "Space Shooter: Google Play")
+![Space Game: Google Play](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame15GooglePlay.jpg "Space Shooter: Google Play")
 Space Quest 15: Sign into Google Play functionality added using SDKBox
 
 ---
 
-![Space Game: Google Analytics](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame16Analytics.png "Space Shooter: Google Analytics")
+![Space Game: Google Analytics](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame16Analytics.png "Space Shooter: Google Analytics")
 Space Quest 16: Google Analytics achievements recorded as events (SDKBox support added)
 
 ---
 
-![Space Game: Leaderboards](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame17Leaderboards.png "Space Shooter: Leaderboards")
+![Space Game: Leaderboards](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame17Leaderboards.png "Space Shooter: Leaderboards")
 Space Quest 17: Leaderboards
 
 ---
 
-![Space Game: Pop up achievements](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame18Achievement.png "Space Shooter: Pop up achievements")
+![Space Game: Pop up achievements](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame18Achievement.png "Space Shooter: Pop up achievements")
 Space Quest 18: Pop up achievements
 
 ---
 
-![Space Game: Achievements](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame19Achievements.png "Space Shooter: Achievements")
+![Space Game: Achievements](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame19Achievements.png "Space Shooter: Achievements")
 Space Quest 19: Achievements
 
 ---
 
-![Space Game: Main Menu](https://raw.githubusercontent.com/joeaoregan/Yr4-Platform-Games-Development-CA/master/Screenshots/SpaceGame20FinalMenu.png "Space Shooter: Main Menu")
+![Space Game: Main Menu](https://raw.githubusercontent.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment/master/Screenshots/SpaceGame20FinalMenu.png "Space Shooter: Main Menu")
 Space Quest 20: Leaderboards and Achievements accessed from Main Menu
 
 ---
