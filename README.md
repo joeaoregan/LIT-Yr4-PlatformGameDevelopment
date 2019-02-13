@@ -1,8 +1,15 @@
-# Year-four Platform Games Development CA 
-# Cocos2d-x Space Game
-## Side-scrolling 2D Space Shooter
-## Using SDKBox and Google Analytics
-### 2804/2018
+# Platform Digital Game Development
+## Joe O'Regan (K00203642)
+### Year 4 (2017/18), Semester 8
+#### BSc Computing (Games Design and Development)
+##### Limerick Institute of Technology
+
+---
+
+## Cocos2d-x Space Game
+### Side-scrolling 2D Space Shooter
+### Using SDKBox and Google Analytics
+#### 28/04/2018
 
 Cross-platform C++ game for Win32/Android created using Cocos2d-x created for the Platform Games Development module of year-four of Games Design and Development course using the Space Game tutorial at raywenderlich.com as a starting point.
 
