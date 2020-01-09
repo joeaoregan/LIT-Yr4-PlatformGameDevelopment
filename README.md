@@ -40,7 +40,7 @@ The game includes Google Analytics and Google Play Services Leaderboards and Ach
 ---
 
 ## Videos:
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=TVLTJW5FwQs" target="_blank"><img src="https://i9.ytimg.com/vi/TVLTJW5FwQs/mq1.jpg?sqp=CNTf2vAF&rs=AOn4CLBFwD1xyNrUyq_CVYTPGe4mxT6Q4A" alt="Space Quest Trailer Youtube" width="480" height="360" border="10" /></a>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=TVLTJW5FwQs" target="_blank"><img src="https://i9.ytimg.com/vi/TVLTJW5FwQs/mqdefault.jpg?time=1578545356009&sqp=CMzf2vAF&rs=AOn4CLD1UBUmnpaoHbJyoiYWYcdtJ4R2dw" alt="Space Quest Trailer Youtube" width="480" height="360" border="10" /></a>
 ###### Space Quest Trailer Youtube
 
 ---
