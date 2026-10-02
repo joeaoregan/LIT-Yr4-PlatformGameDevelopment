@@ -21,3 +21,5 @@
 !/proj.win32/main.h
 !/proj.win32/main.cpp
 !/proj.android-studio/app/jni/Android.mk
+
+dev/
