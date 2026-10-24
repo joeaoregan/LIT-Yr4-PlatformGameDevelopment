@@ -1,0 +1,80 @@
+site_name: LIT Year 4 - Platform Game Development
+site_url: https://joeaoregan.github.io/LIT-Yr4-PlatformGameDevelopment
+docs_dir: docs
+site_dir: site
+
+repo_url: https://github.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment
+repo_name: GitHub
+
+theme:
+  name: material
+  palette: 
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+      primary: 'blue'
+      accent: 'light blue'
+
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+  logo: images/svg/logo.svg
+  favicon: images/logo_space_quest_640.png
+
+  features:
+    - navigation.tabs
+    - navigation.instant
+    - navigation.tabs.sticky
+    - navigation.sections
+    - toc.follow
+    - navigation.footer
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Game Design:
+    - Overview: game-design/index.md
+    - Mechanics & Rules: game-design/mechanics.md
+  - Architecture:
+    - Overview: architecture/index.md
+    - Cocos2d-x Engine: architecture/cocos-engine.md
+    - Input & Controls: architecture/input-systems.md
+    - SDKBox & Cloud Services: architecture/sdkbox-services.md
+  - Scenes & Levels:
+    - Overview: scenes/index.md
+    - Level 1: scenes/level-1.md
+    - Level 2 & Boss: scenes/level-2.md
+  - Entities & Combat:
+    - Overview: entities/index.md
+    - Player Ship: entities/player.md
+    - Enemy Roster: entities/enemies.md
+    - Weapons & Power-ups: entities/powerups.md
+  - UI & Audio:
+    - Heads Up Display: audio-ui/hud.md
+    - Music Player & Audio: audio-ui/music-player.md
+  - Build & Setup:
+    - Win32 Setup: setup/win32.md
+    - Android Studio Setup: setup/android.md
+  - Play: https://joeoregan.github.io/JS-SpaceQuest/
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/joeaoregan/LIT-Yr4-PlatformGameDevelopment
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+

@@ -22,4 +22,8 @@
 !/proj.win32/main.cpp
 !/proj.android-studio/app/jni/Android.mk
 
+# Local dev
 dev/
+
+# Mkdocs
+site/
