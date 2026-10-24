@@ -1,0 +1,268 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 260" width="220" height="180" role="img" aria-label="Screen Studio Animated TV Logo">
+  <style>
+    :root {
+      --tv-stroke: #0f172a;
+      --tv-text: #0f172a;
+      --tv-sub: #475569;
+      --tv-accent: #2563eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --tv-stroke: #e2e8f0;
+        --tv-text: #f8fafc;
+        --tv-sub: #94a3b8;
+        --tv-accent: #60a5fa;
+      }
+    }
+
+    .tv-line {
+      fill: none;
+      stroke: var(--tv-stroke);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tv-line-thin {
+      fill: none;
+      stroke: var(--tv-stroke);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tv-ball {
+      fill: var(--tv-stroke);
+      stroke: none;
+    }
+
+    .slide-text {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 23px;
+      fill: var(--tv-text);
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .slide-pill {
+      fill: var(--tv-accent);
+    }
+
+    /* 4-slide loop plus CRT TV Turn-Off (10s total = 2s per slide plus 2s TV off) */
+    @keyframes slideCycle {
+      0% {
+        opacity: 0;
+        transform: translateX(65px);
+      }
+      4%, 16% {
+        opacity: 1;
+        transform: translateX(0px);
+      }
+      20%, 100% {
+        opacity: 0;
+        transform: translateX(-65px);
+      }
+    }
+
+    @keyframes dotCycle {
+      0%, 2% { opacity: 0; }
+      4%, 16% { opacity: 1; }
+      20%, 100% { opacity: 0; }
+    }
+
+    @keyframes baseDotsCycle {
+      0%, 78% { opacity: 0.4; }
+      80%, 98% { opacity: 0; }
+      100% { opacity: 0.4; }
+    }
+
+    /* CRT TV Off: Full rectangle flattens to horizontal centre line, then shrinks in width and fades */
+    @keyframes crtBandCycle {
+      0%, 79% {
+        opacity: 0;
+        transform: scale(1, 1);
+      }
+      80% {
+        opacity: 0.95;
+        transform: scale(1, 0.75);
+      }
+      83% {
+        opacity: 1;
+        transform: scale(1, 0.035);
+      }
+      87% {
+        opacity: 0.95;
+        transform: scale(0.92, 0.03);
+      }
+      93% {
+        opacity: 0.35;
+        transform: scale(0.06, 0.015);
+      }
+      96%, 100% {
+        opacity: 0;
+        transform: scale(0, 0);
+      }
+    }
+
+    /* CRT TV Off: Centre circle grows on the line, then shrinks down and fades out */
+    @keyframes crtCircleCycle {
+      0%, 81% {
+        opacity: 0;
+        transform: scale(0.1);
+      }
+      83% {
+        opacity: 0.9;
+        transform: scale(0.55);
+      }
+      86% {
+        opacity: 1;
+        transform: scale(1.25);
+      }
+      91% {
+        opacity: 0.7;
+        transform: scale(0.42);
+      }
+      95% {
+        opacity: 0.25;
+        transform: scale(0.1);
+      }
+      98%, 100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    .s1, .s2, .s3, .s4 {
+      opacity: 0;
+    }
+
+    .s1 { animation: slideCycle 10s cubic-bezier(0.22, 1, 0.36, 1) infinite 0s; }
+    .s2 { animation: slideCycle 10s cubic-bezier(0.22, 1, 0.36, 1) infinite 2s; }
+    .s3 { animation: slideCycle 10s cubic-bezier(0.22, 1, 0.36, 1) infinite 4s; }
+    .s4 { animation: slideCycle 10s cubic-bezier(0.22, 1, 0.36, 1) infinite 6s; }
+
+    .d1, .d2, .d3, .d4 {
+      opacity: 0;
+    }
+    .d1 { animation: dotCycle 10s ease infinite 0s; }
+    .d2 { animation: dotCycle 10s ease infinite 2s; }
+    .d3 { animation: dotCycle 10s ease infinite 4s; }
+    .d4 { animation: dotCycle 10s ease infinite 6s; }
+
+    .base-dots {
+      animation: baseDotsCycle 10s ease infinite 0s;
+    }
+
+    .crt-band {
+      fill: var(--tv-text);
+      opacity: 0;
+      transform-origin: 135px 148px;
+      animation: crtBandCycle 10s ease-out infinite 0s;
+    }
+
+    .crt-circle {
+      fill: var(--tv-text);
+      opacity: 0;
+      transform-origin: 135px 148px;
+      animation: crtCircleCycle 10s ease-out infinite 0s;
+    }
+
+    /* Dial Switch: Starts 0.5s early at 75% (7.5s), reaches horizontal at 80% (8.0s), holds 1.5s until 95% (9.5s), returns over 0.5s to 100% (10.0s) */
+    @keyframes dialSwitchCycle {
+      0%, 75% {
+        transform: rotate(0deg);
+      }
+      80%, 95% {
+        transform: rotate(45deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .dial-tick {
+      transform-origin: 255px 180px;
+      animation: dialSwitchCycle 10s ease-in-out infinite 0s;
+    }
+  </style>
+
+  <defs>
+    <clipPath id="screen-clip">
+      <rect x="52" y="92" width="166" height="112" rx="4" />
+    </clipPath>
+  </defs>
+
+  <!-- Rabbit-ear Antennas (switched from reference plus ball tips) -->
+  <line x1="152" y1="62" x2="96" y2="16" class="tv-line" />
+  <circle cx="94" cy="14" r="7" class="tv-ball" />
+
+  <line x1="168" y1="62" x2="208" y2="28" class="tv-line" />
+  <circle cx="210" cy="26" r="7" class="tv-ball" />
+
+  <!-- Antenna Base Dome on top of TV -->
+  <path d="M 138 76 A 22 18 0 0 1 182 76" class="tv-line" />
+
+  <!-- Outer TV Cabinet -->
+  <rect x="32" y="76" width="256" height="144" rx="20" class="tv-line" />
+
+  <!-- Inner 16:9 Screen Bezel -->
+  <rect x="48" y="88" width="174" height="120" rx="10" class="tv-line" />
+
+  <!-- Right Control Panel: 3 Speaker Slots -->
+  <line x1="242" y1="108" x2="268" y2="108" class="tv-line" />
+  <line x1="242" y1="124" x2="268" y2="124" class="tv-line" />
+  <line x1="242" y1="140" x2="268" y2="140" class="tv-line" />
+
+  <!-- Right Control Panel: Single Rotary Dial -->
+  <circle cx="255" cy="180" r="12" class="tv-line-thin" />
+  <line x1="255" y1="180" x2="262" y2="173" class="tv-line-thin dial-tick" />
+
+  <!-- Bottom Curved TV Stand Legs -->
+  <path d="M 88 220 Q 76 236 60 244" class="tv-line" />
+  <path d="M 232 220 Q 244 236 260 244" class="tv-line" />
+
+  <!-- Animated Slide Content Inside Screen -->
+  <g clip-path="url(#screen-clip)">
+    <g class="s1">
+      <rect x="105" y="103" width="60" height="5" rx="2.5" class="slide-pill" style="opacity: 0.85;" />
+      <text x="135" y="135" class="slide-text">Click</text>
+      <text x="135" y="163" class="slide-text">Here</text>
+    </g>
+    <g class="s2">
+      <rect x="105" y="103" width="60" height="5" rx="2.5" class="slide-pill" style="opacity: 0.85;" />
+      <text x="135" y="135" class="slide-text">To See</text>
+      <text x="135" y="163" class="slide-text">Trailer</text>
+    </g>
+    <g class="s3">
+      <rect x="105" y="103" width="60" height="5" rx="2.5" class="slide-pill" style="opacity: 0.85;" />
+      <text x="135" y="135" class="slide-text">On</text>
+      <text x="135" y="163" class="slide-text">YouTube!</text>
+    </g>
+    <g class="s4">
+      <rect x="105" y="103" width="60" height="5" rx="2.5" class="slide-pill" style="opacity: 0.85;" />
+      <text x="135" y="149" class="slide-text">Goodbye👋</text>
+    </g>
+
+    <!-- Bottom Slide Progress Dots -->
+    <g class="base-dots">
+      <circle cx="117" cy="193" r="3" fill="var(--tv-sub)" />
+      <circle cx="129" cy="193" r="3" fill="var(--tv-sub)" />
+      <circle cx="141" cy="193" r="3" fill="var(--tv-sub)" />
+      <circle cx="153" cy="193" r="3" fill="var(--tv-sub)" />
+    </g>
+
+    <circle cx="117" cy="193" r="3.5" class="slide-pill d1" />
+    <circle cx="129" cy="193" r="3.5" class="slide-pill d2" />
+    <circle cx="141" cy="193" r="3.5" class="slide-pill d3" />
+    <circle cx="153" cy="193" r="3.5" class="slide-pill d4" />
+
+    <!-- CRT TV Turn-Off Effect (Flattening Square to Line plus Growing and Shrinking Centre Glow Circle) -->
+    <rect x="52" y="92" width="166" height="112" rx="2" class="crt-band" />
+    <g class="crt-circle">
+      <circle cx="135" cy="148" r="28" opacity="0.22" />
+      <circle cx="135" cy="148" r="19" opacity="0.45" />
+      <circle cx="135" cy="148" r="12" />
+    </g>
+  </g>
+</svg>

@@ -16,6 +16,10 @@
 
 ---
 
+<div align="center">
+<img src="docs/images/svg/logo.svg" alt="Space Quest Logo" width="480px" />
+</div>
+
 ## Cocos2d-x Space Game
 
 Side-scrolling 2D Space Shooter. Using SDKBox and Google Analytics. 
@@ -54,7 +58,14 @@ The game includes Google Analytics and Google Play Services Leaderboards and Ach
 ---
 
 ## Videos:
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=TVLTJW5FwQs" target="_blank"><img src="https://i9.ytimg.com/vi/TVLTJW5FwQs/mqdefault.jpg?time=1578545356009&sqp=CMzf2vAF&rs=AOn4CLD1UBUmnpaoHbJyoiYWYcdtJ4R2dw" alt="Space Quest Trailer Youtube" width="480" height="360" border="10" /></a>
+
+
+<div align="center">
+<a href="https://www.youtube.com/watch?feature=player_embedded&v=TVLTJW5FwQs" alt="Space Quest Trailer Youtube" width="480">
+<img src="docs/images/svg/tv_logo.svg" alt="Animated TV SVG" width="360px" />
+</a>
+</div>
+
 ###### Space Quest Trailer Youtube
 
 ---
