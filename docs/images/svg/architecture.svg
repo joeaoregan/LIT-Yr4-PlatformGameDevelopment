@@ -1,0 +1,284 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="100%" height="100%" role="img" aria-label="Space Quest Cross-Platform Architecture Diagram">
+  <defs>
+    <style>
+      :root {
+        --sq-bg: rgba(15, 23, 42, 0.04);
+        --sq-header: rgba(37, 99, 235, 0.1);
+        --sq-stroke: #334155;
+        --sq-title: #0f172a;
+        --sq-text: #1e293b;
+        --sq-muted: #475569;
+        --sq-blue: #2563eb;
+        --sq-emerald: #059669;
+        --sq-amber: #d97706;
+        --sq-rose: #e11d48;
+        --sq-purple: #7c3aed;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --sq-bg: rgba(15, 23, 42, 0.70);
+          --sq-header: rgba(59, 130, 246, 0.18);
+          --sq-stroke: #475569;
+          --sq-title: #f8fafc;
+          --sq-text: #e2e8f0;
+          --sq-muted: #94a3b8;
+          --sq-blue: #60a5fa;
+          --sq-emerald: #34d399;
+          --sq-amber: #fbbf24;
+          --sq-rose: #fb7185;
+          --sq-purple: #a78bfa;
+        }
+      }
+
+      .box-card {
+        fill: var(--sq-bg);
+        stroke: var(--sq-stroke);
+        stroke-width: 2;
+        rx: 10px;
+      }
+
+      .box-header {
+        fill: var(--sq-header);
+        stroke: var(--sq-stroke);
+        stroke-width: 1.5;
+        rx: 10px;
+      }
+
+      .box-title {
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 13.5px;
+        fill: var(--sq-title);
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      .box-item {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 500;
+        font-size: 11.5px;
+        fill: var(--sq-text);
+      }
+
+      .edge-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 700;
+        font-size: 10px;
+        fill: var(--sq-muted);
+        text-anchor: middle;
+      }
+
+      /* Flow animation lines */
+      .flow-blue {
+        fill: none;
+        stroke: var(--sq-blue);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-emerald {
+        fill: none;
+        stroke: var(--sq-emerald);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-amber {
+        fill: none;
+        stroke: var(--sq-amber);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-rose {
+        fill: none;
+        stroke: var(--sq-rose);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-purple {
+        fill: none;
+        stroke: var(--sq-purple);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      @keyframes dashFlow {
+        to {
+          stroke-dashoffset: -20;
+        }
+      }
+
+      /* Pulse animations */
+      @keyframes pulseRight {
+        0% { transform: translateX(0px); opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateX(84px); opacity: 0; }
+      }
+
+      @keyframes pulseDown {
+        0% { transform: translateY(0px); opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateY(68px); opacity: 0; }
+      }
+
+      .dot-blue-r {
+        fill: var(--sq-blue);
+        animation: pulseRight 1.8s ease-in-out infinite;
+      }
+
+      .dot-emerald-d {
+        fill: var(--sq-emerald);
+        animation: pulseDown 2s ease-in-out infinite;
+      }
+
+      .dot-amber-r {
+        fill: var(--sq-amber);
+        animation: pulseRight 2.2s ease-in-out infinite;
+      }
+
+      .dot-purple-r {
+        fill: var(--sq-purple);
+        animation: pulseRight 1.9s ease-in-out infinite;
+      }
+    </style>
+
+    <!-- Marker Arrowheads -->
+    <marker id="sq-arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--sq-blue)"/>
+    </marker>
+    <marker id="sq-arrow-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--sq-emerald)"/>
+    </marker>
+    <marker id="sq-arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--sq-amber)"/>
+    </marker>
+    <marker id="sq-arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--sq-rose)"/>
+    </marker>
+    <marker id="sq-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--sq-purple)"/>
+    </marker>
+  </defs>
+
+  <!-- ==================== BOX 1: Input & Event Pipeline (Top-Left) ==================== -->
+  <g id="box-input">
+    <rect x="24" y="24" width="270" height="184" class="box-card" />
+    <rect x="24" y="24" width="270" height="36" class="box-header" />
+    <text x="159" y="42" class="box-title">Cross-Platform Input Layer</text>
+
+    <text x="40" y="82" class="box-item" style="fill: var(--sq-blue); font-weight: 700;">[Win32 Desktop]</text>
+    <text x="40" y="102" class="box-item">• EventListenerKeyboard (WASD/Arrows)</text>
+    <text x="40" y="122" class="box-item">• Space / Ctrl (Single/Double Laser)</text>
+
+    <text x="40" y="148" class="box-item" style="fill: var(--sq-emerald); font-weight: 700;">[Android Mobile]</text>
+    <text x="40" y="168" class="box-item">• EventListenerTouchAllAtOnce</text>
+    <text x="40" y="188" class="box-item">• EasyArrowsx-3.0 Virtual D-Pad</text>
+  </g>
+
+  <!-- Flow 1: Input -> Cocos2d-x Director / Scene -->
+  <g id="flow-input-to-director">
+    <text x="344" y="98" class="edge-label">Dispatch Events</text>
+    <line x1="294" y1="108" x2="386" y2="108" class="flow-blue" marker-end="url(#sq-arrow-blue)" />
+    <circle cx="300" cy="108" r="3.5" class="dot-blue-r" />
+  </g>
+
+  <!-- ==================== BOX 2: Cocos2d-x Engine & Director (Top-Center) ==================== -->
+  <g id="box-engine">
+    <rect x="392" y="24" width="260" height="184" class="box-card" />
+    <rect x="392" y="24" width="260" height="36" class="box-header" />
+    <text x="522" y="42" class="box-title">Cocos2d-x Director &amp; Scene</text>
+
+    <text x="408" y="82" class="box-item">• cocos2d::Director (Main Loop)</text>
+    <text x="408" y="104" class="box-item">• AppDelegate Lifecycle</text>
+    <text x="408" y="126" class="box-item">• Scene Graph Hierarchy:</text>
+    <text x="424" y="148" class="box-item">1. ParallaxStarfieldLayer</text>
+    <text x="424" y="168" class="box-item">2. GameWorldLayer (Sprites)</text>
+    <text x="424" y="188" class="box-item">3. HUD &amp; TouchControlsLayer</text>
+  </g>
+
+  <!-- Flow 2: Engine -> Audio & Media (Horizontal) -->
+  <g id="flow-engine-to-audio">
+    <text x="702" y="98" class="edge-label">Playback Calls</text>
+    <line x1="652" y1="108" x2="744" y2="108" class="flow-purple" marker-end="url(#sq-arrow-purple)" />
+    <circle cx="658" cy="108" r="3.5" class="dot-purple-r" />
+  </g>
+
+  <!-- ==================== BOX 3: Audio & In-Game Media (Top-Right) ==================== -->
+  <g id="box-audio">
+    <rect x="750" y="24" width="186" height="184" class="box-card" />
+    <rect x="750" y="24" width="186" height="36" class="box-header" />
+    <text x="843" y="42" class="box-title">Audio &amp; Music Player</text>
+
+    <text x="764" y="82" class="box-item">• CocosDenshion</text>
+    <text x="764" y="104" class="box-item">• SimpleAudioEngine</text>
+    <text x="764" y="126" class="box-item">• Music Player Layer:</text>
+    <text x="778" y="146" class="box-item">Prev / Next / Pause</text>
+    <text x="764" y="170" class="box-item">• Laser &amp; Explosion SFX</text>
+    <text x="764" y="192" class="box-item">• Warning Sirens (Boss)</text>
+  </g>
+
+  <!-- Flow 3: Director -> Entity Engine (Vertical) -->
+  <g id="flow-engine-to-entities">
+    <text x="576" y="254" class="edge-label">update(dt) / draw()</text>
+    <line x1="522" y1="208" x2="522" y2="290" class="flow-emerald" marker-end="url(#sq-arrow-emerald)" />
+    <circle cx="522" cy="214" r="3.5" class="dot-emerald-d" />
+  </g>
+
+  <!-- ==================== BOX 4: SDKBox Cloud Services & Telemetry (Bottom-Left) ==================== -->
+  <g id="box-sdkbox">
+    <rect x="24" y="296" width="270" height="236" class="box-card" />
+    <rect x="24" y="296" width="270" height="36" class="box-header" />
+    <text x="159" y="314" class="box-title">SDKBox Cloud Telemetry</text>
+
+    <text x="40" y="354" class="box-item" style="fill: var(--sq-amber); font-weight: 700;">[Google Analytics Plugin]</text>
+    <text x="40" y="374" class="box-item">• Session tracking &amp; retention</text>
+    <text x="40" y="394" class="box-item">• Stage start / completion events</text>
+    <text x="40" y="414" class="box-item">• Weapon usage &amp; death telemetry</text>
+
+    <text x="40" y="446" class="box-item" style="fill: var(--sq-emerald); font-weight: 700;">[Google Play Game Services]</text>
+    <text x="40" y="466" class="box-item">• PluginSdkboxPlay integration</text>
+    <text x="40" y="486" class="box-item">• Cloud Leaderboards (High scores)</text>
+    <text x="40" y="506" class="box-item">• Achievements (Boss kills, badges)</text>
+    <text x="40" y="524" class="box-item">• Player sign-in &amp; sync</text>
+  </g>
+
+  <!-- Flow 4: Entities -> SDKBox (Telemetry stream) -->
+  <g id="flow-entities-to-sdkbox">
+    <text x="340" y="394" class="edge-label">Submit Score &amp; Events</text>
+    <line x1="392" y1="404" x2="300" y2="404" class="flow-amber" marker-end="url(#sq-arrow-amber)" />
+  </g>
+
+  <!-- ==================== BOX 5: Entity World & Batch Rendering (Bottom-Right) ==================== -->
+  <g id="box-entities">
+    <rect x="392" y="296" width="544" height="236" class="box-card" />
+    <rect x="392" y="296" width="544" height="36" class="box-header" />
+    <text x="664" y="314" class="box-title">Game World, Physics &amp; SpriteBatchNode</text>
+
+    <!-- Column 1: Player & Weaponry -->
+    <text x="412" y="354" class="box-item" style="fill: var(--sq-blue); font-weight: 700;">[Player Ship &amp; Armament]</text>
+    <text x="412" y="376" class="box-item">• PlayerShip (Sprite &amp; Physics)</text>
+    <text x="412" y="398" class="box-item">• Single Laser &amp; Double Lasers</text>
+    <text x="412" y="420" class="box-item">• Shields &amp; Energy Status Bars</text>
+    <text x="412" y="442" class="box-item">• PowerUps (Weapon buffs, lives)</text>
+
+    <!-- Column 2: Enemy Roster & Collisions -->
+    <text x="674" y="354" class="box-item" style="fill: var(--sq-rose); font-weight: 700;">[Hostile Fleet &amp; Collisions]</text>
+    <text x="674" y="376" class="box-item">• Asteroid Hazards (Rotational)</text>
+    <text x="674" y="398" class="box-item">• Drone Scouts (Evasive AI)</text>
+    <text x="674" y="420" class="box-item">• Attack Cruisers (Targeted fire)</text>
+    <text x="674" y="442" class="box-item">• DerpStar Boss (Multi-phased)</text>
+    <text x="674" y="468" class="box-item">• AABB Bounding Box Collision</text>
+    <text x="674" y="490" class="box-item">• SpriteBatchNode single-draw call</text>
+    <text x="674" y="512" class="box-item">• ParticleSystemQuad (Explosions)</text>
+  </g>
+</svg>
+

@@ -17,7 +17,8 @@
 ---
 
 <div align="center">
-<img src="docs/images/svg/logo.svg" alt="Space Quest Logo" width="540px" />
+<img src="docs/images/svg/logo.svg" alt="Space Quest Logo" width="540px" /><br/>
+  <a href="https://joeoregan.github.io/JS-SpaceQuest/" alt="SpaceQuestJS Link">Play Space Quest JS</a>
 </div>
 
 ## Cocos2d-x Space Game
@@ -34,6 +35,12 @@ Cross-platform C++ game for Win32/Android created using Cocos2d-x created for th
 The game includes Google Analytics and Google Play Services Leaderboards and Achievements.
 
 ---
+
+## Architecture
+
+![Architecture Diagram](docs/images/svg/architecture.svg)
+
+- [Architecture docs](http://127.0.0.1:8000/LIT-Yr4-PlatformGameDevelopment/architecture/)
 
 ## Additions:
 
