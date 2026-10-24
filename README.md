@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-<img src="docs/images/svg/logo.svg" alt="Space Quest Logo" width="480px" />
+<img src="docs/images/svg/logo.svg" alt="Space Quest Logo" width="540px" />
 </div>
 
 ## Cocos2d-x Space Game
@@ -62,7 +62,7 @@ The game includes Google Analytics and Google Play Services Leaderboards and Ach
 
 <div align="center">
 <a href="https://www.youtube.com/watch?feature=player_embedded&v=TVLTJW5FwQs" alt="Space Quest Trailer Youtube" width="480">
-<img src="docs/images/svg/tv_logo.svg" alt="Animated TV SVG" width="360px" />
+<img src="docs/images/svg/tv_logo.svg" alt="Animated TV SVG" width="240px" />
 </a>
 </div>
 

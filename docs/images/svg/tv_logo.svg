@@ -11,7 +11,7 @@
         --tv-stroke: #e2e8f0;
         --tv-text: #f8fafc;
         --tv-sub: #94a3b8;
-        --tv-accent: #60a5fa;
+        --tv-accent: #db053e;
       }
     }
 
