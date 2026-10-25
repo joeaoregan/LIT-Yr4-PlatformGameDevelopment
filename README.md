@@ -41,6 +41,8 @@ The game includes Google Analytics and Google Play Services Leaderboards and Ach
 ![Architecture Diagram](docs/images/svg/architecture.svg)
 
 - [Architecture docs](http://127.0.0.1:8000/LIT-Yr4-PlatformGameDevelopment/architecture/)
+- [Cocos2d-x Engine](https://joeaoregan.github.io/LIT-Yr4-PlatformGameDevelopment/architecture/cocos-engine/)
+- [Scenes & Level Progression](https://joeaoregan.github.io/LIT-Yr4-PlatformGameDevelopment/scenes/)
 
 ## Additions:
 
