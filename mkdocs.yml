@@ -25,6 +25,12 @@ theme:
 
   logo: images/svg/logo.svg
   favicon: images/logo_space_quest_640.png
+  icon:
+    admonition:
+      note: material/alpha-j
+      success: material/alpha-j
+      warning: material/alpha-j
+      danger: material/alpha-j
 
   features:
     - navigation.tabs
@@ -33,6 +39,10 @@ theme:
     - navigation.sections
     - toc.follow
     - navigation.footer
+    - navigation.instant.preview
+    - navigation.tracking
+    - navigation.path
+    - navigation.top
     - content.code.copy
 
 nav:
@@ -78,3 +88,6 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - javascript/mermaid-init.js

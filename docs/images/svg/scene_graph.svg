@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 508 680" width="100%" height="100%" role="img" aria-label="Space Quest Scene Graph and Scene Flow Architecture Diagram">
+  <defs>
+    <style>
+      :root {
+        --sg-bg: rgba(15, 23, 42, 0.04);
+        --sg-header: rgba(37, 99, 235, 0.1);
+        --sg-stroke: #334155;
+        --sg-title: #0f172a;
+        --sg-text: #1e293b;
+        --sg-muted: #475569;
+        --sg-blue: #2563eb;
+        --sg-emerald: #059669;
+        --sg-amber: #d97706;
+        --sg-rose: #e11d48;
+        --sg-purple: #7c3aed;
+        --sg-cyan: #0891b2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --sg-bg: rgba(15, 23, 42, 0.70);
+          --sg-header: rgba(59, 130, 246, 0.18);
+          --sg-stroke: #475569;
+          --sg-title: #f8fafc;
+          --sg-text: #e2e8f0;
+          --sg-muted: #94a3b8;
+          --sg-blue: #60a5fa;
+          --sg-emerald: #34d399;
+          --sg-amber: #fbbf24;
+          --sg-rose: #fb7185;
+          --sg-purple: #a78bfa;
+          --sg-cyan: #22d3ee;
+        }
+      }
+
+      .box-card {
+        fill: var(--sg-bg);
+        stroke: var(--sg-stroke);
+        stroke-width: 2;
+        rx: 10px;
+      }
+
+      .box-header {
+        fill: var(--sg-header);
+        stroke: var(--sg-stroke);
+        stroke-width: 1.5;
+        rx: 10px;
+      }
+
+      .box-title {
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        fill: var(--sg-title);
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      .box-item {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 500;
+        font-size: 12px;
+        fill: var(--sg-text);
+      }
+
+      .edge-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 700;
+        font-size: 10.5px;
+        fill: var(--sg-muted);
+        text-anchor: middle;
+      }
+
+      /* Animated flow paths */
+      .flow-blue {
+        fill: none;
+        stroke: var(--sg-blue);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-emerald {
+        fill: none;
+        stroke: var(--sg-emerald);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-amber {
+        fill: none;
+        stroke: var(--sg-amber);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-rose {
+        fill: none;
+        stroke: var(--sg-rose);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-purple {
+        fill: none;
+        stroke: var(--sg-purple);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-cyan {
+        fill: none;
+        stroke: var(--sg-cyan);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      @keyframes dashFlow {
+        to {
+          stroke-dashoffset: -20;
+        }
+      }
+
+      @keyframes pulseDotR {
+        0% { transform: translateX(0px); opacity: 0; }
+        25% { opacity: 1; }
+        75% { opacity: 1; }
+        100% { transform: translateX(45px); opacity: 0; }
+      }
+
+      @keyframes pulseDotD {
+        0% { transform: translateY(0px); opacity: 0; }
+        25% { opacity: 1; }
+        75% { opacity: 1; }
+        100% { transform: translateY(45px); opacity: 0; }
+      }
+
+      .dot-cyan-r {
+        fill: var(--sg-cyan);
+        animation: pulseDotR 1.8s ease-in-out infinite;
+      }
+
+      .dot-emerald-d {
+        fill: var(--sg-emerald);
+        animation: pulseDotD 1.8s ease-in-out infinite;
+      }
+
+      .dot-rose-d {
+        fill: var(--sg-rose);
+        animation: pulseDotD 2.2s ease-in-out infinite;
+      }
+    </style>
+
+    <!-- Markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-blue)" />
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-emerald)" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-amber)" />
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-rose)" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-purple)" />
+    </marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--sg-cyan)" />
+    </marker>
+  </defs>
+
+  <!-- ==================== LEFT COLUMN: COCOS2D-X SCENE GRAPH HIERARCHY ==================== -->
+  <g id="box-scene-graph">
+    <rect x="24" y="24" width="460" height="632" class="box-card" />
+    <rect x="24" y="24" width="460" height="42" class="box-header" />
+    <text x="254" y="45" class="box-title">Cocos2d-x Scene Graph &amp; Composite Node Hierarchy</text>
+
+    <!-- Root Node: Director -->
+    <rect x="140" y="80" width="228" height="48" rx="8" style="fill: var(--sg-header); stroke: var(--sg-blue); stroke-width: 1.8;" />
+    <text x="254" y="98" class="box-title" style="font-size: 13px; fill: var(--sg-blue);">cocos2d::Director</text>
+    <text x="254" y="116" class="edge-label" style="fill: var(--sg-muted);">Drives 60 FPS Main Loop &amp; Scene Stack</text>
+
+    <!-- Connector: Director to Scene -->
+    <line x1="254" y1="128" x2="254" y2="152" class="flow-blue" marker-end="url(#arrow-blue)" />
+
+    <!-- Current Scene Node -->
+    <rect x="130" y="152" width="248" height="50" rx="8" style="fill: var(--sg-bg); stroke: var(--sg-purple); stroke-width: 1.8;" />
+    <text x="254" y="170" class="box-title" style="font-size: 13px; fill: var(--sg-purple);">Active Scene (cocos2d::Scene)</text>
+    <text x="254" y="188" class="box-item" style="text-anchor: middle; font-size: 11px;">Level::createScene() / Level1 / Level2</text>
+
+    <!-- Connector: Scene to Layer -->
+    <line x1="254" y1="202" x2="254" y2="226" class="flow-purple" marker-end="url(#arrow-purple)" />
+
+    <!-- Game Layer Node -->
+    <rect x="110" y="226" width="288" height="52" rx="8" style="fill: var(--sg-header); stroke: var(--sg-emerald); stroke-width: 1.8;" />
+    <text x="254" y="245" class="box-title" style="font-size: 13px; fill: var(--sg-emerald);">Primary Layer (Level / cocos2d::Layer)</text>
+    <text x="254" y="265" class="box-item" style="text-anchor: middle; font-size: 11px;">addChild(node, zOrder, tag) Hierarchy</text>
+
+    <!-- Branch Lines from Layer to Subsystems -->
+    <!-- Center spine -->
+    <line x1="254" y1="278" x2="254" y2="304" style="stroke: var(--sg-stroke); stroke-width: 1.5;" />
+    <!-- Horizontal distribution bar -->
+    <line x1="56" y1="304" x2="452" y2="304" style="stroke: var(--sg-stroke); stroke-width: 1.5;" />
+
+    <!-- Drop lines to 4 Layer categories -->
+    <line x1="56" y1="304" x2="56" y2="322" class="flow-amber" marker-end="url(#arrow-amber)" />
+    <line x1="188" y1="304" x2="188" y2="322" class="flow-blue" marker-end="url(#arrow-blue)" />
+    <line x1="320" y1="304" x2="320" y2="322" class="flow-cyan" marker-end="url(#arrow-cyan)" />
+    <line x1="452" y1="304" x2="452" y2="322" class="flow-rose" marker-end="url(#arrow-rose)" />
+
+    <!-- 1. Background System -->
+    <rect x="42" y="322" width="186" height="136" rx="8" style="fill: var(--sg-bg); stroke: var(--sg-amber); stroke-width: 1.5;" />
+    <text x="135" y="340" class="box-title" style="font-size: 12px; fill: var(--sg-amber);">Parallax &amp; VFX</text>
+    <text x="50" y="362" class="box-item">• ParallaxNodeExtras</text>
+    <text x="62" y="378" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Multi-layer starfield</text>
+    <text x="50" y="398" class="box-item">• ParticleSystemQuad</text>
+    <text x="62" y="414" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Stars1 / 2 / 3 .plist</text>
+    <text x="50" y="434" class="box-item">• Explosion Emitters</text>
+    <text x="62" y="448" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Custom particle bursts</text>
+
+    <!-- 2. Batched Sprites (GPU Atlas) -->
+    <rect x="238" y="322" width="232" height="136" rx="8" style="fill: var(--sg-bg); stroke: var(--sg-blue); stroke-width: 1.5;" />
+    <text x="354" y="340" class="box-title" style="font-size: 12px; fill: var(--sg-blue);">SpriteBatchNode (GPU)</text>
+    <text x="246" y="362" class="box-item">• Sprites.pvr.ccz Atlas</text>
+    <text x="258" y="378" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Player, Asteroids, Lasers</text>
+    <text x="246" y="398" class="box-item">• JoeSprites.png Atlas</text>
+    <text x="258" y="414" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Kling / WilKnot / DerpStar</text>
+    <text x="246" y="434" class="box-item">• 1 Single OpenGL Draw Call</text>
+    <text x="258" y="448" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ High-performance blitting</text>
+
+    <!-- 3. Mobile Touch & Input Overlay -->
+    <rect x="42" y="474" width="186" height="162" rx="8" style="fill: var(--sg-bg); stroke: var(--sg-cyan); stroke-width: 1.5;" />
+    <text x="135" y="492" class="box-title" style="font-size: 12px; fill: var(--sg-cyan);">Input &amp; Controller</text>
+    <text x="50" y="514" class="box-item">• DPad Virtual Stick</text>
+    <text x="62" y="530" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ EasyArrowsx-3.0</text>
+    <text x="50" y="550" class="box-item">• EventListenerKeyboard</text>
+    <text x="62" y="566" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Win32 WASD / Arrows</text>
+    <text x="50" y="586" class="box-item">• MultiTouch Listener</text>
+    <text x="62" y="602" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Capacitive touch polling</text>
+    <text x="50" y="622" class="box-item">• Input Normalisation</text>
+
+    <!-- 4. HUD & Interactive Audio -->
+    <rect x="238" y="474" width="232" height="162" rx="8" style="fill: var(--sg-bg); stroke: var(--sg-rose); stroke-width: 1.5;" />
+    <text x="354" y="492" class="box-title" style="font-size: 12px; fill: var(--sg-rose);">HUD &amp; Audio UI Layer</text>
+    <text x="246" y="514" class="box-item">• HUD (cocos2d::Layer)</text>
+    <text x="258" y="530" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Score, Lives, Timer, Level</text>
+    <text x="246" y="550" class="box-item">• HealthBar Component</text>
+    <text x="258" y="566" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Dynamic visual hit points</text>
+    <text x="246" y="586" class="box-item">• MusicPlayer Node</text>
+    <text x="258" y="602" class="box-item" style="fill: var(--sg-muted); font-size: 10.5px;">→ Prev / Next / Play / Pause</text>
+    <text x="246" y="622" class="box-item">• SimpleAudioEngine</text>
+  </g>
+
+  </svg>
