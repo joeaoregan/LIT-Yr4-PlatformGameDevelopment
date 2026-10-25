@@ -2,6 +2,8 @@
 
 The player commands an advanced starfighter equipped with dynamic thrusters and modular laser banks.
 
+![Double Laser Combat](../images/screenshots/SpaceGame5DoubleLaser.jpg)
+
 ![Player Double Lasers](../images/screenshots/SpaceGame10Lasers.jpg)
 
 ---

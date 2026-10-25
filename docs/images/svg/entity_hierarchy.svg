@@ -1,0 +1,275 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 620" width="100%" height="100%" role="img" aria-label="Space Quest Combat, Weapons and Entity Hierarchy Diagram">
+  <defs>
+    <style>
+      :root {
+        --eh-bg: rgba(15, 23, 42, 0.04);
+        --eh-header: rgba(37, 99, 235, 0.1);
+        --eh-stroke: #334155;
+        --eh-title: #0f172a;
+        --eh-text: #1e293b;
+        --eh-muted: #475569;
+        --eh-blue: #2563eb;
+        --eh-emerald: #059669;
+        --eh-amber: #d97706;
+        --eh-rose: #e11d48;
+        --eh-purple: #7c3aed;
+        --eh-cyan: #0891b2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --eh-bg: rgba(15, 23, 42, 0.70);
+          --eh-header: rgba(59, 130, 246, 0.18);
+          --eh-stroke: #475569;
+          --eh-title: #f8fafc;
+          --eh-text: #e2e8f0;
+          --eh-muted: #94a3b8;
+          --eh-blue: #60a5fa;
+          --eh-emerald: #34d399;
+          --eh-amber: #fbbf24;
+          --eh-rose: #fb7185;
+          --eh-purple: #a78bfa;
+          --eh-cyan: #22d3ee;
+        }
+      }
+
+      .box-card {
+        fill: var(--eh-bg);
+        stroke: var(--eh-stroke);
+        stroke-width: 2;
+        rx: 10px;
+      }
+
+      .box-header {
+        fill: var(--eh-header);
+        stroke: var(--eh-stroke);
+        stroke-width: 1.5;
+        rx: 10px;
+      }
+
+      .box-title {
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        fill: var(--eh-title);
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+
+      .box-item {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 500;
+        font-size: 12px;
+        fill: var(--eh-text);
+      }
+
+      .edge-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 700;
+        font-size: 10.5px;
+        fill: var(--eh-muted);
+        text-anchor: middle;
+      }
+
+      /* Animated flow paths */
+      .flow-blue {
+        fill: none;
+        stroke: var(--eh-blue);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-emerald {
+        fill: none;
+        stroke: var(--eh-emerald);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-amber {
+        fill: none;
+        stroke: var(--eh-amber);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-rose {
+        fill: none;
+        stroke: var(--eh-rose);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-purple {
+        fill: none;
+        stroke: var(--eh-purple);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      .flow-cyan {
+        fill: none;
+        stroke: var(--eh-cyan);
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        animation: dashFlow 1.2s linear infinite;
+      }
+
+      @keyframes dashFlow {
+        to {
+          stroke-dashoffset: -20;
+        }
+      }
+
+      @keyframes pulsePulseD {
+        0% { transform: translateY(0px); opacity: 0; }
+        25% { opacity: 1; }
+        75% { opacity: 1; }
+        100% { transform: translateY(24px); opacity: 0; }
+      }
+
+      .dot-pulse-d {
+        fill: var(--eh-emerald);
+        animation: pulsePulseD 1.8s ease-in-out infinite;
+      }
+    </style>
+
+    <!-- Markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--eh-blue)" />
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--eh-emerald)" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--eh-amber)" />
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--eh-rose)" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--eh-purple)" />
+    </marker>
+  </defs>
+
+  <!-- Container Box -->
+  <rect x="20" y="20" width="980" height="580" class="box-card" />
+  <rect x="20" y="20" width="980" height="42" class="box-header" />
+  <text x="510" y="41" class="box-title">Space Quest Combat, Weapons &amp; Entity Hierarchy Architecture</text>
+
+  <!-- Level 1 Root: cocos2d::Sprite -->
+  <rect x="360" y="78" width="300" height="52" rx="8" style="fill: var(--eh-header); stroke: var(--eh-blue); stroke-width: 2;" />
+  <text x="510" y="96" class="box-title" style="font-size: 13.5px; fill: var(--eh-blue);">cocos2d::Sprite (Base Class)</text>
+  <text x="510" y="116" class="edge-label" style="fill: var(--eh-muted);">GPU Quad Blitting, Affine Transform &amp; BoundingBox()</text>
+
+  <!-- Spine from cocos2d::Sprite downwards -->
+  <line x1="510" y1="130" x2="510" y2="152" style="stroke: var(--eh-stroke); stroke-width: 1.5;" />
+  <!-- Horizontal distribution rail -->
+  <line x1="120" y1="152" x2="900" y2="152" style="stroke: var(--eh-stroke); stroke-width: 1.5;" />
+
+  <!-- Four entity category drop connectors -->
+  <line x1="120" y1="152" x2="120" y2="174" class="flow-emerald" marker-end="url(#arrow-emerald)" />
+  <line x1="380" y1="152" x2="380" y2="174" class="flow-amber" marker-end="url(#arrow-amber)" />
+  <line x1="640" y1="152" x2="640" y2="174" class="flow-purple" marker-end="url(#arrow-purple)" />
+  <line x1="900" y1="152" x2="900" y2="174" class="flow-rose" marker-end="url(#arrow-rose)" />
+
+  <!-- ==================== COLUMN 1: PLAYER SHIP ==================== -->
+  <rect x="36" y="174" width="220" height="240" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-emerald); stroke-width: 1.8;" />
+  <text x="146" y="194" class="box-title" style="font-size: 13px; fill: var(--eh-emerald);">Player (PlayerShip)</text>
+  <text x="48" y="220" class="box-item">• upgradeWeapon()</text>
+  <text x="60" y="236" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Single to Double Cannons</text>
+  <text x="48" y="258" class="box-item">• moveUp() / moveDown()</text>
+  <text x="48" y="278" class="box-item">• moveLeft() / moveRight()</text>
+  <text x="48" y="298" class="box-item">• damage() / stopFlashing()</text>
+  <text x="60" y="314" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Invulnerability window</text>
+  <text x="48" y="336" class="box-item">• initHealthBar()</text>
+  <text x="48" y="356" class="box-item">• m_weaponStrength (Lvl 1-4)</text>
+  <text x="48" y="376" class="box-item">• SpriteBatchNode bound</text>
+
+  <!-- Player Weapons Box (Sub-card) -->
+  <rect x="36" y="430" width="220" height="150" rx="8" style="fill: var(--eh-header); stroke: var(--eh-emerald); stroke-width: 1.5;" />
+  <text x="146" y="450" class="box-title" style="font-size: 12.5px; fill: var(--eh-emerald);">Player Arsenal</text>
+  <text x="48" y="474" class="box-item">1. Single Red Laser (Default)</text>
+  <text x="60" y="490" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ High-speed center beam</text>
+  <text x="48" y="512" class="box-item">2. Dual Twin Lasers</text>
+  <text x="60" y="528" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Parallel wing cannon burst</text>
+  <text x="48" y="550" class="box-item">3. Shield &amp; Weapon Overcharge</text>
+
+  <line x1="146" y1="414" x2="146" y2="428" class="flow-emerald" marker-end="url(#arrow-emerald)" />
+
+  <!-- ==================== COLUMN 2: HAZARDS (ASTEROIDS) ==================== -->
+  <rect x="276" y="174" width="210" height="240" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-amber); stroke-width: 1.8;" />
+  <text x="381" y="194" class="box-title" style="font-size: 13px; fill: var(--eh-amber);">Asteroid (Base Hazard)</text>
+  <text x="288" y="220" class="box-item">• rotateAsteroid()</text>
+  <text x="300" y="236" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Infinite rotational action</text>
+  <text x="288" y="258" class="box-item">• minSpeed() / maxSpeed()</text>
+  <text x="300" y="274" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ 2.0s to 10.0s flight speed</text>
+  <text x="288" y="296" class="box-item">• getRandY() random spawn</text>
+  <text x="288" y="316" class="box-item">• damage() [Destroy &amp; SFX]</text>
+  <text x="288" y="336" class="box-item">• Particle Explosion Emitter</text>
+  <text x="288" y="356" class="box-item">• Bounding circle collision</text>
+
+  <!-- Derived Asteroid (Sub-card) -->
+  <rect x="276" y="430" width="210" height="150" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-amber); stroke-width: 1.5;" />
+  <text x="381" y="450" class="box-title" style="font-size: 12.5px; fill: var(--eh-amber);">AsteroidOriginal</text>
+  <text x="288" y="474" class="box-item">• Inherits Asteroid</text>
+  <text x="288" y="496" class="box-item">• Classic Asteroid Variant</text>
+  <text x="288" y="518" class="box-item">• Alternate Sprite Atlas Frame</text>
+  <text x="288" y="540" class="box-item">• Heavy Kinetic Impact</text>
+
+  <line x1="381" y1="414" x2="381" y2="428" class="flow-amber" marker-end="url(#arrow-amber)" />
+
+  <!-- ==================== COLUMN 3: POWER-UPS & LASERS ==================== -->
+  <rect x="506" y="174" width="220" height="190" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-purple); stroke-width: 1.8;" />
+  <text x="616" y="194" class="box-title" style="font-size: 13px; fill: var(--eh-purple);">PowerUp &amp; Laser Nodes</text>
+  <text x="518" y="220" class="box-item">• Laser : public Sprite</text>
+  <text x="530" y="236" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ High-velocity projectile</text>
+  <text x="518" y="258" class="box-item">• PowerUp : public Sprite</text>
+  <text x="530" y="274" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ rotate() &amp; collected()</text>
+  <text x="518" y="296" class="box-item">• isSpawned() uniqueness</text>
+  <text x="518" y="316" class="box-item">• getSpawnTime() / getSpeed()</text>
+
+  <!-- PowerUp Types -->
+  <rect x="506" y="380" width="220" height="200" rx="8" style="fill: var(--eh-header); stroke: var(--eh-purple); stroke-width: 1.5;" />
+  <text x="616" y="400" class="box-title" style="font-size: 12.5px; fill: var(--eh-purple);">PowerUp Types &amp; Buffs</text>
+  <text x="518" y="424" class="box-item">1. Extra Life (Heart / Ship)</text>
+  <text x="530" y="440" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Increments remaining lives</text>
+  <text x="518" y="462" class="box-item">2. Weapon Upgrade (Double)</text>
+  <text x="530" y="478" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Upgrades primary lasers</text>
+  <text x="518" y="500" class="box-item">3. Shield Regenerator</text>
+  <text x="530" y="516" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Refills active HealthBar</text>
+  <text x="518" y="538" class="box-item">4. Score Multiplier (+500 pts)</text>
+
+  <line x1="616" y1="364" x2="616" y2="378" class="flow-purple" marker-end="url(#arrow-purple)" />
+
+  <!-- ==================== COLUMN 4: ENEMY FLEET HIERARCHY ==================== -->
+  <rect x="746" y="174" width="234" height="190" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-rose); stroke-width: 1.8;" />
+  <text x="863" y="194" class="box-title" style="font-size: 13px; fill: var(--eh-rose);">EnemyShip (Base Enemy)</text>
+  <text x="758" y="220" class="box-item">• virtual void init(Size res)</text>
+  <text x="758" y="240" class="box-item">• virtual void update(float dt)</text>
+  <text x="758" y="260" class="box-item">• damage() &amp; getLives()</text>
+  <text x="758" y="280" class="box-item">• getNextFire() [Weapon timer]</text>
+  <text x="758" y="300" class="box-item">• virtual void initHealthBar()</text>
+  <text x="758" y="320" class="box-item">• MAX_ENEMY_SHIP1_LIVES</text>
+
+  <!-- Derived Enemies (Sub-card) -->
+  <rect x="746" y="380" width="234" height="200" rx="8" style="fill: var(--eh-bg); stroke: var(--eh-rose); stroke-width: 1.5;" />
+  <text x="863" y="400" class="box-title" style="font-size: 12.5px; fill: var(--eh-rose);">Derived Enemy Hierarchy</text>
+  <text x="758" y="424" class="box-item">• EnemyShipKling</text>
+  <text x="770" y="440" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Agile scout drone cruiser</text>
+  <text x="758" y="462" class="box-item">• EnemyShipWilKnot</text>
+  <text x="770" y="478" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Heavy armoured interceptor</text>
+  <text x="758" y="500" class="box-item">• EnemyShipDerpStar</text>
+  <text x="770" y="516" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Multi-phase capital boss</text>
+  <text x="770" y="534" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ addCanons() &amp; moveCanon()</text>
+  <text x="770" y="552" class="box-item" style="fill: var(--eh-muted); font-size: 10.5px;">→ Dedicated boss health bar</text>
+
+  <line x1="863" y1="364" x2="863" y2="378" class="flow-rose" marker-end="url(#arrow-rose)" />
+
+  <circle cx="510" cy="140" r="3" class="dot-pulse-d" />
+</svg>
+
